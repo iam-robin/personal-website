@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="392px" height="440px" viewBox="0 0 392 440" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>webpack</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="webpack" transform="translate(-90.000000, 0.000000)" fill="#AAB2BD" fill-rule="nonzero">
+            <polygon id="Path-5" points="277.708308 342.599563 277.708308 227.93949 172.285703 166.263961 172.285703 283.591133"></polygon>
+            <polygon id="Path-5" transform="translate(347.997005, 254.431762) scale(-1, 1) translate(-347.997005, -254.431762) " points="400.708307 342.599563 400.708307 227.93949 295.285702 166.263961 295.285702 283.591133"></polygon>
+            <polygon id="Path-6" points="286.541208 214.02656 178.517713 151.571908 286.541208 91.6264519 394.682555 151.571908"></polygon>
+            <polygon id="Path-7" points="277.708252 439.324639 277.708252 360.484784 168.401184 300.12736 104.360246 338.63589"></polygon>
+            <polygon id="Path-7" transform="translate(105.850065, 214.218500) rotate(60.000000) translate(-105.850065, -214.218500) " points="195.401023 284.117791 195.17986 210.692176 80.218509 144.319209 16.2991072 180.713252"></polygon>
+            <polygon id="Path-7" transform="translate(465.850065, 214.218500) scale(-1, 1) rotate(60.000000) translate(-465.850065, -214.218500) " points="555.401023 284.117791 555.17986 210.692176 440.218509 144.319209 376.299107 180.713252"></polygon>
+            <polygon id="Path-7" transform="translate(382.034249, 369.726000) scale(-1, 1) translate(-382.034249, -369.726000) " points="468.708252 439.324639 468.708252 360.484784 359.401184 300.12736 295.360246 338.63589"></polygon>
+            <polygon id="Path-7" transform="translate(188.155439, 71.159629) scale(-1, 1) rotate(-180.000000) translate(-188.155439, -71.159629) " points="277.708252 142.191898 277.708252 63.3520436 162.965909 0.127359 98.6026267 38.558219"></polygon>
+            <polygon id="Path-7" transform="translate(385.155439, 71.159629) rotate(180.000000) translate(-385.155439, -71.159629) " points="474.708251 142.191898 474.708251 63.3520436 359.965908 0.127359 295.602626 38.558219"></polygon>
+        </g>
+    </g>
+</svg>

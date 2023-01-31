@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="576px" height="448px" viewBox="0 0 576 448" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>Shape</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="book-open-solid" transform="translate(0.000000, -1.000000)" fill="#AAB2BD" fill-rule="nonzero">
+            <path d="M542.22,1.05 C487.42,4.16 378.5,15.48 311.26,56.64 C306.62,59.48 303.99,64.53 303.99,69.81 L303.99,433.68 C303.99,445.23 316.62,452.53 327.27,447.17 C396.45,412.35 496.5,402.85 545.97,400.25 C562.86,399.36 575.99,385.82 575.99,369.59 L575.99,31.75 C576,14.04 560.64,0.01 542.22,1.05 Z M264.73,56.64 C197.5,15.48 88.58,4.17 33.78,1.05 C15.36,0.01 0,14.04 0,31.75 L0,369.6 C0,385.84 13.13,399.38 30.02,400.26 C79.51,402.86 179.61,412.37 248.79,447.21 C259.41,452.56 272,445.27 272,433.75 L272,69.63 C272,64.34 269.38,59.49 264.73,56.64 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

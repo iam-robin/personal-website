@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="640px" height="394px" viewBox="0 0 640 394" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>markdown</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="markdown" fill="#AAB2BD" fill-rule="nonzero">
+            <path d="M593.85,393.92 L46.15,393.92 C20.7,393.92 0,373.22 0,347.77 L0,46.23 C0,20.78 20.7,0.08 46.15,0.08 L593.84,0.08 C619.29,0.08 639.99,20.78 639.99,46.23 L639.99,347.77 C640,373.22 619.3,393.92 593.85,393.92 Z M153.85,301.62 L153.85,181.62 L215.39,258.54 L276.93,181.62 L276.93,301.62 L338.47,301.62 L338.47,92.38 L276.93,92.38 L215.39,169.3 L153.85,92.38 L92.31,92.38 L92.31,301.61 L153.85,301.61 L153.85,301.62 Z M566.15,197 L504.61,197 L504.61,92.38 L443.07,92.38 L443.07,197 L381.53,197 L473.84,304.69 L566.15,197 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

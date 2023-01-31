@@ -1,0 +1,154 @@
+/* --- INTER --- */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../public/typefaces/Inter/Inter-Regular.woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  src: url("../public/typefaces/Inter/Inter-SemiBold.woff2");
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html {
+    @apply antialiased text-black font-sans text-base;
+    overscroll-behavior: none;
+  }
+
+  body {
+    --background-color: theme("colors.grey.150");
+    background-color: var(--background-color);
+    overflow-x: hidden;
+    overscroll-behavior: none;
+  }
+
+  .dark body {
+    --background-color: theme("colors.grey.1000");
+  }
+
+  .resize-animation-stopper *,
+  .resize-animation-stopper *:after,
+  .resize-animation-stopper *:before {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  @media screen and (max-width: 800px) {
+    body.mobile-menu-open {
+      overflow: hidden;
+    }
+  }
+}
+
+@layer components {
+  .default-transition {
+    @apply transition-all duration-[700ms] ease-in-out;
+  }
+
+  .short-transition {
+    @apply transition-[all] duration-[500ms] ease-in-out;
+  }
+
+  .transform-three-d {
+    transform-style: preserve-3d;
+    transform-origin: center;
+  }
+
+  .book-rotate {
+    transform: rotateX(80deg) rotateZ(45deg) scale(0.75);
+  }
+
+  .book-perspective {
+    perspective: 500px;
+  }
+
+  .book-bottom {
+    transform: translateY(0) translateX(0px) translateZ(0) rotateX(-90deg);
+    transform-origin: top;
+    height: var(--book-height, 30px);
+  }
+
+  .book-right {
+    transform: translateY(0) translateX(0px) translateZ(0) rotateY(-90deg);
+    transform-origin: right;
+    width: var(--book-height, 30px);
+  }
+
+  .book-stripes {
+    background-image: linear-gradient(
+      0deg,
+      #f6f6f6 40%,
+      #eaeaed 40%,
+      #eaeaed 50%,
+      #f6f6f6 50%,
+      #f6f6f6 90%,
+      #eaeaed 90%,
+      #eaeaed 100%
+    );
+    background-size: 4px 4px;
+  }
+
+  .book-stripes-right {
+    background-image: linear-gradient(
+      90deg,
+      #ffffff 40%,
+      #f6f6f6 40%,
+      #f6f6f6 50%,
+      #ffffff 50%,
+      #ffffff 90%,
+      #f6f6f6 90%,
+      #f6f6f6 100%
+    );
+    background-size: 3px 3px;
+  }
+
+  .vinyl {
+    background: radial-gradient(
+      circle,
+      #f6f6f6 0 10%,
+      white 11% 25%,
+      #222 26% 30%,
+      #2b2b2b 31% 32%,
+      #222 33% 37%,
+      #2b2b2b 38% 39%,
+      #222 40% 44%,
+      #2b2b2b 45% 46%,
+      #222 47% 51%,
+      #2b2b2b 52% 53%,
+      #222 54% 58%,
+      #2b2b2b 59% 60%,
+      #222 61% 65%,
+      #2b2b2b 66% 67%,
+      #222 68% 72%,
+      #2b2b2b 73% 74%,
+      #222 75% 79%,
+      #2b2b2b 80% 81%,
+      #222 82% 86%,
+      #2b2b2b 87% 88%,
+      #222 89% 93%,
+      #2b2b2b 94% 95%,
+      #222 96% 100%
+    );
+  }
+
+  .album-rotate {
+    transform-origin: left left;
+    transform: perspective(400px) rotateY(-25deg) scale(0.8);
+  }
+
+  .playlist-rotate {
+    transform: translateY(-40px) scale(0.5);
+  }
+}
