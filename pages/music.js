@@ -8,10 +8,10 @@ import clsx from "clsx";
 import TextLink from "../components/TextLink";
 import { useState } from 'react';
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const count = 6;
 
-  const resTopAlbumsThreeMonth = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${process.env.LAST_FM_USER_NAME}&api_key=${process.env.LAST_FM_API_KEY}&limit=${count}&period=3month&format=json`);
+  const resTopAlbumsThreeMonth = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${process.env.LAST_FM_USER_NAME}&api_key=${process.env.LAST_FM_API_KEY}&limit=${count}&period=1month&format=json`);
   const topAlbumThreeMonthQuery = await resTopAlbumsThreeMonth.json();
   const topAlbumsThreeMonth = topAlbumThreeMonthQuery?.topalbums?.album.map((album) => ({
     title: album?.name,
@@ -74,7 +74,7 @@ const Music = ({ topAlbumsThreeMonth, topAlbumOverall }) => {
               'cursor-pointer py-2 px-3 rounded-md dark:text-grey-500',
               !isOverall ? 'font-bold text-blue bg-blue-100 dark:bg-grey-900 dark:text-blue' : ''
             )}
-          >Past 3 month</button>
+          >Past 30 days</button>
           <button
             onClick={() => setIsOverall(true)}
             className={clsx(
