@@ -7,7 +7,7 @@ import BookItem from "../components/BookItem";
 import Head from "next/head";
 import { GraphQLClient, gql } from "graphql-request";
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const endpoint = "https://literal.club/graphql/";
   const graphQLClient = new GraphQLClient(endpoint);
   graphQLClient.setHeader(
