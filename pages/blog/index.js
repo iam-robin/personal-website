@@ -1,6 +1,6 @@
 import fs from "fs";
 import Head from "next/head";
-import Article from "../../components/article";
+// import Article from "../../components/article";
 import matter from "gray-matter";
 
 export async function getStaticProps() {
@@ -29,7 +29,8 @@ export default function Blog({ posts }) {
       <section>
         <h1 className="text-3xl font-bold mb-6 p-4">Blog</h1>
           {posts.map((post) => (
-            <Article key={post.slug} className="border-b-2" post={post} />
+            <div key={post.slug}></div>
+            // <Article key={post.slug} className="border-b-2" post={post} />
           ))}
       </section>
     </div>
