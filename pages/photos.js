@@ -7,7 +7,6 @@ import {
   // getFolders,
   buildImage,
 } from "../lib/cloudinary";
-// import clsx from "clsx";
 import PageHeader from "../components/PageHeader";
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../tailwind.config.js'
