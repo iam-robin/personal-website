@@ -70,11 +70,11 @@ module.exports = {
       xl: "1264px",
     },
     fontFamily: {
-      sans: ["Inter", "Helvetica", "Arial", "ui-sans-serif", "sans-serif"],
+      sans: ["var(--font-apercu)", "Helvetica", "Arial", "ui-sans-serif", "sans-serif"],
     },
     fontWeight: {
       normal: 400,
-      bold: 600,
+      bold: 700,
     },
     fontSize: {
       xs: [

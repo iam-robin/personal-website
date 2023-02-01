@@ -68,14 +68,14 @@ const Layout = ({ children }) => {
       <div
         onClick={() => setIsMobileMenuOpen(false)}
         className={clsx(
-          "h-screen w-screen fixed top-[0] left-[0] z-40 bg-black dark:bg-white opacity-50 dark:opacity-20",
+          "h-screen w-screen fixed top-[0] left-[0] z-40 bg-black dark:bg-grey-900 opacity-50 dark:opacity-80",
           isMobileMenuOpen ? "block md:hidden" : "hidden",
         )}
       ></div>
       <Link
         href="/"
         className={clsx(
-          "flex items-center gap-3 fixed top-2 left-4 z-50",
+          "flex items-center gap-3 fixed top-4 left-4 z-50",
           "md:hidden"
         )}
       >
@@ -88,7 +88,7 @@ const Layout = ({ children }) => {
         </div>
       </Link>
       <button
-        className="self-end md:hidden fixed z-50 right-4 top-[0]"
+        className="self-end md:hidden fixed z-50 right-4 top-2"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       >
         {isMobileMenuOpen ? (
@@ -100,7 +100,7 @@ const Layout = ({ children }) => {
       {/* start: workaround for scroll container border radius */}
       <div
         className={clsx(
-          "fixed left-[0] right-[0] top-[0] z-20 h-12",
+          "fixed left-[0] right-[0] top-[0] z-20 h-16",
           "sm:left-3 sm:right-3",
           "transition-[left,right,height] duration-[700ms] ease-in-out",
           isDesktopMenuOpen
@@ -181,7 +181,7 @@ const Layout = ({ children }) => {
       >
         <div
           className={clsx(
-            "bg-white dark:bg-grey-950 p-8 h-full mx-auto pt-24 min-h-screen relative",
+            "bg-white dark:bg-grey-950 p-8 h-full mx-auto pt-28 min-h-screen relative",
             "sm:p-16 sm:pt-24 sm:min-h-[calc(100vh-24px)]",
             "md:p-20 md:pt-17",
             "transition-[min-height] duration-[700ms] ease-in-out",

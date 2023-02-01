@@ -4,6 +4,23 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { ThemeProvider } from "next-themes";
+import localFont from "@next/font/local";
+
+const apercu = localFont({
+  src: [
+    {
+      path: "./apercu-regular-pro.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./apercu-bold-pro.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-apercu",
+});
 
 function MyApp({ Component, pageProps }) {
   const { asPath } = useRouter();
@@ -22,16 +39,15 @@ function MyApp({ Component, pageProps }) {
   });
 
   const disableAnimationOnResize = () => {
-      let resizeTimer;
-      window.addEventListener("resize", () => {
-        document.body.classList.add("resize-animation-stopper");
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-          document.body.classList.remove("resize-animation-stopper");
-        }, 300);
-      });
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      document.body.classList.add("resize-animation-stopper");
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        document.body.classList.remove("resize-animation-stopper");
+      }, 300);
+    });
   };
-
 
   return (
     <>
@@ -47,11 +63,13 @@ function MyApp({ Component, pageProps }) {
           src="//gc.zgo.at/count.js"
         ></script>
       </Head>
-      <ThemeProvider attribute="class">
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ThemeProvider>
+      <main className={`${apercu.variable} font-sans test-class`}>
+        <ThemeProvider attribute="class">
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
+      </main>
     </>
   );
 }

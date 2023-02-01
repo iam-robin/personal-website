@@ -41,46 +41,30 @@ export const getServerSideProps = async () => {
     }
   `;
 
-  //   const query = gql`
-  //     query booksByReadingStateAndProfile(
-  //       $limit: Int!
-  //       $offset: Int!
-  //       $readingStatus: ReadingStatus!
-  //       $profileId: String!
-  //     ) {
-  //       booksByReadingStateAndProfile(
-  //         limit: $limit
-  //         offset: $offset
-  //         readingStatus: $readingStatus
-  //         profileId: $profileId
-  //       ) {
-  //         title
-  //         cover
-  //         pageCount
-  //         id
-  //         slug
-  //         authors {
-  //           name
-  //         }
-  //       }
-  //     }
-  //   `;
-
-  //   const dateQuery = gql`
-  //     query getReadDates($bookId: String!, $profileId: String!) {
-  //       getReadDates(bookId: $bookId, profileId: $profileId) {
-  //         id
-  //         finished
-  //       }
-  //     }
-  //   `;
-
-  //   const data = await graphQLClient.request(query, {
-  //     limit: 100,
-  //     offset: 0,
-  //     readingStatus: "FINISHED",
-  //     profileId: process.env.LITERAL_PROFILE_ID,
-  //   });
+  const wantToReadQuery = gql`
+    query booksByReadingStateAndProfile(
+      $limit: Int!
+      $offset: Int!
+      $readingStatus: ReadingStatus!
+      $profileId: String!
+    ) {
+      booksByReadingStateAndProfile(
+        limit: $limit
+        offset: $offset
+        readingStatus: $readingStatus
+        profileId: $profileId
+      ) {
+        title
+        cover
+        pageCount
+        id
+        slug
+        authors {
+          name
+        }
+      }
+    }
+  `;
 
   const shelfData = await graphQLClient.request(shelfQuery, {
     limit: 100,
@@ -88,35 +72,19 @@ export const getServerSideProps = async () => {
     profileId: process.env.LITERAL_PROFILE_ID,
   });
 
-  //   const readingDates = await Promise.all(
-  //     data.booksByReadingStateAndProfile.map(async (item) => {
-  //       const readingDate = await graphQLClient.request(dateQuery, {
-  //         bookId: item.id,
-  //         profileId: process.env.LITERAL_PROFILE_ID,
-  //       });
-  //       return {
-  //         ...item,
-  //         finished: readingDate?.getReadDates[0].finished || false,
-  //       };
-  //     })
-  //   );
-
-  //   const booksSortedByYear = readingDates.reduce((acc, current) => {
-  //     current.year = new Date(current.finished).getFullYear();
-  //     if (current.year in acc) {
-  //       acc[current.year].push(current);
-  //     } else {
-  //       acc[current.year] = [current];
-  //     }
-  //     return acc;
-  //   }, {});
+  const wantToReadData = await graphQLClient.request(wantToReadQuery, {
+    limit: 100,
+    offset: 0,
+    readingStatus: "WANTS_TO_READ",
+    profileId: process.env.LITERAL_PROFILE_ID,
+  });
 
   return {
-    props: { shelfData },
+    props: { shelfData, wantToReadData },
   };
 };
 
-const Books = ({ shelfData }) => {
+const Books = ({ shelfData, wantToReadData }) => {
   const [activeTab, setActiveTab] = useState(
     shelfData.getShelvesByProfileId[0].title
   );
@@ -136,7 +104,7 @@ const Books = ({ shelfData }) => {
         </TextLink>
         .
       </PageHeader>
-      <ul className="mt-20 gap-6 flex cursor-pointer flex-wrap">
+      <ul className="mt-20 gap-x-6 gap-y-3 flex cursor-pointer flex-wrap">
         {shelfData.getShelvesByProfileId.map((shelf, i) => {
           return (
             shelf.title !== "graphic novels / mangas" && (
@@ -155,6 +123,17 @@ const Books = ({ shelfData }) => {
             )
           );
         })}
+        <li
+          onClick={() => {
+            setActiveTab("wantToRead");
+          }}
+        >
+          <FilterItem
+            name="Want to read"
+            count={wantToReadData.booksByReadingStateAndProfile.length}
+            active={"wantToRead" === activeTab}
+          />
+        </li>
       </ul>
       <div
         className={clsx(
@@ -163,50 +142,34 @@ const Books = ({ shelfData }) => {
           "xl:grid-cols-3"
         )}
       >
-        {shelfData.getShelvesByProfileId
-          .find((obj) => obj.title === activeTab)
-          .books.map((book, i) => {
-            return (
-              <BookItem
-                key={i}
-                image={book.cover}
-                title={book.title}
-                author={book.authors[0]?.name || ""}
-                slug={book.slug}
-                pageCount={book.pageCount}
-              />
-            );
-          })}
+        {activeTab === "wantToRead"
+          ? wantToReadData.booksByReadingStateAndProfile.map((book, i) => {
+              return (
+                <BookItem
+                  key={i}
+                  image={book.cover}
+                  title={book.title}
+                  author={book.authors[0]?.name || ""}
+                  slug={book.slug}
+                  pageCount={book.pageCount}
+                />
+              );
+            })
+          : shelfData.getShelvesByProfileId
+              .find((obj) => obj.title === activeTab)
+              .books.map((book, i) => {
+                return (
+                  <BookItem
+                    key={i}
+                    image={book.cover}
+                    title={book.title}
+                    author={book.authors[0]?.name || ""}
+                    slug={book.slug}
+                    pageCount={book.pageCount}
+                  />
+                );
+              })}
       </div>
-      {/* {Object.entries(booksSortedByYear)
-        .reverse()
-        .map(([key, value]) => {
-          return (
-            <div key={key} className="mb-30 relative">
-              <MediaDivider>{key}</MediaDivider>
-              <div
-                className={clsx(
-                  "grid grid-cols-1 gap-6",
-                  "lg:grid-cols-2 lg:gap-10",
-                  "xl:grid-cols-3"
-                )}
-              >
-                {value.map((book, i) => {
-                  return (
-                    <BookItem
-                      key={i}
-                      image={book.cover}
-                      title={book.title}
-                      author={book.authors[0]?.name || ""}
-                      slug={book.slug}
-                      pageCount={book.pageCount}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })} */}
     </div>
   );
 };

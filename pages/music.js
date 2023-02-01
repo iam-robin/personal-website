@@ -51,11 +51,7 @@ const Music = ({ topAlbumsThreeMonth, topAlbumOverall }) => {
       <p className="font-bold dark:text-grey-200">
       </p>
       <h2 className="text-black font-bold mb-8 uppercase mt-24 dark:text-grey-700">My Playlists</h2>
-      <div className={clsx(
-          "grid grid-cols-1 gap-6",
-          "xxs:grid-cols-2",
-          "lg:grid-cols-3 lg:gap-10",
-        )}>
+      <div>
         {
           playlists?.map((playlist, index) => (
             <PlaylistItem
