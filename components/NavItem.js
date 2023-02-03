@@ -102,7 +102,11 @@ const NavItem = (props) => {
         )}
       >
         {props.onlyIcon && (
-          <div className="fixed hidden group-hover:block left-[72px] z-50 px-3 py-[6px] rounded-xl font-normal bg-grey-200 dark:bg-grey-900">
+          <div className={clsx(
+            "fixed opacity-0 scale-90 pointer-events-none origin-left -translate-x-2 left-[72px] z-50 px-3 py-[6px] rounded-xl font-normal bg-grey-200 dark:bg-grey-900",
+            "transition-[opacity,transform] duration-[300ms] ease-in-out",
+            "group-hover:opacity-100 group-hover:translate-x-[0] group-hover:scale-100"
+          )}>
             {props.content.charAt(0).toUpperCase() + props.content.slice(1)}
           </div>
         )}

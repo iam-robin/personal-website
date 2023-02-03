@@ -119,15 +119,15 @@ const Sidebar: React.FC<MediaDividerProps> = ({ collided }) => {
         </span>
         <ul
           className={clsx(
-            "text-xs flex text-grey-600 dark:text-grey-700 flex-row md:flex-col gap-4 md:gap-2 md:mt-3",
+            "text-xs flex text-grey-600 dark:text-grey-700 flex-row md:flex-col gap-4 md:gap-1 md:mt-3",
           )}
         >
           <li>
-            <Link href="/imprint" className={clsx(
+            <Link href="/legals" className={clsx(
                 "transition-[padding] duration-[700ms] ease-in-out",
                 collided ? "md:pl-2" : "md:pl-0"
             )}>
-              Imprint
+              Legals
             </Link>
           </li>
           <li>
