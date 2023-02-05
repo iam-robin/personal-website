@@ -7,6 +7,8 @@ import FolderIcon from "../public/img/icons/folder.svg";
 import FolderFilledIcon from "../public/img/icons/folderFilled.svg";
 import BookIcon from "../public/img/icons/book.svg";
 import BookFilledIcon from "../public/img/icons/bookFilled.svg";
+import BookmarkIcon from "../public/img/icons/bookmark.svg";
+import BookmarkFilledIcon from "../public/img/icons/bookmarkFilled.svg";
 import MusicIcon from "../public/img/icons/music.svg";
 import MusicFilledIcon from "../public/img/icons/musicFilled.svg";
 import WriteIcon from "../public/img/icons/write.svg";
@@ -45,6 +47,10 @@ const NavItem = (props) => {
       active: MusicFilledIcon,
       inactive: MusicIcon,
     },
+    bookmarks: {
+        active: BookmarkFilledIcon,
+        inactive: BookmarkIcon,
+      },
     blog: {
       active: WriteFilledIcon,
       inactive: WriteIcon,
@@ -82,6 +88,7 @@ const NavItem = (props) => {
     >
       <Link
         href={props.route}
+        rel="me"
         onClick={() => publish("navItemClicked")}
         className={clsx(
           `flex relative px-3 rounded-lg items-center justify-between pointer text-sm group`,
