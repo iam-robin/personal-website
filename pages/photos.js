@@ -129,7 +129,7 @@ const Photos = ({
       </ul> */}
       <Masonry
         breakpointCols={breakpointColumnsObj}
-        className="flex mt-18 -mx-8 md:mt-40"
+        className="flex mt-18 -mx-8 md:mt-24"
         columnClassName="pl-8 pr-8"
       >
         {images?.map((image) => {

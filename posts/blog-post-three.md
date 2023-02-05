@@ -1,9 +1,9 @@
 ---
-title: 'Blog post one'
-slug: 'blog-post-one'
+title: 'Blog post three'
+slug: 'blog-post-three'
 description: 'A short description about this post'
 image: /images/post-1.jpg
-date: '2021-09-22'
+date: '2022-09-22'
 tags:
   - Internet
   - Productivity

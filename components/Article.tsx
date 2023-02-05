@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-interface ArticleProps {
+interface BlogItemProps {
   post: {
     title: string;
     date: string;
@@ -8,19 +8,20 @@ interface ArticleProps {
     image?: string;
     slug: string;
     tags: string[];
-  }
+  };
 }
 
-const Article: React.FC<ArticleProps> = ({ post }) => {
+const BlogItem: React.FC<BlogItemProps> = ({ post }) => {
   return (
     <article>
-    <Link href={`blog/${post.slug}`}><h3>{post.title}</h3></Link>
-    <p>{post.date} | {post.tags.map(tag => tag).join(', ')}</p>
-    <p>
-        {post.description}
-    </p>
-</article>
+      <Link href={`blog/${post?.slug}`}>
+        <h3>{post?.title}</h3>
+      </Link>
+      <p>
+        {post?.date} | {post?.tags.map((tag) => tag).join(", ")}
+      </p>
+    </article>
   );
 };
 
-export default Article;
+export default BlogItem;
