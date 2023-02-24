@@ -22,7 +22,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   const bookmarks = await fetchBookmarks();
 
   const tagFrequency = []
-    .concat(...bookmarks?.map(({ tags }) => tags))
+    .concat(...bookmarks.filter((bookmark) => bookmark.tags).map(({ tags }) => tags))
     .reduce((freq, tag) => {
       freq[tag] = (freq[tag] || 0) + 1;
       return freq;
