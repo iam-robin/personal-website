@@ -22,14 +22,14 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   const bookmarks = await fetchBookmarks();
 
   const tagFrequency = []
-    .concat(...bookmarks.map(({ tags }) => tags))
+    .concat(...bookmarks?.map(({ tags }) => tags))
     .reduce((freq, tag) => {
       freq[tag] = (freq[tag] || 0) + 1;
       return freq;
     }, {});
 
   const tags = Object.entries(tagFrequency)
-    .map(([title, frequency]): { title: string; frequency: number } => ({
+    ?.map(([title, frequency]): { title: string; frequency: number } => ({
       title,
       frequency: frequency as number,
     }))
@@ -55,9 +55,6 @@ const Bookmarks = ({ bookmarks, tags }: Props) => {
     setActiveTag(tag);
   };
 
-  useEffect(() => {
-    console.log(activeTag);
-  }, [activeTag]);
   return (
     <div className="relative">
       <PageHeader headline="Bookmarks">
