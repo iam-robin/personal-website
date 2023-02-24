@@ -22,7 +22,11 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   const bookmarks = await fetchBookmarks();
 
   const tagFrequency = []
-    .concat(...bookmarks.filter((bookmark) => bookmark.tags).map(({ tags }) => tags))
+    .concat(
+      ...bookmarks
+        .map(({ tags }) => tags?.filter(Boolean))
+        .filter((tags) => tags?.length > 0)
+    )
     .reduce((freq, tag) => {
       freq[tag] = (freq[tag] || 0) + 1;
       return freq;
@@ -77,27 +81,27 @@ const Bookmarks = ({ bookmarks, tags }: Props) => {
           personal website.
           <ul className="flex gap-4 mt-5 text-xs text-grey font-mono">
             <li className="flex items-center gap-2">
-              <div className={clsx(
-                "h-[6px] w-[6px] rounded-full bg-blue",
-                )}></div>
+              <div
+                className={clsx("h-[6px] w-[6px] rounded-full bg-blue")}
+              ></div>
               article
             </li>
             <li className="flex items-center gap-1">
-              <div className={clsx(
-                "h-[6px] w-[6px] rounded-full bg-green",
-                )}></div>
+              <div
+                className={clsx("h-[6px] w-[6px] rounded-full bg-green")}
+              ></div>
               website
             </li>
             <li className="flex items-center gap-1">
-              <div className={clsx(
-                "h-[6px] w-[6px] rounded-full bg-yellow",
-                )}></div>
+              <div
+                className={clsx("h-[6px] w-[6px] rounded-full bg-yellow")}
+              ></div>
               video
             </li>
             <li className="flex items-center gap-1">
-              <div className={clsx(
-                "h-[6px] w-[6px] rounded-full bg-red",
-                )}></div>
+              <div
+                className={clsx("h-[6px] w-[6px] rounded-full bg-red")}
+              ></div>
               misc
             </li>
           </ul>
@@ -134,11 +138,7 @@ const Bookmarks = ({ bookmarks, tags }: Props) => {
           );
         })}
       </ul>
-      <ul
-        className={clsx(
-          "mt-8 group xl:max-w-none",
-        )}
-      >
+      <ul className={clsx("mt-8 group xl:max-w-none")}>
         {displayBookmarks?.map(({ title, created, tags, link, type }) => (
           <BookmarkItem
             key={title}
