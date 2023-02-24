@@ -31,7 +31,7 @@ const Sidebar: React.FC<MediaDividerProps> = ({ collided }) => {
           <h1 className="text-grey-1000 dark:text-grey-200 font-bold">
             Robin Spielmann
           </h1>
-          <h2 className="text-grey-400 dark:text-grey-500">Design engineer</h2>
+          <h2 className="text-grey-400 dark:text-grey-500">Design Engineer</h2>
         </div>
       </Link>
       <nav className="flex flex-col gap-10 mb-10 md:my-10">
@@ -64,6 +64,7 @@ const Sidebar: React.FC<MediaDividerProps> = ({ collided }) => {
           <ul className="list-none p-0 m-0 -ml-2 mt-2">
             <NavItem content="books" route="/books" onlyIcon={collided} />
             <NavItem content="music" route="/music" onlyIcon={collided} />
+            <NavItem content="bookmarks" route="/bookmarks" onlyIcon={collided} />
           </ul>
         </div>
         <div>
@@ -77,12 +78,6 @@ const Sidebar: React.FC<MediaDividerProps> = ({ collided }) => {
             where to find me
           </h3>
           <ul className="list-none p-0 m-0 -ml-2 mt-2">
-            {/* <NavItem
-                content="twitter"
-                route="https://twitter.com/iamrob_in"
-                onlyIcon={collided}
-                small
-              /> */}
             <NavItem
               content="mastodon"
               route="https://mastodon.social/@iamrobin"

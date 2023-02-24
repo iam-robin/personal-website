@@ -7,6 +7,17 @@ const Changelog = () => {
       <h1 className="text-xl mb-12 font-medium">Changelog</h1>
       <ul>
         <VersionItem
+          version="2.1.0"
+          headline="🔖 Bookmark page"
+          date={new Date("2023-02-24T11:00")}
+        >
+          <p>
+            I have added a new page to the website, where all the articles,
+            websites, videos, and other things I have bookmarked are listed. The
+            data is automatically updated from my Raindrop.io account.
+          </p>
+        </VersionItem>
+        <VersionItem
           version="2.0.0"
           headline="💅 New layout"
           date={new Date("2023-01-31T13:30")}

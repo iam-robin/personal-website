@@ -1,6 +1,5 @@
 import useSWR from "swr";
 import fetcher from "../lib/fetcher";
-import MediaDivider from "../components/MediaDivider";
 import PageHeader from "../components/PageHeader";
 import MusicItem from "../components/MusicItem";
 import PlaylistItem from "../components/PlaylistItem";
@@ -9,7 +8,7 @@ import TextLink from "../components/TextLink";
 import { useState } from 'react';
 
 export async function getStaticProps() {
-  const count = 6;
+  const count = 9;
 
   const resTopAlbumsThreeMonth = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${process.env.LAST_FM_USER_NAME}&api_key=${process.env.LAST_FM_API_KEY}&limit=${count}&period=1month&format=json`);
   const topAlbumThreeMonthQuery = await resTopAlbumsThreeMonth.json();

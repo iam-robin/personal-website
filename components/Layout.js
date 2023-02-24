@@ -84,7 +84,7 @@ const Layout = ({ children }) => {
           <h1 className="text-grey-1000 dark:text-grey-200 font-bold">
             Robin Spielmann
           </h1>
-          <h2 className="text-grey-400 dark:text-grey-500">Design engineer</h2>
+          <h2 className="text-grey-400 dark:text-grey-500">Design Engineer</h2>
         </div>
       </Link>
       <button
@@ -173,21 +173,16 @@ const Layout = ({ children }) => {
         <Sidebar collided={!isDesktopMenuOpen} />
       </aside>
       <main
-        className={clsx(
-          "w-full",
-          "transition-[margin] duration-[700ms] ease-in-out",
-          isDesktopMenuOpen ? "md:ml-60" : "md:ml-20"
-        )}
-      >
+        className="w-full">
         <div
           className={clsx(
             "bg-white dark:bg-grey-950 p-8 h-full mx-auto pt-28 min-h-screen relative",
             "sm:p-16 sm:pt-24 sm:min-h-[calc(100vh-24px)]",
             "md:p-20 md:pt-17",
-            "transition-[min-height] duration-[700ms] ease-in-out",
+            "transition-[min-height, margin] duration-[700ms] ease-in-out",
             isDesktopMenuOpen
-              ? "md:min-h-[calc(100vh-96px)]"
-              : " md:min-h-[calc(100vh-32px)]"
+              ? "md:min-h-[calc(100vh-96px)] md:ml-60"
+              : " md:min-h-[calc(100vh-32px)] md:ml-20"
           )}
         >
           <button

@@ -110,7 +110,7 @@ const NavItem = (props) => {
       >
         {props.onlyIcon && (
           <div className={clsx(
-            "fixed opacity-0 scale-90 pointer-events-none origin-left -translate-x-2 left-[72px] z-50 px-3 py-[6px] rounded-xl font-normal bg-grey-200 dark:bg-grey-900",
+            "hidden md:block fixed opacity-0 scale-90 pointer-events-none origin-left -translate-x-2 left-[72px] z-50 px-3 py-[6px] rounded-xl font-normal bg-grey-200 dark:bg-grey-900",
             "transition-[opacity,transform] duration-[300ms] ease-in-out",
             "group-hover:opacity-100 group-hover:translate-x-[0] group-hover:scale-100"
           )}>
@@ -142,7 +142,7 @@ const NavItem = (props) => {
           )}
           <span
             className={clsx(
-              "origin-bottom-left ml-3 md:transition-all md:duration-[500ms] md:ease-in-out",
+              "origin-bottom-left ml-3 md:transition-[opacity] md:duration-[500ms] md:ease-in-out",
               activeRoute == props.route ? "font-bold" : "font-normal",
               props.onlyIcon ? "md:opacity-0" : "opacity-100"
             )}

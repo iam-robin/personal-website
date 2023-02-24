@@ -55,9 +55,9 @@ module.exports = {
         DEFAULT: "#828996",
       },
       black: "#111111",
-      green: "#91C5C5",
-      yellow: "#E2CD80",
-      purple: "#D6D2E4",
+      green: "#18aa74",
+      yellow: "#ffb700",
+      red: "#ff4136",
       background: "var(--background-color)",
     },
     screens: {
@@ -71,6 +71,7 @@ module.exports = {
     },
     fontFamily: {
       sans: ["var(--font-apercu)", "Helvetica", "Arial", "ui-sans-serif", "sans-serif"],
+      mono: ["var(--font-spacemono)", "monospace"],
     },
     fontWeight: {
       normal: 400,

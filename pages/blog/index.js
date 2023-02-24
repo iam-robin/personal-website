@@ -1,7 +1,7 @@
 import { useState } from "react";
 import fs from "fs";
 import Head from "next/head";
-import Article from "../../components/Article";
+import BlogItem from "../../components/BlogItem";
 import matter from "gray-matter";
 import PageHeader from "../../components/PageHeader";
 import FilterItem from "../../components/FilterItem";
@@ -88,19 +88,12 @@ export default function Blog({ posts, tags }) {
         </ul>
         {activeTag === "all"
           ? posts.map((post) => (
-              <Article key={post.slug} className="border-b-2" post={post} />
+              <BlogItem key={post.slug} className="border-b-2" post={post} />
             ))
           : posts.filter(({ tags }) => tags.includes(activeTag)).map((post) => (
-            <Article key={post.slug} className="border-b-2" post={post} />
+            <BlogItem key={post.slug} className="border-b-2" post={post} />
           ))
           }
-          {/* posts.find((post) => post.tags.includes(activeTag)).map((post) => (
-            console.log("post:", post)
-            //   return <Article key={0} className="border-b-2" post={null} />
-          )) */}
-        {/* {posts.map((post) => (
-            <Article key={post.slug} className="border-b-2" post={post} />
-        ))} */}
       </section>
     </div>
   );

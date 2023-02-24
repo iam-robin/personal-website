@@ -1,19 +1,9 @@
-import { useEffect } from "react";
 import clsx from "clsx";
 import ProjectCard from "../../components/ProjectCard";
 import Head from "next/head";
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../tailwind.config.js";
 import PageHeader from "../../components/PageHeader";
 
 const Projects = () => {
-//   const fullConfig = resolveConfig(tailwindConfig);
-//   useEffect(() => {
-//     document.body.style.setProperty(
-//       "--background-color",
-//       fullConfig.theme.colors.grey["200"]
-//     );
-//   }, [fullConfig.theme]);
 
   return (
     <div>

@@ -1,7 +1,8 @@
 import clsx from "clsx";
+import { ReactElement } from "react";
 
 interface PageHeaderProps {
-  children: string;
+  children: string | ReactElement;
   headline: string;
 }
 
@@ -17,9 +18,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({ children, headline }) => {
       >
         {headline}
       </h2>
-      <p className="w-full mt-2 lg:w-2/3 lg:mt-[0px] dark:text-grey-300">
+      <div className="w-full mt-2 lg:w-2/3 lg:mt-[0px] dark:text-grey-300">
         {children}
-      </p>
+      </div>
     </div>
   );
 };

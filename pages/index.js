@@ -21,7 +21,7 @@ const Home = () => {
         <Link href="https://read.cv/iamrobin">
           <MarkerLink type="circle" delay={600} text="Robin↗" />
         </Link>
-        –  a design engineer living in Munich, who enjoys working at the
+        –  a design Engineer living in Munich, who enjoys working at the
         intersection of code, design and art.
       </h1>
       <h2 className="text-lg mt-6 dark:text-grey-200">

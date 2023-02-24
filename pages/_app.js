@@ -5,6 +5,13 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { ThemeProvider } from "next-themes";
 import localFont from "@next/font/local";
+import { Space_Mono } from "@next/font/google";
+
+const spacemono = Space_Mono({
+    subsets: ["latin"],
+    weight: '400',
+    variable: "--font-spacemono",
+});
 
 const apercu = localFont({
   src: [
@@ -63,7 +70,7 @@ function MyApp({ Component, pageProps }) {
           src="//gc.zgo.at/count.js"
         ></script>
       </Head>
-      <main className={`${apercu.variable} font-sans test-class`}>
+      <main className={`${apercu.variable} ${spacemono.variable} font-sans test-class`}>
         <ThemeProvider attribute="class">
           <Layout>
             <Component {...pageProps} />
