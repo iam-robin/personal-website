@@ -33,5 +33,11 @@ export const fetchBookmarks = async (page: number = 0) => {
     bookmarks.push(...(await fetchBookmarks(page + 1)));
   }
 
+  bookmarks.sort((a, b) => {
+    const dateA = new Date(a.created).getTime();
+    const dateB = new Date(b.created).getTime();
+    return dateB - dateA;
+  });
+
   return bookmarks;
 };
