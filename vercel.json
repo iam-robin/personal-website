@@ -1,8 +1,0 @@
-{
-  "crons": [
-    {
-        "schedule": "0 0 * * *",
-        "command": "npm run build"
-    }
-  ]
-}
