@@ -1,12 +1,11 @@
 {
+    "version": 2,
     "builds": [
-      {
-        "src": "next.config.js",
-        "use": "@vercel/next",
-        "config": {
-          "maxLambdaSize": "50mb"
-        },
-        "cron": "0 0 * * *"
+      { "src": "next.config.js", "use": "@vercel/next" }
+    ],
+    "cron": {
+      "build": {
+        "schedule": "0 0 * * *"
       }
-    ]
+    }
   }
