@@ -1,14 +1,26 @@
-import useSWR from "swr";
-import fetcher from "../lib/fetcher";
 import PageHeader from "../components/PageHeader";
 import MusicItem from "../components/MusicItem";
 import PlaylistItem from "../components/PlaylistItem";
 import clsx from "clsx";
 import TextLink from "../components/TextLink";
 import { useState } from 'react';
+import { myPlaylists } from "../lib/spotify";
 
 export async function getStaticProps() {
   const count = 9;
+
+  const response = await myPlaylists();
+  const { items } = await response.json();
+
+  const playlists = items.map((playlist) => ({
+    name: playlist.name,
+    url: playlist.external_urls.spotify,
+    image: playlist.images[0].url,
+    tracks: playlist.tracks.total,
+    description: playlist.description,
+  }));
+
+//   console.log(playlists);
 
   const resTopAlbumsThreeMonth = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${process.env.LAST_FM_USER_NAME}&api_key=${process.env.LAST_FM_API_KEY}&limit=${count}&period=1month&format=json`);
   const topAlbumThreeMonthQuery = await resTopAlbumsThreeMonth.json();
@@ -34,12 +46,12 @@ export async function getStaticProps() {
     props: {
       topAlbumsThreeMonth,
       topAlbumOverall,
+      playlists
     },
   }
 };
 
-const Music = ({ topAlbumsThreeMonth, topAlbumOverall }) => {
-  const { data: playlists } = useSWR("/api/spotify/playlists", fetcher);
+const Music = ({ topAlbumsThreeMonth, topAlbumOverall, playlists }) => {
   const [isOverall, setIsOverall] = useState(false);
 
   return (

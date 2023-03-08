@@ -29,7 +29,7 @@ export const fetchBookmarks = async (page: number = 0) => {
     );
   }
 
-  if (data.items.length === PER_PAGE) {
+  if (data.items?.length === PER_PAGE) {
     bookmarks.push(...(await fetchBookmarks(page + 1)));
   }
 
