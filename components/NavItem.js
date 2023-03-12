@@ -175,7 +175,7 @@ const NavItem = (props) => {
         {!props.route.startsWith("https://") && props.index && (
           <div
             className={clsx(
-              "h-4 w-4 bg-grey-200 dark:bg-grey-950 rounded text-[10px] flex items-center justify-center text-grey-550 dark:text-grey-650 font-mono",
+              "hidden h-4 w-4 bg-grey-200 dark:bg-grey-950 rounded text-[10px] md:flex items-center justify-center text-grey-550 dark:text-grey-650 font-mono",
               "transition-all duration-[300ms] ease-in-out",
               activeRoute != props.route
                 ? "group-hover:bg-grey-250 group-hover:text-600 dark:group-hover:bg-grey-900 dark:group-hover:text-600"
