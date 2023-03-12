@@ -8,8 +8,16 @@ const PlaylistItem = (props) => {
       href={props.url}
       target="_blank"
       rel="noreferrer"
-      className="group relative cursor-pointer rounded-xl bg-grey-100 dark:bg-grey-900 flex items-center py-6 px-6 group hover:bg-grey-200 dark:hover:bg-grey-850 transition-background duration-[0.5s] gap-8 mb-6"
+      className="group relative cursor-pointer rounded-xl bg-grey-100 dark:bg-grey-900 flex items-center py-6 px-6 pr-12 group hover:bg-grey-200 dark:hover:bg-grey-850 transition-background duration-[0.5s] gap-8 mb-6"
     >
+      <div
+        className={clsx(
+          "absolute right-6 top-6 w-3 h-3 flex items-center justify-center text-xl text-grey-300 dark:text-grey-600",
+          "group-hover:text-grey-500 dark:group-hover:text-grey-300 transition-all duration-[0.5s] group-hover:translate-x-1 group-hover:-translate-y-1"
+        )}
+      >
+        ↗
+      </div>
       <Image
         src={props.cover}
         alt={props.title}
