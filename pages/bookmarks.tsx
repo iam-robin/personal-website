@@ -66,18 +66,12 @@ const Bookmarks = ({ bookmarks, tags }: Props) => {
           Daily I receive new articles, videos, essays, etc. in the RSS reader
           of my choice{" "}
           <TextLink src="https://reederapp.com/" external>
-            Reeder
+            Reeder.
           </TextLink>
-          . Some I read immediately, while others I save for later using my
-          trusted read-it-later tool,{" "}
-          <TextLink src="https://getpocket.com/" external>
-            Pocket
-          </TextLink>
-          . I categorize and tag items I have read and found interesting in{" "}
+          I categorize and tag items I have read and found interesting in{" "}
           <TextLink src="https://raindrop.io/" external>
-            Raindrop.io
-          </TextLink>
-          . Thanks to their fantastic API, I can also share that list here on my
+            Raindrop.io.
+          </TextLink>Thanks to their fantastic API, I can also share that list here on my
           personal website.
           <ul className="flex gap-4 mt-5 text-xs text-grey font-mono">
             <li className="flex items-center gap-2">

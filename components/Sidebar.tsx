@@ -46,9 +46,9 @@ const Sidebar: React.FC<MediaDividerProps> = ({ collided }) => {
             What I create
           </h3>
           <ul className={clsx("list-none p-0 m-0 -ml-2 mt-2")}>
-            <NavItem content="projects" route="/projects" onlyIcon={collided} />
-            {/* <NavItem content="blog" route="/blog" onlyIcon={collided} /> */}
-            <NavItem content="photos" route="/photos" onlyIcon={collided} />
+            <NavItem content="projects" route="/projects" onlyIcon={collided} index="1" />
+            {/* <NavItem content="blog" route="/blog" onlyIcon={collided} index={2} /> */}
+            <NavItem content="photos" route="/photos" onlyIcon={collided} index="2" />
           </ul>
         </div>
         <div>
@@ -62,9 +62,9 @@ const Sidebar: React.FC<MediaDividerProps> = ({ collided }) => {
             What I consume
           </h3>
           <ul className="list-none p-0 m-0 -ml-2 mt-2">
-            <NavItem content="books" route="/books" onlyIcon={collided} />
-            <NavItem content="music" route="/music" onlyIcon={collided} />
-            <NavItem content="bookmarks" route="/bookmarks" onlyIcon={collided} />
+            <NavItem content="books" route="/books" onlyIcon={collided} index="3" />
+            <NavItem content="music" route="/music" onlyIcon={collided} index="4" />
+            <NavItem content="bookmarks" route="/bookmarks" onlyIcon={collided} index="5" />
           </ul>
         </div>
         <div>
@@ -90,12 +90,6 @@ const Sidebar: React.FC<MediaDividerProps> = ({ collided }) => {
               onlyIcon={collided}
               small
             />
-            {/* <NavItem
-              content="instagram"
-              route="https://www.instagram.com/iamrob.in/"
-              onlyIcon={collided}
-              small
-            /> */}
             <NavItem
               content="readcv"
               route="https://read.cv/iamrobin"

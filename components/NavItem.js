@@ -81,17 +81,29 @@ const NavItem = (props) => {
 
   useEffect(() => {
     setActiveRoute(getActiveRoute(router));
-  }, [router]);
+
+    const handleKeyPress = (event) => {
+      if (event.key === props.index) {
+        router.push(props.route);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [router, props.index, props.route]);
 
   return (
-    <li className={clsx("block text-base group", props.small ? "h-8" : "h-10")}>
+    <li className={clsx("block text-base group")}>
       <Link
         href={props.route}
         rel="me"
         onClick={() => publish("navItemClicked")}
         className={clsx(
           `flex relative px-3 rounded-lg items-center justify-between pointer text-sm group`,
-          'after:block after:content-[""] after:-z-10 after:absolute after:top-[0] after:left-[0] after:w-full after:h-full after:rounded-xl',
+          'after:block after:content-[""] after:-z-10 after:absolute after:top-[0] after:left-[0] after:w-full after:h-full after:rounded-lg',
           "after:opacity-0 after:scale-90 after:transition-all after:duration-300 after:ease-in-out",
           "hover:after:opacity-100 hover:after:scale-100",
           "md:transition-all md:duration-[500ms] md:ease-in-out",
@@ -99,7 +111,7 @@ const NavItem = (props) => {
           props.onlyIcon && activeRoute != props.route
             ? "hover:after:opacity-0"
             : "",
-          props.small ? "text-xs py-2" : "text-base py-[6px]",
+          props.small ? "text-xs py-2" : "text-base py-[8px]",
           `${
             activeRoute == props.route
               ? "after:scale-100 after:transition-color after:duration-[0ms] after:opacity-100 text-grey-900 dark:text-grey-200 after:bg-grey-200 md:after:bg-white dark:after:bg-grey-900"
@@ -125,7 +137,7 @@ const NavItem = (props) => {
                 "fill-grey-800 dark:fill-grey-400",
                 "transition-all duration-[500ms] ease-in-out",
                 props.onlyIcon & !props.small ? "md:h-6 md:w-6" : "",
-                props.small & !props.onlyIcon ? "h-4 w-4" : "h-5 w-5",
+                props.small & !props.onlyIcon ? "h-4 w-4" : "h-4 w-4",
                 activeRoute == props.route ? "hidden" : "block"
               )}
             />
@@ -133,17 +145,17 @@ const NavItem = (props) => {
           {IconActive && (
             <IconActive
               className={clsx(
-                "h-5 w-5 fill-blue",
+                "fill-blue",
                 "transition-all duration-[500ms] ease-in-out",
                 props.onlyIcon & !props.small ? "md:h-6 md:w-6" : "",
-                props.small & !props.onlyIcon ? "h-4 w-4" : "h-5 w-5",
+                props.small & !props.onlyIcon ? "h-4 w-4" : "h-4 w-4",
                 activeRoute == props.route ? "block" : "hidden"
               )}
             />
           )}
           <span
             className={clsx(
-              "origin-bottom-left ml-3 md:transition-[opacity] md:duration-[500ms] md:ease-in-out",
+              "text-sm origin-bottom-left ml-2 md:transition-[opacity] md:duration-[500ms] md:ease-in-out",
               activeRoute == props.route ? "font-bold" : "font-normal",
               props.onlyIcon ? "md:opacity-0" : "opacity-100"
             )}
@@ -159,6 +171,20 @@ const NavItem = (props) => {
               props.onlyIcon ? "md:opacity-0" : "md:opacity-100"
             )}
           />
+        )}
+        {!props.route.startsWith("https://") && props.index && (
+          <div
+            className={clsx(
+              "h-4 w-4 bg-grey-200 dark:bg-grey-950 rounded text-[10px] flex items-center justify-center text-grey-550 dark:text-grey-650 font-mono",
+              "transition-all duration-[300ms] ease-in-out",
+              activeRoute != props.route
+                ? "group-hover:bg-grey-250 group-hover:text-600 dark:group-hover:bg-grey-900 dark:group-hover:text-600"
+                : "bg-grey-150",
+              props.onlyIcon ? "md:opacity-0" : "md:opacity-100"
+            )}
+          >
+            {props.index}
+          </div>
         )}
       </Link>
     </li>
