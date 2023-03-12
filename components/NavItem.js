@@ -18,6 +18,7 @@ import MastodonIcon from "../public/img/icons/mastodon.svg";
 import InstagramIcon from "../public/img/icons/instagram.svg";
 import GithubIcon from "../public/img/icons/github.svg";
 import ReadcvIcon from "../public/img/icons/readcv.svg";
+import GlassIcon from "../public/img/icons/glass.svg";
 import ArrowUpRightIcon from "../public/img/icons/arrowUpRight.svg";
 import clsx from "clsx";
 import { publish } from "../lib/events";
@@ -48,9 +49,9 @@ const NavItem = (props) => {
       inactive: MusicIcon,
     },
     bookmarks: {
-        active: BookmarkFilledIcon,
-        inactive: BookmarkIcon,
-      },
+      active: BookmarkFilledIcon,
+      inactive: BookmarkIcon,
+    },
     blog: {
       active: WriteFilledIcon,
       inactive: WriteIcon,
@@ -70,6 +71,9 @@ const NavItem = (props) => {
     readcv: {
       inactive: ReadcvIcon,
     },
+    glass: {
+      inactive: GlassIcon,
+    },
   };
 
   const IconInactive = iconMap[props.content]?.inactive;
@@ -80,12 +84,7 @@ const NavItem = (props) => {
   }, [router]);
 
   return (
-    <li
-      className={clsx(
-        "block text-base group",
-        props.small ? "h-8" : "h-10"
-      )}
-    >
+    <li className={clsx("block text-base group", props.small ? "h-8" : "h-10")}>
       <Link
         href={props.route}
         rel="me"
@@ -109,11 +108,13 @@ const NavItem = (props) => {
         )}
       >
         {props.onlyIcon && (
-          <div className={clsx(
-            "hidden md:block fixed opacity-0 scale-90 pointer-events-none origin-left -translate-x-2 left-[72px] z-50 px-3 py-[6px] rounded-xl font-normal bg-grey-200 dark:bg-grey-900",
-            "transition-[opacity,transform] duration-[300ms] ease-in-out",
-            "group-hover:opacity-100 group-hover:translate-x-[0] group-hover:scale-100"
-          )}>
+          <div
+            className={clsx(
+              "hidden md:block fixed opacity-0 scale-90 pointer-events-none origin-left -translate-x-2 left-[72px] z-50 px-3 py-[6px] rounded-xl font-normal bg-grey-200 dark:bg-grey-900",
+              "transition-[opacity,transform] duration-[300ms] ease-in-out",
+              "group-hover:opacity-100 group-hover:translate-x-[0] group-hover:scale-100"
+            )}
+          >
             {props.content.charAt(0).toUpperCase() + props.content.slice(1)}
           </div>
         )}

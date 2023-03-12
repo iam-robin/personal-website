@@ -90,15 +90,21 @@ const Sidebar: React.FC<MediaDividerProps> = ({ collided }) => {
               onlyIcon={collided}
               small
             />
-            <NavItem
+            {/* <NavItem
               content="instagram"
               route="https://www.instagram.com/iamrob.in/"
               onlyIcon={collided}
               small
-            />
+            /> */}
             <NavItem
               content="readcv"
               route="https://read.cv/iamrobin"
+              onlyIcon={collided}
+              small
+            />
+            <NavItem
+              content="glass"
+              route="https://glass.photo/iamrobin"
               onlyIcon={collided}
               small
             />
