@@ -201,7 +201,7 @@ const Layout = ({ children }) => {
               <IconNormalScreen className="fill-grey-550 dark:fill-grey-550 h-5 w-5" />
             )}
           </button>
-          <section className="mx-auto max-w-3xl">{children}</section>
+          <section className="mx-auto max-w-[992px]">{children}</section>
           {/* <div className="bg-blue sticky bottom-12 right-12 w-full">project nav</div> */}
         </div>
       </main>

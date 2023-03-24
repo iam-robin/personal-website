@@ -1,7 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import clsx from 'clsx';
-import Image from 'next/image';
-import TextLink from "../components/TextLink";
 import ArrowUpRightIcon from '../public/img/icons/arrowUpRight.svg';
 
 function mapRange(value, low1, high1, low2, high2) {
@@ -12,7 +10,7 @@ const BookItem = (props) => {
   const bookRef = useRef();
 
   useEffect(() => {
-    const height = props.pageCount ? mapRange(props.pageCount, 1, 1000, 8, 54) + 'px' : '16px';
+    const height = props.pageCount ? mapRange(props.pageCount, 1, 1000, 8, 64) + 'px' : '16px';
     bookRef.current.style.setProperty('--book-height', height);
   }, [props.pageCount])
 
@@ -39,7 +37,7 @@ const BookItem = (props) => {
           className={clsx(
             'relative transition-transform duration-[0.5s] ease-in-out transform-three-d order-[-1] w-12 shrink-0',
             'lg:group-hover:book-rotate lg:w-1/2 lg:order-1',
-            'xl:w-full',
+            'xl:w-full xl:max-w-[120px]',
             `after:hidden lg:after:block after:content-[""] after:book-stripes after:bg-grey-100 after:w-[calc(100%+0.5px)] after:absolute after:left-0 after:rounded-l-md after:border-y-[3px] after:border-l-[4px] after:border-grey-800 dark:after:border-grey-700`,
             'after:book-bottom',
             `before:hidden lg:before:block before:content-[""] before:book-stripes-right before:bg-white before:h-[calc(100%+0.5px)] before:absolute before:-right-[0] before-top-0 before:border-x-[3px] before:border-x-grey-800 dark:before:border-x-grey-700 before:border-t-[3px] before:border-t-grey-200 dark:before:border-t-grey-900`,

@@ -8,7 +8,7 @@ const PlaylistItem = (props) => {
       href={props.url}
       target="_blank"
       rel="noreferrer"
-      className="group relative cursor-pointer rounded-xl bg-grey-100 dark:bg-grey-900 flex items-center py-6 px-6 pr-12 group hover:bg-grey-200 dark:hover:bg-grey-850 transition-background duration-[0.5s] gap-8 mb-6"
+      className="group relative cursor-pointer rounded-xl bg-grey-100 dark:bg-grey-900 flex items-center py-6 px-6 pr-12 group hover:bg-grey-200 dark:hover:bg-grey-850 transition-background duration-[0.5s] gap-8"
     >
       <div
         className={clsx(

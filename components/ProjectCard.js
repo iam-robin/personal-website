@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import clsx from 'clsx';
+import Link from "next/link";
+import clsx from "clsx";
 
 const ProjectCard = (props) => {
   return (
@@ -14,29 +14,33 @@ const ProjectCard = (props) => {
         "dark:sm:after:bg-grey-900"
       )}
     >
-      <div className={`${props.color} h-[160px] z-10 relative flex justify-center items-center rounded-xl transition-transform`}>
-        {
-          props.logo &&
+      <div
+        className={`${props.color} aspect-[3/2] z-10 relative flex justify-center items-center rounded-xl transition-transform`}
+      >
+        {props.logo && (
           <img
             src={props.logo}
             alt={`${props.title} logo`}
-            className={`${props.logoHeight ? props.logoHeight : "h-[35%]"}`}
+            className={clsx(
+              "max-h-16",
+              `${props.logoHeight ? props.logoHeight : "h-[35%]"}`
+            )}
           />
-        }
+        )}
       </div>
-      <div className={clsx(
-        "pt-3 px-1 z-10 relative",
-      )}>
-        <span className='inline-flex items-center'>
+      <div className={clsx("pt-3 px-1 z-10 relative")}>
+        <span className="inline-flex items-center">
           <h2 className="inline font-bold dark:text-grey-200">{props.title}</h2>
-          {props.externalLink && <span className="ml-1 dark:text-grey-200">↗</span>}
+          {props.externalLink && (
+            <span className="ml-1 dark:text-grey-200">↗</span>
+          )}
         </span>
-        {
-          props.description && <p className="text-grey-600">{props.description}</p>
-        }
+        {props.description && (
+          <p className="text-grey-600">{props.description}</p>
+        )}
       </div>
     </Link>
   );
-}
+};
 
 export default ProjectCard;
