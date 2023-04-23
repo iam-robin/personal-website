@@ -24,7 +24,7 @@ const TextLink: React.FC<TextLinkProps> = ({children, ...props }) => {
     >
       {children}
     </a>
-    { external && <ArrowUpRightIcon className=" h-2 w-2 ml-[6px] fill-black dark:fill-grey-200" /> }
+    { external && <ArrowUpRightIcon className=" h-2 w-2 ml-[6px] fill-text-lvl-2" /> }
     </span>
   );
 }

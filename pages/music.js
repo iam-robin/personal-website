@@ -76,7 +76,7 @@ const Music = ({ topAlbumsThreeMonth, topAlbumOverall, playlists }) => {
         .
       </PageHeader>
       <p className="font-bold dark:text-grey-200"></p>
-      <h2 className="text-black font-bold mb-8 uppercase mt-24 dark:text-grey-700">
+      <h2 className="text-text-lvl-1 font-bold mb-8 uppercase mt-24">
         My Playlists
       </h2>
       <div
@@ -97,14 +97,14 @@ const Music = ({ topAlbumsThreeMonth, topAlbumOverall, playlists }) => {
         ))}
       </div>
       <div className="mt-24 mb-8 flex items-center">
-        <h2 className="text-black font-bold  uppercase dark:text-grey-700">
+        <h2 className="text-text-lvl-1 font-bold uppercase">
           Top Albums
         </h2>
         <div className="ml-8 flex gap-2 text-sm">
           <button
             onClick={() => setIsOverall(false)}
             className={clsx(
-              "cursor-pointer py-2 px-3 rounded-md dark:text-grey-500",
+              "cursor-pointer py-2 px-3 rounded-md text-text-lvl-2",
               !isOverall
                 ? "font-bold text-blue bg-blue-100 dark:bg-grey-900 dark:text-blue"
                 : ""
@@ -115,7 +115,7 @@ const Music = ({ topAlbumsThreeMonth, topAlbumOverall, playlists }) => {
           <button
             onClick={() => setIsOverall(true)}
             className={clsx(
-              "cursor-pointer py-2 px-3 rounded-md dark:text-grey-500",
+              "cursor-pointer py-2 px-3 rounded-md text-text-lvl-2",
               isOverall
                 ? "font-bold text-blue bg-blue-100 dark:bg-grey-900 dark:text-blue"
                 : ""
@@ -128,9 +128,8 @@ const Music = ({ topAlbumsThreeMonth, topAlbumOverall, playlists }) => {
       <div
         className={clsx(
           "grid grid-cols-1 gap-8",
-          "xxs:grid-cols-2",
-          "lg:grid-cols-3",
-          "xl:grid-cols-4"
+          "lg:grid-cols-2",
+          "xxl:grid-cols-3"
         )}
       >
         {isOverall

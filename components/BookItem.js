@@ -15,7 +15,7 @@ const BookItem = (props) => {
   }, [props.pageCount])
 
   return (
-    <a href={`https://literal.club/book/${props.slug}`} target="_blank" rel="noreferrer" className='cursor-pointer rounded-xl bg-grey-100 dark:bg-grey-900 hover:dark:bg-grey-850 p-8 lg:p-14 group hover:bg-grey-200 transition-background duration-[0.5s]'>
+    <a href={`https://literal.club/book/${props.slug}`} target="_blank" rel="noreferrer" className='block h-full cursor-pointer rounded-xl bg-bg-lvl-2 p-8 lg:p-14 hover:bg-bg-lvl-4 group transition-background duration-[0.5s]'>
       <div className={clsx(
         'flex h-full gap-8',
         'lg:justify-center lg:items-center lg:gap-[0]',
@@ -28,8 +28,8 @@ const BookItem = (props) => {
           'transition-all duration-500 ease-in-out',
           'lg:group-hover:opacity-100 lg:group-hover:translate-y-[0]',
         )}>
-          <h3 className='text-base font-bold leading-[1.2] dark:text-grey-200'>{props.title}</h3>
-          <p className='text-base mt-1 text-grey-500 lg:text-base'>{props.author}</p>
+          <h3 className='text-base font-bold leading-[1.2] text-text-lvl-1'>{props.title}</h3>
+          <p className='text-base mt-1 text-text-lvl-3 lg:text-base'>{props.author}</p>
         </div>
         {/* book image */}
         <div
@@ -67,7 +67,7 @@ const BookItem = (props) => {
             )}
           >
             View on Literal
-            <ArrowUpRightIcon className=" h-2 w-2 ml-[6px] fill-black dark:fill-blue" />
+            <ArrowUpRightIcon className=" h-2 w-2 ml-[6px] fill-blue" />
           </span>
         </div>
       </div>

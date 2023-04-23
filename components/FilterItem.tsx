@@ -11,7 +11,7 @@ const FilterItem: React.FC<FilterItemProps> = ({ name, count, active }) => {
   return (
     <h3 className={clsx(
         "text-base",
-        active ? "text-grey-900 dark:text-grey-100" : "text-grey-400 dark:text-grey-600 hover:text-grey-800 dark:hover:text-grey-300",
+        active ? "text-text-lvl-1" : "text-text-lvl-4 hover:text-text-lvl-3",
     )}>
         <span className={clsx(
             active ? "underline-offset-8 underline decoration-blue decoration-2" : ""

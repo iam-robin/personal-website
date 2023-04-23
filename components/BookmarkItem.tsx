@@ -49,12 +49,12 @@ const BookmarkItem: React.FC<BookmarkItemProps> = ({
                   : "bg-red"
               )}
             ></span>
-            <h3 className="text-black dark:text-grey-100 whitespace-nowrap overflow-hidden text-ellipsis">
+            <h3 className="text-text-lvl-1 whitespace-nowrap overflow-hidden text-ellipsis">
               {title}
             </h3>
           </div>
-          <div className="h-[1px] w-full bg-grey-200 shrink-1 dark:bg-grey-850 transition-colors duration-[300ms] ease-in-out"></div>
-          <span className="font-mono text-sm text-grey-600">
+          <div className="h-[1px] w-full bg-bg-lvl-4 shrink-1 transition-colors duration-[300ms] ease-in-out"></div>
+          <span className="font-mono text-sm text-text-lvl-4">
             <span className="hidden md:inline">{dateFormated}</span>
             <span className="md:hidden">{dateMobile}</span>
           </span>

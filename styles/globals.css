@@ -12,15 +12,93 @@
     overscroll-behavior: none;
   }
 
-  body {
-    --background-color: theme("colors.grey.150");
-    background-color: var(--background-color);
-    overflow-x: hidden;
-    overscroll-behavior: none;
+  [data-theme='blue'] body {
+    /* BACKGROUND */
+    --background-body: theme("colors.blue.500");
+    --background-level-1: theme("colors.white");
+    --background-level-2: theme("colors.grey.100");
+    --background-level-3: theme("colors.grey.150");
+    --background-level-4: theme("colors.grey.200");
+    /* TEXT */
+    --text-level-1: theme("colors.grey.1000");
+    --text-level-2: theme("colors.grey.900");
+    --text-level-3: theme("colors.grey.600");
+    --text-level-4: theme("colors.grey.400");
+    --text-level-5: theme("colors.grey.300");
+    /* NAVIGATION TEXT */
+    --nav-text-level-1: theme("colors.blue.100");
+    --nav-text-level-2: theme("colors.blue.150");
+    --nav-text-level-3: theme("colors.blue.300");
+    --nav-background-level-1: theme("colors.blue.450");
+    --nav-background-level-2: theme("colors.blue.550");
+    --nav-icon-active: theme("colors.blue.100");
+    --nav-icon-inactive: theme("colors.blue.250");
+    --nav-hotkey-bg: theme("colors.blue.450");
+    --nav-hotkey-bg-active: theme("colors.blue.400");
+    --nav-hotkey-text: theme("colors.blue.150");
+    --nav-fill-logo: theme("colors.blue.200");
   }
 
-  .dark body {
-    --background-color: theme("colors.grey.1000");
+  [data-theme='light'] body {
+    /* BACKGROUND */
+    --background-body: theme("colors.grey.150");
+    --background-level-1: theme("colors.white");
+    --background-level-2: theme("colors.grey.100");
+    --background-level-3: theme("colors.grey.150");
+    --background-level-4: theme("colors.grey.200");
+    --background-level-5: theme("colors.grey.300");
+    /* TEXT */
+    --text-level-1: theme("colors.grey.1000");
+    --text-level-2: theme("colors.grey.900");
+    --text-level-3: theme("colors.grey.600");
+    --text-level-4: theme("colors.grey.400");
+    --text-level-5: theme("colors.grey.300");
+    /* NAVIGATION */
+    --nav-text-level-1: theme("colors.grey.1000");
+    --nav-text-level-2: theme("colors.grey.500");
+    --nav-text-level-3: theme("colors.grey.400");
+    --nav-background-level-1: theme("colors.white");
+    --nav-background-level-2: theme("colors.grey.200");
+    --nav-icon-active: theme("colors.blue.400");
+    --nav-icon-inactive: theme("colors.grey.800");
+    --nav-hotkey-bg: theme("colors.grey.200");
+    --nav-hotkey-bg-active: theme("colors.grey.150");
+    --nav-hotkey-text: theme("colors.grey.550");
+    --nav-fill-logo: theme("colors.blue.450");
+
+  }
+
+  [data-theme='dark'] body {
+    /* BACKGROUND */
+    --background-body: theme("colors.grey.1000");
+    --background-level-1: theme("colors.grey.950");
+    --background-level-2: theme("colors.grey.900");
+    --background-level-3: theme("colors.grey.850");
+    --background-level-4: theme("colors.grey.850");
+    /* TEXT */
+    --text-level-1: theme("colors.grey.200");
+    --text-level-2: theme("colors.grey.300");
+    --text-level-3: theme("colors.grey.500");
+    --text-level-4: theme("colors.grey.600");
+    --text-level-5: theme("colors.grey.700");
+    /* NAVIGATION */
+    --nav-text-level-1: theme("colors.grey.200");
+    --nav-text-level-2: theme("colors.grey.400");
+    --nav-text-level-3: theme("colors.grey.600");
+    --nav-background-level-1: theme("colors.grey.900");
+    --nav-background-level-2: theme("colors.grey.950");
+    --nav-icon-active: theme("colors.blue.400");
+    --nav-icon-inactive: theme("colors.grey.400");
+    --nav-hotkey-bg: theme("colors.grey.900");
+    --nav-hotkey-bg-active: theme("colors.grey.950");
+    --nav-hotkey-text: theme("colors.grey.500");
+    --nav-fill-logo: theme("colors.blue.400");
+  }
+
+  body {
+    background-color: var(--background-body);
+    overflow-x: hidden;
+    overscroll-behavior: none;
   }
 
   .resize-animation-stopper *,
@@ -131,9 +209,5 @@
   .album-rotate {
     transform-origin: left left;
     transform: perspective(400px) rotateY(-25deg) scale(0.8);
-  }
-
-  .playlist-rotate {
-    transform: translateY(-40px) scale(0.5);
   }
 }

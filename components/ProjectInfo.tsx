@@ -14,14 +14,12 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({children, ...props }) => {
   return (
     <div className="flex flex-wrap mt-16">
       <h1 className={clsx(
-        "w-full text-xxl font-bold mt-[-8px]",
+        "w-full text-xxl font-bold mt-[-8px] text-text-lvl-1",
         "sm:w-1/3",
-        "dark:text-grey-100"
       )}>{headline}</h1>
       <div className={clsx(
-        "w-full mt-4",
+        "w-full mt-4 text-text-lvl-2",
         "sm:w-2/3 sm:mt-[0px]",
-        "dark:text-grey-300"
       )}>
         <p>{children}</p>
         <div className="flex items-center space-x-10 mt-10">

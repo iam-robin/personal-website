@@ -8,10 +8,9 @@ const ProjectCard = (props) => {
       alt={"project card for " + props.title}
       className={clsx(
         "relative py-5 px-8 sm:p-6 md:p-8",
-        "after:content-[''] after:absolute after:top-3 after:left-3 after:w-[calc(100%-24px)] after:h-[calc(100%-24px)] sm:after:bg-grey-100 after:rounded-xl",
+        "after:content-[''] after:absolute after:top-3 after:left-3 after:w-[calc(100%-24px)] after:h-[calc(100%-24px)] sm:after:bg-bg-lvl-2 after:rounded-xl",
         "after:opacity-0 after:scale-95 after:transition-scale after:duration-300 after:ease-in-out",
         "hover:after:opacity-100 hover:after:scale-100",
-        "dark:sm:after:bg-grey-900"
       )}
     >
       <div
@@ -30,13 +29,13 @@ const ProjectCard = (props) => {
       </div>
       <div className={clsx("pt-3 px-1 z-10 relative")}>
         <span className="inline-flex items-center">
-          <h2 className="inline font-bold dark:text-grey-200">{props.title}</h2>
+          <h2 className="inline font-bold text-text-lvl-1">{props.title}</h2>
           {props.externalLink && (
-            <span className="ml-1 dark:text-grey-200">↗</span>
+            <span className="ml-1 text-text-lvl-2">↗</span>
           )}
         </span>
         {props.description && (
-          <p className="text-grey-600">{props.description}</p>
+          <p className="text-text-lvl-3">{props.description}</p>
         )}
       </div>
     </Link>

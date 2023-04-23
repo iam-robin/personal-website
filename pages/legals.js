@@ -1,6 +1,6 @@
 const Imprint = () => {
     return (
-        <div className="dark:text-grey-200">
+        <div className="text-text-lvl-1">
             <div className="flex flex-wrap">
                 <div className="w-full md:w-1/2">
                     <h2 className="font-bold text-xl">Editor</h2>
