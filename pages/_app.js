@@ -71,7 +71,7 @@ function MyApp({ Component, pageProps }) {
         ></script>
       </Head>
       <main className={`${apercu.variable} ${spacemono.variable} font-sans test-class`}>
-        <ThemeProvider>
+        <ThemeProvider defaultTheme="blue">
           <Layout>
             <Component {...pageProps} />
           </Layout>
