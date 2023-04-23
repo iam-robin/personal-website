@@ -12,7 +12,7 @@ const Changelog = () => {
                     date={new Date("2023-04-23T12:00")}
                 >
                     <p>
-                        I couldn't decide if I prefer a blue or gray background
+                        I couldn&apos;t decide if I prefer a blue or gray background
                         for my personal website.<br/>The solution: a theme switcher!
                     </p>
                 </VersionItem>
