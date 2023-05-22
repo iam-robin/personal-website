@@ -92,9 +92,6 @@ module.exports = {
         fontFamily: {
             sans: [
                 "var(--font-apercu)",
-                "Helvetica",
-                "Arial",
-                "ui-sans-serif",
                 "sans-serif",
             ],
             mono: ["var(--font-spacemono)", "monospace"],

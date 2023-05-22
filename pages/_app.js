@@ -11,6 +11,7 @@ const spacemono = Space_Mono({
     subsets: ["latin"],
     weight: '400',
     variable: "--font-spacemono",
+    display: 'swap',
 });
 
 const apercu = localFont({
@@ -27,6 +28,7 @@ const apercu = localFont({
     },
   ],
   variable: "--font-apercu",
+  display: 'swap',
 });
 
 function MyApp({ Component, pageProps }) {
