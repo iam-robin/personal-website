@@ -70,7 +70,7 @@ function MyApp({ Component, pageProps }) {
           src="//gc.zgo.at/count.js"
         ></script>
       </Head>
-      <main className={`${apercu.variable} ${spacemono.variable} font-sans test-class`}>
+      <main className={`${apercu.variable} ${spacemono.variable} font-sans`}>
         <ThemeProvider defaultTheme="blue">
           <Layout>
             <Component {...pageProps} />
