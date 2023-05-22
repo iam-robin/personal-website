@@ -1,25 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Masonry from "react-masonry-css";
 import Head from "next/head";
 import {
   search,
   mapImageResources,
-  // getFolders,
+  getTags,
   buildImage,
-} from "../lib/cloudinary";
-import PageHeader from "../components/PageHeader";
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../tailwind.config.js'
+} from "../../lib/cloudinary";
+import PageHeader from "../../components/PageHeader";
+import PhotoAlbumItem from "../../components/PhotoAlbumItem";
+import clsx from "clsx";
 
-const MAX_RESULTS = 100;
+const MAX_RESULTS = 6;
 
 const Photos = ({
   images: defaultImages,
   nextCursor: defaultNextCursor,
   totalCount: defaultTotalCount,
-  // folders,
+  folders,
 }) => {
-  const fullConfig = resolveConfig(tailwindConfig);
   const breakpointColumnsObj = {
     default: 3,
     1024: 2,
@@ -30,38 +29,8 @@ const Photos = ({
   const [images, setImages] = useState(defaultImages);
   const [nextCursor, setNextCursor] = useState(defaultNextCursor);
   const [totalCount, setTotalCount] = useState(defaultTotalCount);
-  // const [activeFolder, setActiveFolder] = useState();
 
-//   useEffect(() => {
-//     document.body.style.setProperty("--background-color", fullConfig.theme.colors.grey['200']);
-//   }, [fullConfig.theme]);
-
-  //   console.log("images render", images);
-  // console.log('nextCursor', nextCursor);
-  // console.log('totalCount', totalCount);
-
-  // useEffect(() => {
-  //   (async function run() {
-  //     const results = await fetch("/api/cloudinary/search", {
-  //       method: "POST",
-  //       body: JSON.stringify({
-  //         expression: `folder="${activeFolder || ""}"`,
-  //       }),
-  //     }).then((r) => r.json());
-
-  //     const {
-  //       resources,
-  //       next_cursor: nextPageCursor,
-  //       total_count: updatedTotalCount,
-  //     } = results;
-
-  //     const images = mapImageResources(resources);
-
-  //     setImages(images);
-  //     setNextCursor(nextPageCursor);
-  //     setTotalCount(updatedTotalCount);
-  //   })();
-  // }, [activeFolder]);
+  console.log(folders);
 
   async function handleOnLoadMore(e) {
     e.preventDefault();
@@ -90,15 +59,6 @@ const Photos = ({
     setTotalCount(updatedTotalCount);
   }
 
-  // function handleOnFolderClick(e) {
-  //   const folderPath = e.target.dataset.folderPath;
-  //   if (folderPath === activeFolder) return;
-  //   setActiveFolder(folderPath);
-  //   setNextCursor(undefined);
-  //   setImages([]);
-  //   setTotalCount(0);
-  // }
-
   return (
     <div>
       <Head>
@@ -106,30 +66,31 @@ const Photos = ({
         <meta name="description" content="Photography gallery iamrobin" />
       </Head>
       <PageHeader headline="Photos">
-      I have been enjoying using a camera to capture visually appealing
+        I have been enjoying using a camera to capture visually appealing
         moments for over a decade. My preferred equipment is a Canon eos 5d mark
         III with prime lenses (50mm and 85mm), but I also love using my Fujifilm
         x100v.
       </PageHeader>
-      {/* <h2>Folders</h2>
-      <ul onClick={handleOnFolderClick}>
-        {folders.map((folder) => {
-          const isActive = folder.path === activeFolder;
+      <h2 className="text-black font-bold mb-8 uppercase mt-24 dark:text-grey-700">
+        Photo albums
+      </h2>
+      <div className={clsx("grid grid-cols-1 gap-8", "sm:grid-cols-2", "lg:grid-cols-3")}>
+        {Object.keys(folders).map((folder) => {
           return (
-            <li
-              key={folder.path}
-            >
-              <button
-                data-folder-path={folder.path}
-                className={clsx(isActive ? "bg-blue" : "bg-grey-100")}
-              >{folder.name}</button>
-            </li>
+            <PhotoAlbumItem
+              key={folder}
+              name={folder}
+              photos={folders[folder]}
+            />
           );
         })}
-      </ul> */}
+      </div>
+      <h2 className="text-black font-bold mb-8 uppercase mt-24 dark:text-grey-700">
+        Latest photos
+      </h2>
       <Masonry
         breakpointCols={breakpointColumnsObj}
-        className="flex mt-18 -mx-8 md:mt-24"
+        className="flex -mx-8"
         columnClassName="pl-8 pr-8"
       >
         {images?.map((image) => {
@@ -144,13 +105,6 @@ const Photos = ({
                 alt={image?.publicId || "photo"}
                 width="800"
               />
-              {/* <CldImage
-                width="800"
-                height="800"
-                src={image?.publicId}
-                alt="photo"
-                loading="lazy"
-              /> */}
             </div>
           );
         })}
@@ -166,7 +120,7 @@ const Photos = ({
 
 export async function getStaticProps() {
   const results = await search({
-    expression: 'folder=""',
+    expression: "",
     max_results: MAX_RESULTS,
   });
 
@@ -176,14 +130,35 @@ export async function getStaticProps() {
     total_count: totalCount,
   } = results;
   const images = mapImageResources(resources);
-  // const { folders } = await getFolders();
+  const { tags } = await getTags();
+  const folders = {};
+
+  for (const tag of tags) {
+    const results = await search({
+      expression: `tags="${tag}"`,
+      max_results: 3,
+    });
+
+    const { resources } = results;
+    const images = mapImageResources(resources);
+
+    images.forEach((image) => {
+      let parts = image.image.split("/");
+      let secondLastPart = parts[parts.length - 2];
+      let newSecondLastPart = `w_200,c_scale/${secondLastPart}`;
+      parts[parts.length - 2] = newSecondLastPart;
+      image.image = parts.join("/");
+    });
+
+    folders[tag] = images;
+  }
 
   return {
     props: {
       images: images || null,
       nextCursor: nextCursor || null,
       totalCount: totalCount || null,
-      // folders: folders || null,
+      folders: folders || null,
     },
   };
 }
