@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:icons:svgr": "svgr public/icons --out-dir components/icons --typescript --filename-case kebab --icon 1em --svg-props fill=currentColor"
   },
   "dependencies": {
     "@cloudinary/url-gen": "^1.8.7",
@@ -15,6 +16,7 @@
     "@heroicons/react": "^1.0.6",
     "@next/font": "^13.1.6",
     "@notionhq/client": "^1.0.3",
+    "@svgr/cli": "^8.0.1",
     "clsx": "^1.1.1",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",

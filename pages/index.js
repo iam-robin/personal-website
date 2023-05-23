@@ -1,13 +1,14 @@
 import Link from "next/link";
 import MarkerLink from "../components/MarkerLink";
 import ProjectCard from "../components/ProjectCard";
+import PeakHeadline from "../components/PeakHeadline";
 import BookItem from "../components/BookItem";
 import MusicItem from "../components/MusicItem";
 import clsx from "clsx";
 import Head from "next/head";
 import { GraphQLClient, gql } from "graphql-request";
 
-const Home = ({ isReadingData, topAlbumsThreeMonth }) => {
+const Home = ({ isReadingData, topAlbumsThreeMonth, lastReadBooks }) => {
     return (
         <>
             <Head>
@@ -21,7 +22,13 @@ const Home = ({ isReadingData, topAlbumsThreeMonth }) => {
                 <h1 className="text-xl font-bold leading-normal text-text-lvl-1">
                     Hey, I am
                     <Link href="https://read.cv/iamrobin">
-                        <MarkerLink type="circle" delay={600} text="Robin↗" />
+                        <MarkerLink
+                            type="circle"
+                            isExternal
+                            isBold
+                            delay={600}
+                            text="Robin"
+                        />
                     </Link>
                     –  a Design Engineer living in Munich, who enjoys working at
                     the intersection of code, design and art.
@@ -113,9 +120,11 @@ const Home = ({ isReadingData, topAlbumsThreeMonth }) => {
                     />
                 </div>
             </div> */}
-            <h2 className="font-bold mb-12 text-md mt-20 md:mt-30 lg:mt-40 text-text-lvl-2 border-b border-text-lvl-4 pb-4">
-                Latest projects
-            </h2>
+            <PeakHeadline
+                headline="Latest projects"
+                to="/projects"
+                linkname="All projects"
+            />
             <div
                 className={clsx(
                     "grid grid-cols-1 -m-8",
@@ -151,6 +160,32 @@ const Home = ({ isReadingData, topAlbumsThreeMonth }) => {
                     logoHeight="h-[33%]"
                 />
             </div>
+            <PeakHeadline
+                headline="Last read books"
+                to="/books"
+                linkname="All books"
+            />
+            <div
+                className={clsx(
+                    "grid grid-cols-1 gap-6 mt-10",
+                    "lg:grid-cols-2 lg:gap-10",
+                    "xl:grid-cols-3"
+                )}
+            >
+                {lastReadBooks.booksByReadingStateAndProfile.map((book, i) => {
+                    return (
+                        <BookItem
+                            key={i}
+                            className="row-span-2"
+                            image={book.cover}
+                            title={book.title}
+                            author={book.authors[0]?.name || ""}
+                            slug={book.slug}
+                            pageCount={book.pageCount}
+                        />
+                    );
+                })}
+            </div>
         </>
     );
 };
@@ -163,7 +198,32 @@ export const getStaticProps = async () => {
         `Bearer ${process.env.LITERAL_ACCESS_TOKEN}`
     );
 
-    const isReadingQuery = gql`
+    // const isReadingQuery = gql`
+    //     query booksByReadingStateAndProfile(
+    //         $limit: Int!
+    //         $offset: Int!
+    //         $readingStatus: ReadingStatus!
+    //         $profileId: String!
+    //     ) {
+    //         booksByReadingStateAndProfile(
+    //             limit: $limit
+    //             offset: $offset
+    //             readingStatus: $readingStatus
+    //             profileId: $profileId
+    //         ) {
+    //             title
+    //             cover
+    //             pageCount
+    //             id
+    //             slug
+    //             authors {
+    //                 name
+    //             }
+    //         }
+    //     }
+    // `;
+
+    const lastReadBooksQuery = gql`
         query booksByReadingStateAndProfile(
             $limit: Int!
             $offset: Int!
@@ -188,10 +248,17 @@ export const getStaticProps = async () => {
         }
     `;
 
-    const isReadingData = await graphQLClient.request(isReadingQuery, {
-        limit: 2,
+    // const isReadingData = await graphQLClient.request(isReadingQuery, {
+    //     limit: 2,
+    //     offset: 0,
+    //     readingStatus: "IS_READING",
+    //     profileId: process.env.LITERAL_PROFILE_ID,
+    // });
+
+    const lastReadBooks = await graphQLClient.request(lastReadBooksQuery, {
+        limit: 3,
         offset: 0,
-        readingStatus: "IS_READING",
+        readingStatus: "FINISHED",
         profileId: process.env.LITERAL_PROFILE_ID,
     });
 
@@ -211,7 +278,7 @@ export const getStaticProps = async () => {
     );
 
     return {
-        props: { isReadingData, topAlbumsThreeMonth },
+        props: { lastReadBooks, topAlbumsThreeMonth },
     };
 };
 

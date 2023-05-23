@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import clsx from "clsx";
 import Image from "next/image";
+import ArrowUpRightIcon from "./icons/arrow-up-right";
 
 const PlaylistItem = (props) => {
   return (
@@ -16,7 +17,7 @@ const PlaylistItem = (props) => {
           "group-hover:text-text-lvl-4 transition-all duration-[0.5s] group-hover:translate-x-1 group-hover:-translate-y-1"
         )}
       >
-        ↗
+        <ArrowUpRightIcon />
       </div>
       <Image
         src={props.cover}

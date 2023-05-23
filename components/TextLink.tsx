@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import ArrowUpRightIcon from '../public/img/icons/arrowUpRight.svg';
+import ArrowUpRightIcon from "./icons/arrow-up-right";
 
 interface TextLinkProps {
   children: string;

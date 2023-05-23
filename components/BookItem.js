@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import clsx from 'clsx';
-import ArrowUpRightIcon from '../public/img/icons/arrowUpRight.svg';
+import ArrowUpRightIcon from "../components/icons/arrow-up-right";
 
 function mapRange(value, low1, high1, low2, high2) {
   return Math.round(low2 + (high2 - low2) * (value - low1) / (high1 - low1));
@@ -15,7 +15,7 @@ const BookItem = (props) => {
   }, [props.pageCount])
 
   return (
-    <a href={`https://literal.club/book/${props.slug}`} target="_blank" rel="noreferrer" className='block h-full cursor-pointer rounded-xl bg-bg-lvl-2 p-8 lg:p-14 hover:bg-bg-lvl-4 group transition-background duration-[0.5s]'>
+    <a href={`https://literal.club/book/${props.slug}`} target="_blank" rel="noreferrer" className='block h-full cursor-pointer rounded-xl bg-bg-lvl-3 p-8 lg:p-14 hover:bg-bg-lvl-4 group transition-background duration-[0.5s]'>
       <div className={clsx(
         'flex h-full gap-8',
         'lg:justify-center lg:items-center lg:gap-[0]',

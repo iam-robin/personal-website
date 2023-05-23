@@ -1,5 +1,6 @@
 import Link from "next/link";
 import clsx from "clsx";
+import ArrowUpRightIcon from "./icons/arrow-up-right";
 
 const ProjectCard = (props) => {
   return (
@@ -31,7 +32,7 @@ const ProjectCard = (props) => {
         <span className="inline-flex items-center">
           <h2 className="inline font-bold text-text-lvl-1">{props.title}</h2>
           {props.externalLink && (
-            <span className="ml-1 text-text-lvl-2">↗</span>
+            <ArrowUpRightIcon className="ml-2 text-text-lvl-2 h-2 w-2" />
           )}
         </span>
         {props.description && (

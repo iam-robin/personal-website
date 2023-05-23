@@ -19,7 +19,7 @@ import InstagramIcon from "../public/img/icons/instagram.svg";
 import GithubIcon from "../public/img/icons/github.svg";
 import ReadcvIcon from "../public/img/icons/readcv.svg";
 import GlassIcon from "../public/img/icons/glass.svg";
-import ArrowUpRightIcon from "../public/img/icons/arrowUpRight.svg";
+import ArrowUpRightIcon from "../components/icons/arrow-up-right";
 import clsx from "clsx";
 import { publish } from "../lib/events";
 

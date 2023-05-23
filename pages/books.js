@@ -89,6 +89,8 @@ const Books = ({ shelfData, wantToReadData }) => {
     shelfData.getShelvesByProfileId[0].title
   );
 
+  console.log(shelfData);
+
   return (
     <div>
       <Head>
