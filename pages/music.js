@@ -29,7 +29,7 @@ export async function getStaticProps() {
       title: album?.name,
       artist: album?.artist?.name,
       cover: album?.image[3]["#text"] || album?.image[2]["#text"],
-      playCounts: album?.playcount,
+      playCount: album?.playcount,
       url: album?.url,
     })
   );

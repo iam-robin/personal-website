@@ -25,6 +25,22 @@ const Layout = ({ children }) => {
 
     useEffect(() => {
         subscribe("navItemClicked", () => setIsMobileMenuOpen(false));
+
+        const handleResize = () => {
+            setIsDesktopMenuOpen(window.innerWidth >= 1264);
+          };
+
+          handleResize(); // Check initial viewport width
+
+          if (typeof window !== 'undefined') {
+            window.addEventListener('resize', handleResize);
+          }
+
+          return () => {
+            if (typeof window !== 'undefined') {
+              window.removeEventListener('resize', handleResize);
+            }
+          };
     }, []);
 
     useEffect(() => {

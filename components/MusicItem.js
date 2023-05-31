@@ -8,7 +8,7 @@ const MusicItem = (props) => {
             href={props.url}
             target="_blank"
             rel="noreferrer"
-            className="group h-full relative cursor-pointer rounded-xl bg-bg-lvl-2 flex items-center py-6 px-6 pr-6 group hover:bg-bg-lvl-4 transition-background duration-[0.5s] gap-6"
+            className="group h-full relative cursor-pointer rounded-xl bg-bg-lvl-2 flex items-center py-6 px-6 pr-6 group hover:bg-bg-lvl-4 transition-background duration-[0.5s] gap-4"
         >
             <div
                 className={clsx(
@@ -26,13 +26,16 @@ const MusicItem = (props) => {
                     className="rounded-sm"
                 />
             </div>
-            <div>
-                <p className="block font-bold leading-5 md:mt-[0] text-text-lvl-1 line-clamp-2">
+            <div className="flex flex-col">
+                <p className="block font-bold leading-5 text-sm md:mt-[0] text-text-lvl-1 line-clamp-2 max-w-[150px]">
                     {props.title}
                 </p>
-                <p className="text-text-lvl-3 leading-5 mt-1">
+                <p className="text-text-lvl-3 text-sm leading-5">
                     {props.artist}
                 </p>
+                <span className="flex items-center gap-1 absolute top-2 right-2 text-text-lvl-3 bg-bg-lvl-1 rounded-xl px-3 py-1 text-xxs">
+                    {props.playCounts} plays
+                </span>
             </div>
         </a>
     );

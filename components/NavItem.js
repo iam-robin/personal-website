@@ -32,7 +32,7 @@ const NavItem = (props) => {
     const [activeRoute, setActiveRoute] = useState(getActiveRoute(router));
 
     const iconMap = {
-        photos: {
+        photography: {
             active: CameraFilledIcon,
             inactive: CameraIcon,
         },
@@ -52,7 +52,7 @@ const NavItem = (props) => {
             active: BookmarkFilledIcon,
             inactive: BookmarkIcon,
         },
-        blog: {
+        writing: {
             active: WriteFilledIcon,
             inactive: WriteIcon,
         },

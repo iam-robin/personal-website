@@ -3,12 +3,17 @@ import MarkerLink from "../components/MarkerLink";
 import ProjectCard from "../components/ProjectCard";
 import PeakHeadline from "../components/PeakHeadline";
 import BookItem from "../components/BookItem";
-import MusicItem from "../components/MusicItem";
 import clsx from "clsx";
 import Head from "next/head";
 import { GraphQLClient, gql } from "graphql-request";
+import { search, mapImageResources, buildImage } from "../lib/cloudinary";
 
-const Home = ({ isReadingData, topAlbumsThreeMonth, lastReadBooks }) => {
+const Home = ({
+    isReadingData,
+    topAlbumsThreeMonth,
+    lastReadBooks,
+    images,
+}) => {
     return (
         <>
             <Head>
@@ -127,20 +132,21 @@ const Home = ({ isReadingData, topAlbumsThreeMonth, lastReadBooks }) => {
             />
             <div
                 className={clsx(
-                    "grid grid-cols-1 -m-8",
-                    "xs:grid-cols-2",
-                    "md:grid-cols-3"
+                    "grid grid-cols-1 gap-6 mt-10",
+                    "md:grid-cols-2",
+                    "lg:grid-cols-3 lg:gap-6",
+                    "xl:grid-cols-3"
                 )}
             >
                 <ProjectCard
                     title="Lumon"
-                    // link="projects/lumon"
-                    externalLink={true}
-                    link="https://severance-interface.vercel.app/"
+                    link="projects/lumon"
+                    externalLink={false}
                     description="'Severance' interface"
                     color="bg-[#0E1F38]"
                     logo="/img/projects/lumon/thumb.png"
                     logoHeight="h-[33%]"
+                    year="2022"
                 />
                 <ProjectCard
                     title="Geeenerated"
@@ -150,6 +156,7 @@ const Home = ({ isReadingData, topAlbumsThreeMonth, lastReadBooks }) => {
                     color="bg-[#6F69D2]"
                     logo="/img/projects/geeenerated/thumb.svg"
                     logoHeight="h-[36%]"
+                    year="ongoing"
                 />
                 <ProjectCard
                     title="notion budget"
@@ -158,18 +165,50 @@ const Home = ({ isReadingData, topAlbumsThreeMonth, lastReadBooks }) => {
                     color="bg-[#2D2E37]"
                     logo="/img/projects/notionbudget/thumb.png"
                     logoHeight="h-[33%]"
+                    year="2021"
                 />
             </div>
             <PeakHeadline
-                headline="Last read books"
+                headline="Last photos taken"
+                to="/photos"
+                linkname="All photos"
+            />
+            <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
+            {images?.map((image) => {
+                const imageUrl = buildImage(image.publicId)
+                    .resize("w_620")
+                    .toURL();
+                return (
+                    <div
+                        className="bg-grey-200"
+                        key={image?.assetId}
+                    >
+                        <img
+                            src={imageUrl}
+                            alt={image?.publicId || "photo"}
+                            width="620"
+                            className="object-cover w-full h-full"
+                        />
+                        {/* <CldImage
+                width="800"
+                height="800"
+                src={image?.publicId}
+                alt="photo"
+                loading="lazy"
+              /> */}
+                    </div>
+                );
+            })}
+            </div>
+            <PeakHeadline
+                headline="Last books read"
                 to="/books"
                 linkname="All books"
             />
             <div
                 className={clsx(
                     "grid grid-cols-1 gap-6 mt-10",
-                    "lg:grid-cols-2 lg:gap-10",
-                    "xl:grid-cols-3"
+                    "lg:grid-cols-3 lg:gap-6",
                 )}
             >
                 {lastReadBooks.booksByReadingStateAndProfile.map((book, i) => {
@@ -191,6 +230,16 @@ const Home = ({ isReadingData, topAlbumsThreeMonth, lastReadBooks }) => {
 };
 
 export const getStaticProps = async () => {
+    // CLOUDINARY (PHOTOS)
+    const results = await search({
+        expression: 'folder=""',
+        max_results: 4,
+    });
+
+    const { resources } = results;
+    const images = mapImageResources(resources);
+
+    // LITERAL CLUB
     const endpoint = "https://literal.club/graphql/";
     const graphQLClient = new GraphQLClient(endpoint);
     graphQLClient.setHeader(
@@ -278,7 +327,7 @@ export const getStaticProps = async () => {
     );
 
     return {
-        props: { lastReadBooks, topAlbumsThreeMonth },
+        props: { lastReadBooks, topAlbumsThreeMonth, images },
     };
 };
 

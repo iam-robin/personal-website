@@ -4,11 +4,11 @@ import Link from "next/link";
 import clsx from "clsx";
 import ThemeToggle from "./ThemeToggle";
 
-interface MediaDividerProps {
+interface SidebarProps {
     collided?: boolean;
 }
 
-const Sidebar: React.FC<MediaDividerProps> = ({ collided }) => {
+const Sidebar: React.FC<SidebarProps> = ({ collided }) => {
     return (
         <div className="flex flex-col justify-between h-full">
             <Link
@@ -56,9 +56,9 @@ const Sidebar: React.FC<MediaDividerProps> = ({ collided }) => {
                             onlyIcon={collided}
                             index="1"
                         />
-                        {/* <NavItem content="blog" route="/blog" onlyIcon={collided} index={2} /> */}
+                        {/* <NavItem content="writing" route="/blog" onlyIcon={collided} index={2} /> */}
                         <NavItem
-                            content="photos"
+                            content="photography"
                             route="/photos"
                             onlyIcon={collided}
                             index="2"

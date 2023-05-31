@@ -101,6 +101,13 @@ module.exports = {
             bold: 700,
         },
         fontSize: {
+            xxs: [
+                "10px",
+                {
+                    letterSpacing: "0px",
+                    lineHeight: "1.3",
+                },
+            ],
             xs: [
                 "12px",
                 {
