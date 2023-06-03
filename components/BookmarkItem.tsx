@@ -30,7 +30,7 @@ const BookmarkItem: React.FC<BookmarkItemProps> = ({
     <li
       className={clsx(
         "relative py-3 cursor-pointer",
-        "group-hover:opacity-25 hover:!opacity-100 transition-opacity duration-[300ms] ease-in-out",
+        "group-hover:opacity-50 hover:!opacity-100 transition-opacity duration-[300ms] ease-in-out",
         "after:content-['↗'] after:absolute after:text-grey-800 dark:after:text-grey-200 after:-right-6 after:-translate-x-2 after:group-hover:-translate-x-2 hover:after:!translate-x-[0] after:top-[11px] after:opacity-0 after:group-hover:opacity-0 after:hover:!opacity-100 after:transition-all after:duration-300 after:ease-in-out"
       )}
     >
