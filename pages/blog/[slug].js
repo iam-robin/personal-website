@@ -39,3 +39,5 @@ export default function PostPage({ frontmatter, content }) {
     </section>
   );
 }
+
+PostPage.Layout = "Stacked";

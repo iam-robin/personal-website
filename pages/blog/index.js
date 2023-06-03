@@ -97,3 +97,5 @@ export default function Blog({ posts, tags }) {
     </div>
   );
 }
+
+Blog.Layout = "Main";
