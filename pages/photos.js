@@ -188,6 +188,6 @@ export async function getStaticProps() {
   };
 }
 
-Photos.layout = "LayoutDefault";
 
 export default Photos;
+Photos.Layout = "Main";

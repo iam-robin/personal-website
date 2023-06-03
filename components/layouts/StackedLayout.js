@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Sidebar from "./Sidebar";
+import Sidebar from "../Sidebar";
 import clsx from "clsx";
-import IconFullScreen from "../public/img/icons/fullScreen3.svg";
-import IconNormalScreen from "../public/img/icons/fullScreenOff3.svg";
-import IconMenu from "../public/img/icons/menu.svg";
-import IconClose from "../public/img/icons/close.svg";
-import { subscribe } from "../lib/events";
+import IconMenu from "../../public/img/icons/menu.svg";
+import IconClose from "../../public/img/icons/close.svg";
+import { subscribe } from "../../lib/events";
+import { useRouter } from "next/router";
+import CloseIcon from "../../components/icons/close";
 
 function useFirstRender() {
     const firstRender = useRef(true);
@@ -18,29 +18,30 @@ function useFirstRender() {
     return firstRender.current;
 }
 
-const Layout = ({ children }) => {
+const StackedLayout = (props) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(true);
     const firstRender = useFirstRender();
+    const router = useRouter();
 
     useEffect(() => {
         subscribe("navItemClicked", () => setIsMobileMenuOpen(false));
 
         const handleResize = () => {
             setIsDesktopMenuOpen(window.innerWidth >= 1264);
-          };
+        };
 
-          handleResize(); // Check initial viewport width
+        handleResize(); // Check initial viewport width
 
-          if (typeof window !== 'undefined') {
-            window.addEventListener('resize', handleResize);
-          }
+        if (typeof window !== "undefined") {
+            window.addEventListener("resize", handleResize);
+        }
 
-          return () => {
-            if (typeof window !== 'undefined') {
-              window.removeEventListener('resize', handleResize);
+        return () => {
+            if (typeof window !== "undefined") {
+                window.removeEventListener("resize", handleResize);
             }
-          };
+        };
     }, []);
 
     useEffect(() => {
@@ -70,6 +71,13 @@ const Layout = ({ children }) => {
             });
         }, "1200");
     }, [firstRender, isDesktopMenuOpen]);
+
+    const handleCloseClick = () => {
+        const currentRoute = router.asPath; // Aktuelle URL auslesen
+        const parentRoute = currentRoute.replace(/\/[^/]+$/, ""); // Letzte Subroute entfernen
+
+        router.push(parentRoute); // Auf die Parent-Route umleiten
+    };
 
     return (
         <div
@@ -131,6 +139,13 @@ const Layout = ({ children }) => {
                         "before:content-[''] before:absolute before:bg-bg-lvl-1 before:-bottom-6 before:h-6 before:w-6 before:right-[0] before:rounded-tr-[20px]"
                     )}
                 >
+                    <button
+                        onClick={handleCloseClick}
+                        tabindex="0"
+                        className="h-8 w-8 absolute -bottom-12 right-4 bg-bg-lvl-4 rounded-full flex items-center justify-center cursor-pointer"
+                    >
+                        <CloseIcon className="h-5 w-5 text-text-lvl-3" />
+                    </button>
                     <div className="absolute -bottom-6 h-6 w-6 left-[0] bg-bg-body -z-10"></div>
                     <div className="absolute -bottom-6 h-6 w-6 right-[0] bg-bg-body -z-10"></div>
                 </div>
@@ -199,31 +214,13 @@ const Layout = ({ children }) => {
                             : "md:min-h-[calc(100vh-32px)] md:ml-20"
                     )}
                 >
-                    {/* <button
-                        className={clsx(
-                            "fixed h-8 w-8 hidden items-center justify-center bg-bg-lvl-4 z-50 rounded-full",
-                            "md:flex",
-                            "transition-[left,top] duration-[700ms] ease-in-out",
-                            isDesktopMenuOpen
-                                ? "left-[224px] top-30"
-                                : "left-[64px] top-30"
-                        )}
-                        onClick={() => setIsDesktopMenuOpen(!isDesktopMenuOpen)}
-                    >
-                        {isDesktopMenuOpen ? (
-                            <IconFullScreen className="fill-grey-550 h-5 w-5" />
-                        ) : (
-                            <IconNormalScreen className="fill-grey-550 h-5 w-5" />
-                        )}
-                    </button> */}
                     <section className="mx-auto max-w-[992px]">
-                        {children}
+                        {props.children}
                     </section>
-                    {/* <div className="bg-blue sticky bottom-12 right-12 w-full">project nav</div> */}
                 </div>
             </main>
         </div>
     );
 };
 
-export default Layout;
+export default StackedLayout;

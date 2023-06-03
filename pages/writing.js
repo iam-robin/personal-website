@@ -6,6 +6,6 @@ const Writing = () => {
     );
 }
 
-Writing.layout = "LayoutDefault";
 
 export default Writing;
+Writing.Layout = "Main";

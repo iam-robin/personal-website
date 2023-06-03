@@ -93,6 +93,6 @@ const Projects = () => {
     );
 };
 
-Projects.layout = "LayoutDefault";
 
 export default Projects;
+Projects.Layout = "Main";

@@ -158,6 +158,6 @@ const Music = ({ topAlbumsThreeMonth, topAlbumOverall, playlists }) => {
   );
 };
 
-Music.layout = "LayoutDefault";
 
 export default Music;
+Music.Layout = "Main";

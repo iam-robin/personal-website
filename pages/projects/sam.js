@@ -18,6 +18,6 @@ const Sam = () => {
     );
 }
 
-Sam.layout = "LayoutDefault";
 
 export default Sam;
+Sam.Layout = "Stacked";

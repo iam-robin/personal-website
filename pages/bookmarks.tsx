@@ -7,6 +7,7 @@ import BookmarkItem from "../components/BookmarkItem";
 import TextLink from "../components/TextLink";
 import { fetchBookmarks } from "../lib/raindrop";
 import { Bookmark } from "../types/bookmark";
+import { MyPage } from "../components/layouts/types";
 
 type Tag = {
   title: string;
@@ -47,7 +48,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   };
 };
 
-const Bookmarks = ({ bookmarks, tags }: Props) => {
+const Bookmarks: MyPage = ({ bookmarks, tags }: Props) => {
   const [displayBookmarks, setDisplayBookmarks] = useState(bookmarks);
   const [activeTag, setActiveTag] = useState<string>("all");
   const filterBookmarks = (tag?: string) => {
@@ -148,6 +149,6 @@ const Bookmarks = ({ bookmarks, tags }: Props) => {
   );
 };
 
-Bookmarks.layout = "LayoutDefault";
 
 export default Bookmarks;
+Bookmarks.Layout = "Main";

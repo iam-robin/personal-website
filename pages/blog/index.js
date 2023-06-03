@@ -39,9 +39,6 @@ export async function getStaticProps() {
 
 export default function Blog({ posts, tags }) {
   const [activeTag, setActiveTag] = useState("all");
-  posts.filter(({ tags }) => tags.includes("Internet")).map((post) => {
-    console.log("i p", post);
-  });
   return (
     <div>
       <Head>
@@ -86,14 +83,16 @@ export default function Blog({ posts, tags }) {
             );
           })}
         </ul>
-        {activeTag === "all"
-          ? posts.map((post) => (
-              <BlogItem key={post.slug} className="border-b-2" post={post} />
+        <div className="flex flex-col mt-16">
+            {activeTag === "all"
+            ? posts.map((post, index) => (
+                <BlogItem key={post.slug} isFirst={index == 0} className="border-b-2" post={post} />
+                ))
+            : posts.filter(({ tags }) => tags.includes(activeTag)).map((post, index) => (
+                <BlogItem key={post.slug} className="border-b-2" isFirst={index == 0} post={post} />
             ))
-          : posts.filter(({ tags }) => tags.includes(activeTag)).map((post) => (
-            <BlogItem key={post.slug} className="border-b-2" post={post} />
-          ))
-          }
+            }
+        </div>
       </section>
     </div>
   );

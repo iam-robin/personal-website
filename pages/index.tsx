@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MyPage } from "../components/layouts/types";
 import MarkerLink from "../components/MarkerLink";
 import ProjectCard from "../components/ProjectCard";
 import PeakHeadline from "../components/PeakHeadline";
@@ -8,12 +9,10 @@ import Head from "next/head";
 import { GraphQLClient, gql } from "graphql-request";
 import { search, mapImageResources, buildImage } from "../lib/cloudinary";
 
-const Home = ({
-    isReadingData,
-    topAlbumsThreeMonth,
+const Home: MyPage = ({
     lastReadBooks,
     images,
-}) => {
+}: any) => {
     return (
         <>
             <Head>
@@ -47,84 +46,6 @@ const Home = ({
                     creating it.
                 </h2>
             </div>
-            {/* <h2 className="font-bold mb-10 text-md mt-40 text-text-lvl-2 border-b border-text-lvl-2 pb-4">
-                Currently enjoying
-            </h2>
-            <div
-                className={clsx(
-                    "grid grid-cols-1 gap-6",
-                    "lg:grid-cols-2 lg:gap-8",
-                    "xl:grid-cols-3 xl:grid-rows-2 "
-                )}
-            >
-                {isReadingData.booksByReadingStateAndProfile.map((book, i) => {
-                    return (
-                        <div className="row-span-2 relative" key={i}>
-                            <span className="absolute top-4 left-4 text-grey-300 text-sm">
-                                Reading · Book
-                            </span>
-                            <BookItem
-                                key={i}
-                                className="row-span-2"
-                                image={book.cover}
-                                title={book.title}
-                                author={book.authors[0]?.name || ""}
-                                slug={book.slug}
-                                pageCount={book.pageCount}
-                            />
-                        </div>
-                    );
-                })}
-                <div className="col-span-1">
-                    <MusicItem
-                        title={topAlbumsThreeMonth[0]?.title}
-                        artist={topAlbumsThreeMonth[0]?.artist}
-                        cover={topAlbumsThreeMonth[0]?.cover}
-                        playCounts={topAlbumsThreeMonth[0]?.playCount}
-                        url={topAlbumsThreeMonth[0]?.url}
-                    />
-                </div>
-                <div className="row-span-2">
-                    <BookItem
-                        className="row-span-2"
-                        image={
-                            isReadingData.booksByReadingStateAndProfile[0].cover
-                        }
-                        title={
-                            isReadingData.booksByReadingStateAndProfile[0].title
-                        }
-                        author={
-                            isReadingData.booksByReadingStateAndProfile[0]
-                                .authors[0]?.name || ""
-                        }
-                        slug={
-                            isReadingData.booksByReadingStateAndProfile[0].slug
-                        }
-                        pageCount={
-                            isReadingData.booksByReadingStateAndProfile[0]
-                                .pageCount
-                        }
-                    />
-                </div>
-                <div className="col-span-1">
-                    <MusicItem
-                        title={topAlbumsThreeMonth[1]?.title}
-                        artist={topAlbumsThreeMonth[1]?.artist}
-                        cover={topAlbumsThreeMonth[1]?.cover}
-                        playCounts={topAlbumsThreeMonth[1]?.playCount}
-                        url={topAlbumsThreeMonth[1]?.url}
-                    />
-                </div>
-                <div className="col-span-1">
-                    <MusicItem
-                        title={topAlbumsThreeMonth[2]?.title}
-                        artist={topAlbumsThreeMonth[2]?.artist}
-                        cover={topAlbumsThreeMonth[2]?.cover}
-                        playCounts={topAlbumsThreeMonth[2]?.playCount}
-                        url={topAlbumsThreeMonth[2]?.url}
-                    />
-                </div>
-            </div> */}
             <PeakHeadline
                 headline="Latest projects"
                 to="/projects"
@@ -176,7 +97,7 @@ const Home = ({
             <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
             {images?.map((image) => {
                 const imageUrl = buildImage(image.publicId)
-                    .resize("w_620")
+                    .resize("w_620" as any)
                     .toURL();
                 return (
                     <div
@@ -189,13 +110,6 @@ const Home = ({
                             width="620"
                             className="object-cover w-full h-full"
                         />
-                        {/* <CldImage
-                width="800"
-                height="800"
-                src={image?.publicId}
-                alt="photo"
-                loading="lazy"
-              /> */}
                     </div>
                 );
             })}
@@ -247,31 +161,6 @@ export const getStaticProps = async () => {
         `Bearer ${process.env.LITERAL_ACCESS_TOKEN}`
     );
 
-    // const isReadingQuery = gql`
-    //     query booksByReadingStateAndProfile(
-    //         $limit: Int!
-    //         $offset: Int!
-    //         $readingStatus: ReadingStatus!
-    //         $profileId: String!
-    //     ) {
-    //         booksByReadingStateAndProfile(
-    //             limit: $limit
-    //             offset: $offset
-    //             readingStatus: $readingStatus
-    //             profileId: $profileId
-    //         ) {
-    //             title
-    //             cover
-    //             pageCount
-    //             id
-    //             slug
-    //             authors {
-    //                 name
-    //             }
-    //         }
-    //     }
-    // `;
-
     const lastReadBooksQuery = gql`
         query booksByReadingStateAndProfile(
             $limit: Int!
@@ -297,13 +186,6 @@ export const getStaticProps = async () => {
         }
     `;
 
-    // const isReadingData = await graphQLClient.request(isReadingQuery, {
-    //     limit: 2,
-    //     offset: 0,
-    //     readingStatus: "IS_READING",
-    //     profileId: process.env.LITERAL_PROFILE_ID,
-    // });
-
     const lastReadBooks = await graphQLClient.request(lastReadBooksQuery, {
         limit: 3,
         offset: 0,
@@ -311,26 +193,11 @@ export const getStaticProps = async () => {
         profileId: process.env.LITERAL_PROFILE_ID,
     });
 
-    const count = 3;
-    const resTopAlbumsThreeMonth = await fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${process.env.LAST_FM_USER_NAME}&api_key=${process.env.LAST_FM_API_KEY}&limit=${count}&period=1month&format=json`
-    );
-    const topAlbumThreeMonthQuery = await resTopAlbumsThreeMonth.json();
-    const topAlbumsThreeMonth = topAlbumThreeMonthQuery?.topalbums?.album.map(
-        (album) => ({
-            title: album?.name,
-            artist: album?.artist?.name,
-            cover: album?.image[3]["#text"] || album?.image[2]["#text"],
-            playCounts: album?.playcount,
-            url: album?.url,
-        })
-    );
-
     return {
-        props: { lastReadBooks, topAlbumsThreeMonth, images },
+        props: { lastReadBooks, images },
     };
 };
 
-Home.layout = "LayoutDefault";
 
 export default Home;
+Home.Layout = "Main";

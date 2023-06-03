@@ -89,8 +89,6 @@ const Books = ({ shelfData, wantToReadData }) => {
     shelfData.getShelvesByProfileId[0].title
   );
 
-  console.log(shelfData);
-
   return (
     <div>
       <Head>
@@ -176,6 +174,6 @@ const Books = ({ shelfData, wantToReadData }) => {
   );
 };
 
-Books.layout = "LayoutDefault";
 
 export default Books;
+Books.Layout = "Main";

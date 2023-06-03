@@ -42,6 +42,6 @@ const NotionBudget = () => {
     );
 }
 
-NotionBudget.layout = "LayoutDefault";
 
 export default NotionBudget;
+NotionBudget.Layout = "Stacked";

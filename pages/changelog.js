@@ -148,6 +148,6 @@ const Changelog = () => {
     );
 };
 
-Changelog.layout = "LayoutDefault";
 
 export default Changelog;
+Changelog.Layout = "Main";

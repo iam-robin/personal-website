@@ -36,6 +36,6 @@ const Imprint = () => {
     )
 }
 
-Imprint.layout = "LayoutDefault";
 
 export default Imprint;
+Imprint.Layout = "Main";

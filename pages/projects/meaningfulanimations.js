@@ -42,6 +42,6 @@ const meaningfulanimations = () => {
     );
 }
 
-meaningfulanimations.layout = "LayoutDefault";
 
 export default meaningfulanimations;
+meaningfulanimations.Layout = "Stacked";

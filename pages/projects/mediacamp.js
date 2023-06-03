@@ -115,6 +115,6 @@ const Mediacamp = () => {
     );
 }
 
-Mediacamp.layout = "LayoutDefault";
 
 export default Mediacamp;
+Mediacamp.Layout = "Stacked";

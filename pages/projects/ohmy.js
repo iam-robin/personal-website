@@ -62,6 +62,6 @@ const Ohmy = () => {
     );
 }
 
-Ohmy.layout = "LayoutDefault";
 
 export default Ohmy;
+Ohmy.Layout = "Stacked";

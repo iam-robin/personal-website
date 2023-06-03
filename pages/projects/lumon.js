@@ -86,6 +86,6 @@ const Lumon = () => {
     );
 };
 
-Lumon.layout = "LayoutDefault";
 
 export default Lumon;
+Lumon.Layout = "Stacked";
