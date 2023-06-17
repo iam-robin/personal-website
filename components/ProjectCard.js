@@ -9,10 +9,11 @@ const ProjectCard = (props) => {
       alt={"project card for " + props.title}
       className={clsx(
         props.color,
-        "relative rounded-xl p-6",
+        "relative rounded-xl p-6 transition-all",
+        "hover:scale-105 hover:rotate-2"
       )}
     >
-    <div className="absolute top-3 right-3 bg-white rounded-xl px-3 py-1 text-sm bg-opacity-10 text-white">{props.year}</div>
+    <div className="absolute top-3 right-3 bg-white rounded-xl px-3 py-1 text-sm bg-opacity-10 text-white ">{props.year}</div>
       <div
         className="p-12 relative flex justify-center items-center"
       >
