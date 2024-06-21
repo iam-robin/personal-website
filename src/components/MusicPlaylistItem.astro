@@ -1,0 +1,19 @@
+---
+interface Props {
+    cover: string;
+    title: string;
+}
+
+const { cover, title } = Astro.props;
+---
+
+<a class="h-full w-full cursor-pointer">
+    <div
+        class="music-item group relative flex w-full items-center rounded-lg bg-neutral-100 px-4 py-14"
+    >
+        <div class="album" style=`background-image: url(${cover})`></div>
+    </div>
+    <div class="mt-2 text-xs">
+        <p class="font-bold text-black-700">{title}</p>
+    </div>
+</a>

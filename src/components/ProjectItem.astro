@@ -1,0 +1,74 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+
+export interface Props {
+    bgColor: string;
+    href: string;
+    title: string;
+    labels: string[];
+    year: string;
+    logo: ImageMetadata;
+    logoWidth?: string;
+    customOpenString?: string;
+    classes?: string;
+}
+
+const {
+    bgColor,
+    href,
+    title,
+    labels,
+    year,
+    logo,
+    logoWidth = '4rem',
+    customOpenString,
+    classes
+} = Astro.props as Props;
+---
+
+<a
+    class:list={[
+        classes,
+        'group relative flex aspect-square w-full flex-col overflow-hidden rounded-xl'
+    ]}
+    href={href}
+    style={`background-color: ${bgColor};`}
+>
+    <p class="absolute right-3 top-3 rounded-full bg-white-100 px-3 py-0.5 text-xs text-white-700">
+        {year}
+    </p>
+    <div
+        class="flex h-3/4 items-center justify-center overflow-hidden transition-all delay-100 duration-200 group-hover:h-0 group-hover:-translate-y-16"
+    >
+        <Image src={logo} alt="project logo" style={`width: ${logoWidth};`} />
+    </div>
+    <div
+        class="flex h-1/4 flex-col justify-between p-6 pt-0 text-white transition-all delay-100 duration-200 group-hover:h-full group-hover:pt-6"
+    >
+        <div>
+            <h3 class="mb-2 ml-1 text-base transition-all delay-100 duration-200 group-hover:mb-2">
+                {title}
+            </h3>
+            <ul class="flex gap-1">
+                {
+                    labels?.map((label) => (
+                        <li class="rounded-full bg-white-100 px-3 py-0.5 font-mono text-2xs text-white-700">
+                            {label}
+                        </li>
+                    ))
+                }
+            </ul>
+            <p
+                class="mt-4 h-0 overflow-hidden text-white-700 transition-all delay-100 duration-200 group-hover:h-full"
+            >
+                Enim eiusmod anim aute sunt excepteur ad in proident. Duis et ipsum exercitation
+                occaecat ea pariatur in deserunt in nostrud in sunt ex.
+            </p>
+        </div>
+        <div data-navLink class="mt-2 flex items-center gap-[6px]">
+            {customOpenString ? customOpenString : 'Open case study'}
+            <Icon name="ph:arrow-up-right-bold" width={16} />
+        </div>
+    </div>
+</a>

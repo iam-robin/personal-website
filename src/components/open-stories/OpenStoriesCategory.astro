@@ -1,0 +1,44 @@
+---
+interface Props {
+    title: string;
+}
+
+const { title } = Astro.props as Props;
+---
+
+<open-stories src={`./stories/${title}/${title}.json`} show-metadata>{title}</open-stories>
+
+<style>
+    open-stories::part(button) {
+        height: 96px;
+        width: 96px;
+        background-color: #f1f5f9;
+        border-radius: 100%;
+        border: 4px solid white;
+        cursor: pointer;
+        font-size: 14px;
+        position: relative;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s;
+    }
+    open-stories::part(button):hover {
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+    }
+    open-stories::part(amount) {
+        position: absolute;
+        opacity: 0;
+        transform: scale(0.3);
+        top: -6px;
+        right: -6px;
+        height: 36px;
+        width: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #e2dcff;
+        border-radius: 100%;
+        color: #635c7f;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+</style>

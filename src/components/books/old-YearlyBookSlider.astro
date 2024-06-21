@@ -1,0 +1,43 @@
+---
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import Slider from '@components/slider/Slider.astro';
+import SliderItem from '@components/slider/SliderItem.astro';
+import BookItem from './old-BookItem.astro';
+import type { Book } from './BookSection.astro';
+
+interface Props {
+    title: string;
+    books: Book[];
+    currentlyReading?: Book[];
+}
+
+const { title, books, currentlyReading } = Astro.props as Props;
+---
+
+<Slider spacingTop>
+    {
+        currentlyReading?.map((book: Book) => (
+            <SliderItem size="medium">
+                {book.cover && (
+                    <BookItem
+                        cover={book.cover}
+                        title={book.title}
+                        authors={book.authors}
+                        currentlyReading={true}
+                    />
+                )}
+            </SliderItem>
+        ))
+    }
+    {
+        books.map((book: Book) => (
+            <SliderItem size="medium">
+                {book.cover && (
+                    <BookItem cover={book.cover} title={book.title} authors={book.authors} />
+                )}
+            </SliderItem>
+        ))
+    }
+    <SliderItem emptyEnd />
+</Slider>

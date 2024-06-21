@@ -1,0 +1,56 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+    text: string;
+    style: 'primary' | 'secondary';
+    icon?: {
+        name: string;
+        side: 'left' | 'right';
+    };
+    classes?: string;
+}
+
+const { text, style, icon, classes } = Astro.props as Props;
+---
+
+<button
+    class:list={[
+        classes,
+        'flex items-center gap-1 px-3 py-2',
+        {
+            'border border-red-500 bg-red-200 text-red-800': style === 'primary',
+            'border border-blue-500 bg-blue-200 text-blue-800': style === 'secondary'
+        }
+    ]}
+>
+    {
+        icon && icon.side === 'left' && (
+            <Icon
+                name={icon.name}
+                width={24}
+                class:list={[
+                    {
+                        'text-red-600': style === 'primary',
+                        'text-blue-600': style === 'secondary'
+                    }
+                ]}
+            />
+        )
+    }
+    {text}
+    {
+        icon && icon.side === 'right' && (
+            <Icon
+                name={icon.name}
+                width={24}
+                class:list={[
+                    {
+                        'text-red-600': style === 'primary',
+                        'text-blue-600': style === 'secondary'
+                    }
+                ]}
+            />
+        )
+    }
+</button>

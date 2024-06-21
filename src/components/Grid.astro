@@ -1,0 +1,18 @@
+---
+interface Props {
+    classes?: string;
+}
+
+const { classes } = Astro.props as Props;
+---
+
+<section
+    class:list={[
+        classes,
+        'mx-auto grid max-w-screen-lg grid-cols-4 gap-0 px-4',
+        'sm:grid-cols-8 sm:px-8',
+        'lg:grid-cols-12 lg:gap-4 lg-with-padding:px-0'
+    ]}
+>
+    <slot />
+</section>

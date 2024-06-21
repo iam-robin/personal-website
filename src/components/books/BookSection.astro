@@ -1,0 +1,60 @@
+---
+import SectionContent from '@components/SectionContent.astro';
+import { currentlyReadingQueryResponse, shelfQueryResponse } from 'src/api/literal';
+import YearlyBookSlider from './YearlyBookSlider';
+
+export interface Author {
+    name: string;
+}
+
+export interface Book {
+    title: string;
+    cover: string;
+    pageCount: number;
+    id: string;
+    slug: string;
+    authors: Author[];
+    currentlyReading?: boolean;
+}
+
+export interface Shelf {
+    title: string;
+    books: Book[];
+}
+
+const shelfJson = await shelfQueryResponse();
+const shelfData = shelfJson.data;
+let yearlyShelfData = shelfData.getShelvesByProfileId.filter((shelf: any) =>
+    shelf.title.startsWith('20')
+);
+
+const currentlyReadingJson = await currentlyReadingQueryResponse();
+const currentlyReadingData = currentlyReadingJson.data;
+
+const currentYear = new Date().getFullYear();
+const currentYearString = currentYear.toString();
+let currentYearShelf = shelfData.getShelvesByProfileId.find(
+    (shelf: Shelf) => shelf.title === currentYearString
+);
+
+if (!currentYearShelf) {
+    currentYearShelf = {
+        title: currentYearString,
+        books: []
+    };
+    shelfData.getShelvesByProfileId.push(currentYearShelf);
+}
+
+currentlyReadingData.booksByReadingStateAndProfile.forEach((book: Book) => {
+    book.currentlyReading = true;
+    currentYearShelf.books.unshift(book);
+});
+---
+
+<div>
+    <SectionContent
+        title="Books"
+        description="I would like to read more books. Keeping a list of all the books I've read and enjoyed will hopefully help me do that. Each book links to its corresponding page on the awesome book platform Literal."
+    />
+    <YearlyBookSlider shelfs={yearlyShelfData} client:load />
+</div>

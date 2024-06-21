@@ -1,0 +1,26 @@
+---
+import Layout from '@layouts/Layout.astro';
+import ContactLinksSection from '@components/ContactLinksSection.astro';
+import LatestBookmarks from '@components/bookmarks/LatestBookmarks.astro';
+import Hero from '@components/hero.astro';
+import Divider from '@components/Divider.astro';
+import SideProjectSection from '@components/SideProjectSection.astro';
+import PhotographySection from '@components/PhotographySection.astro';
+import GenerativeArtSection from '@components/GenerativeArtSection.astro';
+import OpenStoriesSection from '@components/open-stories/OpenStoriesSection.astro';
+---
+
+<Layout title="Home">
+    <Hero />
+    <div class="flex flex-col gap-24 py-40">
+        <PhotographySection />
+        <Divider />
+        <SideProjectSection />
+        <Divider />
+        <OpenStoriesSection />
+        <!-- <GenerativeArtSection /> -->
+        <Divider />
+        <LatestBookmarks />
+    </div>
+    <ContactLinksSection />
+</Layout>

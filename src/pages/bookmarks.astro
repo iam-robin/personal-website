@@ -1,0 +1,72 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { type Bookmark } from '@components/bookmarks/BookmarkItem.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import Headline from '@components/Headline.astro';
+import AllBookmarks from '@components/bookmarks/AllBookmarks';
+import { fetchBookmarks } from 'src/api/raindrop';
+
+// Data fetching in frontmatter
+const bookmarks: Bookmark[] = await fetchBookmarks(0);
+
+// Step 1: Flatten all tags into a single array
+const allTags = bookmarks.flatMap((bookmark) => bookmark.tags);
+
+// Step 2: Count occurrences of each tag using a Map
+const tagCounts = new Map();
+allTags.forEach((tag) => {
+    if (tagCounts.has(tag)) {
+        tagCounts.set(tag, tagCounts.get(tag) + 1);
+    } else {
+        tagCounts.set(tag, 1);
+    }
+});
+
+// Step 3: Convert the Map into the desired array structure
+const tags = Array.from(tagCounts, ([name, count]) => ({ name, count }));
+tags.sort((a, b) => b.count - a.count);
+---
+
+<Layout title="Bookmarks">
+    <div class="-mt-28 bg-neutral-100">
+        <Grid classes="pt-56 pb-16">
+            <GridBox desktopStart={1} desktopEnd={6}>
+                <Headline level={2}>Bookmarks</Headline>
+            </GridBox>
+            <GridBox desktopStart={7} desktopEnd={12}>
+                <div class="mt-2">
+                    <p class="font-mono">
+                        Daily I receive new articles, videos, essays, etc. in the RSS reader of my
+                        choice: Reeder. I categorize and tag items I have read and found interesting
+                        in Raindrop.io. Thanks to their fantastic API, I can also share that list
+                        here on my personal website.
+                    </p>
+                    <ul class="mt-8 flex h-full items-center gap-4 font-mono text-xs">
+                        <li>
+                            <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-green"
+                            ></span>Article
+                        </li>
+                        <li>
+                            <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-lilac"
+                            ></span>Website
+                        </li>
+                        <li>
+                            <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-blue"
+                            ></span>Video
+                        </li>
+                        <li>
+                            <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-red"
+                            ></span>Misc
+                        </li>
+                    </ul>
+                </div>
+            </GridBox>
+        </Grid>
+    </div>
+    <Grid classes="mt-16">
+        <GridBox desktopFull>
+            <AllBookmarks tags={tags} bookmarks={bookmarks} client:load />
+        </GridBox>
+    </Grid>
+</Layout>

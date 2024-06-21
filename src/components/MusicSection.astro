@@ -1,0 +1,83 @@
+---
+import type { AlbumDetails, LastfmAlbum } from 'src/types/lastfm';
+import Slider from './slider/Slider.astro';
+import SliderItem from './slider/SliderItem.astro';
+import { Image } from 'astro:assets';
+import { myPlaylists } from 'src/api/spotify';
+import MusicAlbumItem from './MusicAlbumItem.astro';
+import SectionContent from './SectionContent.astro';
+import MusicPlaylistItem from './MusicPlaylistItem.astro';
+import AlbumSlider from './music/AlbumSlider';
+import PlaylistSlider from './music/PlaylistSlider';
+
+export interface Playlist {
+    name?: string;
+    url?: string;
+    image?: string;
+    tracks?: number;
+    description?: string;
+}
+
+const count = 12;
+
+// LAST MONTH
+const resTopAlbumsThreeMonth = await fetch(
+    `https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${
+        import.meta.env.LAST_FM_USER_NAME
+    }&api_key=${import.meta.env.LAST_FM_API_KEY}&limit=${count}&period=1month&format=json`
+);
+const topAlbumThreeMonthQuery = await resTopAlbumsThreeMonth.json();
+const topAlbumsThreeMonth = topAlbumThreeMonthQuery?.topalbums?.album.map((album: LastfmAlbum) => ({
+    title: album?.name,
+    artist: album?.artist?.name,
+    cover: album?.image[3]['#text'] || album?.image[2]['#text'],
+    playCount: album?.playcount,
+    url: album?.url
+}));
+
+// OVERALL
+const resTopAlbumsOverall = await fetch(
+    `https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${
+        import.meta.env.LAST_FM_USER_NAME
+    }&api_key=${import.meta.env.LAST_FM_API_KEY}&limit=${count}&period=$overall&format=json`
+);
+const topAlbumOverallQuery = await resTopAlbumsOverall.json();
+
+const topAlbumsOverall = topAlbumOverallQuery?.topalbums?.album.map((album: LastfmAlbum) => ({
+    title: album?.name,
+    artist: album?.artist?.name,
+    cover: album?.image[3]['#text'] || album.image[2]['#text'],
+    playCount: album?.playcount,
+    url: album?.url
+}));
+
+const albums = {
+    threeMonth: topAlbumsThreeMonth,
+    overall: topAlbumsOverall
+};
+
+// SPOTIFY PLAYLISTS
+const response = await myPlaylists();
+const { items } = await response.json();
+
+const publicPlaylists = items.filter((playlist: any) => playlist.public === true);
+
+const playlists: Playlist[] = publicPlaylists?.map((playlist: any) => ({
+    name: playlist?.name,
+    url: playlist?.external_urls?.spotify,
+    image: playlist?.images && playlist?.images[0]?.url,
+    tracks: playlist?.tracks?.total,
+    description: playlist?.description
+}));
+---
+
+<div>
+    <SectionContent
+        title="Music"
+        description="Et est dolor adipisicing nostrud ad. Quis irure consectetur magna magna voluptate. Occaecat commodo sunt sunt duis aliqua ipsum. Commodo consectetur amet magna dolore esse ea dolore dolor magna occaecat. Adipisicing officia nisi ex."
+    />
+    <div class="flex flex-col gap-20">
+        <AlbumSlider albums={albums} client:load />
+        <PlaylistSlider playlists={playlists} />
+    </div>
+</div>

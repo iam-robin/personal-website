@@ -1,0 +1,53 @@
+---
+import { Icon } from 'astro-icon/components';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import Headline from '@components/Headline.astro';
+---
+
+<div class="-mt-28 bg-neutral-100">
+    <Grid classes="pt-[280px] pb-[200px]">
+        <GridBox desktopStart={1} desktopEnd={9}>
+            <Headline level={2} classes="pr-2 cursor-default">
+                <div class="group inline-block">
+                    Hey
+                    <Icon
+                        class="inline -translate-y-1 rotate-12 text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[32deg] group-hover:scale-[110%] sm:text-[46px] md:-translate-y-2 md:text-[50px]"
+                        name="sticker-smiley-40"
+                    />
+                </div>
+                 I'm a Design Engineer, working at the intersection of
+                <div class="group inline-block">
+                    <Icon
+                        class="-pl-2 -mr-1 ml-1 inline -translate-y-[2px] -rotate-12 text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[-24deg] group-hover:scale-[110%] sm:text-[46px] md:-translate-y-1 md:text-[48px]"
+                        name="sticker-code-50"
+                    />
+                     code,
+                </div>
+                <div class="group inline-block">
+                    <Icon
+                        class="-mr-1 ml-1 inline -translate-y-1 rotate-12 text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[-12deg] group-hover:scale-[110%] sm:text-[46px] md:-translate-y-2 md:text-[50px]"
+                        name="sticker-design-50"
+                    />
+                     design
+                </div>
+                 and
+                <div class="group inline-block">
+                    <Icon
+                        class="-mr-1 ml-1 inline text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[20deg] group-hover:scale-[110%] sm:text-[46px] md:text-[46px]"
+                        name="sticker-art-50"
+                    />
+                     art.
+                </div>
+            </Headline>
+        </GridBox>
+        <GridBox desktopStart={6} desktopEnd={12} classes="mt-12">
+            <p class="font-mono text-sm lg:text-base">
+                This personal website is my own little space on the internet where I want to share
+                my work, interests and passions with others, without having to please the algorithms
+                of social media platforms or follow any other rules. I hope you enjoy exploring my
+                digital living room as much as I enjoyed creating it.
+            </p>
+        </GridBox>
+    </Grid>
+</div>

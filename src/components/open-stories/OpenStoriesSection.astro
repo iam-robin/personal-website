@@ -1,0 +1,31 @@
+---
+import Grid from '@components/Grid.astro';
+import OpenStoriesCategory from './OpenStoriesCategory.astro';
+import GridBox from '@components/GridBox.astro';
+import SectionContent from '@components/SectionContent.astro';
+---
+
+<Grid>
+    <GridBox desktopFull>
+        <SectionContent
+            title="Stories"
+            description="Posting stories without the need for a social media platform. Why not? Something like a visual diary with snapshots of things that I like and do. Powered by the great open-source package open-stories."
+        />
+        <div class="flex gap-5 overflow-x-auto p-1">
+            <OpenStoriesCategory title="bicycle" />
+            <OpenStoriesCategory title="me" />
+            <OpenStoriesCategory title="art" />
+            <OpenStoriesCategory title="hiking" />
+            <OpenStoriesCategory title="cooking" />
+        </div>
+        <!--
+            <OpenStoriesCategory title="cooking" />
+            <OpenStoriesCategory title="travel" /> -->
+        <!-- <OpenStoriesCategory title="food" />
+            <OpenStoriesCategory title="hiking" /> -->
+    </GridBox>
+</Grid>
+
+<!-- <script src="https://unpkg.com/open-stories-element@latest" type="module" defer></script> -->
+<!-- USE LOCAL VERSION TO OVERWRITE OBJECT FIT FROM CONTAIN TO COVER AND TO CHANGE FROM 9/16 TO 2/3 -->
+<script src="/src/utils/open-stories-element.js" type="module" defer></script>

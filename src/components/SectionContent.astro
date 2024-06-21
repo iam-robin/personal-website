@@ -1,0 +1,47 @@
+---
+import Grid from './Grid.astro';
+import GridBox from './GridBox.astro';
+import Headline from './Headline.astro';
+import Link from './Link.astro';
+
+interface Props {
+    title: string;
+    description: string;
+    linkText?: string;
+    linkUrl?: string;
+}
+
+const { title, description, linkText, linkUrl } = Astro.props;
+---
+
+<Grid classes="mb-6 sm:mb-8 lg:mb-16">
+    <GridBox desktopStart={1} desktopEnd={4} tabletStart={1} tabletEnd={4} mobileFull>
+        <Headline level={3}>{title}</Headline>
+    </GridBox>
+    <GridBox
+        desktopStart={5}
+        desktopEnd={linkText && linkUrl ? 9 : 12}
+        tabletStart={5}
+        tabletEnd={8}
+        mobileFull
+        classes="text-sm font-mono mt-3 sm:mt-0"
+    >
+        {description}
+    </GridBox>
+    {
+        linkText && linkUrl && (
+            <GridBox
+                desktopStart={10}
+                desktopEnd={12}
+                tabletStart={5}
+                tabletEnd={8}
+                mobileFull
+                classes="flex lg:justify-end items-start mt-6 sm:mt-3 lg:mt-0"
+            >
+                <Link href={linkUrl} external>
+                    {linkText}
+                </Link>
+            </GridBox>
+        )
+    }
+</Grid>

@@ -1,0 +1,27 @@
+<svg width="370" height="305" viewBox="0 0 370 305" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.8">
+<rect width="350" height="60" fill="white" transform="translate(10)"/>
+<rect width="350" height="60" rx="4" transform="translate(10)" fill="white"/>
+<rect width="28" height="28" rx="4" transform="translate(26 16)" fill="#ECECEC"/>
+<rect width="200" height="4" transform="translate(69 23)" fill="#ECECEC"/>
+<rect width="80" height="4" transform="translate(69 33)" fill="#ECECEC"/>
+</g>
+<rect width="370" height="65" rx="4" transform="translate(0 80)" fill="white"/>
+<rect width="29.6" height="29.4" rx="4" transform="translate(16.9143 97.8)" fill="#ECECEC"/>
+<rect width="211.429" height="4.2" transform="translate(62.3714 105.15)" fill="#ECECEC"/>
+<rect width="84.5714" height="4.2" transform="translate(62.3714 115.65)" fill="#ECECEC"/>
+<g opacity="0.8">
+<rect width="350" height="60" fill="white" transform="translate(10 165)"/>
+<rect width="350" height="60" rx="4" transform="translate(10 165)" fill="white"/>
+<rect width="28" height="28" rx="4" transform="translate(26 181)" fill="#ECECEC"/>
+<rect width="200" height="4" transform="translate(69 188)" fill="#ECECEC"/>
+<rect width="80" height="4" transform="translate(69 198)" fill="#ECECEC"/>
+</g>
+<g opacity="0.8">
+<rect width="350" height="60" fill="white" transform="translate(10 245)"/>
+<rect width="350" height="60" rx="4" transform="translate(10 245)" fill="white"/>
+<rect width="28" height="28" rx="4" transform="translate(26 261)" fill="#ECECEC"/>
+<rect width="200" height="4" transform="translate(69 268)" fill="#ECECEC"/>
+<rect width="80" height="4" transform="translate(69 278)" fill="#ECECEC"/>
+</g>
+</svg>

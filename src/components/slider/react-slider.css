@@ -1,0 +1,44 @@
+:root {
+    --content-max-width: 1024px;
+    --space-md: 2rem;
+}
+
+.prev-button.disabled,
+.next-button.disabled {
+    pointer-events: none;
+    opacity: 0.2;
+}
+
+.gallery {
+    overscroll-behavior-x: contain;
+    -ms-scroll-snap-type: x proximity;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+}
+
+.gallery::-webkit-scrollbar {
+    inline-size: 0 !important;
+    display: none;
+}
+
+.slider-grid {
+    display: grid;
+    grid-template-columns:
+        [full-start] 1fr [content-start] min(
+            var(--content-max-width),
+            calc(100% - var(--space-md) * 2)
+        )
+        [content-end] 1fr [full-end];
+}
+
+/* Override for xs breakpoint */
+@media (max-width: 640px) {
+    .slider-grid {
+        grid-template-columns:
+            [full-start] 16px [content-start] min(
+                var(--content-max-width),
+                calc(100% - var(--space-md) * 2)
+            )
+            [content-end] 16px [full-end];
+    }
+}

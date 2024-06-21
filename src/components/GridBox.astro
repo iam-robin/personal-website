@@ -1,0 +1,42 @@
+---
+interface Props {
+    desktopFull?: boolean;
+    tabletFull?: boolean;
+    mobileFull?: boolean;
+    desktopStart?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+    desktopEnd?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+    tabletStart?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+    tabletEnd?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+    mobileStart?: 1 | 2 | 3 | 4;
+    mobileEnd?: 1 | 2 | 3 | 4;
+    classes?: string;
+}
+
+const {
+    desktopFull,
+    tabletFull,
+    mobileFull,
+    desktopStart,
+    desktopEnd,
+    tabletStart,
+    tabletEnd,
+    mobileStart,
+    mobileEnd,
+    classes
+} = Astro.props as Props;
+---
+
+<div
+    class:list={[
+        classes,
+        'col-span-full', // Default to col-span-full
+        mobileEnd && mobileStart && `col-start-${mobileStart} col-end-${mobileEnd + 1}`,
+        tabletEnd && tabletStart && `sm:col-start-${tabletStart} sm:col-end-${tabletEnd + 1}`,
+        desktopEnd && desktopStart && `lg:col-start-${desktopStart} lg:col-end-${desktopEnd + 1}`,
+        !mobileFull && 'col-span-full', // Conditionally add col-span-full for mobile if not explicitly set
+        !tabletFull && 'col-span-full sm:col-span-full', // Conditionally add col-span-full for tablet if not explicitly set
+        !desktopFull && 'col-span-full sm:col-span-full lg:col-span-full' // Conditionally add col-span-full for desktop if not explicitly set
+    ]}
+>
+    <slot />
+</div>

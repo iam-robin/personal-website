@@ -1,0 +1,33 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+    href: string;
+    classes?: string;
+    external?: boolean;
+}
+
+const { href, classes, external } = Astro.props as Props;
+---
+
+<a data-navLink href={href} class:list={[classes, 'group flex items-center gap-[6px]']}>
+    <span class="font-mono text-xs tracking-wide transition-all group-hover:-translate-x-0.5"
+        ><slot /></span
+    >
+    <Icon
+        name="ph:arrow-right-bold"
+        width={16}
+        class:list={[
+            external && 'hidden',
+            'text-neutral-400 transition-all group-hover:translate-x-0.5 group-hover:text-black'
+        ]}
+    />
+    <Icon
+        name="ph:arrow-up-right-bold"
+        width={16}
+        class:list={[
+            !external && 'hidden',
+            'text-neutral-400 transition-all group-hover:translate-x-0.5 group-hover:text-black'
+        ]}
+    />
+</a>

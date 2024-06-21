@@ -1,0 +1,28 @@
+---
+interface Props {
+    emptyEnd?: boolean;
+    classes?: string;
+    size?: 'xsmall' | 'small' | 'medium' | 'large';
+}
+
+const { emptyEnd = false, classes, size = 'medium' } = Astro.props as Props;
+---
+
+<div
+    class:list={[
+        classes,
+        'slide flex shrink-0 content-center items-center',
+        !emptyEnd && size === 'xsmall'
+            ? 'w-[calc(12.5%-(160px/6))]'
+            : !emptyEnd && size === 'small'
+              ? 'w-[calc(25%-(96px/4))]'
+              : !emptyEnd && size === 'medium'
+                ? 'w-[calc(100%-(64px/3))] xs:w-[calc(50%-(64px/3))] md:w-[calc(33.33%-(64px/3))]'
+                : !emptyEnd && size === 'large'
+                  ? 'w-1/2'
+                  : '',
+        emptyEnd ? 'w-[108px]' : ''
+    ]}
+>
+    <slot />
+</div>

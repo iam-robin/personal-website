@@ -1,0 +1,203 @@
+---
+import { Icon } from 'astro-icon/components';
+import Grid from '../Grid.astro';
+import GridBox from '../GridBox.astro';
+
+interface Props {
+    classes?: string;
+    spacingTop?: boolean;
+    buttonPosition?: 'bottom' | 'none';
+}
+
+const { classes, spacingTop, buttonPosition = 'bottom' } = Astro.props as Props;
+const id = 'gallery-' + Math.random().toString(36).substr(2, 9);
+---
+
+<div class={classes} id={id}>
+    <div
+        class="grid"
+        style="grid-template-columns: [full-start] 1fr [content-start] min( var(--content-max-width), calc(100% - var(--space-md) * 2) ) [content-end] 1fr [full-end];"
+    >
+        <div class="gallery col-[full] grid grid-cols-[inherit] overflow-x-scroll">
+            <div class:list={[`col-[content] flex gap-4 pt-3 lg:gap-8`, spacingTop && 'pt-4']}>
+                <slot />
+            </div>
+        </div>
+    </div>
+    {
+        buttonPosition === 'bottom' && (
+            <Grid>
+                <GridBox desktopFull classes="flex justify-end items-center mt-8">
+                    <div class="flex gap-2">
+                        <button class="prev-button disabled group flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-neutral-100">
+                            <Icon
+                                class="translate-x-1 transition group-hover:translate-x-0"
+                                name="ph:arrow-left"
+                                size={30}
+                            />
+                        </button>
+                        <button class="next-button group flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-neutral-100">
+                            <Icon
+                                class="-translate-x-1 transition group-hover:translate-x-0"
+                                name="ph:arrow-right"
+                                size={30}
+                            />
+                        </button>
+                    </div>
+                </GridBox>
+            </Grid>
+        )
+    }
+</div>
+
+<style>
+    :root {
+        --content-max-width: 1024px;
+        --space-md: 2rem;
+    }
+
+    .prev-button.disabled,
+    .next-button.disabled {
+        pointer-events: none;
+        opacity: 0.2;
+    }
+
+    .gallery {
+        overscroll-behavior-x: contain;
+        -ms-scroll-snap-type: x proximity;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+    }
+
+    .gallery::-webkit-scrollbar {
+        inline-size: 0 !important;
+        display: none;
+    }
+
+    .grid {
+        grid-template-columns:
+            [full-start] 1fr [content-start] min(
+                var(--content-max-width),
+                calc(100% - var(--space-md) * 2)
+            )
+            [content-end] 1fr [full-end];
+    }
+
+    /* Override for xs breakpoint */
+    @media (max-width: 640px) {
+        .grid {
+            grid-template-columns:
+                [full-start] 16px [content-start] min(
+                    var(--content-max-width),
+                    calc(100% - var(--space-md) * 2)
+                )
+                [content-end] 16px [full-end];
+        }
+    }
+</style>
+
+<script define:vars={{ id }}>
+    const container = document.getElementById(id);
+    const gallery = container.querySelector('.gallery');
+    const slides = gallery?.querySelectorAll('.slide');
+    const prevButton = container.querySelector('.prev-button');
+    const nextButton = container.querySelector('.next-button');
+    const gap = 40;
+
+    const debounce = (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    };
+
+    const updateButtonStates = () => {
+        const isScrolledToLeft = gallery?.scrollLeft === 0;
+        const isScrolledToRight =
+            (gallery?.scrollLeft ?? 0) + (gallery?.clientWidth ?? 0) + 5 >=
+            (gallery?.scrollWidth ?? 0);
+
+        if (isScrolledToLeft) {
+            prevButton?.classList.add('disabled');
+        } else {
+            prevButton?.classList.remove('disabled');
+        }
+
+        if (isScrolledToRight) {
+            nextButton?.classList.add('disabled');
+        } else {
+            nextButton?.classList.remove('disabled');
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        gallery?.addEventListener('scroll', debounce(updateButtonStates, 100));
+
+        const scrollToNextVisibleSlide = () => {
+            const viewportWidth = gallery?.clientWidth;
+            let lastVisibleIndex = -1;
+            prevButton?.classList.remove('disabled');
+
+            // Find the last visible slide
+            slides?.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.left >= 0 && rect.right - rect.width / 2 <= (viewportWidth ?? 0)) {
+                    lastVisibleIndex = index;
+                }
+            });
+
+            // scroll to the next slide
+            if (lastVisibleIndex !== -1) {
+                if (lastVisibleIndex >= (slides?.length ?? 0) - 2) {
+                    nextButton?.classList.add('disabled');
+                }
+                const nextSlide = slides?.[lastVisibleIndex + 1];
+                if (nextSlide) {
+                    const slideWidth = nextSlide.offsetWidth;
+                    const scrollLeft = nextSlide.offsetLeft + slideWidth - (viewportWidth ?? 0);
+                    gallery?.scrollTo({ left: scrollLeft + gap, behavior: 'smooth' });
+                }
+            }
+        };
+
+        const scrollToPrevVisibleSlide = () => {
+            const viewportWidth = gallery?.clientWidth;
+            let firstVisibleIndex = -1;
+            let firstVisibleFound = false;
+            nextButton?.classList.remove('disabled');
+
+            // Find the first visible slide
+            slides?.forEach((slide, index) => {
+                if (firstVisibleFound) return;
+
+                const rect = slide.getBoundingClientRect();
+                if (rect.left >= (rect.width / 2) * -1 && rect.right <= (viewportWidth ?? 0)) {
+                    firstVisibleIndex = index;
+                    firstVisibleFound = true;
+                }
+            });
+
+            // scroll to the prev slide
+            if (firstVisibleIndex !== -1) {
+                if (firstVisibleIndex <= 1) {
+                    prevButton?.classList.add('disabled');
+                    gallery?.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    const prevSlide = slides?.[firstVisibleIndex - 1];
+                    if (prevSlide) {
+                        const scrollRight = prevSlide.offsetLeft;
+                        gallery?.scrollTo({ left: scrollRight - gap, behavior: 'smooth' });
+                    }
+                }
+            }
+        };
+
+        prevButton?.addEventListener('click', scrollToPrevVisibleSlide);
+        nextButton?.addEventListener('click', scrollToNextVisibleSlide);
+    });
+</script>

@@ -1,0 +1,146 @@
+---
+import Grid from './Grid.astro';
+import GridBox from './GridBox.astro';
+
+interface NavItem {
+    name: string;
+    path: string;
+}
+
+const navData: NavItem[] = [
+    {
+        name: 'Media',
+        path: '/media'
+    },
+    {
+        name: 'Bookmarks',
+        path: '/bookmarks'
+    }
+    // {
+    //     name: 'Notes',
+    //     path: '/notes'
+    // }
+];
+---
+
+<header id="header" class="sticky top-0 z-50 mt-14 py-4">
+    <Grid>
+        <GridBox desktopStart={1} desktopEnd={3}>
+            <div class="absolute bottom-4">
+                <a
+                    href="/"
+                    id="header-logo"
+                    class="flex -rotate-6 font-bold italic tracking-wider text-black-300 transition-all duration-300 ease-out-cubic hover:text-black"
+                >
+                    <span id="header-i" class="text-lg transition-all duration-300 ease-out-cubic">
+                        i
+                    </span>
+                    <span
+                        id="header-am"
+                        class="ml-1 text-lg transition-all duration-300 ease-out-cubic"
+                    >
+                        am
+                    </span>
+                    <span
+                        id="header-robin"
+                        class="-translate-x-16 translate-y-7 text-lg transition-all duration-300 ease-out-cubic"
+                    >
+                        robin
+                    </span>
+                </a>
+            </div>
+        </GridBox>
+        <GridBox desktopStart={5} desktopEnd={10}>
+            <nav class="flex gap-8">
+                {
+                    navData.map((item) => (
+                        <a
+                            data-navLink
+                            href={item.path}
+                            class="nav-item group relative font-mono text-xs uppercase tracking-widest hover:text-blue"
+                        >
+                            {item.name}
+                            <span class="pointer-events-none absolute -left-3 top-[6px] mx-auto h-[6px] w-[6px] rounded-full bg-blue opacity-0 transition-all duration-300" />
+                        </a>
+                    ))
+                }
+            </nav>
+        </GridBox>
+        <!-- <GridBox desktopStart={11} desktopEnd={12} classes="flex justify-end">
+            <span>🌑</span>
+        </GridBox> -->
+    </Grid>
+</header>
+
+<style>
+    .nav-item.active {
+        font-weight: 700;
+    }
+    .nav-item.active span {
+        opacity: 0;
+    }
+</style>
+
+<!-- client-side JS -->
+<script>
+    const navLinks = document.querySelectorAll('[data-navLink]');
+    navLinks.forEach((link) => {
+        if (link.getAttribute('href') === window.location.pathname) {
+            link.classList.add('active');
+        }
+    });
+
+    function adjustHeaderClasses() {
+        const header = document.getElementById('header');
+        const headerLogo = document.getElementById('header-logo');
+        const headerI = document.getElementById('header-i') as HTMLSpanElement;
+        const headerAm = document.getElementById('header-am') as HTMLSpanElement;
+        const headerRobin = document.getElementById('header-robin') as HTMLSpanElement;
+
+        const logoClassesExpanded = ['-rotate-6', 'tracking-wider', 'text-black-300'];
+        const logoClassesCollapsed = ['text-sm', 'text-black', 'font-normal'];
+
+        const robinTypeClassesExpanded = ['text-lg', '-translate-x-16', 'translate-y-7'];
+
+        const amTypeClassesExpanded = ['text-lg', 'ml-1'];
+        const iTypeClassesExpanded = ['text-lg'];
+
+        if (window.scrollY < 56) {
+            header?.classList.remove('bg-white', 'border-b', 'border-neutral-200');
+            headerLogo?.classList.add(...logoClassesExpanded);
+
+            headerRobin?.classList.add(...robinTypeClassesExpanded);
+            headerRobin?.classList.remove(...logoClassesCollapsed);
+
+            headerAm?.classList.add(...amTypeClassesExpanded);
+            headerAm?.classList.remove(...logoClassesCollapsed);
+
+            headerI?.classList.add(...iTypeClassesExpanded);
+            headerI?.classList.remove(...logoClassesCollapsed);
+
+            // headerI.innerHTML = 'i';
+            // headerRobin.innerHTML = 'robin';
+        } else {
+            header?.classList.add('bg-white', 'border-b', 'border-neutral-200');
+            headerLogo?.classList.remove(...logoClassesExpanded);
+
+            headerRobin?.classList.add(...logoClassesCollapsed);
+            headerRobin?.classList.remove(...robinTypeClassesExpanded);
+
+            headerAm?.classList.add(...logoClassesCollapsed);
+            headerAm?.classList.remove(...amTypeClassesExpanded);
+
+            headerI?.classList.add(...logoClassesCollapsed);
+            headerI?.classList.remove(...iTypeClassesExpanded);
+
+            // headerI.innerHTML = 'i';
+            // headerRobin.innerHTML = 'robin';
+        }
+    }
+
+    // Run the function immediately to set the classes correctly on initial load
+    adjustHeaderClasses();
+
+    // Set up the event listener for the scroll event
+    window.addEventListener('scroll', adjustHeaderClasses);
+</script>

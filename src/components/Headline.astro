@@ -1,0 +1,47 @@
+---
+interface Props {
+    level: 1 | 2 | 3 | 4 | 5;
+    classes?: string;
+}
+
+const { level, classes } = Astro.props;
+---
+
+{
+    (() => {
+        switch (level) {
+            case 1:
+                return (
+                    <h1 class:list={[classes, 'text-3xl font-bold']}>
+                        <slot />
+                    </h1>
+                );
+            case 2:
+                return (
+                    <h2 class:list={[classes, 'text-lg font-bold sm:text-xl md:text-2xl']}>
+                        <slot />
+                    </h2>
+                );
+            case 3:
+                return (
+                    <h3 class:list={[classes, 'text-lg font-bold md:text-xl']}>
+                        <slot />
+                    </h3>
+                );
+            case 4:
+                return (
+                    <h4 class:list={[classes, 'text-md font-bold']}>
+                        <slot />
+                    </h4>
+                );
+            case 5:
+                return (
+                    <h5 class:list={[classes, 'text-base font-bold']}>
+                        <slot />
+                    </h5>
+                );
+            default:
+                return null;
+        }
+    })()
+}

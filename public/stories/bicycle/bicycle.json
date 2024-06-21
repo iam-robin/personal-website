@@ -1,0 +1,39 @@
+{
+    "version": "https://jsonfeed.org/version/1.1",
+    "title": "Valid feed",
+    "_open_stories": {
+        "version": "0.0.9"
+    },
+    "items": [
+        {
+            "id": "a1",
+            "date_published": "2023/7/11 15:27",
+            "_open_stories": {
+                "mime_type": "image/jpg",
+                "url": "stories/bicycle/03.jpg",
+                "alt": "lorem",
+                "caption": "lorem"
+            }
+        },
+        {
+            "id": "a1",
+            "date_published": "2023/7/11 15:27",
+            "_open_stories": {
+                "mime_type": "image/jpg",
+                "url": "stories/bicycle/02.jpg",
+                "alt": "lorem",
+                "caption": "lorem"
+            }
+        },
+        {
+            "id": "a1",
+            "date_published": "2023/7/11 15:27",
+            "_open_stories": {
+                "mime_type": "image/jpg",
+                "url": "stories/bicycle/01.jpg",
+                "alt": "lorem",
+                "caption": "lorem"
+            }
+        }
+    ]
+}

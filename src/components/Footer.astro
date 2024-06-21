@@ -1,0 +1,24 @@
+---
+import Grid from './Grid.astro';
+import GridBox from './GridBox.astro';
+---
+
+<footer class="sticky top-[100vh] -mt-16 bg-black-50">
+    <Grid>
+        <GridBox classes="flex justify-between h-16 items-center text-xs text-black-600">
+            <p>© <span id="copyright-year"></span>, Robin Spielmann</p>
+            <ul class="flex gap-4">
+                <li><a href="/legal">Legal notice</a></li>
+                <li>Changelog</li>
+                <li><a href="">Source code</a></li>
+            </ul>
+        </GridBox>
+    </Grid>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const copyrightYear = document.getElementById('copyright-year');
+        if (copyrightYear) copyrightYear.textContent = new Date().getFullYear().toString();
+    });
+</script>

@@ -1,0 +1,129 @@
+---
+import ContactLinkItem from './ContactLinkItem.astro';
+import Grid from './Grid.astro';
+import GridBox from './GridBox.astro';
+import Headline from './Headline.astro';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+    classes?: string;
+}
+
+const { classes } = Astro.props as Props;
+---
+
+<div
+    class:list={[classes, 'bg-neutral-100 py-40 text-neutral-800 transition-all duration-300']}
+    id="contact-container"
+>
+    <Grid>
+        <GridBox
+            mobileFull
+            tabletStart={1}
+            tabletEnd={2}
+            desktopStart={1}
+            desktopEnd={3}
+            classes="relative"
+        >
+            <Headline classes="mb-4 sm:mt-2" level={3}>Contact</Headline>
+            <Icon
+                id="icon-for-default"
+                class="icon-for-service absolute top-32 text-[64px] transition-transform"
+                name="sticker-wave-50"
+            />
+            <Icon
+                id="icon-for-email"
+                class="icon-for-service absolute top-32 -rotate-12 scale-0 text-[64px] transition-transform"
+                name="sticker-mail-50-2"
+            />
+            <Icon
+                id="icon-for-mastodon"
+                class="icon-for-service absolute top-32 rotate-12 scale-0 text-[64px] transition-transform"
+                name="sticker-mastodon-50"
+            />
+            <Icon
+                id="icon-for-glass"
+                class="icon-for-service absolute top-32 -rotate-[8deg] scale-0 text-[64px] transition-transform"
+                name="sticker-glass-50"
+            />
+            <Icon
+                id="icon-for-readcv"
+                class="icon-for-service absolute top-32 rotate-12 scale-0 text-[64px] transition-transform"
+                name="sticker-readcv-50"
+            />
+        </GridBox>
+        <GridBox mobileFull tabletStart={3} tabletEnd={8} desktopStart={4} desktopEnd={12}>
+            <ul>
+                <ContactLinkItem
+                    id="email-contact-item"
+                    hoverBgColor="bg-blue"
+                    hoverTextColor="text-blue-dark"
+                    service="Email"
+                    handle="hey@iamrob.in"
+                    url="#"
+                />
+                <ContactLinkItem
+                    id="mastodon-contact-item"
+                    hoverBgColor="bg-green"
+                    hoverTextColor="text-green-dark"
+                    service="Mastodon"
+                    handle="@iamrobin@mastodon.social"
+                    url="#"
+                />
+                <ContactLinkItem
+                    id="glass-contact-item"
+                    hoverBgColor="bg-yellow"
+                    hoverTextColor="text-yellow-dark"
+                    service="Glass"
+                    handle="@iamrobin"
+                    url="#"
+                />
+                <ContactLinkItem
+                    id="readcv-contact-item"
+                    hoverBgColor="bg-lilac"
+                    hoverTextColor="text-lilac-dark"
+                    service="Readcv"
+                    handle="@iamrobin"
+                    url="#"
+                    noBorder
+                />
+            </ul>
+        </GridBox>
+    </Grid>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const contactItems = document.querySelectorAll('.contact-item');
+        const container = document.getElementById('contact-container');
+        const icons = document.querySelectorAll('.icon-for-service');
+
+        contactItems.forEach((item) => {
+            const bgColor = (item as HTMLElement).dataset.bgcolor as string;
+            const textColor = (item as HTMLElement).dataset.textcolor as string;
+            item.addEventListener('mouseover', () => {
+                const service = item.getAttribute('id')?.split('-')[0];
+                icons.forEach((icon) => {
+                    if (icon.id === `icon-for-${service}`) {
+                        icon.classList.remove('scale-0');
+                    } else {
+                        icon.classList.add('scale-0');
+                    }
+                });
+
+                container?.classList.remove('bg-neutral-100', 'text-neutral-800');
+                container?.classList.add(bgColor, textColor);
+            });
+            item.addEventListener('mouseout', () => {
+                icons.forEach((icon) => {
+                    icon.classList.add('scale-0');
+                    if (icon.id === 'icon-for-default') {
+                        icon.classList.remove('scale-0');
+                    }
+                });
+                container?.classList.remove(bgColor, textColor);
+                container?.classList.add('bg-neutral-100', 'text-neutral-800');
+            });
+        });
+    });
+</script>

@@ -1,0 +1,40 @@
+@font-face {
+    font-family: 'apercu';
+    src:
+        url('/fonts/apercu-regular-pro.woff2') format('woff2'),
+        url('/fonts/apercu-regular-pro.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: auto;
+}
+
+@font-face {
+    font-family: 'apercu';
+    src:
+        url('/fonts/apercu-bold-pro.woff2') format('woff2'),
+        url('/fonts/apercu-bold-pro.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: auto;
+}
+
+/* fira-mono-regular - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Fira Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/fira-mono-v14-latin-regular.woff2') format('woff2');
+}
+/* fira-mono-700 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Fira Mono';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/fira-mono-v14-latin-700.woff2') format('woff2');
+}
+
+html {
+    font-size: 16px;
+}

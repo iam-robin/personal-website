@@ -1,0 +1,39 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+    service: string;
+    handle: string;
+    url?: string;
+    noBorder?: boolean;
+    hoverBgColor: string;
+    hoverTextColor: string;
+    id: string;
+}
+
+const { service, handle, url, noBorder, hoverBgColor, hoverTextColor, id } = Astro.props as Props;
+---
+
+<li id={id} class="contact-item group" data-bgcolor={hoverBgColor} data-textcolor={hoverTextColor}>
+    <a
+        href={url}
+        target="_blank"
+        class={`grid grid-cols-4 items-center py-4 sm:grid-cols-6 lg:grid-cols-9 ${
+            !noBorder && 'border-b border-black-200 border-inherit'
+        }`}
+    >
+        <span
+            class="col-start-1 col-end-1 font-bold sm:col-start-1 sm:col-end-3 lg:col-start-1 lg:col-end-4"
+            >{service}</span
+        >
+        <span
+            class="col-start-2 col-end-3 font-mono sm:col-start-3 sm:col-end-5 lg:col-start-4 lg:col-end-7"
+            >{handle}</span
+        >
+        <span
+            class="col-start-4 col-end-4 justify-self-end transition group-hover:rotate-45 sm:col-start-5 sm:col-end-7 lg:col-start-7 lg:col-end-10"
+        >
+            <Icon name="ph:arrow-up-right-bold" width={16} />
+        </span>
+    </a>
+</li>
