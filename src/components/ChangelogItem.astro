@@ -1,0 +1,28 @@
+---
+import { timeSince } from 'src/utils/timeSince';
+import GridBox from './GridBox.astro';
+import Headline from './Headline.astro';
+
+interface Props {
+    date: Date;
+    version: string;
+    title: string;
+}
+
+const { date, version, title } = Astro.props as Props;
+---
+
+<GridBox desktopStart={3} desktopEnd={4} classes="mt-2 mb-3 lg:mb-0">
+    <span
+        class={`rounded-full px-3 py-1 font-mono text-xs ${
+            version.endsWith('0.0')
+                ? 'text-lilac-dark bg-lilac-light'
+                : 'text-neutral-500 bg-neutral-100'
+        }`}>v {version}</span
+    >
+</GridBox>
+<GridBox desktopStart={5} desktopEnd={10} classes="mb-20">
+    <Headline classes="mb-1" level={4}>{title}</Headline>
+    <div class="mb-3 text-neutral-400">{timeSince(date)}</div>
+    <slot />
+</GridBox>
