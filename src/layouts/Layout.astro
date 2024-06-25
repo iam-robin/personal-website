@@ -3,6 +3,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { SEO } from 'astro-seo';
+import MobileMenu from '@components/MobileMenu.astro';
 
 interface Props {
     title: string;
@@ -41,8 +42,9 @@ const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
             }}
         />
     </head>
-    <body class="min-h-screen overscroll-none">
+    <body class="min-h-[calc(100vh-56px)] overscroll-none">
         <Header />
+        <MobileMenu />
         <slot />
         <Footer />
     </body>

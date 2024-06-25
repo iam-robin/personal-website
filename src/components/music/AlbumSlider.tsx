@@ -20,7 +20,7 @@ const AlbumSlider: React.FC<YearlyBookSliderProps> = ({ albums }) => {
                         onClick={() => setActiveFilter('threeMonth')}
                         className={`cursor-pointer rounded px-2 py-1 ${
                             activeFilter === 'threeMonth'
-                                ? 'bg-lilac-light text-lilac-dark'
+                                ? 'bg-neutral-100 text-neutral-800'
                                 : 'text-neutral-400'
                         }`}
                     >
@@ -30,7 +30,7 @@ const AlbumSlider: React.FC<YearlyBookSliderProps> = ({ albums }) => {
                         onClick={() => setActiveFilter('overall')}
                         className={`cursor-pointer rounded px-2 py-1 ${
                             activeFilter === 'overall'
-                                ? 'bg-lilac-light text-lilac-dark'
+                                ? 'bg-neutral-100 text-neutral-800'
                                 : 'text-neutral-400'
                         }`}
                     >

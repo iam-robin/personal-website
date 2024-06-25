@@ -23,7 +23,7 @@ const YearlyBookSlider: React.FC<YearlyBookSliderProps> = ({ shelfs }) => {
                             onClick={() => setActiveShelf(index)}
                             className={`cursor-pointer rounded px-2 py-1 ${
                                 activeShelf === index
-                                    ? 'bg-lilac-light text-lilac-dark'
+                                    ? 'bg-neutral-100 text-neutral-800'
                                     : 'text-neutral-400'
                             }`}
                         >
