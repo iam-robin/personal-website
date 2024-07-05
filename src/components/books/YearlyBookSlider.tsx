@@ -14,9 +14,9 @@ const YearlyBookSlider: React.FC<YearlyBookSliderProps> = ({ shelfs }) => {
 
     return (
         <div>
-            <Container classes="mb-2 flex items-center gap-3 pt-4">
+            <Container classes="mb-2 lg:mb-8 flex flex-col md:flex-row md:items-center gap-3 pt-4">
                 <span className="font-bold">Books read in</span>
-                <ul className=" flex gap-2">
+                <ul className=" flex flex-wrap gap-2">
                     {shelfs?.map((shelf: Shelf, index: number) => (
                         <li
                             key={index}
@@ -35,7 +35,7 @@ const YearlyBookSlider: React.FC<YearlyBookSliderProps> = ({ shelfs }) => {
             </Container>
             <Slider
                 spacingTop
-                classes={shelfs[activeShelf].books.length > 3 ? '-mt-[68px]' : ''}
+                classes={shelfs[activeShelf].books.length > 3 ? 'lg:-mt-[68px]' : ''}
                 buttonPosition={shelfs[activeShelf].books.length > 3 ? 'top' : null}
             >
                 {shelfs[activeShelf].books.map((book) => (

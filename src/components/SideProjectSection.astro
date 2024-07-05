@@ -1,8 +1,5 @@
 ---
 import { projects } from 'src/content/projects';
-import Grid from './Grid.astro';
-import GridBox from './GridBox.astro';
-import Headline from './Headline.astro';
 import Slider from './slider/Slider.astro';
 import SliderItem from './slider/SliderItem.astro';
 import ProjectItem from './ProjectItem.astro';
@@ -10,10 +7,11 @@ import SectionContent from './SectionContent.astro';
 ---
 
 <div>
-    <SectionContent
-        title="Side Projects"
-        description=" Like most of us – I have lot of ideas and projects that I would like to implement. Many of them get lost in my notes or as random thoughts on my computer. But can you believe it? Some of them actually happen."
-    />
+    <SectionContent title="Side Projects">
+        Like most of us – I have lot of ideas and projects that I would like to implement. Many of
+        them get lost in my notes or as random thoughts on my computer. But can you believe it? Some
+        of them actually happen.
+    </SectionContent>
     <Slider>
         {
             projects.map((project, index) => (
@@ -22,11 +20,13 @@ import SectionContent from './SectionContent.astro';
                         bgColor={project.bgColor}
                         href={project.href}
                         title={project.title}
+                        description={project.description}
                         labels={project.labels}
                         year={project.year}
                         logo={project.logo}
                         logoWidth={project.logoWidth}
                         customOpenString={project.customOpenString}
+                        comingSoon={project.comingSoon}
                     />
                 </SliderItem>
             ))

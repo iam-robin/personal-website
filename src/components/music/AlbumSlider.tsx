@@ -13,9 +13,9 @@ const AlbumSlider: React.FC<YearlyBookSliderProps> = ({ albums }) => {
 
     return (
         <div>
-            <Container classes="mb-2 flex items-center gap-3">
+            <Container classes="mb-2 lg:mb-8 mt-10 md:mt-0 flex flex-col md:flex-row md:items-center gap-3">
                 <span className="font-bold">Top albums</span>
-                <ul className=" flex gap-2">
+                <ul className=" flex flex-wrap gap-2">
                     <li
                         onClick={() => setActiveFilter('threeMonth')}
                         className={`cursor-pointer rounded px-2 py-1 ${
@@ -40,7 +40,7 @@ const AlbumSlider: React.FC<YearlyBookSliderProps> = ({ albums }) => {
             </Container>
             <Slider
                 spacingTop
-                classes="-mt-[68px]"
+                classes="lg:-mt-[68px]"
                 buttonPosition={albums?.[activeFilter].length > 3 ? 'top' : null}
             >
                 {albums?.[activeFilter].map((album: any) => (

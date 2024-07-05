@@ -23,10 +23,10 @@ const navData: NavItem[] = [
 ];
 ---
 
-<header id="header" class="z-50 mt-14 py-4 lg:sticky lg:top-0">
+<header id="header" class="z-50 h-0 lg:sticky lg:top-0 lg:mt-14 lg:h-auto lg:py-4">
     <Grid>
         <GridBox desktopStart={1} desktopEnd={3}>
-            <div class="lg:absolute lg:bottom-4">
+            <div class="absolute top-3 sm:top-6 md:top-12 lg:bottom-4 lg:top-auto">
                 <a
                     href="/"
                     id="header-logo"
@@ -91,6 +91,7 @@ const navData: NavItem[] = [
     });
 
     function adjustHeaderClasses() {
+        if (window.innerWidth < 1024) return;
         const header = document.getElementById('header');
         const headerLogo = document.getElementById('header-logo');
         const headerI = document.getElementById('header-i') as HTMLSpanElement;

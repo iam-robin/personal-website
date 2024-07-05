@@ -69,51 +69,100 @@ const BookmarkItem: React.FC<BookmarkItemProps> = ({ bookmark }) => {
     }, []);
 
     return (
-        <li className="bookmark-item group relative" ref={itemRef}>
-            <a href={bookmark.link} className="flex items-center justify-between gap-4 py-2">
-                <img
-                    className="cover-image max-w-64 pointer-events-none absolute z-10 hidden max-h-40 shadow-lg group-hover:block"
-                    src={bookmark.cover}
-                    ref={coverRef}
-                />
-                <div className="flex max-w-[80%] shrink-0 items-center gap-2">
-                    <div
-                        className={`h-2 w-2 rounded-full ${
-                            bookmark.type === 'article'
-                                ? 'bg-green'
-                                : bookmark.type === 'video'
-                                  ? 'bg-blue'
-                                  : bookmark.type === 'link'
-                                    ? 'bg-lilac'
-                                    : 'bg-red'
-                        }`}
-                    ></div>
-                    <p className="mr-2 truncate font-mono text-sm">{bookmark.title}</p>
-                    <div>
-                        {bookmark.tags.length > 0 && (
-                            <div className="flex gap-1 ">
-                                {bookmark.tags.map((tag) => (
-                                    <span
-                                        key={tag}
-                                        className="shrink-0 rounded-full bg-black-30 px-2 py-0.5 text-2xs text-black-600"
-                                    >
-                                        #{tag}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
+        <>
+            {/* DESKTOP VERSION */}
+            <li className="bookmark-item group relative hidden md:block" ref={itemRef}>
+                <a href={bookmark.link} className="flex items-center justify-between gap-4 py-2">
+                    <img
+                        className="cover-image max-w-64 pointer-events-none absolute z-10 hidden max-h-40 shadow-lg group-hover:block"
+                        src={bookmark.cover}
+                        ref={coverRef}
+                    />
+                    <div className="flex max-w-[80%] shrink-0 items-center gap-2">
+                        <div
+                            className={`h-2 w-2 rounded-full ${
+                                bookmark.type === 'article'
+                                    ? 'bg-green'
+                                    : bookmark.type === 'video'
+                                      ? 'bg-blue'
+                                      : bookmark.type === 'link'
+                                        ? 'bg-lilac'
+                                        : 'bg-red'
+                            }`}
+                        ></div>
+                        <p className="mr-2 truncate font-mono text-sm">{bookmark.title}</p>
+                        <div>
+                            {bookmark.tags.length > 0 && (
+                                <div className="flex gap-1 ">
+                                    {bookmark.tags.map((tag) => (
+                                        <span
+                                            key={tag}
+                                            className="shrink-0 rounded-full bg-black-30 px-2 py-0.5 text-2xs text-black-600"
+                                        >
+                                            #{tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
-                <div className="h-[1px] w-full grow bg-neutral-200"></div>
-                <p className="shrink-0 text-right font-mono text-xs text-neutral-500 group-hover:hidden">
-                    {formattedDate}
-                </p>
-                <div className="hidden shrink-0 items-center gap-2 group-hover:flex">
-                    <p className="text-sm">{domain}</p>
-                    {/* <Icon name="ph:arrow-up-right-bold" width={16} /> */}
-                </div>
-            </a>
-        </li>
+                    <div className="h-[1px] w-full grow bg-neutral-200"></div>
+                    <p className="shrink-0 text-right font-mono text-xs text-neutral-500 group-hover:hidden">
+                        {formattedDate}
+                    </p>
+                    <div className="hidden shrink-0 items-center gap-2 group-hover:flex">
+                        <p className="text-sm">{domain}</p>
+                        {/* <Icon name="ph:arrow-up-right-bold" width={16} /> */}
+                    </div>
+                </a>
+            </li>
+            {/* MOBILE VERSION */}
+            <li className="md:hidden">
+                <a
+                    href={bookmark.link}
+                    className="mt-5 flex flex-col gap-2 border-b border-neutral-200 pb-5"
+                >
+                    <div className="flex items-center justify-between gap-1">
+                        <div className="flex shrink items-center gap-2 overflow-x-auto">
+                            <div
+                                className={`h-2 w-2 shrink-0 rounded-full ${
+                                    bookmark.type === 'article'
+                                        ? 'bg-green'
+                                        : bookmark.type === 'video'
+                                          ? 'bg-blue'
+                                          : bookmark.type === 'link'
+                                            ? 'bg-lilac'
+                                            : 'bg-red'
+                                }`}
+                            ></div>
+                            <p className="mr-2 truncate font-mono text-xs md:text-sm">
+                                {bookmark.title}
+                            </p>
+                        </div>
+                        <p className="shrink-0 text-right font-mono text-xs text-neutral-500">
+                            {formattedDate}
+                        </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        <div>
+                            {bookmark.tags.length > 0 && (
+                                <div className="flex gap-1 ">
+                                    {bookmark.tags.map((tag) => (
+                                        <span className="shrink-0 rounded-full bg-black-30 px-2 py-0.5 font-mono text-2xs text-black-600">
+                                            #{tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2 text-neutral-400">
+                            <p className="text-2xs">{domain}</p>
+                            {/* <Icon name="ph:arrow-up-right-bold" width={12} /> */}
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </>
     );
 };
 

@@ -124,7 +124,7 @@ const Slider: React.FC<SliderProps> = ({
     return (
         <div ref={containerRef} className={classes}>
             {buttonPosition === 'top' && (
-                <Container classes="mt-8 flex items-center justify-end">
+                <Container classes="mt-2 items-center justify-end hidden md:flex">
                     <div className="flex gap-2">
                         <button
                             ref={prevButtonRef}
@@ -168,7 +168,7 @@ const Slider: React.FC<SliderProps> = ({
                 </div>
             </div>
             {buttonPosition === 'bottom' && (
-                <Container classes="mt-8 flex items-center justify-end">
+                <Container classes="mt-8 items-center justify-end hidden md:flex">
                     <div className="flex gap-2">
                         <button
                             ref={prevButtonRef}

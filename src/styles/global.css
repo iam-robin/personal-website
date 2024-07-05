@@ -38,3 +38,7 @@
 html {
     font-size: 16px;
 }
+
+:root {
+    --active-bg-color: #f8fafc;
+}

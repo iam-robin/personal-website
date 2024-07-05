@@ -29,8 +29,8 @@ tags.sort((a, b) => b.count - a.count);
 ---
 
 <Layout title="Bookmarks">
-    <div class="-mt-28 bg-neutral-100">
-        <Grid classes="pt-56 pb-16">
+    <div class="bg-neutral-100 lg:-mt-28">
+        <Grid classes="pt-32 md:pt-44 lg:pt-56 pb-16">
             <GridBox desktopStart={1} desktopEnd={6}>
                 <Headline level={2}>Bookmarks</Headline>
             </GridBox>
@@ -38,9 +38,11 @@ tags.sort((a, b) => b.count - a.count);
                 <div class="mt-2">
                     <p class="font-mono">
                         Daily I receive new articles, videos, essays, etc. in the RSS reader of my
-                        choice: Reeder. I categorize and tag items I have read and found interesting
-                        in Raindrop.io. Thanks to their fantastic API, I can also share that list
-                        here on my personal website.
+                        choice: <a href="https://reederapp.com/">Reeder</a>. I categorize and tag
+                        items I have read and found interesting in <a href="https://raindrop.io/"
+                            >Raindrop.io</a
+                        >. Thanks to their fantastic API, I can also share that list here on my
+                        personal website.
                     </p>
                     <ul class="mt-8 flex h-full items-center gap-4 font-mono text-xs">
                         <li>
@@ -70,3 +72,15 @@ tags.sort((a, b) => b.count - a.count);
         </GridBox>
     </Grid>
 </Layout>
+
+<style>
+    a {
+        color: #635c7f;
+    }
+
+    a:hover {
+        color: #4c4666;
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
+</style>

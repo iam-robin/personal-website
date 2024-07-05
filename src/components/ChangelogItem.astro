@@ -21,7 +21,7 @@ const { date, version, title } = Astro.props as Props;
         }`}>v {version}</span
     >
 </GridBox>
-<GridBox desktopStart={5} desktopEnd={10} classes="mb-20">
+<GridBox desktopStart={5} desktopEnd={10} classes="mb-16 lg:mb-20">
     <Headline classes="mb-1" level={4}>{title}</Headline>
     <div class="mb-3 text-neutral-400">{timeSince(date)}</div>
     <slot />

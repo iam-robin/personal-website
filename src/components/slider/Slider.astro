@@ -2,14 +2,22 @@
 import { Icon } from 'astro-icon/components';
 import Grid from '../Grid.astro';
 import GridBox from '../GridBox.astro';
+import Link from '@components/Link.astro';
+
+export type SliderLink = {
+    href: string;
+    text: string;
+    external: boolean;
+};
 
 interface Props {
     classes?: string;
     spacingTop?: boolean;
     buttonPosition?: 'bottom' | 'none';
+    link?: SliderLink;
 }
 
-const { classes, spacingTop, buttonPosition = 'bottom' } = Astro.props as Props;
+const { classes, spacingTop, buttonPosition = 'bottom', link } = Astro.props as Props;
 const id = 'gallery-' + Math.random().toString(36).substr(2, 9);
 ---
 
@@ -27,7 +35,17 @@ const id = 'gallery-' + Math.random().toString(36).substr(2, 9);
     {
         buttonPosition === 'bottom' && (
             <Grid>
-                <GridBox desktopFull classes="flex justify-end items-center mt-8">
+                <GridBox
+                    desktopFull
+                    classes="hidden md:flex sm:justify-end justify-between items-center mt-8"
+                >
+                    {link ? (
+                        <Link classes="sm:hidden" href={link.href} external={link.external}>
+                            {link?.text}
+                        </Link>
+                    ) : (
+                        <div />
+                    )}
                     <div class="flex gap-2">
                         <button class="prev-button disabled group flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-neutral-100">
                             <Icon

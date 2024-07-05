@@ -21,7 +21,7 @@ const { emptyEnd = false, classes, size = 'medium' } = Astro.props as Props;
                 : !emptyEnd && size === 'large'
                   ? 'w-1/2'
                   : '',
-        emptyEnd ? 'w-[108px]' : ''
+        emptyEnd ? 'w-4 sm:w-8 lg-with-padding:w-[calc((100vw-1024px)/2-2rem)]' : ''
     ]}
 >
     <slot />

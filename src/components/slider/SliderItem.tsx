@@ -22,7 +22,9 @@ const SliderItem: React.FC<SliderItemProps> = ({
             : '',
         !emptyEnd && size === 'large' ? 'w-1/2' : ''
     ];
-    const endWidthClass = emptyEnd ? 'w-[108px]' : '';
+    const endWidthClass = emptyEnd
+        ? 'w-4 sm:w-8 lg-with-padding:w-[calc((100vw-1024px)/2-2rem)]'
+        : '';
 
     return (
         <div

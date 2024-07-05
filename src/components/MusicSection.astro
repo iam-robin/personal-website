@@ -72,10 +72,11 @@ const playlists: Playlist[] = publicPlaylists?.map((playlist: any) => ({
 ---
 
 <div>
-    <SectionContent
-        title="Music"
-        description="Et est dolor adipisicing nostrud ad. Quis irure consectetur magna magna voluptate. Occaecat commodo sunt sunt duis aliqua ipsum. Commodo consectetur amet magna dolore esse ea dolore dolor magna occaecat. Adipisicing officia nisi ex."
-    />
+    <SectionContent title="Music">
+        Who doesn't like music? I've been tracking my digital listenings on Last.fm since 2013. This
+        section provides an overview of my currently most-played albums and my all-time favorites.
+        Explore my musical tastes and maybe discover some new tunes for yourself!
+    </SectionContent>
     <div class="flex flex-col gap-20">
         <AlbumSlider albums={albums} client:load />
         <PlaylistSlider playlists={playlists} />

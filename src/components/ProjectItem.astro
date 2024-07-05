@@ -4,12 +4,14 @@ import { Image } from 'astro:assets';
 
 export interface Props {
     bgColor: string;
-    href: string;
+    href?: string;
     title: string;
     labels: string[];
     year: string;
+    description: string;
     logo: ImageMetadata;
     logoWidth?: string;
+    comingSoon?: boolean;
     customOpenString?: string;
     classes?: string;
 }
@@ -23,14 +25,17 @@ const {
     logo,
     logoWidth = '4rem',
     customOpenString,
-    classes
+    classes,
+    description,
+    comingSoon = false
 } = Astro.props as Props;
 ---
 
 <a
     class:list={[
         classes,
-        'group relative flex aspect-square w-full flex-col overflow-hidden rounded-xl'
+        'group relative flex h-full w-full flex-col rounded-xl lg:aspect-square lg:overflow-hidden',
+        comingSoon ? 'cursor-not-allowed' : 'cursor-pointer'
     ]}
     href={href}
     style={`background-color: ${bgColor};`}
@@ -39,36 +44,45 @@ const {
         {year}
     </p>
     <div
-        class="flex h-3/4 items-center justify-center overflow-hidden transition-all delay-100 duration-200 group-hover:h-0 group-hover:-translate-y-16"
+        class="flex h-60 shrink-0 items-center justify-center lg:h-3/4 lg:overflow-hidden lg:transition-all lg:delay-100 lg:duration-200 group-hover:lg:h-0 group-hover:lg:-translate-y-16"
     >
         <Image src={logo} alt="project logo" style={`width: ${logoWidth};`} />
     </div>
     <div
-        class="flex h-1/4 flex-col justify-between p-6 pt-0 text-white transition-all delay-100 duration-200 group-hover:h-full group-hover:pt-6"
+        class="flex h-full flex-col justify-between p-3 text-white lg:h-1/4 lg:p-6 lg:pt-0 lg:transition-all lg:delay-100 lg:duration-200 group-hover:lg:h-full group-hover:lg:pt-6"
     >
         <div>
-            <h3 class="mb-2 ml-1 text-base transition-all delay-100 duration-200 group-hover:mb-2">
+            <h3
+                class="mb-2 ml-1 text-base group-hover:mb-2 lg:transition-all lg:delay-100 lg:duration-200"
+            >
                 {title}
             </h3>
-            <ul class="flex gap-1">
+            <ul class="flex flex-wrap gap-1">
                 {
                     labels?.map((label) => (
-                        <li class="rounded-full bg-white-100 px-3 py-0.5 font-mono text-2xs text-white-700">
+                        <li class="rounded-full bg-white-100 px-3 py-0.5 font-mono text-[11px] text-white-700">
                             {label}
                         </li>
                     ))
                 }
             </ul>
             <p
-                class="mt-4 h-0 overflow-hidden text-white-700 transition-all delay-100 duration-200 group-hover:h-full"
+                class="mt-4 text-white-700 lg:h-0 lg:overflow-hidden lg:transition-all lg:delay-100 lg:duration-200 group-hover:lg:h-full"
             >
-                Enim eiusmod anim aute sunt excepteur ad in proident. Duis et ipsum exercitation
-                occaecat ea pariatur in deserunt in nostrud in sunt ex.
+                {description}
             </p>
         </div>
-        <div data-navLink class="mt-2 flex items-center gap-[6px]">
-            {customOpenString ? customOpenString : 'Open case study'}
-            <Icon name="ph:arrow-up-right-bold" width={16} />
+        <div data-navLink class="mb-2 mt-4 flex items-center gap-[6px] lg:mt-2">
+            {
+                comingSoon ? (
+                    <p class="opacity-50">Coming Soon</p>
+                ) : (
+                    <>
+                        {customOpenString ? customOpenString : 'Open case study'}
+                        <Icon name="ph:arrow-up-right-bold" width={16} />
+                    </>
+                )
+            }
         </div>
     </div>
 </a>

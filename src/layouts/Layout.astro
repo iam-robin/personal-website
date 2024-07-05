@@ -4,6 +4,7 @@ import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { SEO } from 'astro-seo';
 import MobileMenu from '@components/MobileMenu.astro';
+import ContactLinksSection from '@components/ContactLinksSection.astro';
 
 interface Props {
     title: string;
@@ -17,7 +18,7 @@ const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="overscroll-none">
     <head>
         <meta charset="UTF-8" />
         <meta name="description" content="Astro description" />
@@ -37,15 +38,16 @@ const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
                     image: resolvedImageWithDomain
                 },
                 image: {
-                    alt: 'Patent Studio Homepage Screenshot'
+                    alt: 'iamrobin personal website screenshot'
                 }
             }}
         />
     </head>
-    <body class="min-h-[calc(100vh-56px)] overscroll-none">
+    <body class="min-h-[calc(100vh-56px)] overflow-x-hidden">
         <Header />
         <MobileMenu />
         <slot />
+        <ContactLinksSection />
         <Footer />
     </body>
 </html>

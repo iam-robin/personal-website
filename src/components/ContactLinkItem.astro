@@ -7,14 +7,22 @@ interface Props {
     url?: string;
     noBorder?: boolean;
     hoverBgColor: string;
+    hoverBgHexColor: string;
     hoverTextColor: string;
     id: string;
 }
 
-const { service, handle, url, noBorder, hoverBgColor, hoverTextColor, id } = Astro.props as Props;
+const { service, handle, url, noBorder, hoverBgColor, hoverTextColor, id, hoverBgHexColor } =
+    Astro.props as Props;
 ---
 
-<li id={id} class="contact-item group" data-bgcolor={hoverBgColor} data-textcolor={hoverTextColor}>
+<li
+    id={id}
+    class="contact-item group"
+    data-bgcolor={hoverBgColor}
+    data-hoverBgHexColor={hoverBgHexColor}
+    data-textcolor={hoverTextColor}
+>
     <a
         href={url}
         target="_blank"
@@ -23,11 +31,11 @@ const { service, handle, url, noBorder, hoverBgColor, hoverTextColor, id } = Ast
         }`}
     >
         <span
-            class="col-start-1 col-end-1 font-bold sm:col-start-1 sm:col-end-3 lg:col-start-1 lg:col-end-4"
+            class="col-start-1 col-end-4 font-bold sm:col-start-1 sm:col-end-3 lg:col-start-1 lg:col-end-4"
             >{service}</span
         >
         <span
-            class="col-start-2 col-end-3 font-mono sm:col-start-3 sm:col-end-5 lg:col-start-4 lg:col-end-7"
+            class="col-start-1 col-end-4 font-mono sm:col-start-3 sm:col-end-5 lg:col-start-4 lg:col-end-7"
             >{handle}</span
         >
         <span

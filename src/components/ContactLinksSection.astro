@@ -13,7 +13,10 @@ const { classes } = Astro.props as Props;
 ---
 
 <div
-    class:list={[classes, 'bg-neutral-100 py-40 text-neutral-800 transition-all duration-300']}
+    class:list={[
+        classes,
+        'bg-neutral-100 pb-16 pt-20 text-neutral-800 transition-all duration-300 lg:pb-52 lg:pt-40'
+    ]}
     id="contact-container"
 >
     <Grid>
@@ -28,27 +31,27 @@ const { classes } = Astro.props as Props;
             <Headline classes="mb-4 sm:mt-2" level={3}>Contact</Headline>
             <Icon
                 id="icon-for-default"
-                class="icon-for-service absolute top-32 text-[64px] transition-transform"
+                class="icon-for-service absolute -top-10 right-10 text-[64px] transition-transform sm:right-auto sm:top-32"
                 name="sticker-wave-50"
             />
             <Icon
                 id="icon-for-email"
-                class="icon-for-service absolute top-32 -rotate-12 scale-0 text-[64px] transition-transform"
+                class="icon-for-service absolute -top-10 right-10 -rotate-12 scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
                 name="sticker-mail-50-2"
             />
             <Icon
                 id="icon-for-mastodon"
-                class="icon-for-service absolute top-32 rotate-12 scale-0 text-[64px] transition-transform"
+                class="icon-for-service absolute -top-10 right-10 rotate-12 scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
                 name="sticker-mastodon-50"
             />
             <Icon
                 id="icon-for-glass"
-                class="icon-for-service absolute top-32 -rotate-[8deg] scale-0 text-[64px] transition-transform"
+                class="icon-for-service absolute -top-10 right-10 -rotate-[8deg] scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
                 name="sticker-glass-50"
             />
             <Icon
                 id="icon-for-readcv"
-                class="icon-for-service absolute top-32 rotate-12 scale-0 text-[64px] transition-transform"
+                class="icon-for-service absolute -top-10 right-10 rotate-12 scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
                 name="sticker-readcv-50"
             />
         </GridBox>
@@ -57,34 +60,38 @@ const { classes } = Astro.props as Props;
                 <ContactLinkItem
                     id="email-contact-item"
                     hoverBgColor="bg-blue"
+                    hoverBgHexColor="#689BF7"
                     hoverTextColor="text-blue-dark"
                     service="Email"
                     handle="hey@iamrob.in"
-                    url="#"
+                    url="mailto:hey@iamrob.in"
                 />
                 <ContactLinkItem
                     id="mastodon-contact-item"
                     hoverBgColor="bg-green"
+                    hoverBgHexColor="#6AD09D"
                     hoverTextColor="text-green-dark"
                     service="Mastodon"
                     handle="@iamrobin@mastodon.social"
-                    url="#"
+                    url="https://mastodon.social/@iamrobin"
                 />
                 <ContactLinkItem
                     id="glass-contact-item"
                     hoverBgColor="bg-yellow"
+                    hoverBgHexColor="#FFC700"
                     hoverTextColor="text-yellow-dark"
                     service="Glass"
                     handle="@iamrobin"
-                    url="#"
+                    url="https://glass.photo/iamrobin"
                 />
                 <ContactLinkItem
                     id="readcv-contact-item"
                     hoverBgColor="bg-lilac"
+                    hoverBgHexColor="#C6B9FF"
                     hoverTextColor="text-lilac-dark"
                     service="Readcv"
                     handle="@iamrobin"
-                    url="#"
+                    url="https://read.cv/iamrobin"
                     noBorder
                 />
             </ul>
@@ -94,15 +101,18 @@ const { classes } = Astro.props as Props;
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        if (window.innerWidth < 640) return;
         const contactItems = document.querySelectorAll('.contact-item');
         const container = document.getElementById('contact-container');
         const icons = document.querySelectorAll('.icon-for-service');
 
         contactItems.forEach((item) => {
             const bgColor = (item as HTMLElement).dataset.bgcolor as string;
+            const bgHexColor = (item as HTMLElement).dataset.hoverbghexcolor as string;
             const textColor = (item as HTMLElement).dataset.textcolor as string;
             item.addEventListener('mouseover', () => {
                 const service = item.getAttribute('id')?.split('-')[0];
+                document.documentElement.style.setProperty('--active-bg-color', bgHexColor);
                 icons.forEach((icon) => {
                     if (icon.id === `icon-for-${service}`) {
                         icon.classList.remove('scale-0');
@@ -116,6 +126,7 @@ const { classes } = Astro.props as Props;
             });
             item.addEventListener('mouseout', () => {
                 icons.forEach((icon) => {
+                    document.documentElement.style.setProperty('--active-bg-color', '#f8fafc');
                     icon.classList.add('scale-0');
                     if (icon.id === 'icon-for-default') {
                         icon.classList.remove('scale-0');

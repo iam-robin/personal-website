@@ -3,11 +3,18 @@ import Grid from './Grid.astro';
 import GridBox from './GridBox.astro';
 ---
 
-<footer class="sticky top-[100vh] -mt-16 bg-black-50">
+<footer
+    class="sticky top-[100vh] pb-28 pt-5 brightness-95 transition duration-300 md:py-5"
+    style="background-color: var(--active-bg-color);"
+>
     <Grid>
-        <GridBox classes="flex justify-between h-16 items-center text-xs text-black-600">
-            <p>© <span id="copyright-year"></span>, Robin Spielmann</p>
-            <ul class="flex gap-4">
+        <GridBox classes="flex justify-between items-center text-xs text-black-600">
+            <p>
+                © <span id="copyright-year"></span>, <span class="block sm:inline"
+                    >Robin Spielmann</span
+                >
+            </p>
+            <ul class="flex flex-col gap-0.5 xs:flex-row xs:gap-4">
                 <li><a href="/legal">Legal notice</a></li>
                 <li><a href="/changelog">Changelog</a></li>
                 <li><a href="https://github.com/iam-robin/personal-website">Source code</a></li>

@@ -52,9 +52,10 @@ currentlyReadingData.booksByReadingStateAndProfile.forEach((book: Book) => {
 ---
 
 <div>
-    <SectionContent
-        title="Books"
-        description="I would like to read more books. Keeping a list of all the books I've read and enjoyed will hopefully help me do that. Each book links to its corresponding page on the awesome book platform Literal."
-    />
+    <SectionContent title="Books">
+        I would like to read more books. Keeping a list of all the books I've read and enjoyed will
+        hopefully help me do that. Each book links to its corresponding page on the awesome book
+        platform Literal.
+    </SectionContent>
     <YearlyBookSlider shelfs={yearlyShelfData} client:load />
 </div>

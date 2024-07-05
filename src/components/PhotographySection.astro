@@ -1,5 +1,5 @@
 ---
-import Slider from './slider/Slider.astro';
+import Slider, { type SliderLink } from './slider/Slider.astro';
 import SliderItem from './slider/SliderItem.astro';
 import { Image } from 'astro:assets';
 
@@ -21,6 +21,9 @@ import Photo15 from '../assets/landingpage-photos/15.jpg';
 import Photo16 from '../assets/landingpage-photos/16.jpg';
 
 import SectionContent from './SectionContent.astro';
+import Link from './Link.astro';
+import Grid from './Grid.astro';
+import GridBox from './GridBox.astro';
 
 const photos = [
     Photo01,
@@ -40,16 +43,24 @@ const photos = [
     Photo15,
     Photo16
 ];
+
+const sliderLink: SliderLink = {
+    text: 'More photos',
+    href: 'https://glass.photo/iamrobin',
+    external: true
+};
 ---
 
 <div>
     <SectionContent
         title="Photography"
-        description="I have been enjoying using a camera to capture visually appealing moments for over a decade now."
         linkText="more photos"
         linkUrl="https://glass.photo/iamrobin"
-    />
-    <Slider>
+    >
+        I have been enjoying using a camera to capture visually appealing moments for over a decade
+        now.
+    </SectionContent>
+    <Slider link={sliderLink}>
         {
             photos.map((photo) => (
                 <>

@@ -19,12 +19,10 @@ const { classes } = Astro.props as Props;
 ---
 
 <div>
-    <SectionContent
-        title="Bookmarks"
-        description="These are the latest articles, websites, and videos I've bookmarked as exciting, helpful, or simply fun to consume."
-        linkText="more bookmarks"
-        linkUrl="/bookmarks"
-    />
+    <SectionContent title="Bookmarks" linkText="more bookmarks" linkUrl="/bookmarks">
+        These are the latest articles, websites, and videos I've bookmarked as exciting, helpful, or
+        simply fun to consume.
+    </SectionContent>
     <Grid classes={classes}>
         <GridBox desktopFull classes="mt-12">
             <ul>
