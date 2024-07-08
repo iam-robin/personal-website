@@ -6,33 +6,48 @@
     },
     "items": [
         {
-            "id": "a1",
-            "date_published": "2023/7/11 15:27",
-            "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/bicycle/03.jpg",
-                "alt": "lorem",
-                "caption": "lorem"
-            }
-        },
-        {
-            "id": "a1",
-            "date_published": "2023/7/11 15:27",
-            "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/bicycle/02.jpg",
-                "alt": "lorem",
-                "caption": "lorem"
-            }
-        },
-        {
-            "id": "a1",
-            "date_published": "2023/7/11 15:27",
+            "date_published": "2020/4/09 18:54",
             "_open_stories": {
                 "mime_type": "image/jpg",
                 "url": "stories/bicycle/01.jpg",
-                "alt": "lorem",
-                "caption": "lorem"
+                "alt": "My old Moser steel roadbike leaning against a tree in a forest",
+                "caption": "My old Moser steel roadbike"
+            }
+        },
+        {
+            "date_published": "2021/9/07 18:37",
+            "_open_stories": {
+                "mime_type": "image/jpg",
+                "url": "stories/bicycle/02.jpg",
+                "alt": "Sunny evening gravel ride in sardinia",
+                "caption": "sunny evening gravel ride in sardinia"
+            }
+        },
+        {
+            "date_published": "2022/7/21 11:24",
+            "_open_stories": {
+                "mime_type": "image/jpg",
+                "url": "stories/bicycle/03.jpg",
+                "alt": "My canyon gravel bike leaning against a wall with bike packing bags attached",
+                "caption": "Bike packing in the netherlands"
+            }
+        },
+        {
+            "date_published": "2023/9/02 14:51",
+            "_open_stories": {
+                "mime_type": "image/jpg",
+                "url": "stories/bicycle/04.jpg",
+                "alt": "My canyon gravel bike on gravel road in the netherlands",
+                "caption": "Green divide gravel tour in the netherlands"
+            }
+        },
+        {
+            "date_published": "2023/9/02 14:51",
+            "_open_stories": {
+                "mime_type": "image/jpg",
+                "url": "stories/bicycle/05.jpg",
+                "alt": "My canyon gravel bike leaning against a wall and a small dinosaur statue in the background",
+                "caption": "Bike and dinosaur"
             }
         }
     ]
