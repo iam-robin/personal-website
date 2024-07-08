@@ -9,6 +9,7 @@ import SectionContent from './SectionContent.astro';
 import MusicPlaylistItem from './MusicPlaylistItem.astro';
 import AlbumSlider from './music/AlbumSlider';
 import PlaylistSlider from './music/PlaylistSlider';
+import InlineLink from './InlineLink.astro';
 
 export interface Playlist {
     name?: string;
@@ -73,9 +74,14 @@ const playlists: Playlist[] = publicPlaylists?.map((playlist: any) => ({
 
 <div>
     <SectionContent title="Music">
-        Who doesn't like music? I've been tracking my digital listenings on Last.fm since 2013. This
-        section provides an overview of my currently most-played albums and my all-time favorites.
-        Explore my musical tastes and maybe discover some new tunes for yourself!
+        Who doesn't like music? I've been tracking my digital listenings on <InlineLink
+            external
+            href="https://www.last.fm/"
+        >
+            Last.fm
+        </InlineLink> since 2013. This section provides an overview of my currently most-played
+        albums and my all-time favorites. Explore my musical tastes and maybe discover some new
+        tunes for yourself!
     </SectionContent>
     <div class="flex flex-col gap-20">
         <AlbumSlider albums={albums} client:load />

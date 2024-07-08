@@ -3,6 +3,7 @@ import Grid from '@components/Grid.astro';
 import Layout from '../layouts/Layout.astro';
 import ChangelogItem from '@components/ChangelogItem.astro';
 import { Icon } from 'astro-icon/components';
+import InlineLink from '@components/InlineLink.astro';
 ---
 
 <Layout title="Journal">
@@ -13,11 +14,12 @@ import { Icon } from 'astro-icon/components';
             date={new Date('2024-07-04T18:00')}
         >
             <p>
-                Incididunt do tempor occaecat dolor excepteur non veniam nostrud sit excepteur
-                incididunt. Sint excepteur cillum consequat laborum anim pariatur excepteur non
-                velit ut qui nostrud ipsum. Deserunt et deserunt deserunt reprehenderit deserunt
-                enim ad mollit nulla magna quis consequat velit reprehenderit sit. Minim minim
-                cillum laboris.
+                Rebuilt with <InlineLink href="https://astro.build/" external>Astro.js</InlineLink>
+                 - and you know what? I really enjoyed the development experience! This update
+                brings a fresh layout, new content-focused structure, and cute little interactions
+                that make the site uniquely personal. It's now easier for me to add new content,
+                ensuring a more dynamic and engaging experience for visitors. Explore and enjoy the
+                revamped site!
             </p>
         </ChangelogItem>
         <ChangelogItem version="2.2.0" title="🌈 Themes" date={new Date('2023-04-23T12:00')}>
