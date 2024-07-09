@@ -32,4 +32,13 @@ import { List, X } from '@phosphor-icons/react';
     details[open] .x {
         display: block;
     }
+
+    details > summary {
+        list-style: none;
+    }
+
+    details > summary::marker,
+    details > summary::-webkit-details-marker {
+        display: none;
+    }
 </style>
