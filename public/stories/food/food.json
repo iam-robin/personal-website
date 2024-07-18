@@ -8,8 +8,8 @@
         {
             "date_published": "2022/2/5",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/food/06.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/food/06.webp",
                 "alt": "Franzbrötchen in the making",
                 "caption": "Franzbrötchen in the making"
             }
@@ -17,8 +17,8 @@
         {
             "date_published": "2022/2/20",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/food/07.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/food/07.webp",
                 "alt": "Lemon tart",
                 "caption": "Lemon tart"
             }
@@ -26,8 +26,8 @@
         {
             "date_published": "2022/8/7",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/food/05.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/food/05.webp",
                 "alt": "King oyster mushroom",
                 "caption": "King Oyster Mushroom"
             }
@@ -35,8 +35,8 @@
         {
             "date_published": "2023/2/13",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/food/03.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/food/03.webp",
                 "alt": "Bimbimbap preparation",
                 "caption": "Bimbimbap preparation"
             }
@@ -44,8 +44,8 @@
         {
             "date_published": "2023/2/17",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/food/02.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/food/02.webp",
                 "alt": "A photo of chinese street food in the restaurant LeDu",
                 "caption": "LeDu – chinese street food in Munich"
             }
@@ -53,8 +53,8 @@
         {
             "date_published": "2023/3/10 21:27",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/food/01.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/food/01.webp",
                 "alt": "Cinnamon buns fresh out of the oven",
                 "caption": "Cinnamon buns fresh out of the oven"
             }
@@ -62,8 +62,8 @@
         {
             "date_published": "2023/8/19",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/food/08.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/food/08.webp",
                 "alt": "Tomatoes from the balcony",
                 "caption": "Tomatoes from the balcony"
             }
@@ -71,8 +71,8 @@
         {
             "date_published": "2024/6/19",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/food/09.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/food/09.webp",
                 "alt": "Cooking school",
                 "caption": "Cooking school"
             }

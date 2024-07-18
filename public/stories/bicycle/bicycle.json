@@ -8,8 +8,8 @@
         {
             "date_published": "2020/4/09 18:54",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/bicycle/01.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/bicycle/01.webp",
                 "alt": "My old Moser steel roadbike leaning against a tree in a forest",
                 "caption": "My old Moser steel roadbike"
             }
@@ -17,8 +17,8 @@
         {
             "date_published": "2021/9/07 18:37",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/bicycle/02.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/bicycle/02.webp",
                 "alt": "Sunny evening gravel ride in sardinia",
                 "caption": "sunny evening gravel ride in sardinia"
             }
@@ -26,8 +26,8 @@
         {
             "date_published": "2022/7/21 11:24",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/bicycle/03.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/bicycle/03.webp",
                 "alt": "My canyon gravel bike leaning against a wall with bike packing bags attached",
                 "caption": "Bike packing in the netherlands"
             }
@@ -35,8 +35,8 @@
         {
             "date_published": "2023/4/23 14:51",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/bicycle/05.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/bicycle/05.webp",
                 "alt": "My canyon gravel bike leaning against a wall and a small dinosaur statue in the background",
                 "caption": "Bike and dinosaur"
             }
@@ -44,8 +44,8 @@
         {
             "date_published": "2023/9/02 14:51",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/bicycle/04.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/bicycle/04.webp",
                 "alt": "My canyon gravel bike on gravel road in the netherlands",
                 "caption": "Green divide gravel tour in the netherlands"
             }

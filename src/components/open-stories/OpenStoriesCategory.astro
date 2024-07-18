@@ -6,7 +6,9 @@ interface Props {
 const { title } = Astro.props as Props;
 ---
 
-<open-stories src={`./stories/${title}/${title}.json`} show-metadata>{title}</open-stories>
+<open-stories src={`./stories/${title}/${title}.json`} show-metadata loading="lazy"
+    >{title}</open-stories
+>
 
 <style>
     open-stories::part(button) {

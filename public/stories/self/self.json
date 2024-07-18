@@ -8,8 +8,8 @@
         {
             "date_published": "2023/1/20 13:50",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/self/01.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/self/01.webp",
                 "alt": "A black and white photo of me with a baguette in my hand",
                 "caption": "Me, in Paris and a baguette"
             }
@@ -17,8 +17,8 @@
         {
             "date_published": "2023/2/16 15:08",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/self/02.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/self/02.webp",
                 "alt": "Me, taking a selfie in a window reflection",
                 "caption": "Home office, window reflection, sun"
             }
@@ -26,8 +26,8 @@
         {
             "date_published": "2023/6/2 19:22",
             "_open_stories": {
-                "mime_type": "image/jpg",
-                "url": "stories/self/03.jpg",
+                "mime_type": "image/webp",
+                "url": "stories/self/03.webp",
                 "alt": "Me, in a car window reflection",
                 "caption": "Car reflection. Felt cute, might delete later."
             }
