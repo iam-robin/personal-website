@@ -39,6 +39,14 @@ html {
     font-size: 16px;
 }
 
+html.monochrome {
+    filter: grayscale(1);
+}
+
 :root {
     --active-bg-color: #f8fafc;
+}
+
+html.dark {
+    --active-bg-color: #000;
 }

@@ -1,6 +1,8 @@
 ---
 import Grid from './Grid.astro';
 import GridBox from './GridBox.astro';
+import MonochromeSwitch from './MonochromeSwitch.astro';
+import ThemeSwitch from './ThemeSwitch.astro';
 
 interface NavItem {
     name: string;
@@ -30,7 +32,7 @@ const navData: NavItem[] = [
                 <a
                     href="/"
                     id="header-logo"
-                    class="flex -rotate-6 font-bold italic tracking-wider text-black-300 transition-all duration-300 ease-out-cubic hover:text-black"
+                    class="flex -rotate-6 font-bold italic tracking-wider text-black-300 transition-all duration-300 ease-out-cubic hover:text-black dark:text-white-600"
                 >
                     <span id="header-i" class="text-lg transition-all duration-300 ease-out-cubic">
                         i
@@ -66,9 +68,10 @@ const navData: NavItem[] = [
                 }
             </nav>
         </GridBox>
-        <!-- <GridBox desktopStart={11} desktopEnd={12} classes="flex justify-end">
-            <span>🌑</span>
-        </GridBox> -->
+        <GridBox desktopStart={11} desktopEnd={12} classes="flex justify-end gap-4">
+            <MonochromeSwitch />
+            <ThemeSwitch />
+        </GridBox>
     </Grid>
 </header>
 
@@ -98,8 +101,13 @@ const navData: NavItem[] = [
         const headerAm = document.getElementById('header-am') as HTMLSpanElement;
         const headerRobin = document.getElementById('header-robin') as HTMLSpanElement;
 
-        const logoClassesExpanded = ['-rotate-6', 'tracking-wider', 'text-black-300'];
-        const logoClassesCollapsed = ['text-sm', 'text-black', 'font-normal'];
+        const logoClassesExpanded = [
+            '-rotate-6',
+            'tracking-wider',
+            'text-black-300',
+            'dark:text-white-600'
+        ];
+        const logoClassesCollapsed = ['text-sm', 'text-black', 'font-normal', 'dark:text-white'];
 
         const robinTypeClassesExpanded = ['text-lg', '-translate-x-16', 'translate-y-7'];
 
@@ -107,7 +115,13 @@ const navData: NavItem[] = [
         const iTypeClassesExpanded = ['text-lg'];
 
         if (window.scrollY < 56) {
-            header?.classList.remove('bg-white', 'border-b', 'border-neutral-200');
+            header?.classList.remove(
+                'bg-white',
+                'border-b',
+                'border-neutral-200',
+                'dark:bg-grey-900',
+                'dark:border-grey-700'
+            );
             headerLogo?.classList.add(...logoClassesExpanded);
 
             headerRobin?.classList.add(...robinTypeClassesExpanded);
@@ -122,7 +136,13 @@ const navData: NavItem[] = [
             // headerI.innerHTML = 'i';
             // headerRobin.innerHTML = 'robin';
         } else {
-            header?.classList.add('bg-white', 'border-b', 'border-neutral-200');
+            header?.classList.add(
+                'bg-white',
+                'border-b',
+                'border-neutral-200',
+                'dark:bg-grey-900',
+                'dark:border-grey-700'
+            );
             headerLogo?.classList.remove(...logoClassesExpanded);
 
             headerRobin?.classList.add(...logoClassesCollapsed);

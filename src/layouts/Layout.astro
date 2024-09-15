@@ -26,6 +26,24 @@ const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
         <title>{adjustedTitle}</title>
+        <script>
+            // DARKMODE
+            if (
+                localStorage?.getItem('dark-mode') === 'true' ||
+                (!('dark-mode' in localStorage) &&
+                    window.matchMedia('(prefers-color-scheme: dark)').matches)
+            ) {
+                document.querySelector('html')?.classList.add('dark');
+            } else {
+                document.querySelector('html')?.classList.remove('dark');
+            }
+            // MONOCHROME MODE
+            if (localStorage?.getItem('monochrome-mode') === 'true') {
+                document.querySelector('html')?.classList.add('monochrome');
+            } else {
+                document.querySelector('html')?.classList.remove('monochrome');
+            }
+        </script>
         <script src="/iamrobin/js/script.js" data-api="/iamrobin/api/event" data-domain="iamrob.in"
         ></script>
         <SEO
@@ -45,7 +63,9 @@ const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
             }}
         />
     </head>
-    <body class="min-h-[calc(100vh-56px)] overflow-x-hidden">
+    <body
+        class="dark:bg-grey-900 min-h-[calc(100vh-56px)] overflow-x-hidden text-black dark:text-white-900"
+    >
         <Header />
         <MobileMenu />
         <slot />

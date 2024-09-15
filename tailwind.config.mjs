@@ -3,6 +3,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors');
 
 export default {
+    darkMode: 'class',
     purge: {
         content: ['./src/**/*.astro', './src/**/*.tsx'],
         options: {
@@ -47,6 +48,7 @@ export default {
                 DEFAULT: 'rgba(0,0,0,1)'
             },
             neutral: colors.slate,
+            grey: colors.zinc,
             red: {
                 light: '#ffc1bb',
                 DEFAULT: '#FF8477',

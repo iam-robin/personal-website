@@ -1,0 +1,33 @@
+---
+
+---
+
+<div class="flex flex-col justify-center">
+    <input type="checkbox" name="light-switch" id="light-switch" class="light-switch sr-only" />
+    <label class="relative cursor-pointer" for="light-switch">
+        <div class="dark:hidden">sun</div>
+        <div class="hidden dark:block">moon</div>
+        <span class="sr-only">Switch to light / dark version</span>
+    </label>
+</div>
+
+<script>
+    const lightSwitch: HTMLInputElement | null = document.querySelector('.light-switch');
+    if (lightSwitch) {
+        if (localStorage.getItem('dark-mode') === 'true') {
+            lightSwitch.checked = true;
+        }
+        lightSwitch.addEventListener('change', () => {
+            const { checked } = lightSwitch;
+            lightSwitch.checked = checked;
+
+            if (lightSwitch.checked) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('dark-mode', 'true');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('dark-mode', 'false');
+            }
+        });
+    }
+</script>

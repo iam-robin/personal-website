@@ -19,7 +19,7 @@ const { href, classes, external } = Astro.props as Props;
         width={16}
         class:list={[
             external && 'hidden',
-            'text-neutral-400 transition-all group-hover:translate-x-0.5 group-hover:text-black'
+            'text-neutral-400 transition-all group-hover:translate-x-0.5 group-hover:text-black dark:group-hover:text-white'
         ]}
     />
     <Icon
@@ -27,7 +27,7 @@ const { href, classes, external } = Astro.props as Props;
         width={16}
         class:list={[
             !external && 'hidden',
-            'text-neutral-400 transition-all group-hover:translate-x-0.5 group-hover:text-black'
+            'text-neutral-400 transition-all group-hover:translate-x-0.5 group-hover:text-black dark:group-hover:text-white'
         ]}
     />
 </a>

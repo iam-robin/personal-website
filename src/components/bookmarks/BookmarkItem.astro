@@ -50,7 +50,7 @@ const domain = url.hostname;
                     bookmark.tags.length > 0 && (
                         <div class="flex gap-1 ">
                             {bookmark.tags.map((tag) => (
-                                <span class="shrink-0 rounded-full bg-black-30 px-2 py-0.5 font-mono text-2xs text-black-600">
+                                <span class="shrink-0 rounded-full bg-black-30 px-2 py-0.5 font-mono text-2xs text-black-600 dark:bg-white-100 dark:text-white-700">
                                     #{tag}
                                 </span>
                             ))}
@@ -59,8 +59,10 @@ const domain = url.hostname;
                 }
             </div>
         </div>
-        <div class="hidden h-[1px] w-full grow bg-neutral-200 md:block"></div>
-        <p class="shrink-0 text-right font-mono text-xs text-neutral-500 group-hover:hidden">
+        <div class="hidden h-[1px] w-full grow bg-neutral-200 dark:bg-white-200 md:block"></div>
+        <p
+            class="shrink-0 text-right font-mono text-xs text-neutral-500 group-hover:hidden dark:text-white-500"
+        >
             {formattedDate}
         </p>
         <div class="hidden shrink-0 items-center gap-2 group-hover:flex">

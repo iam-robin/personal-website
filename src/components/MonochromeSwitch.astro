@@ -1,0 +1,48 @@
+---
+
+---
+
+<div class="flex flex-col justify-center">
+    <input
+        type="checkbox"
+        name="monochrome-switch"
+        id="monochrome-switch"
+        class="monochrome-switch sr-only"
+    />
+    <label class="relative cursor-pointer" for="monochrome-switch">
+        <div class="monochrome-button hidden">bw</div><div class="color-button hidden">color</div>
+        <span class="sr-only">Switch to color / monochrome version</span>
+    </label>
+</div>
+
+<script>
+    const monochromeSwitch: HTMLInputElement | null = document.querySelector('.monochrome-switch');
+    const monochromeButton: HTMLDivElement | null = document.querySelector('.monochrome-button');
+    const colorButton: HTMLDivElement | null = document.querySelector('.color-button');
+    if (monochromeSwitch) {
+        if (localStorage.getItem('monochrome-mode') === 'true') {
+            monochromeSwitch.checked = true;
+            monochromeButton?.classList.add('hidden');
+            colorButton?.classList.remove('hidden');
+        } else {
+            colorButton?.classList.add('hidden');
+            monochromeButton?.classList.remove('hidden');
+        }
+        monochromeSwitch.addEventListener('change', () => {
+            const { checked } = monochromeSwitch;
+            monochromeSwitch.checked = checked;
+
+            if (monochromeSwitch.checked) {
+                document.documentElement.classList.add('monochrome');
+                monochromeButton?.classList.add('hidden');
+                colorButton?.classList.remove('hidden');
+                localStorage.setItem('monochrome-mode', 'true');
+            } else {
+                document.documentElement.classList.remove('monochrome');
+                colorButton?.classList.add('hidden');
+                monochromeButton?.classList.remove('hidden');
+                localStorage.setItem('monochrome-mode', 'false');
+            }
+        });
+    }
+</script>
