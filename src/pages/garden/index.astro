@@ -1,0 +1,21 @@
+---
+import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
+import GardenNoteItem from '@components/GardenNoteItem.astro';
+import GardenLayout from '@layouts/GardenLayout.astro';
+import { getNewestObsidianGardenEntries, getObsidianGardenCategories } from 'src/api/github';
+
+const obsidianCategories = await getObsidianGardenCategories();
+const newestObsidianEntries = await getNewestObsidianGardenEntries(6);
+---
+
+<GardenLayout title="Garden" categories={obsidianCategories}>
+    <h1>Newest notes</h1>
+    <GardenBreadcrumb />
+    <div class="grid grid-cols-3 gap-4">
+        {
+            newestObsidianEntries.map((entry: any) => (
+                <GardenNoteItem data={entry} currentPath="foo" distorted />
+            ))
+        }
+    </div>
+</GardenLayout>

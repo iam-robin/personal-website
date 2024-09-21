@@ -1,0 +1,28 @@
+---
+import { projects } from 'src/content/projects';
+import Slider from './slider/Slider.astro';
+import SliderItem from './slider/SliderItem.astro';
+import SectionContent from './SectionContent.astro';
+import { getNewestObsidianGardenEntries } from 'src/api/github';
+import GardenNoteItem from './GardenNoteItem.astro';
+
+const newestObsidianEntries = await getNewestObsidianGardenEntries(10);
+---
+
+<div>
+    <SectionContent title="Digital Garden">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta molestias sit molestiae harum
+        animi accusamus, accusantium iure, sapiente omnis modi suscipit similique in adipisci fugiat
+        dolorem doloremque atque quidem dolores.
+    </SectionContent>
+    <Slider>
+        {
+            newestObsidianEntries.map((note) => (
+                <SliderItem classes="py-8" size="small">
+                    <GardenNoteItem data={note} currentPath="foo" />
+                </SliderItem>
+            ))
+        }
+        <SliderItem emptyEnd />
+    </Slider>
+</div>

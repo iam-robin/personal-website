@@ -1,12 +1,19 @@
 ---
 import Grid from './Grid.astro';
 import GridBox from './GridBox.astro';
+
+interface Props {
+    isBlack?: boolean;
+    classes?: string;
+}
+
+const { isBlack, classes } = Astro.props;
 ---
 
 <Grid>
     <GridBox
         desktopFull
-        classes="font-mono truncate text-base text-clip text-black-200 tracking-widest"
+        classes=`font-mono truncate text-base text-clip tracking-widest ${isBlack ? 'text-black' : 'text-black/20'} ${classes}`
     >
         ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     </GridBox>

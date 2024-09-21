@@ -3,6 +3,7 @@ import SectionContent from '@components/SectionContent.astro';
 import { currentlyReadingQueryResponse, shelfQueryResponse } from 'src/api/literal';
 import YearlyBookSlider from './YearlyBookSlider';
 import InlineLink from '@components/InlineLink.astro';
+import { getAllObsidianGardenEntries, type GardenEntry } from 'src/api/github';
 
 export interface Author {
     name: string;
@@ -50,6 +51,9 @@ currentlyReadingData.booksByReadingStateAndProfile.forEach((book: Book) => {
     book.currentlyReading = true;
     currentYearShelf.books.unshift(book);
 });
+
+const obsidianEntries = await getAllObsidianGardenEntries('books');
+const obsidianBookEntryNames = obsidianEntries.map((entry: GardenEntry) => entry.name);
 ---
 
 <div>
@@ -58,5 +62,9 @@ currentlyReadingData.booksByReadingStateAndProfile.forEach((book: Book) => {
         hopefully help me do that. Each book links to its corresponding page on the awesome book
         platform <InlineLink external href="https://literal.club/iamrobin">Literal</InlineLink>.
     </SectionContent>
-    <YearlyBookSlider shelfs={yearlyShelfData} client:load />
+    <YearlyBookSlider
+        shelfs={yearlyShelfData}
+        gardenBookEntries={obsidianBookEntryNames}
+        client:load
+    />
 </div>

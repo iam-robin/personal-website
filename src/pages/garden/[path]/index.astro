@@ -1,0 +1,29 @@
+---
+import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
+import GardenNoteItem from '@components/GardenNoteItem.astro';
+import GardenLayout from '@layouts/GardenLayout.astro';
+import { getObsidianGardenCategories, getAllObsidianGardenEntries } from 'src/api/github';
+
+export async function getStaticPaths() {
+    const obsidianCategories = await getObsidianGardenCategories();
+    const paths: string[] = obsidianCategories.map((entry: any) => entry.name);
+    return paths.map((path) => ({ params: { path } }));
+}
+
+const { path } = Astro.params;
+
+const obsidianCategories = await getObsidianGardenCategories();
+const obsidianEntries = await getAllObsidianGardenEntries(path);
+---
+
+<GardenLayout title={`Garden | ${path}`} categories={obsidianCategories}>
+    <a href="/garden">back</a>
+    <GardenBreadcrumb path={path} />
+    <div class="grid grid-cols-3 gap-4">
+        {
+            obsidianEntries.map((entry: any) => (
+                <GardenNoteItem data={entry} currentPath={path} distorted />
+            ))
+        }
+    </div>
+</GardenLayout>

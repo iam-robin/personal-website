@@ -1,0 +1,33 @@
+---
+import type { GardenCategory } from 'src/api/github';
+
+interface Props {
+    categories: GardenCategory[];
+}
+
+const { categories } = Astro.props;
+---
+
+<div class="flex flex-col gap-8">
+    <div class="flex flex-col gap-3">
+        <a href="/garden" class="font-mono text-sm">Home</a>
+        <a class="font-mono text-sm">Random note</a>
+    </div>
+    <div>
+        <h3 class="mb-3 text-sm">Categories</h3>
+        <ul>
+            {
+                categories.map((entry: any) => (
+                    <li>
+                        <a
+                            href={`/garden/${entry.name}`}
+                            class="inline-block py-1 font-mono text-sm"
+                        >
+                            {entry.name}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</div>

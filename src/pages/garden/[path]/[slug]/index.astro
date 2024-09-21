@@ -1,0 +1,49 @@
+---
+import GardenLayout from '@layouts/GardenLayout.astro';
+import { getObsidianGardenCategories, getAllObsidianGardenEntries } from 'src/api/github';
+import { Markdown } from 'astro-remote';
+import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
+
+export async function getStaticPaths() {
+    const obsidianCategories = await getObsidianGardenCategories();
+    const categories: string[] = obsidianCategories.map((entry: any) => entry.name);
+    let staticPaths: { params: { path: string; slug: string } }[] = [];
+
+    // Iterate over each category to fetch entries
+    for (const path of categories) {
+        const entries = await getAllObsidianGardenEntries(path);
+        // Add paths for each entry's slug under the current path
+        entries.forEach((entry: any) => {
+            if (entry.name) {
+                staticPaths.push({
+                    params: { path, slug: entry.name }
+                });
+            }
+        });
+    }
+
+    return staticPaths;
+}
+
+const { path, slug } = Astro.params;
+
+const obsidianCategories = await getObsidianGardenCategories();
+const obsidianNotes = await getAllObsidianGardenEntries(path, slug);
+const note = obsidianNotes[0]; // Assuming getObsidianGardenEntries returns an array with one entry when slug is provided
+const { body, frontmatter } = note;
+
+if (!body) {
+    Astro.redirect('/404');
+    throw new Error('404: Entry not found');
+}
+---
+
+<GardenLayout title={`Garden | ${path}`} categories={obsidianCategories}>
+    <a href="/garden">back to garden</a>
+    <GardenBreadcrumb path={path} slug={slug} />
+    <h1>path: {path}</h1>
+    <p>slug: {slug}</p>
+    <h2>created: {frontmatter.created}</h2>
+    <h2>edited: {frontmatter.edited}</h2>
+    <Markdown content={body} />
+</GardenLayout>

@@ -1,0 +1,69 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import { SEO } from 'astro-seo';
+import MobileMenu from '@components/MobileMenu.astro';
+import ContactLinksSection from '@components/ContactLinksSection.astro';
+import GardenSidebar from '@components/GardenSidebar.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import type { GardenCategory } from 'src/api/github';
+
+interface Props {
+    title: string;
+    categories: GardenCategory[];
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const resolvedImageWithDomain = new URL('/opengraph.jpg', Astro.site).toString();
+
+const { title, categories } = Astro.props;
+const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
+---
+
+<!doctype html>
+<html lang="en" class="overscroll-none">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="robins own little space on the internet" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{adjustedTitle}</title>
+        <script src="/iamrobin/js/script.js" data-api="/iamrobin/api/event" data-domain="iamrob.in"
+        ></script>
+        <SEO
+            title={adjustedTitle}
+            description="personal website of iamrobin"
+            canonical={canonicalURL}
+            openGraph={{
+                basic: {
+                    url: canonicalURL,
+                    type: 'website',
+                    title: title,
+                    image: resolvedImageWithDomain
+                },
+                image: {
+                    alt: 'iamrobin personal website screenshot'
+                }
+            }}
+        />
+    </head>
+    <body class="min-h-[calc(100vh-56px)] overflow-x-hidden">
+        <Header />
+        <MobileMenu />
+        <main>
+            <Grid>
+                <GridBox desktopStart={1} desktopEnd={3} classes="border-r py-10">
+                    <GardenSidebar categories={categories} />
+                </GridBox>
+                <GridBox desktopStart={4} desktopEnd={12}>
+                    <slot />
+                </GridBox>
+            </Grid>
+        </main>
+        <!-- <ContactLinksSection /> -->
+        <Footer />
+    </body>
+</html>

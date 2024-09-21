@@ -49,6 +49,24 @@
                 "alt": "My canyon gravel bike on gravel road in the netherlands",
                 "caption": "Green divide gravel tour in the netherlands"
             }
+        },
+        {
+            "date_published": "2024/8/24 14:51",
+            "_open_stories": {
+                "mime_type": "image/webp",
+                "url": "stories/bicycle/06.webp",
+                "alt": "Trip to the lake with Billy (my bike)",
+                "caption": "Trip to the lake with Billy (my bike)"
+            }
+        },
+        {
+            "date_published": "2024/9/10 14:51",
+            "_open_stories": {
+                "mime_type": "image/webp",
+                "url": "stories/bicycle/07.webp",
+                "alt": "Billy carrying 5 liters of apple juice",
+                "caption": "Billy carrying 5 liters of apple juice"
+            }
         }
     ]
 }
