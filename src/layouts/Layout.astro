@@ -5,6 +5,8 @@ import '../styles/global.css';
 import { SEO } from 'astro-seo';
 import MobileMenu from '@components/MobileMenu.astro';
 import ContactLinksSection from '@components/ContactLinksSection.astro';
+import DistortFilter from '@components/DistortFilter.astro';
+import HeaderSimple from '@components/HeaderSimple.astro';
 
 interface Props {
     title: string;
@@ -51,5 +53,6 @@ const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
         <slot />
         <ContactLinksSection />
         <Footer />
+        <DistortFilter />
     </body>
 </html>

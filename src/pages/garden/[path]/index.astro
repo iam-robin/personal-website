@@ -1,6 +1,9 @@
 ---
+import NotesOverview from '@components/garden/NotesOverview';
 import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
-import GardenNoteItem from '@components/GardenNoteItem.astro';
+import Headline from '@components/Headline.astro';
+import Link from '@components/Link.astro';
+import SectionContent from '@components/SectionContent.astro';
 import GardenLayout from '@layouts/GardenLayout.astro';
 import { getObsidianGardenCategories, getAllObsidianGardenEntries } from 'src/api/github';
 
@@ -13,17 +16,23 @@ export async function getStaticPaths() {
 const { path } = Astro.params;
 
 const obsidianCategories = await getObsidianGardenCategories();
-const obsidianEntries = await getAllObsidianGardenEntries(path);
+const lastCreatedObsidianEntries = await getAllObsidianGardenEntries(path, '', 'created');
+const lastEditedObsidianEntries = await getAllObsidianGardenEntries(path, '', 'edited');
 ---
 
 <GardenLayout title={`Garden | ${path}`} categories={obsidianCategories}>
-    <a href="/garden">back</a>
-    <GardenBreadcrumb path={path} />
-    <div class="grid grid-cols-3 gap-4">
-        {
-            obsidianEntries.map((entry: any) => (
-                <GardenNoteItem data={entry} currentPath={path} distorted />
-            ))
-        }
+    <div class="flex flex-col pl-8 pt-8 xl:pl-0">
+        <div class="flex items-center justify-between">
+            <GardenBreadcrumb path={path} />
+            <Link href="/garden">Back to Home</Link>
+        </div>
+        <div class="mt-16">
+            <NotesOverview
+                latestCreatedNotes={lastCreatedObsidianEntries}
+                latestEditedNotes={lastEditedObsidianEntries}
+                basePath="/garden"
+                client:load
+            />
+        </div>
     </div>
 </GardenLayout>

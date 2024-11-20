@@ -1,33 +1,55 @@
 ---
-import type { GardenCategory } from 'src/api/github';
+import { categoriesWhitelist, type GardenCategory } from 'src/api/github';
+import { colors } from './garden/utils/colors';
+import Link from './Link.astro';
 
 interface Props {
     categories: GardenCategory[];
 }
 
 const { categories } = Astro.props;
+const entryCounts = categoriesWhitelist.map((whitelistCategory) => {
+    const category = categories.find((cat) => cat.name === whitelistCategory);
+    return category ? category.object.entries.length : 0;
+});
+
+// Combine categories and entryCounts into a single array of objects
+const categoriesWithCounts = categoriesWhitelist.map((category, i) => ({
+    category,
+    count: entryCounts[i],
+    color: colors[i]
+}));
+
+// Sort the array based on entryCounts
+categoriesWithCounts.sort((a, b) => b.count - a.count);
 ---
 
-<div class="flex flex-col gap-8">
-    <div class="flex flex-col gap-3">
-        <a href="/garden" class="font-mono text-sm">Home</a>
-        <a class="font-mono text-sm">Random note</a>
-    </div>
+<div class="flex h-full flex-col justify-between gap-8 border-r border-neutral-200 py-8 pl-8 pr-20">
+    <span></span>
     <div>
-        <h3 class="mb-3 text-sm">Categories</h3>
+        <h3 class="mb-3 font-mono text-2xs font-bold uppercase">Topics</h3>
         <ul>
             {
-                categories.map((entry: any) => (
+                categoriesWithCounts.map(({ category, count, color }) => (
                     <li>
                         <a
-                            href={`/garden/${entry.name}`}
-                            class="inline-block py-1 font-mono text-sm"
+                            href={`/garden/${category}`}
+                            class="center inline-flex items-center gap-2 py-1 font-mono text-sm"
                         >
-                            {entry.name}
+                            <span
+                                style={`background-color: ${color};`}
+                                class="h-2 w-2 rounded-full"
+                            />
+                            <span>{category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                            <span class="text-xs text-black-300">({count})</span>
                         </a>
                     </li>
                 ))
             }
         </ul>
     </div>
+    <ul class="flex flex-col gap-1 text-sm text-black-800">
+        <li>Random note</li>
+        <li><a href="/garden/projects/Digital%20Garden.md">Digitial Garden?</a></li>
+    </ul>
 </div>

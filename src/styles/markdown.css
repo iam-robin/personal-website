@@ -1,0 +1,74 @@
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+    font-weight: 600;
+    margin: 1.5rem 0 0.25rem 0;
+}
+
+.markdown h1 {
+    font-size: 1.953rem;
+}
+
+.markdown h2 {
+    font-size: 1.563rem;
+}
+
+.markdown h3 {
+    font-size: 1.25rem;
+    font-style: italic;
+}
+
+.markdown p {
+    display: flex;
+    gap: 16px;
+    font-size: 18px;
+    margin-top: 0.75em;
+}
+
+.markdown blockquote {
+    margin: 2rem 0 0 1rem;
+    padding-left: 1rem;
+    border-left: 1px solid #000;
+}
+
+.markdown blockquote p {
+    font-size: 1rem;
+}
+
+.markdown hr {
+    display: block;
+    margin: 3rem 0;
+    border: none;
+}
+
+.markdown hr:after {
+    content: '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
+    display: block;
+    color: #000;
+    position: absolute;
+    margin: 0 32px;
+    left: 0;
+    right: 0;
+    font-family: 'Fira Mono', monospace;
+    letter-spacing: 0.1em;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    text-overflow: clip;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.markdown img {
+    filter: grayscale(100%) contrast(110%) brightness(110%);
+    mix-blend-mode: multiply;
+}
+
+.markdown img:hover {
+    filter: grayscale(0%) contrast(100%) brightness(100%);
+    mix-blend-mode: normal;
+}
+
+.markdown p img {
+    width: 100%;
+    min-width: 0;
+}

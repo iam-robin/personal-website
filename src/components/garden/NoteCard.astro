@@ -1,0 +1,103 @@
+---
+import { categoriesWhitelist, parseMarkdownContent } from 'src/api/github';
+import { colors } from './utils/colors';
+import NoteCardContent from './NoteCardContent.astro';
+
+interface Props {
+    data: any;
+    path: string;
+    category: string;
+    distorted?: boolean;
+    classes?: string;
+}
+
+const { data, path: currentPath, distorted, classes, category } = Astro.props;
+const { frontmatter, body } = await parseMarkdownContent(data.object.text);
+
+const isDraft = !body || body.trim() === '' || body.trim() === 'TBD';
+
+const categoryIndex = categoriesWhitelist.indexOf(category);
+const backgroundColor = colors[categoryIndex];
+const backgroundColorStyle = `background-color: ${backgroundColor};`;
+
+const randomMarginBottom = Math.floor(Math.random() * 8);
+const randomMarginRight = Math.floor(Math.random() * 8);
+const randomRotation = Math.floor(Math.random() * 4 - 2);
+
+const transformStyles = distorted
+    ? `transform: translateY(${randomMarginBottom}px) translateX(${randomMarginRight}px) rotate(${randomRotation}deg); data-rotation="${randomRotation}";`
+    : `transform: rotate(${randomRotation}deg); data-rotation="${randomRotation}";`;
+---
+
+<div class:list={['group flex h-full min-h-[280px] items-center', classes]}>
+    <div class="effect" style={transformStyles} data-rotation={randomRotation}>
+        {
+            isDraft ? (
+                <div class="relative cursor-not-allowed p-2" style={backgroundColorStyle}>
+                    <NoteCardContent
+                        isDraft={isDraft}
+                        frontmatter={frontmatter}
+                        data={data}
+                        category={category}
+                    />
+                </div>
+            ) : (
+                <a
+                    class="relative block p-2 transition-all hover:scale-105 hover:shadow-md"
+                    href={`${currentPath}/${data.name}`}
+                    style={backgroundColorStyle}
+                >
+                    <NoteCardContent
+                        isDraft={isDraft}
+                        frontmatter={frontmatter}
+                        data={data}
+                        category={category}
+                    />
+                </a>
+            )
+        }
+    </div>
+</div>
+
+<style>
+    .effect {
+        position: relative;
+    }
+    .effect:before,
+    .effect:after {
+        z-index: -1;
+        position: absolute;
+        content: '';
+        width: 50%;
+        top: 80%;
+        background: tomato;
+        box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.3);
+    }
+    .effect:before {
+        left: 0.5rem;
+        bottom: 16px;
+        transform: rotate(-3deg);
+    }
+    .effect:after {
+        transform: rotate(3deg);
+        bottom: 16px;
+        right: 0.5em;
+    }
+    .effect.hide-before:before {
+        display: none;
+    }
+    .effect.hide-after:after {
+        display: none;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const effectElements = document.querySelectorAll('.effect');
+        effectElements.forEach((effectElement) => {
+            const rotation = parseFloat((effectElement as HTMLElement).dataset.rotation || '0');
+            const className = rotation >= 0 ? 'hide-after' : 'hide-before';
+            effectElement.classList.add(className);
+        });
+    });
+</script>

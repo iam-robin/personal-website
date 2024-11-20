@@ -6,7 +6,7 @@ interface Props {
 const { classes } = Astro.props as Props;
 ---
 
-<section
+<div
     class:list={[
         classes,
         'mx-auto grid max-w-screen-lg grid-cols-4 gap-0 px-4',
@@ -15,4 +15,4 @@ const { classes } = Astro.props as Props;
     ]}
 >
     <slot />
-</section>
+</div>

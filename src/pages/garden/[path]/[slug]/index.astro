@@ -1,8 +1,15 @@
 ---
 import GardenLayout from '@layouts/GardenLayout.astro';
-import { getObsidianGardenCategories, getAllObsidianGardenEntries } from 'src/api/github';
+import {
+    getObsidianGardenCategories,
+    getAllObsidianGardenEntries,
+    categoriesWhitelist
+} from 'src/api/github';
 import { Markdown } from 'astro-remote';
 import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
+import Divider from '@components/Divider.astro';
+import { colors } from '@components/garden/utils/colors';
+import Link from '@components/Link.astro';
 
 export async function getStaticPaths() {
     const obsidianCategories = await getObsidianGardenCategories();
@@ -30,20 +37,94 @@ const { path, slug } = Astro.params;
 const obsidianCategories = await getObsidianGardenCategories();
 const obsidianNotes = await getAllObsidianGardenEntries(path, slug);
 const note = obsidianNotes[0]; // Assuming getObsidianGardenEntries returns an array with one entry when slug is provided
+const title = slug.endsWith('.md') ? slug.replace(/\.md$/, '') : slug;
+
+const categoryIndex = categoriesWhitelist.indexOf(path);
+const backgroundColor = colors[categoryIndex];
+const backgroundColorStyle = `background-color: ${backgroundColor};`;
 const { body, frontmatter } = note;
 
 if (!body) {
     Astro.redirect('/404');
     throw new Error('404: Entry not found');
 }
+
+// Function to format the date
+function formatDate(dateString: string) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day} / ${month} / ${year}`;
+}
+
+const editedDate = formatDate(frontmatter.edited);
+const createdDate = formatDate(frontmatter.created);
 ---
 
 <GardenLayout title={`Garden | ${path}`} categories={obsidianCategories}>
-    <a href="/garden">back to garden</a>
-    <GardenBreadcrumb path={path} slug={slug} />
-    <h1>path: {path}</h1>
-    <p>slug: {slug}</p>
-    <h2>created: {frontmatter.created}</h2>
-    <h2>edited: {frontmatter.edited}</h2>
-    <Markdown content={body} />
+    <div class="flex flex-col pl-8 pt-8 xl:pl-0">
+        <div class="flex items-center justify-between">
+            <GardenBreadcrumb path={path} slug={slug} />
+            <Link href="/garden">Back to Home</Link>
+        </div>
+        <!-- style="filter: url(#distort-xl);" -->
+        <div class="flex">
+            <div class="relative mt-16 p-4" style={`${backgroundColorStyle}`}>
+                <div class="texture"></div>
+                <div class="border p-10 pt-6">
+                    <div class="mb-16 flex items-start justify-between gap-8">
+                        <span
+                            class="inline-block rounded-full border px-2 py-[2px] font-mono text-xs"
+                        >
+                            {path}
+                        </span>
+                        <div class="flex flex-col">
+                            {
+                                editedDate !== createdDate && (
+                                    <div class="-mt-2">
+                                        <span class="mr-[17px] font-mono text-xs">edited:</span>
+                                        <span
+                                            class="font-script text-[20px]"
+                                            style="filter: url(#distort-xl);"
+                                        >
+                                            {editedDate}
+                                        </span>
+                                    </div>
+                                )
+                            }
+                            <div class="-mt-2">
+                                <span class="mr-2 font-mono text-xs">created:</span>
+                                <span
+                                    class="font-script text-[20px]"
+                                    style="filter: url(#distort-xl);">{createdDate}</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <h1 class="max-w-[80%] font-sans text-[4.5rem] font-black leading-[1.15]">
+                        {title}
+                    </h1>
+                    <Divider classes="my-4" isBlack />
+                    <div class="markdown">
+                        <Markdown content={body} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </GardenLayout>
+
+<style>
+    .texture {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        /* filter: contrast(200%) brightness(90%); */
+        mix-blend-mode: soft-light;
+        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 369 369' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        pointer-events: none;
+    }
+</style>

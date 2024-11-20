@@ -9,6 +9,23 @@ import InlineLink from '@components/InlineLink.astro';
 <Layout title="Journal">
     <Grid classes="mt-32 md:mt-40 md:mb-8 lg:mt-40 lg:mb-20">
         <ChangelogItem
+            version="3.1.0"
+            title="🌿 Digital Garden"
+            date={new Date('2024-11-19T10:00')}
+        >
+            <p>
+                New Section! My Digital Garden is an evolving collection of thoughts, ideas, and
+                knowledge, dynamically synced straight from my <InlineLink
+                    href="https://obsidian.md/"
+                    external
+                >
+                    Obsidian
+                </InlineLink> vault. It's a space for curiosity and exploration—a living archive of
+                topics I’m passionate about. This seamless integration ensures the notes stay
+                up-to-date, reflecting my ever-changing interests. Dive in and see what’s growing!
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
             version="3.0.0"
             title="🧑‍🚀 Astro and new layout"
             date={new Date('2024-07-04T18:00')}

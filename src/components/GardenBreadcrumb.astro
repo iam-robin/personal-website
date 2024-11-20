@@ -12,14 +12,20 @@ const { path, slug } = Astro.props;
     {
         path && (
             <li>
-                / <a href={`/garden/${path}`}>{path}</a>
+                /{' '}
+                <a href={`/garden/${path}`} class={`${!slug && 'font-bold'}`}>
+                    {path.charAt(0).toUpperCase() + path.slice(1)}
+                </a>
             </li>
         )
     }
     {
         slug && (
             <li>
-                / <a href={`/garden/${path}/${slug}`}>{slug.replace(/\.md$/, '')}</a>
+                /{' '}
+                <a href={`/garden/${path}/${slug}`} class="font-bold">
+                    {slug.replace(/\.md$/, '')}
+                </a>
             </li>
         )
     }

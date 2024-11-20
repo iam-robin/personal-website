@@ -5,9 +5,11 @@ const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 export interface GardenCategory {
     name: string;
     type: string;
+    path: string;
     object: {
         text: string;
         byteSize: number;
+        entries: any;
     };
 }
 
@@ -23,17 +25,20 @@ export interface GardenEntry {
         created: string;
         edited: string;
         description: string;
+        path: string;
     };
 }
 
-const categoriesWhitelist = [
+export const categoriesWhitelist = [
     'art',
     'projects',
     'design',
     'books',
     'misc notes',
+    'society',
+    'psychology',
     'photography',
-    'greek mythology'
+    'technology'
 ];
 
 export async function parseMarkdownContent(content: any) {
@@ -55,10 +60,6 @@ async function fetchFromGitHubGraphQL(path = '', slug = '') {
         expression += slug ? `/${slug}` : '';
     }
 
-    if (slug) {
-        console.log('Fetching data from GitHub with expression:', expression);
-    }
-
     const query = `
     query fetchEntries($owner: String!, $name: String!, $expression: String!) {
         repository(owner: $owner, name: $name) {
@@ -67,7 +68,14 @@ async function fetchFromGitHubGraphQL(path = '', slug = '') {
                     entries {
                         name
                         type
+                        path
                         object {
+                            ... on Tree {
+                                entries {
+                                    name
+                                    type
+                                }
+                            }
                             ... on Blob {
                                 text
                                 byteSize
@@ -134,7 +142,11 @@ export async function getObsidianGardenCategories() {
     }
 }
 
-export async function getAllObsidianGardenEntries(path = '', slug = '') {
+export async function getAllObsidianGardenEntries(
+    path = '',
+    slug = '',
+    filter?: 'created' | 'edited'
+) {
     try {
         const fetchResponse = await fetchFromGitHubGraphQL(path, slug);
 
@@ -151,11 +163,39 @@ export async function getAllObsidianGardenEntries(path = '', slug = '') {
             return [await parseMarkdownContent(object.text)];
         }
 
+        const results: any[] = [];
         // Handling multiple entries within a given path
         if (object.entries) {
-            return object.entries;
+            for (const entry of object.entries) {
+                const parsedContent = await parseMarkdownContent(entry.object.text);
+                const { frontmatter, body } = parsedContent;
+
+                entry.path = entry.path.split('/')[0];
+
+                // Add the entry to the results array
+                results.push({
+                    ...entry,
+                    frontmatter,
+                    body
+                });
+            }
         } else {
             throw new Error('Unexpected data structure returned from the GraphQL query.');
+        }
+        if (filter === 'created') {
+            return results.sort(
+                (a, b) =>
+                    new Date(b.frontmatter.created).getTime() -
+                    new Date(a.frontmatter.created).getTime()
+            );
+        } else if (filter === 'edited') {
+            return results.sort(
+                (a, b) =>
+                    new Date(b.frontmatter.edited).getTime() -
+                    new Date(a.frontmatter.edited).getTime()
+            );
+        } else {
+            return results;
         }
     } catch (error) {
         console.error('Error fetching data from GitHub:', error);
@@ -163,7 +203,7 @@ export async function getAllObsidianGardenEntries(path = '', slug = '') {
     }
 }
 
-export async function getNewestObsidianGardenEntries(amount: number) {
+export async function getNewestObsidianGardenEntries(amount: number, filter: 'created' | 'edited') {
     try {
         const results: any[] = [];
 
@@ -178,26 +218,41 @@ export async function getNewestObsidianGardenEntries(amount: number) {
             if (!object) throw new Error('No data returned from the GraphQL query.');
 
             if (object.entries) {
-                object.entries.forEach(async (entry: GardenCategory) => {
+                for (const entry of object.entries) {
                     const parsedContent = await parseMarkdownContent(entry.object.text);
-                    const { frontmatter } = parsedContent;
+                    const { frontmatter, body } = parsedContent;
+
+                    entry.path = entry.path.split('/')[0];
 
                     // Add the entry to the results array
                     results.push({
                         ...entry,
-                        frontmatter
+                        frontmatter,
+                        body
                     });
-                });
+                }
             }
         }
 
-        return results
-            .sort(
-                (a, b) =>
-                    new Date(b.frontmatter.created).getTime() -
-                    new Date(a.frontmatter.created).getTime()
-            )
-            .slice(0, amount);
+        if (filter === 'created') {
+            return results
+                .sort(
+                    (a, b) =>
+                        new Date(b.frontmatter.created).getTime() -
+                        new Date(a.frontmatter.created).getTime()
+                )
+                .slice(0, amount);
+        } else if (filter === 'edited') {
+            return results
+                .sort(
+                    (a, b) =>
+                        new Date(b.frontmatter.edited).getTime() -
+                        new Date(a.frontmatter.edited).getTime()
+                )
+                .slice(0, amount);
+        } else {
+            return [];
+        }
     } catch (error) {
         console.error('Error fetching data from GitHub:', error);
         return [];
