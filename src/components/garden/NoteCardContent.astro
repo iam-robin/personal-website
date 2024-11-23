@@ -1,5 +1,6 @@
 ---
 import Divider from '@components/Divider.astro';
+import { formatDate } from 'src/utils/formatDate';
 
 interface Props {
     data: any;
@@ -15,13 +16,6 @@ interface Props {
 }
 
 const { data, category, isDraft, frontmatter } = Astro.props;
-
-const formatDate = (dateStr: string) => {
-    const match = dateStr.match(/^\d{4}-\d{2}-\d{2}/);
-    const datePart = match ? match[0] : '';
-    const [year, month, day] = datePart.split('-');
-    return `${day}/${month}/${year}`;
-};
 
 const createdDay = formatDate(frontmatter.created);
 const editedDay = formatDate(frontmatter.edited);

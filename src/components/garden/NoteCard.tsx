@@ -1,4 +1,5 @@
 import { categoriesWhitelist, parseMarkdownContent } from 'src/api/github';
+import { formatDate } from 'src/utils/formatDate';
 
 interface NoteCardProps {
     data: any;
@@ -46,13 +47,6 @@ export const NoteCard: React.FC<NoteCardProps> = ({
     };
 
     const typeFontSize = getFontSize(charCount);
-
-    const formatDate = (dateStr: string) => {
-        const match = dateStr?.match(/^\d{4}-\d{2}-\d{2}/);
-        const datePart = match ? match[0] : '';
-        const [year, month, day] = datePart.split('-');
-        return `${day}/${month}/${year}`;
-    };
 
     const createdDay = formatDate(data.frontmatter?.created);
     const editedDay = formatDate(data.frontmatter?.edited);
