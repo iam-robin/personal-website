@@ -1,38 +1,19 @@
-.markdown h1,
-.markdown h2,
-.markdown h3 {
-    font-weight: 600;
-    margin: 1.5rem 0 0.25rem 0;
+.markdown {
+    --tw-prose-body: rgba(0, 0, 0, 0.9);
+    --tw-prose-headings: rgba(0, 0, 0, 0.9);
+    --tw-prose-counters: rgba(0, 0, 0, 0.4);
+    --tw-prose-bullets: rgba(0, 0, 0, 0.3);
+    --tw-prose-bold: rgba(0, 0, 0, 1);
+    --tw-prose-links: rgba(0, 0, 0, 0.7);
+    --tw-prose-quote-borders: rgba(0, 0, 0, 0.2);
+    --tw-prose-td-borders: rgba(0, 0, 0, 0.1);
+    --tw-prose-th-borders: rgba(0, 0, 0, 0.3);
 }
 
-.markdown h1 {
-    font-size: 1.953rem;
-}
-
-.markdown h2 {
-    font-size: 1.563rem;
-}
-
-.markdown h3 {
-    font-size: 1.25rem;
-    font-style: italic;
-}
-
-.markdown p {
-    display: flex;
-    gap: 16px;
-    font-size: 18px;
-    margin-top: 0.75em;
-}
-
-.markdown blockquote {
-    margin: 2rem 0 0 1rem;
-    padding-left: 1rem;
-    border-left: 1px solid #000;
-}
-
-.markdown blockquote p {
-    font-size: 1rem;
+.markdown.prose {
+    max-width: 65ch;
+    margin: 0 auto;
+    font-size: 1.2rem;
 }
 
 .markdown hr {
@@ -44,7 +25,7 @@
 .markdown hr:after {
     content: '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
     display: block;
-    color: #000;
+    color: rgba(0, 0, 0, 0.5);
     position: absolute;
     margin: 0 32px;
     left: 0;
@@ -71,4 +52,86 @@
 .markdown p img {
     width: 100%;
     min-width: 0;
+    margin: 0;
+    display: none;
+}
+
+.markdown .image-gallery {
+    display: flex;
+    gap: 16px;
+}
+
+.markdown .image-gallery img {
+    display: block;
+}
+
+.markdown a {
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.3);
+    padding-bottom: 3px;
+    position: relative;
+    margin-right: 20px;
+    font-style: italic;
+}
+
+.markdown a::after {
+    content: '↗'; /* Unicode arrow character */
+    position: absolute;
+    font-style: normal;
+    top: 0;
+    line-height: 1.2em;
+    right: -18px; /* Adjust the position as needed */
+    font-size: 1.2em; /* Adjust the size as needed */
+    color: rgba(0, 0, 0, 0.4); /* Match the color of the link */
+}
+
+.markdown input[type='checkbox'] {
+    appearance: none;
+    width: 1.5em;
+    height: 1.5em;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 0.25em;
+    margin-right: 0.5em;
+    vertical-align: middle;
+    position: relative;
+    top: -0.1em;
+}
+
+.markdown input[type='checkbox']:checked::after {
+    content: '✓';
+    display: block;
+    position: absolute;
+    top: 0.05em;
+    left: 0.15em;
+    font-size: 1.2em;
+    line-height: 1em;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.markdown ul:has(> li > input[type='checkbox']) {
+    list-style-type: none; /* Remove list bullets */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+}
+
+.markdown ul:has(> li > input[type='checkbox']) li {
+    display: flex;
+    align-items: center;
+}
+
+.markdown ul:has(> li > input[type='checkbox']) li input[type='checkbox'] {
+    margin-right: 0.5em; /* Adjust spacing between checkbox and text */
+}
+
+.markdown .footnotes {
+    display: none;
+}
+
+.markdown sup > a {
+    border: none;
+    margin-right: 0px;
+}
+
+.markdown sup > a::after {
+    display: none;
 }

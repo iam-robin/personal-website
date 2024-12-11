@@ -97,5 +97,5 @@ export default {
             }
         }
     },
-    plugins: [require('@whiterussianstudio/tailwind-easing')]
+    plugins: [require('@whiterussianstudio/tailwind-easing'), require('@tailwindcss/typography')]
 };

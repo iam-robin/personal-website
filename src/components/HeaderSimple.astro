@@ -4,10 +4,10 @@ import GridBox from './GridBox.astro';
 import { navData } from './Header.astro';
 ---
 
-<header class="z-50 h-0 border-b border-neutral-200 bg-white lg:sticky lg:top-0 lg:h-auto lg:py-4">
+<header class="z-50 border-b border-neutral-200 bg-white lg:sticky lg:top-0 lg:py-4">
     <Grid>
         <GridBox desktopStart={1} desktopEnd={3} classes="lg:absolute lg:left-8 xl:static">
-            <a href="/" class="italic"> iamrobin</a>
+            <a href="/" class="block italic"> iamrobin</a>
         </GridBox>
         <GridBox desktopStart={5} desktopEnd={10} classes="hidden lg:block">
             <nav class="flex gap-8">
@@ -26,7 +26,7 @@ import { navData } from './Header.astro';
             </nav>
         </GridBox>
         <GridBox desktopStart={11} desktopEnd={12} classes="flex justify-end">
-            <span>🌑</span>
+            <span></span>
         </GridBox>
     </Grid>
 </header>

@@ -29,6 +29,7 @@
     },
     "devDependencies": {
         "@iconify-json/ph": "^1.1.10",
+        "@tailwindcss/typography": "^0.5.15",
         "@whiterussianstudio/tailwind-easing": "^1.0.0",
         "prettier": "^3.1.0",
         "prettier-plugin-astro": "^0.12.2",
