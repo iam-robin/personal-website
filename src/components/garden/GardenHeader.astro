@@ -6,8 +6,8 @@ import { navData } from '../Header.astro';
 import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
 
 interface Props {
-    path: string;
-    slug: string;
+    path: string | undefined;
+    slug: string | undefined;
 }
 
 const { path, slug } = Astro.props;
