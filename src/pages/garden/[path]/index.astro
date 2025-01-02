@@ -1,9 +1,7 @@
 ---
 import NotesOverview from '@components/garden/NotesOverview';
 import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
-import Headline from '@components/Headline.astro';
 import Link from '@components/Link.astro';
-import SectionContent from '@components/SectionContent.astro';
 import GardenLayout from '@layouts/GardenLayout.astro';
 import { getObsidianGardenCategories, getAllObsidianGardenEntries } from 'src/api/github';
 
@@ -20,13 +18,13 @@ const lastCreatedObsidianEntries = await getAllObsidianGardenEntries(path, '', '
 const lastEditedObsidianEntries = await getAllObsidianGardenEntries(path, '', 'edited');
 ---
 
-<GardenLayout title={`Garden | ${path}`} categories={obsidianCategories}>
-    <div class="flex flex-col pl-8 pt-16 xl:pl-0">
-        <div class="flex items-center justify-between">
+<GardenLayout title={`Garden | ${path}`} categories={obsidianCategories} path={path}>
+    <div class="flex flex-col px-2 pt-4 md:px-4 lg:pl-8 lg:pt-16 xl:pl-0">
+        <div class="hidden items-center justify-between lg:flex">
             <GardenBreadcrumb path={path} />
             <Link href="/garden">Back to Home</Link>
         </div>
-        <div class="mt-16">
+        <div class="mt-4 lg:mt-16">
             <NotesOverview
                 latestCreatedNotes={lastCreatedObsidianEntries}
                 latestEditedNotes={lastEditedObsidianEntries}

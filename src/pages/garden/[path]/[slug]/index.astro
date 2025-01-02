@@ -49,7 +49,6 @@ const obsidianNotes = await getAllObsidianGardenEntries(path, slug);
 const note = obsidianNotes[0];
 
 const notesInSameCateogry = await getAllObsidianGardenEntries(path, '', 'created');
-console.log('🚀 ~ notesInSameCateogry:', notesInSameCateogry);
 const { previous, next } = findPrevNextNotes(slug, notesInSameCateogry);
 const { body, frontmatter } = note;
 
@@ -59,9 +58,9 @@ if (!body) {
 }
 ---
 
-<GardenLayout title={`Garden | ${path}`} categories={obsidianCategories}>
-    <div class="flex flex-col px-2 pt-16 md:px-4 lg:pl-8 xl:pl-0">
-        <div class="flex items-center justify-between">
+<GardenLayout title={`Garden | ${path}`} categories={obsidianCategories} path={path} slug={slug}>
+    <div class="flex flex-col px-2 pt-4 md:px-4 lg:pl-8 lg:pt-16 xl:pl-0">
+        <div class="hidden items-center justify-between lg:flex">
             <GardenBreadcrumb path={path} slug={slug} />
             <Link href="/garden">Back to Home</Link>
         </div>

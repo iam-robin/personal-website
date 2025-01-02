@@ -34,7 +34,7 @@ export const categoriesWhitelist = [
     'projects',
     'design',
     'books',
-    'misc notes',
+    // 'misc notes',
     'society',
     'psychology',
     'photography',

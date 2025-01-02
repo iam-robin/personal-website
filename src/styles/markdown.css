@@ -109,18 +109,21 @@
 }
 
 .markdown ul:has(> li > input[type='checkbox']) {
-    list-style-type: none; /* Remove list bullets */
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
 .markdown ul:has(> li > input[type='checkbox']) li {
     display: flex;
-    align-items: center;
+    font-size: 0.9em;
+    line-height: 1.4em;
+    margin-bottom: 16px;
 }
 
 .markdown ul:has(> li > input[type='checkbox']) li input[type='checkbox'] {
-    margin-right: 0.5em; /* Adjust spacing between checkbox and text */
+    margin-right: 0.5em;
+    flex-shrink: 0;
 }
 
 .markdown .footnotes {
@@ -134,4 +137,36 @@
 
 .markdown sup > a::after {
     display: none;
+}
+
+.markdown .columns {
+    display: grid;
+    grid-template-columns: var(--column-widths, 1fr 1fr);
+    grid-template-columns: 1fr;
+    gap: 32px;
+}
+
+.markdown .columns img {
+    max-width: 120px;
+    margin: 0;
+    margin-top: 8px;
+}
+
+.markdown .columns p,
+.markdown .columns ul {
+    margin: 0;
+}
+
+.markdown .columns.vertically-centered {
+    align-items: center;
+}
+
+@media (min-width: 640px) {
+    .markdown .columns {
+        grid-template-columns: var(--column-widths, 1fr 1fr);
+        gap: 64px;
+    }
+    .markdown .columns img {
+        max-width: 100%;
+    }
 }

@@ -61,7 +61,12 @@ const albums = {
 const response = await myPlaylists();
 const { items } = await response.json();
 
-const publicPlaylists = items.filter((playlist: any) => playlist.public === true);
+const publicPlaylists = items.filter(
+    (playlist: any) =>
+        (playlist.public === true && playlist.name === 'The Indie-spensable Playlist') ||
+        playlist.name === 'Deep-fried focus' ||
+        playlist.name === "Indietroni-can't-stop-dancing"
+);
 
 const playlists: Playlist[] = publicPlaylists?.map((playlist: any) => ({
     name: playlist?.name,
