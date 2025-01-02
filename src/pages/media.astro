@@ -1,30 +1,11 @@
 ---
-import Grid from '@components/Grid.astro';
-import GridBox from '@components/GridBox.astro';
 import Layout from '@layouts/Layout.astro';
-import { Image } from 'astro:assets';
-import Photo01 from '../assets/images/Robin.jpg';
 import MusicSection from '@components/MusicSection.astro';
 import BookSection from '@components/books/BookSection.astro';
 import Divider from '@components/Divider.astro';
 ---
 
-<Layout title="About">
-    <!-- <Grid classes="py-20"> -->
-    <!-- <GridBox desktopStart={1} desktopEnd={4}>
-            <Image src={Photo01} widths={[660]} sizes={`330px`} alt="A picture of me" />
-        </GridBox>
-        <GridBox desktopStart={5} desktopEnd={10}>
-            <h1>add professional and personal page (2 menu points)</h1>
-            <p>
-                This personal website is my own little space on the internet where I want to share
-                my work, interests and passions with others, without having to please the algorithms
-                of social media platforms or follow any other rules. I hope you enjoy exploring my
-                digital living room as much as I enjoyed creating it.
-            </p>
-        </GridBox> -->
-    <!-- <GridBox desktopFull />
-    </Grid> -->
+<Layout title="Media">
     <div class="flex flex-col gap-20 py-40">
         <BookSection />
         <Divider />

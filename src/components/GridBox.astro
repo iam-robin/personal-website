@@ -1,14 +1,18 @@
 ---
+export type DesktopColSpan = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+type TabletColSpan = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+type MobileColSpan = 1 | 2 | 3 | 4;
+
 interface Props {
     desktopFull?: boolean;
     tabletFull?: boolean;
     mobileFull?: boolean;
-    desktopStart?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-    desktopEnd?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-    tabletStart?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-    tabletEnd?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-    mobileStart?: 1 | 2 | 3 | 4;
-    mobileEnd?: 1 | 2 | 3 | 4;
+    desktopStart?: DesktopColSpan;
+    desktopEnd?: DesktopColSpan;
+    tabletStart?: TabletColSpan;
+    tabletEnd?: TabletColSpan;
+    mobileStart?: MobileColSpan;
+    mobileEnd?: MobileColSpan;
     classes?: string;
 }
 

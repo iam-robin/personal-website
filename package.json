@@ -19,7 +19,9 @@
         "@zachleat/carouscroll": "^1.0.6",
         "astro": "^4.5.2",
         "astro-icon": "^1.0.4",
+        "astro-remote": "^0.3.3",
         "astro-seo": "^0.8.4",
+        "gray-matter": "^4.0.3",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "tailwindcss": "^3.3.5",
@@ -27,6 +29,7 @@
     },
     "devDependencies": {
         "@iconify-json/ph": "^1.1.10",
+        "@tailwindcss/typography": "^0.5.15",
         "@whiterussianstudio/tailwind-easing": "^1.0.0",
         "prettier": "^3.1.0",
         "prettier-plugin-astro": "^0.12.2",

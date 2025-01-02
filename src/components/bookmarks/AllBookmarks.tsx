@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { Bookmark } from './BookmarkItem.astro';
 import BookmarkItem from './BookmarkItem';
 

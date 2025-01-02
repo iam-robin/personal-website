@@ -7,7 +7,7 @@ interface NavItem {
     path: string;
 }
 
-const navData: NavItem[] = [
+export const navData: NavItem[] = [
     {
         name: 'Media',
         path: '/media'
@@ -17,8 +17,8 @@ const navData: NavItem[] = [
         path: '/bookmarks'
     }
     // {
-    //     name: 'Notes',
-    //     path: '/notes'
+    //     name: 'Garden',
+    //     path: '/garden'
     // }
 ];
 ---
@@ -118,9 +118,6 @@ const navData: NavItem[] = [
 
             headerI?.classList.add(...iTypeClassesExpanded);
             headerI?.classList.remove(...logoClassesCollapsed);
-
-            // headerI.innerHTML = 'i';
-            // headerRobin.innerHTML = 'robin';
         } else {
             header?.classList.add('bg-white', 'border-b', 'border-neutral-200');
             headerLogo?.classList.remove(...logoClassesExpanded);
@@ -133,9 +130,6 @@ const navData: NavItem[] = [
 
             headerI?.classList.add(...logoClassesCollapsed);
             headerI?.classList.remove(...iTypeClassesExpanded);
-
-            // headerI.innerHTML = 'i';
-            // headerRobin.innerHTML = 'robin';
         }
     }
 

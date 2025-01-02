@@ -7,9 +7,14 @@ import Container from '@components/Container';
 
 interface YearlyBookSliderProps {
     shelfs: Shelf[];
+    gardenBookEntries: string[];
 }
 
-const YearlyBookSlider: React.FC<YearlyBookSliderProps> = ({ shelfs }) => {
+const hasBookEntryInGarden = (title: string, author: string, gardenEntries: string[]) => {
+    return gardenEntries.some((entry) => entry.includes(title) && entry.includes(author));
+};
+
+const YearlyBookSlider: React.FC<YearlyBookSliderProps> = ({ shelfs, gardenBookEntries }) => {
     const [activeShelf, setActiveShelf] = useState<number>(0);
 
     return (
@@ -46,6 +51,11 @@ const YearlyBookSlider: React.FC<YearlyBookSliderProps> = ({ shelfs }) => {
                             authors={book.authors}
                             currentlyReading={book.currentlyReading}
                             link={book.slug}
+                            hasGardenEntry={hasBookEntryInGarden(
+                                book.title,
+                                book.authors[0].name,
+                                gardenBookEntries
+                            )}
                         />
                     </SliderItem>
                 ))}

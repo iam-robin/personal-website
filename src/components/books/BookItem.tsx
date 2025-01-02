@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
 import badge from '../../assets/shape-sticker-lilac.svg';
 import type { Author } from './BookSection.astro';
 import './book-item.css';
+import stickerIcon from '../../icons/sticker-garden.svg';
 
 interface BookItemProps {
     cover: string;
@@ -9,12 +9,27 @@ interface BookItemProps {
     authors?: Author[];
     currentlyReading?: boolean;
     link?: string;
+    hasGardenEntry?: boolean;
 }
 
-const BookItem: React.FC<BookItemProps> = ({ cover, title, authors, currentlyReading, link }) => {
+const BookItem: React.FC<BookItemProps> = ({
+    cover,
+    title,
+    authors,
+    currentlyReading,
+    link,
+    hasGardenEntry
+}) => {
     return (
-        <a href={`https://literal.club/book/${link}`} className="h-full w-full">
-            <div className="book-item group relative flex w-full cursor-pointer flex-col items-center gap-5 rounded-lg bg-neutral-100 px-4 py-14">
+        <a
+            href={
+                hasGardenEntry
+                    ? `/garden/books/${title}%20%E2%80%93%20${authors?.[0]?.name}.md`
+                    : `https://literal.club/book/${link}`
+            }
+            className="h-full w-full"
+        >
+            <div className="book-item group relative flex w-full cursor-pointer flex-col items-center gap-5 rounded-lg bg-neutral-100 px-4 py-12">
                 {currentlyReading && (
                     <span
                         style={{ backgroundImage: `url(${badge.src})` }}
@@ -22,6 +37,13 @@ const BookItem: React.FC<BookItemProps> = ({ cover, title, authors, currentlyRea
                     >
                         currently reading
                     </span>
+                )}
+                {hasGardenEntry && (
+                    <img
+                        src={stickerIcon.src}
+                        alt="Garden Sticker"
+                        className="absolute right-4 top-4 h-10 w-10"
+                    />
                 )}
                 <div className="book self-center">
                     <div className="book-cover" style={{ backgroundImage: `url(${cover})` }}>

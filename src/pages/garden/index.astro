@@ -1,0 +1,36 @@
+---
+import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
+import InlineLink from '@components/InlineLink.astro';
+import SectionContent from '@components/SectionContent.astro';
+import GardenLayout from '@layouts/GardenLayout.astro';
+import { getNewestObsidianGardenEntries, getObsidianGardenCategories } from 'src/api/github';
+import NotesOverview from '@components/garden/NotesOverview';
+
+const obsidianCategories = await getObsidianGardenCategories();
+const lastCreatedObsidianEntries = await getNewestObsidianGardenEntries(9, 'created');
+const lastEditedObsidianEntries = await getNewestObsidianGardenEntries(9, 'edited');
+---
+
+<GardenLayout title="Garden" categories={obsidianCategories}>
+    <div class="flex flex-col lg:pl-8 xl:pl-0">
+        <SectionContent classes="mt-16" contentStart={6}>
+            <span slot="title">Digital Garden</span>
+             My Digital Garden is a growing collection of thoughts, ideas, and knowledge I’ve
+            gathered from various topics that spark my curiosity. The notes are synced directly from
+            my Obsidian workspace, making this space a living reflection of my evolving interests
+            and discoveries.
+            <div class="mt-3">
+                <InlineLink href="/garden/projects/Digital%20Garden.md">
+                    More about Digital Gardens
+                </InlineLink>
+            </div>
+        </SectionContent>
+        <NotesOverview
+            latestCreatedNotes={lastCreatedObsidianEntries}
+            latestEditedNotes={lastEditedObsidianEntries}
+            basePath="/garden"
+            categories={obsidianCategories}
+            client:load
+        />
+    </div>
+</GardenLayout>

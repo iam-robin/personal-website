@@ -1,24 +1,28 @@
 ---
 import Grid from './Grid.astro';
-import GridBox from './GridBox.astro';
+import GridBox, { type DesktopColSpan } from './GridBox.astro';
 import Headline from './Headline.astro';
 import Link from './Link.astro';
 
 interface Props {
-    title: string;
+    classes?: string;
+    title?: string;
     linkText?: string;
     linkUrl?: string;
+    contentStart?: DesktopColSpan;
 }
 
-const { title, linkText, linkUrl } = Astro.props;
+const { title, linkText, linkUrl, classes, contentStart = 5 } = Astro.props;
 ---
 
-<Grid classes="mb-6 sm:mb-8 lg:mb-16">
+<Grid classes={`mb-6 sm:mb-8 lg:mb-16 ${classes}`}>
     <GridBox desktopStart={1} desktopEnd={4} tabletStart={1} tabletEnd={4} mobileFull>
-        <Headline level={3}>{title}</Headline>
+        <Headline level={3}>
+            {title ? title : <slot name="title" />}
+        </Headline>
     </GridBox>
     <GridBox
-        desktopStart={5}
+        desktopStart={contentStart}
         desktopEnd={linkText && linkUrl ? 9 : 12}
         tabletStart={5}
         tabletEnd={8}

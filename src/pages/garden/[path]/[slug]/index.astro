@@ -1,0 +1,76 @@
+---
+import GardenLayout from '@layouts/GardenLayout.astro';
+import { getObsidianGardenCategories, getAllObsidianGardenEntries } from 'src/api/github';
+import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
+import Link from '@components/Link.astro';
+import NoteDetailCard from '@components/garden/NoteDetailCard.astro';
+
+const findPrevNextNotes = (slug: string, notesInSameCateogry: any[]) => {
+    const filteredNotes = notesInSameCateogry.filter(
+        (note) => !(!note.body || note.body.trim() === '' || note.body.trim() === 'TBD') // filter drafts
+    );
+    const index = filteredNotes.findIndex((note) => note.name === slug);
+
+    if (index === -1) {
+        return { previous: undefined, next: undefined };
+    }
+
+    const previous = index > 0 ? filteredNotes[index - 1] : undefined;
+    const next = index < filteredNotes.length - 1 ? filteredNotes[index + 1] : undefined;
+
+    return { previous, next };
+};
+
+export async function getStaticPaths() {
+    const obsidianCategories = await getObsidianGardenCategories();
+    const categories: string[] = obsidianCategories.map((entry: any) => entry.name);
+    let staticPaths: { params: { path: string; slug: string } }[] = [];
+
+    // Iterate over each category to fetch entries
+    for (const path of categories) {
+        const entries = await getAllObsidianGardenEntries(path);
+        // Add paths for each entry's slug under the current path
+        entries.forEach((entry: any) => {
+            if (entry.name) {
+                staticPaths.push({
+                    params: { path, slug: entry.name }
+                });
+            }
+        });
+    }
+
+    return staticPaths;
+}
+
+const { path, slug } = Astro.params;
+
+const obsidianCategories = await getObsidianGardenCategories();
+const obsidianNotes = await getAllObsidianGardenEntries(path, slug);
+const note = obsidianNotes[0];
+
+const notesInSameCateogry = await getAllObsidianGardenEntries(path, '', 'created');
+const { previous, next } = findPrevNextNotes(slug, notesInSameCateogry);
+const { body, frontmatter } = note;
+
+if (!body) {
+    Astro.redirect('/404');
+    throw new Error('404: Entry not found');
+}
+---
+
+<GardenLayout title={`Garden | ${path}`} categories={obsidianCategories} path={path} slug={slug}>
+    <div class="flex flex-col px-2 pt-4 md:px-4 lg:pl-8 lg:pt-16 xl:pl-0">
+        <div class="hidden items-center justify-between lg:flex">
+            <GardenBreadcrumb path={path} slug={slug} />
+            <Link href="/garden">Back to Home</Link>
+        </div>
+        <NoteDetailCard
+            slug={slug}
+            path={path}
+            body={body}
+            frontmatter={frontmatter}
+            nextTitle={next?.name}
+            previousTitle={previous?.name}
+        />
+    </div>
+</GardenLayout>

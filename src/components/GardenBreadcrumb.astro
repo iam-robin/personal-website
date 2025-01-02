@@ -1,0 +1,32 @@
+---
+interface Props {
+    path?: string;
+    slug?: string;
+}
+
+const { path, slug } = Astro.props;
+---
+
+<ul class="flex gap-2">
+    <li><a href="/garden">Home</a></li>
+    {
+        path && (
+            <li>
+                /{' '}
+                <a href={`/garden/${path}`} class={`${!slug && 'font-bold'}`}>
+                    {path.charAt(0).toUpperCase() + path.slice(1)}
+                </a>
+            </li>
+        )
+    }
+    {
+        slug && (
+            <li>
+                /{' '}
+                <a href={`/garden/${path}/${slug}`} class="font-bold">
+                    {slug.replace(/\.md$/, '')}
+                </a>
+            </li>
+        )
+    }
+</ul>

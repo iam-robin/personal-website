@@ -75,7 +75,8 @@ export default {
         },
         fontFamily: {
             sans: ['apercu', ...defaultTheme.fontFamily.sans],
-            mono: ['Fira Mono', ...defaultTheme.fontFamily.mono]
+            mono: ['Fira Mono', ...defaultTheme.fontFamily.mono],
+            script: ['LiebeHeide']
         },
         fontSize: {
             '3xl': ['5rem', '1.05'],
@@ -91,9 +92,10 @@ export default {
         extend: {
             screens: {
                 xs: '480px',
-                'lg-with-padding': '1088px'
+                'lg-with-padding': '1088px',
+                xl: '1600px'
             }
         }
     },
-    plugins: [require('@whiterussianstudio/tailwind-easing')]
+    plugins: [require('@whiterussianstudio/tailwind-easing'), require('@tailwindcss/typography')]
 };

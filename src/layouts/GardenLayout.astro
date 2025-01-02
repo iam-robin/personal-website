@@ -1,0 +1,83 @@
+---
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import '../styles/markdown.css';
+import { SEO } from 'astro-seo';
+import MobileMenu from '@components/MobileMenu.astro';
+import GardenSidebar from '@components/GardenSidebar.astro';
+import type { GardenCategory } from 'src/api/github';
+import DistortFilter from '@components/DistortFilter.astro';
+import GardenHeader from '@components/garden/GardenHeader.astro';
+import ContactLinksSection from '@components/ContactLinksSection.astro';
+
+interface Props {
+    title: string;
+    categories: GardenCategory[];
+    path?: string;
+    slug?: string;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const resolvedImageWithDomain = new URL('/opengraph-garden.jpg', Astro.site).toString();
+
+const { title, categories, path, slug } = Astro.props;
+const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
+---
+
+<!doctype html>
+<html lang="en" class="overscroll-none">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="robins own little space on the internet" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{adjustedTitle}</title>
+        <script src="/iamrobin/js/script.js" data-api="/iamrobin/api/event" data-domain="iamrob.in"
+        ></script>
+        <SEO
+            title={adjustedTitle}
+            description="personal website of iamrobin"
+            canonical={canonicalURL}
+            openGraph={{
+                basic: {
+                    url: canonicalURL,
+                    type: 'website',
+                    title: title,
+                    image: resolvedImageWithDomain
+                },
+                image: {
+                    alt: 'iamrobin personal website screenshot'
+                }
+            }}
+        />
+    </head>
+    <body class="min-h-[calc(100vh-56px)] overflow-x-hidden">
+        {slug && path && <GardenHeader slug={slug} path={path} />}
+        <MobileMenu />
+        <main class="relative">
+            <div class="sticky-sidebar hidden lg:sticky lg:top-[57px] lg:float-left lg:block">
+                <GardenSidebar categories={categories} />
+            </div>
+            <div class="content-container min-h-[70vh] pb-32 lg:min-h-screen">
+                <slot />
+            </div>
+        </main>
+        <ContactLinksSection />
+        <Footer />
+        <DistortFilter />
+        <style>
+            .sticky-sidebar {
+                height: calc(100vh - 57px);
+            }
+            .content-container {
+                max-width: calc(100vw - ((100vw - 1024px) / 2));
+
+                @media (min-width: 1600px) {
+                    margin: 0 auto;
+                    max-width: 1024px;
+                }
+            }
+        </style>
+    </body>
+</html>

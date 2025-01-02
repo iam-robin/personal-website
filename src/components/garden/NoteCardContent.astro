@@ -1,0 +1,119 @@
+---
+import Divider from '@components/Divider.astro';
+import { formatDate } from 'src/utils/formatDate';
+
+interface Props {
+    data: any;
+    category: string;
+    isDraft: boolean;
+    frontmatter: {
+        created: string;
+        edited: string;
+        description: string;
+    };
+    distorted?: boolean;
+    classes?: string;
+}
+
+const { data, category, isDraft, frontmatter } = Astro.props;
+
+const createdDay = formatDate(frontmatter.created);
+const editedDay = formatDate(frontmatter.edited);
+
+const charCount = frontmatter.description.length;
+
+// Function to map character count to font size between 12 and 18px
+const getFontSize = (count: number) => {
+    const minFontSize = 1.5;
+    const maxFontSize = 2.5;
+    const maxCharCount = 50;
+
+    // Ensure the font size is within the range
+    const fontSize = Math.min(
+        maxFontSize,
+        Math.max(minFontSize, maxFontSize - (count / maxCharCount) * (maxFontSize - minFontSize))
+    );
+    return `${fontSize.toFixed(2)}rem`;
+};
+
+const typeFontSize = getFontSize(charCount);
+
+// const getRandomOpacity = () => {
+//     return (Math.random() * (1 - 0.8) + 0.6).toFixed(2);
+// };
+
+const randomOpacity = 0.9;
+
+const randomTypeRotation = Math.floor(Math.random() * 4 - 2);
+const randomTypeMarginBottom = Math.floor(Math.random() * 12 - 6);
+const randomTypeMarginRight = Math.floor(Math.random() * 12 - 6);
+
+const getTextAlignment = (charCount: number) => {
+    if (charCount < 30) {
+        return 'text-center';
+    } else {
+        return 'text-left';
+    }
+};
+
+const textAlignmentClass = getTextAlignment(charCount);
+---
+
+<>
+    <div class="texture"></div>
+    <div class="flex h-full flex-col justify-between border p-3 font-mono">
+        <div>
+            <ul class="flex gap-2">
+                <li class="mb-2 inline-block rounded-full border px-2 py-[2px] text-[11px]">
+                    {category}
+                </li>
+                {
+                    isDraft && (
+                        <li class="mb-2 inline-block rounded-full border px-2 py-[2px] text-[11px]">
+                            Draft
+                        </li>
+                    )
+                }
+            </ul>
+            <h3 class="mt-3 text-base font-bold">{data.name.replace(/\.md$/, '')}</h3>
+        </div>
+        {
+            frontmatter.description && (
+                <div style="filter: url(#distort);">
+                    <Divider isBlack classes="my-1" />
+                    <p
+                        class={`line-clamp-3 py-1 ${textAlignmentClass} font-script text-md leading-[1.1] opacity-60`}
+                        style={`font-size: ${typeFontSize}; transform: translateY(${randomTypeMarginBottom}px) translateX(${randomTypeMarginRight}px) rotate(${randomTypeRotation}deg); opacity: ${randomOpacity}; font-feature-settings: "liga", "ss01", "ss02", "ss03";`}
+                    >
+                        {frontmatter.description}
+                    </p>
+                </div>
+            )
+        }
+        <div class="text-[12px]">
+            <Divider isBlack classes="my-1" />
+            <p><span class="inline-block min-w-[72px]">created:</span> {createdDay}</p>
+            {
+                createdDay !== editedDay && (
+                    <p>
+                        <span class="inline-block min-w-[72px]">edited:</span> {editedDay}
+                    </p>
+                )
+            }
+        </div>
+    </div>
+</>
+
+<style>
+    .texture {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        /* filter: contrast(200%) brightness(90%); */
+        opacity: 0.5;
+        mix-blend-mode: soft-light;
+        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 369 369' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+</style>

@@ -35,10 +35,47 @@
     src: url('../fonts/fira-mono-v14-latin-700.woff2') format('woff2');
 }
 
+@font-face {
+    font-family: 'LiebeHeide';
+    src: url('../fonts/LiebeHeide-FinelinerBold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
 html {
     font-size: 16px;
 }
 
 :root {
     --active-bg-color: #f8fafc;
+}
+
+.noteCardEffect {
+    position: relative;
+}
+.noteCardEffect:before,
+.noteCardEffect:after {
+    z-index: -1;
+    position: absolute;
+    content: '';
+    width: 50%;
+    top: 80%;
+    background: tomato;
+    box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.3);
+}
+.noteCardEffect:before {
+    left: 0.5rem;
+    bottom: 16px;
+    transform: rotate(-3deg);
+}
+.noteCardEffect:after {
+    transform: rotate(3deg);
+    bottom: 16px;
+    right: 0.5em;
+}
+.noteCardEffect.hide-before:before {
+    display: none;
+}
+.noteCardEffect.hide-after:after {
+    display: none;
 }
