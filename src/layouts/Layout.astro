@@ -11,11 +11,12 @@ interface Props {
     title: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
-const resolvedImageWithDomain = new URL('/opengraph.jpg', Astro.site).toString();
-
 const { title } = Astro.props;
 const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const imageFileName = title === '365' ? '/opengraph-365.jpg' : '/opengraph.jpg';
+const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
 ---
 
 <!doctype html>
