@@ -55,7 +55,7 @@ let photos = [
     // Photo24,
     // Photo23,
     // Photo22,
-    Photo21,
+    // Photo21,
     Photo20,
     Photo19,
     Photo18,
@@ -107,7 +107,10 @@ const formatDate = (index: number, length: number) => {
 ---
 
 <Layout title="365">
-    <div class="flex flex-col justify-center py-40" style="min-height: calc(100vh - 120px)">
+    <div
+        class="flex flex-col justify-center pb-16 pt-32 lg:py-40"
+        style="min-height: calc(100vh - 120px)"
+    >
         <SectionContent classes="w-full" title="365 project">
             I’m capturing and sharing one photo each day for a year.<br />Enjoy exploring my visual
             journey and: wish me endurance.
@@ -139,7 +142,7 @@ const formatDate = (index: number, length: number) => {
                                     class="bg-neutral-100"
                                 />
                             ) : (
-                                <div class="flex h-[calc(100%-29px)] w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
+                                <div class="flex h-[calc(100%-45px)] w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
                                     <div class=" flex flex-col items-center gap-2">
                                         <SmileyNervous
                                             weight="regular"
@@ -155,11 +158,13 @@ const formatDate = (index: number, length: number) => {
                                 </div>
                             )}
                             <figcaption
-                                class={`mt-2 flex gap-2 font-mono text-xs ${
+                                class={`mt-2 flex items-center gap-3 font-mono text-xs ${
                                     photo === undefined ? 'text-black-400' : ''
                                 }`}
                             >
-                                <span>{formatNumber(index, photos.length)}</span>
+                                <span class="text-md font-bold">
+                                    {formatNumber(index, photos.length)}
+                                </span>
                                 <span>–</span>
                                 <span>{formatDate(index, photos.length)}</span>
                             </figcaption>
@@ -172,7 +177,13 @@ const formatDate = (index: number, length: number) => {
     </div>
     <div class="pb-40">
         <Grid>
-            <GridBox desktopStart={3} desktopEnd={7} classes="flex flex-col justify-center">
+            <GridBox
+                desktopStart={3}
+                desktopEnd={7}
+                tabletStart={1}
+                tabletEnd={4}
+                classes="flex flex-col justify-center"
+            >
                 <Headline level={3}>But why?</Headline>
                 <p class="mt-6">
                     We all know the impulse to want to change something at the beginning of the
@@ -183,7 +194,15 @@ const formatDate = (index: number, length: number) => {
                     process of creation. Join me on this journey as I grow and challenge myself!
                 </p>
             </GridBox>
-            <GridBox desktopStart={9} desktopEnd={11}>
+            <GridBox
+                desktopStart={9}
+                desktopEnd={11}
+                tabletStart={6}
+                tabletEnd={8}
+                mobileStart={1}
+                mobileEnd={3}
+                classes="flex items-center justify-end md:justify-start mt-12 md:mt-0"
+            >
                 <Image
                     src={RobinCamera}
                     alt="Illustration of me walking with a camera"
