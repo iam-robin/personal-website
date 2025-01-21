@@ -14,6 +14,7 @@ interface Props {
     mobileStart?: MobileColSpan;
     mobileEnd?: MobileColSpan;
     classes?: string;
+    id?: string;
 }
 
 const {
@@ -26,7 +27,8 @@ const {
     tabletEnd,
     mobileStart,
     mobileEnd,
-    classes
+    classes,
+    id
 } = Astro.props as Props;
 ---
 
@@ -41,6 +43,7 @@ const {
         !tabletFull && 'col-span-full sm:col-span-full', // Conditionally add col-span-full for tablet if not explicitly set
         !desktopFull && 'col-span-full sm:col-span-full lg:col-span-full' // Conditionally add col-span-full for desktop if not explicitly set
     ]}
+    id={id}
 >
     <slot />
 </div>

@@ -30,7 +30,7 @@ const transformStyles = distorted
 ---
 
 <div class:list={['group flex h-full min-h-[280px] items-center', classes]}>
-    <div class="effect" style={transformStyles} data-rotation={randomRotation}>
+    <div class="corner-shadow-effect" style={transformStyles} data-rotation={randomRotation}>
         {
             isDraft ? (
                 <div class="relative cursor-not-allowed p-2" style={backgroundColorStyle}>
@@ -59,40 +59,9 @@ const transformStyles = distorted
     </div>
 </div>
 
-<style>
-    .effect {
-        position: relative;
-    }
-    .effect:before,
-    .effect:after {
-        z-index: -1;
-        position: absolute;
-        content: '';
-        width: 50%;
-        top: 80%;
-        box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.3);
-    }
-    .effect:before {
-        left: 0.5rem;
-        bottom: 16px;
-        transform: rotate(-3deg);
-    }
-    .effect:after {
-        transform: rotate(3deg);
-        bottom: 16px;
-        right: 0.5em;
-    }
-    .effect.hide-before:before {
-        display: none;
-    }
-    .effect.hide-after:after {
-        display: none;
-    }
-</style>
-
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const effectElements = document.querySelectorAll('.effect');
+        const effectElements = document.querySelectorAll('.corner-shadow-effect');
         effectElements.forEach((effectElement) => {
             const rotation = parseFloat((effectElement as HTMLElement).dataset.rotation || '0');
             const className = rotation >= 0 ? 'hide-after' : 'hide-before';

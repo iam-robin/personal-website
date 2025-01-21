@@ -1,0 +1,197 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Slider from '@components/slider/Slider.astro';
+import SliderItem from '@components/slider/SliderItem.astro';
+import { Image } from 'astro:assets';
+import badge from '../assets/shape-sticker-lilac.svg';
+import { SmileyNervous } from '@phosphor-icons/react';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import Headline from '@components/Headline.astro';
+
+import RobinCamera from '../assets/images/robin-camera.png';
+
+import Photo01 from '../assets/365/01.jpg';
+import Photo02 from '../assets/365/02.jpg';
+import Photo03 from '../assets/365/03.jpg';
+import Photo04 from '../assets/365/04.jpg';
+import Photo05 from '../assets/365/05.jpg';
+import Photo06 from '../assets/365/06.jpg';
+import Photo07 from '../assets/365/07.jpg';
+import Photo08 from '../assets/365/08.jpg';
+import Photo09 from '../assets/365/09.jpg';
+import Photo10 from '../assets/365/10.jpg';
+import Photo11 from '../assets/365/11.jpg';
+import Photo12 from '../assets/365/12.jpg';
+import Photo13 from '../assets/365/13.jpg';
+import Photo14 from '../assets/365/14.jpg';
+import Photo15 from '../assets/365/15.jpg';
+import Photo16 from '../assets/365/16.jpg';
+import Photo17 from '../assets/365/17.jpg';
+import Photo18 from '../assets/365/18.jpg';
+import Photo19 from '../assets/365/19.jpg';
+import Photo20 from '../assets/365/20.jpg';
+import Photo21 from '../assets/365/21.jpg';
+// import Photo22 from '../assets/365/22.jpg';
+// import Photo23 from '../assets/365/23.jpg';
+// import Photo24 from '../assets/365/24.jpg';
+// import Photo25 from '../assets/365/25.jpg';
+// import Photo26 from '../assets/365/26.jpg';
+// import Photo27 from '../assets/365/27.jpg';
+// import Photo28 from '../assets/365/28.jpg';
+// import Photo29 from '../assets/365/29.jpg';
+// import Photo30 from '../assets/365/30.jpg';
+// import Photo31 from '../assets/365/31.jpg';
+import SectionContent from '@components/SectionContent.astro';
+
+let photos = [
+    // Photo31,
+    // Photo30,
+    // Photo29,
+    // Photo28,
+    // Photo27,
+    // Photo26,
+    // Photo25,
+    // Photo24,
+    // Photo23,
+    // Photo22,
+    Photo21,
+    Photo20,
+    Photo19,
+    Photo18,
+    Photo17,
+    Photo16,
+    Photo15,
+    Photo14,
+    Photo13,
+    Photo12,
+    Photo11,
+    Photo10,
+    Photo09,
+    Photo08,
+    Photo07,
+    Photo06,
+    Photo05,
+    Photo04,
+    Photo03,
+    Photo02,
+    Photo01
+];
+
+const currentDate = new Date();
+const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
+const daysPassed =
+    Math.floor((currentDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+
+let difference = daysPassed - photos.length;
+
+if (difference > 0) {
+    photos = Array(difference).fill(undefined).concat(photos);
+}
+
+const formatNumber = (index: number, length: number) => {
+    const number = length - index;
+    return number.toString().padStart(number < 100 ? 3 : 0, '0');
+};
+
+const formatDate = (index: number, length: number) => {
+    const startDate = new Date(2025, 0, 1); // January 1, 2025
+    const currentDate = new Date(startDate);
+    currentDate.setDate(startDate.getDate() + (length - 1 - index));
+    return currentDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+};
+---
+
+<Layout title="365">
+    <div class="flex flex-col justify-center py-40" style="min-height: calc(100vh - 120px)">
+        <SectionContent classes="w-full" title="365 project">
+            I’m capturing and sharing one photo each day for a year.<br />Enjoy exploring my visual
+            journey and: wish me endurance.
+        </SectionContent>
+        <Slider classes="xl:mt-12">
+            {
+                photos.map((photo, index) => (
+                    <SliderItem size="medium" classes="group relative mt-2">
+                        <figure class="h-full w-full">
+                            {(photos.length - index - 1) % 7 === 0 && (
+                                <div
+                                    style={{ backgroundImage: `url(${badge.src})` }}
+                                    class="absolute -right-5 -top-5 flex h-20 w-20 rotate-12 items-center justify-center rounded-full bg-cover bg-no-repeat text-lilac-dark transition-all duration-300 group-hover:rotate-[18deg] group-hover:scale-105"
+                                >
+                                    <div class="mt-1 flex flex-col text-center">
+                                        <div class="text-xs">Week</div>
+                                        <div class="-mt-1 text-base font-bold">
+                                            0{Math.ceil((photos.length - index) / 7)}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {photo ? (
+                                <Image
+                                    src={photo}
+                                    alt="test image"
+                                    widths={[640]}
+                                    sizes={`320px`}
+                                    class="bg-neutral-100"
+                                />
+                            ) : (
+                                <div class="flex h-[calc(100%-29px)] w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
+                                    <div class=" flex flex-col items-center gap-2">
+                                        <SmileyNervous
+                                            weight="regular"
+                                            size={40}
+                                            color="rgba(0,0,0,0.2)"
+                                        />
+                                        <p>
+                                            No photo
+                                            <br />
+                                            uploaded yet
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                            <figcaption
+                                class={`mt-2 flex gap-2 font-mono text-xs ${
+                                    photo === undefined ? 'text-black-400' : ''
+                                }`}
+                            >
+                                <span>{formatNumber(index, photos.length)}</span>
+                                <span>–</span>
+                                <span>{formatDate(index, photos.length)}</span>
+                            </figcaption>
+                        </figure>
+                    </SliderItem>
+                ))
+            }
+            <SliderItem emptyEnd />
+        </Slider>
+    </div>
+    <div class="pb-40">
+        <Grid>
+            <GridBox desktopStart={3} desktopEnd={7} classes="flex flex-col justify-center">
+                <Headline level={3}>But why?</Headline>
+                <p class="mt-6">
+                    We all know the impulse to want to change something at the beginning of the
+                    year, and this is mine: My main goal with this project is to confront my
+                    unhealthy perfectionism. By committing to share one photo each day for a year, I
+                    aim to learn how to embrace and share work that isn’t perfect. It’s about
+                    letting go of the need for everything to be flawless and finding beauty in the
+                    process of creation. Join me on this journey as I grow and challenge myself!
+                </p>
+            </GridBox>
+            <GridBox desktopStart={9} desktopEnd={11}>
+                <Image
+                    src={RobinCamera}
+                    alt="Illustration of me walking with a camera"
+                    widths={[640]}
+                    sizes={`320px`}
+                    class="max-w-[180px]"
+                />
+            </GridBox>
+        </Grid>
+    </div>
+</Layout>
