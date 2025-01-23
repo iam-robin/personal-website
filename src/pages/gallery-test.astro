@@ -1,0 +1,18 @@
+---
+import { Image } from 'astro:assets';
+
+const imageFiles = Object.values(import.meta.glob('../../src/assets/365/*', { eager: true }));
+---
+
+<div class="mx-auto mb-5 w-full columns-1 gap-3 px-4 sm:columns-2 md:columns-3 lg:columns-4">
+    {
+        imageFiles.map((img: any) => (
+            <Image
+                src={img.default}
+                width="600"
+                alt="Photo of a pizza"
+                class="mb-3 w-full rounded"
+            />
+        ))
+    }
+</div>

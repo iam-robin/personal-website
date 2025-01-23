@@ -10,14 +10,14 @@
         "astro": "astro"
     },
     "dependencies": {
-        "@astrojs/check": "^0.5.8",
-        "@astrojs/react": "^3.3.2",
-        "@astrojs/tailwind": "^5.1.0",
+        "@astrojs/check": "^0.9.4",
+        "@astrojs/react": "^4.1.6",
+        "@astrojs/tailwind": "^5.1.5",
         "@phosphor-icons/react": "^2.1.6",
         "@types/react": "^18.3.1",
         "@types/react-dom": "^18.3.0",
         "@zachleat/carouscroll": "^1.0.6",
-        "astro": "^4.5.2",
+        "astro": "^5.1.9",
         "astro-icon": "^1.0.4",
         "astro-remote": "^0.3.3",
         "astro-seo": "^0.8.4",
