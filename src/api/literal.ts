@@ -79,8 +79,6 @@ export const shelfQueryResponse = async () => {
         }
     }
 
-    console.log('shelves', shelves[0].books[0]);
-
     return shelves;
 };
 
