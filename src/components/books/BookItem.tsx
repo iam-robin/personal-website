@@ -24,7 +24,7 @@ const BookItem: React.FC<BookItemProps> = ({
         <a
             href={
                 hasGardenEntry
-                    ? `/garden/books/${title}%20%E2%80%93%20${authors?.[0]?.name}.md`
+                    ? `/garden/books/${title?.trimEnd()}%20%E2%80%93%20${authors?.[0]?.name?.trimEnd()}.md`
                     : `https://literal.club/book/${link}`
             }
             className="h-full w-full"
