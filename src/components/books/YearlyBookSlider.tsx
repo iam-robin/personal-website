@@ -50,6 +50,7 @@ const YearlyBookSlider: React.FC<YearlyBookSliderProps> = ({ shelfs, gardenBookE
                             title={book.title}
                             authors={book.authors}
                             currentlyReading={book.currentlyReading}
+                            rating={book.review?.rating}
                             link={book.slug}
                             hasGardenEntry={hasBookEntryInGarden(
                                 book.title,

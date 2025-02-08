@@ -39,7 +39,49 @@ export const shelfQueryResponse = async () => {
         })
     });
 
-    return response.json();
+    const data = await response.json();
+    const shelves = data.data.getShelvesByProfileId;
+
+    const reviewQuery = `
+        query getReviews($pairs: [ProfileIdBookIdInput!]!) {
+            reviews(pairs: $pairs) {
+                id
+                rating
+                spoiler
+                text
+                createdAt
+                updatedAt
+                tags
+            }
+        }
+    `;
+
+    for (const shelf of shelves) {
+        for (const book of shelf.books) {
+            const reviewResponse = await fetch('https://literal.club/graphql/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${import.meta.env.LITERAL_ACCESS_TOKEN}`
+                },
+                body: JSON.stringify({
+                    query: reviewQuery,
+                    variables: {
+                        pairs: [{ profileId: import.meta.env.LITERAL_PROFILE_ID, bookId: book.id }]
+                    }
+                })
+            });
+
+            const reviewData = await reviewResponse.json();
+            if (reviewData.data?.reviews?.length > 0) {
+                book.review = reviewData.data.reviews[0];
+            }
+        }
+    }
+
+    console.log('shelves', shelves[0].books[0]);
+
+    return shelves;
 };
 
 export const currentlyReadingQueryResponse = async () => {

@@ -2,11 +2,13 @@ import badge from '../../assets/shape-sticker-lilac.svg';
 import type { Author } from './BookSection.astro';
 import './book-item.css';
 import stickerIcon from '../../icons/sticker-garden.svg';
+import { Star, StarHalf } from '@phosphor-icons/react';
 
 interface BookItemProps {
     cover: string;
     title?: string;
     authors?: Author[];
+    rating?: number;
     currentlyReading?: boolean;
     link?: string;
     hasGardenEntry?: boolean;
@@ -18,6 +20,7 @@ const BookItem: React.FC<BookItemProps> = ({
     authors,
     currentlyReading,
     link,
+    rating,
     hasGardenEntry
 }) => {
     return (
@@ -29,7 +32,7 @@ const BookItem: React.FC<BookItemProps> = ({
             }
             className="h-full w-full"
         >
-            <div className="book-item group relative flex w-full cursor-pointer flex-col items-center gap-5 rounded-lg bg-neutral-100 px-4 py-12">
+            <div className="book-item group relative flex w-full cursor-pointer flex-col items-center gap-5 rounded-lg bg-neutral-100 px-4 py-20">
                 {currentlyReading && (
                     <span
                         style={{ backgroundImage: `url(${badge.src})` }}
@@ -56,6 +59,26 @@ const BookItem: React.FC<BookItemProps> = ({
             <div className="mt-2 text-xs">
                 <p className="font-bold text-black-700">{title}</p>
                 <p className="text-black-400">{authors?.map((author) => author.name).join(', ')}</p>
+                {rating && (
+                    <p className="mt-1 flex">
+                        {[...Array(Math.floor(rating))].map((_, index) => (
+                            <Star key={index} size={16} weight="fill" className="fill-black-600" />
+                        ))}
+                        {rating % 1 !== 0 && (
+                            <StarHalf size={16} weight="fill" className="fill-black-600" />
+                        )}
+                        {[...Array(5 - Math.floor(rating) - (rating % 1 !== 0 ? 1 : 0))].map(
+                            (_, index) => (
+                                <Star
+                                    key={index + Math.floor(rating) + 1}
+                                    size={16}
+                                    weight="regular"
+                                    className="fill-black-600"
+                                />
+                            )
+                        )}
+                    </p>
+                )}
             </div>
         </a>
     );

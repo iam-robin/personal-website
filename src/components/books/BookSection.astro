@@ -17,6 +17,15 @@ export interface Book {
     slug: string;
     authors: Author[];
     currentlyReading?: boolean;
+    review: {
+        id: string;
+        rating: number;
+        spoiler: boolean;
+        text: string;
+        createdAt: string;
+        updatedAt: string;
+        tags: any[];
+    };
 }
 
 export interface Shelf {
@@ -24,20 +33,15 @@ export interface Shelf {
     books: Book[];
 }
 
-const shelfJson = await shelfQueryResponse();
-const shelfData = shelfJson.data;
-let yearlyShelfData = shelfData.getShelvesByProfileId.filter((shelf: any) =>
-    shelf.title.startsWith('20')
-);
+const shelfData = await shelfQueryResponse();
+let yearlyShelfData = shelfData.filter((shelf: any) => shelf.title.startsWith('20'));
 
 const currentlyReadingJson = await currentlyReadingQueryResponse();
 const currentlyReadingData = currentlyReadingJson.data;
 
 const currentYear = new Date().getFullYear();
 const currentYearString = currentYear.toString();
-let currentYearShelf = shelfData.getShelvesByProfileId.find(
-    (shelf: Shelf) => shelf.title === currentYearString
-);
+let currentYearShelf = shelfData.find((shelf: Shelf) => shelf.title === currentYearString);
 
 if (!currentYearShelf) {
     currentYearShelf = {
