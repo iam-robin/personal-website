@@ -15,7 +15,7 @@ jobs:
               run: |
                   COMMIT_MSG=$(git log -1 --pretty=%B)
                   if [[ ! "$COMMIT_MSG" =~ ^"🤖 Automated sync from NAS" ]]; then
-                    echo "Commit message does not start with 'NAS Sync:', skipping workflow."
+                    echo "Commit message does not start with '🤖 Automated sync from NAS', skipping workflow."
                     exit 1
                   fi
 
