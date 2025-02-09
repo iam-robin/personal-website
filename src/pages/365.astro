@@ -20,7 +20,7 @@ const photos: PhotoModule[] = Object.values(
 );
 
 const formatIndexNumber = (index: number, length: number) => {
-    const number = length - index + 1;
+    const number = length - index;
     return number.toString().padStart(number < 100 ? 3 : 0, '0');
 };
 
