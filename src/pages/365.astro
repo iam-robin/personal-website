@@ -3,126 +3,61 @@ import Layout from '@layouts/Layout.astro';
 import Slider from '@components/slider/Slider.astro';
 import SliderItem from '@components/slider/SliderItem.astro';
 import { Image } from 'astro:assets';
-import badge from '../assets/shape-sticker-lilac.svg';
 import { SmileyNervous } from '@phosphor-icons/react';
 import Grid from '@components/Grid.astro';
 import GridBox from '@components/GridBox.astro';
 import Headline from '@components/Headline.astro';
 
 import RobinCamera from '../assets/images/robin-camera.png';
-
-import Photo01 from '../assets/365/01.jpg';
-import Photo02 from '../assets/365/02.jpg';
-import Photo03 from '../assets/365/03.jpg';
-import Photo04 from '../assets/365/04.jpg';
-import Photo05 from '../assets/365/05.jpg';
-import Photo06 from '../assets/365/06.jpg';
-import Photo07 from '../assets/365/07.jpg';
-import Photo08 from '../assets/365/08.jpg';
-import Photo09 from '../assets/365/09.jpg';
-import Photo10 from '../assets/365/10.jpg';
-import Photo11 from '../assets/365/11.jpg';
-import Photo12 from '../assets/365/12.jpg';
-import Photo13 from '../assets/365/13.jpg';
-import Photo14 from '../assets/365/14.jpg';
-import Photo15 from '../assets/365/15.jpg';
-import Photo16 from '../assets/365/16.jpg';
-import Photo17 from '../assets/365/17.jpg';
-import Photo18 from '../assets/365/18.jpg';
-import Photo19 from '../assets/365/19.jpg';
-import Photo20 from '../assets/365/20.jpg';
-import Photo21 from '../assets/365/21.jpg';
-import Photo22 from '../assets/365/22.jpg';
-import Photo23 from '../assets/365/23.jpg';
-import Photo24 from '../assets/365/24.jpg';
-import Photo25 from '../assets/365/25.jpg';
-import Photo26 from '../assets/365/26.jpg';
-import Photo27 from '../assets/365/27.jpg';
-import Photo28 from '../assets/365/28.jpg';
-import Photo29 from '../assets/365/29.jpg';
-import Photo30 from '../assets/365/30.jpg';
-import Photo31 from '../assets/365/31.jpg';
-import Photo32 from '../assets/365/32.jpg';
-import Photo33 from '../assets/365/33.jpg';
-import Photo34 from '../assets/365/34.jpg';
-import Photo35 from '../assets/365/35.jpg';
-import Photo36 from '../assets/365/36.jpg';
-import Photo37 from '../assets/365/37.jpg';
-import Photo38 from '../assets/365/38.jpg';
-import Photo39 from '../assets/365/39.jpg';
-// import Photo40 from '../assets/365/40.jpg';
-// import Photo41 from '../assets/365/41.jpg';
-// import Photo42 from '../assets/365/42.jpg';
 import SectionContent from '@components/SectionContent.astro';
 
-let photos = [
-    Photo39,
-    Photo38,
-    Photo37,
-    Photo36,
-    Photo35,
-    Photo34,
-    Photo33,
-    Photo32,
-    Photo31,
-    Photo30,
-    Photo29,
-    Photo28,
-    Photo27,
-    Photo26,
-    Photo25,
-    Photo24,
-    Photo23,
-    Photo22,
-    Photo21,
-    Photo20,
-    Photo19,
-    Photo18,
-    Photo17,
-    Photo16,
-    Photo15,
-    Photo14,
-    Photo13,
-    Photo12,
-    Photo11,
-    Photo10,
-    Photo09,
-    Photo08,
-    Photo07,
-    Photo06,
-    Photo05,
-    Photo04,
-    Photo03,
-    Photo02,
-    Photo01
-];
-
-const currentDate = new Date();
-const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
-const daysPassed =
-    Math.floor((currentDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-
-let difference = daysPassed - photos.length;
-
-if (difference > 0) {
-    photos = Array(difference).fill(undefined).concat(photos);
+interface PhotoModule {
+    default: ImageMetadata;
 }
 
-const formatNumber = (index: number, length: number) => {
-    const number = length - index;
+const photos: PhotoModule[] = Object.values(
+    import.meta.glob('../../src/assets/365/*', { eager: true })
+);
+
+const formatIndexNumber = (index: number, length: number) => {
+    const number = length - index + 1;
     return number.toString().padStart(number < 100 ? 3 : 0, '0');
 };
 
-const formatDate = (index: number, length: number) => {
-    const startDate = new Date(2025, 0, 1); // January 1, 2025
-    const currentDate = new Date(startDate);
-    currentDate.setDate(startDate.getDate() + (length - 1 - index));
-    return currentDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+const getDayOfYear = (date: Date): number => {
+    const start = new Date(date.getFullYear(), 0, 0);
+    const diff = date.getTime() - start.getTime();
+    const oneDay = 1000 * 60 * 60 * 24;
+    return Math.floor(diff / oneDay);
 };
+
+const createDayArray = (): string[] => {
+    const today = new Date();
+    const dayOfYear = getDayOfYear(today);
+    return Array.from({ length: dayOfYear }, (_, i) => {
+        const date = new Date(today.getFullYear(), 0, i + 2);
+        return date.toISOString().split('T')[0]; // YYYY-MM-DD format
+    }).reverse(); // Reverse array to have most recent date first
+};
+
+const days = createDayArray();
+
+const photosByDate = photos.reduce((acc: Record<string, PhotoModule>, photo: PhotoModule) => {
+    try {
+        // Extract date from the src path instead of default
+        const filename = photo.default.src.split('/').pop() || '';
+        const date = filename.split('_')[0];
+
+        if (date) {
+            acc[date] = photo;
+        }
+
+        return acc;
+    } catch (error) {
+        console.error('Error processing photo:', photo, error);
+        return acc;
+    }
+}, {});
 ---
 
 <Layout title="365">
@@ -136,26 +71,13 @@ const formatDate = (index: number, length: number) => {
         </SectionContent>
         <Slider classes="xl:mt-12">
             {
-                photos.map((photo, index) => (
+                days.map((date, index) => (
                     <SliderItem size="medium" classes="group relative mt-2">
                         <figure class="h-full w-full">
-                            {(photos.length - index - 1) % 7 === 0 && (
-                                <div
-                                    style={{ backgroundImage: `url(${badge.src})` }}
-                                    class="absolute -right-5 -top-5 flex h-20 w-20 rotate-12 items-center justify-center rounded-full bg-cover bg-no-repeat text-lilac-dark transition-all duration-300 group-hover:rotate-[18deg] group-hover:scale-105"
-                                >
-                                    <div class="mt-1 flex flex-col text-center">
-                                        <div class="text-xs">Week</div>
-                                        <div class="-mt-1 text-base font-bold">
-                                            0{Math.ceil((photos.length - index) / 7)}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                            {photo ? (
+                            {photosByDate[date] ? (
                                 <Image
-                                    src={photo}
-                                    alt="test image"
+                                    src={photosByDate[date].default}
+                                    alt={`Photo from ${date}`}
                                     widths={[640]}
                                     sizes={`320px`}
                                     class="bg-neutral-100"
@@ -178,14 +100,14 @@ const formatDate = (index: number, length: number) => {
                             )}
                             <figcaption
                                 class={`mt-2 flex items-center gap-3 font-mono text-xs ${
-                                    photo === undefined ? 'text-black-400' : ''
+                                    photosByDate[date] === undefined ? 'text-black-400' : ''
                                 }`}
                             >
                                 <span class="text-md font-bold">
-                                    {formatNumber(index, photos.length)}
+                                    {formatIndexNumber(index, photos.length)}
                                 </span>
                                 <span>–</span>
-                                <span>{formatDate(index, photos.length)}</span>
+                                <span>{date}</span>
                             </figcaption>
                         </figure>
                     </SliderItem>

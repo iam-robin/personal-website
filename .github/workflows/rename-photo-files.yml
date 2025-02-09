@@ -1,0 +1,41 @@
+name: Rename Photo Files
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    rename:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Check commit message
+              run: |
+                  COMMIT_MSG=$(git log -1 --pretty=%B)
+                  if [[ ! "$COMMIT_MSG" =~ ^"🤖 Automated sync from NAS" ]]; then
+                    echo "Commit message does not start with 'NAS Sync:', skipping workflow."
+                    exit 1
+                  fi
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '18'
+
+            - name: Install dependencies
+              run: |
+                  npm init -y
+                  npm install exifreader
+
+            - name: Run rename script
+              run: node scripts/rename-photos.js src/assets/365
+
+            - name: Commit and push renamed files
+              run: |
+                  git config --global user.name "GitHub Actions"
+                  git config --global user.email "actions@github.com"
+                  git add .
+                  git commit -m "🤖 Renamed files with EXIF data" || echo "No changes to commit"
+                  git push
