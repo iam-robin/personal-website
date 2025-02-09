@@ -10,6 +10,8 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }} # Authenticate checkout with GitHub token
 
             - name: Check commit message
               id: check_commit
@@ -39,6 +41,8 @@ jobs:
               run: node scripts/rename-photos.js src/assets/365
 
             - name: Commit and push renamed files
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               if: steps.check_commit.outputs.should_continue == 'true'
               run: |
                   git config --global user.name "GitHub Actions"
