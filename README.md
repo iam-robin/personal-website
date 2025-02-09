@@ -26,3 +26,5 @@ Some fonts used on this website are free to use under [Open Font License](https:
 - [Fira Mono](https://mozilla.github.io/Fira/)
 
 But you can’t use the [Apercu](https://www.colophon-foundry.org/typefaces/apercu) font unless you buy it from colophon foundry as I did.
+
+👋
