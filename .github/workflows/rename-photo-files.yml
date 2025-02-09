@@ -12,27 +12,34 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Check commit message
+              id: check_commit
               run: |
                   COMMIT_MSG=$(git log -1 --pretty=%B)
                   if [[ ! "$COMMIT_MSG" =~ ^"🤖 Automated sync from NAS" ]]; then
                     echo "Commit message does not start with '🤖 Automated sync from NAS', skipping workflow."
-                    exit 1
+                    echo "::set-output name=should_continue::false"
+                    exit 0
                   fi
+                  echo "::set-output name=should_continue::true"
 
             - name: Setup Node.js
+              if: steps.check_commit.outputs.should_continue == 'true'
               uses: actions/setup-node@v3
               with:
                   node-version: '18'
 
             - name: Install dependencies
+              if: steps.check_commit.outputs.should_continue == 'true'
               run: |
                   npm init -y
                   npm install exifreader
 
             - name: Run rename script
+              if: steps.check_commit.outputs.should_continue == 'true'
               run: node scripts/rename-photos.js src/assets/365
 
             - name: Commit and push renamed files
+              if: steps.check_commit.outputs.should_continue == 'true'
               run: |
                   git config --global user.name "GitHub Actions"
                   git config --global user.email "actions@github.com"
