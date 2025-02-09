@@ -35,7 +35,7 @@ const createDayArray = (): string[] => {
     const today = new Date();
     const dayOfYear = getDayOfYear(today);
     return Array.from({ length: dayOfYear }, (_, i) => {
-        const date = new Date(today.getFullYear(), 0, i + 2);
+        const date = new Date(today.getFullYear(), 0, i + 1);
         return date.toISOString().split('T')[0]; // YYYY-MM-DD format
     }).reverse(); // Reverse array to have most recent date first
 };
