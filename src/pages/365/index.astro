@@ -53,8 +53,8 @@ const photosByDate = photos.reduce((acc: Record<string, PhotoModule>, photo: Pho
         <Slider classes="xl:mt-12">
             {
                 days.map((date, index) => (
-                    <SliderItem size="medium" classes="group relative mt-2">
-                        <a href={`365/${date}`}>
+                    <SliderItem size="medium" classes="relative mt-2">
+                        <a href={`365/${date}`} class="h-full w-full">
                             <figure class="h-full w-full">
                                 {photosByDate[date] ? (
                                     <Image
