@@ -1,0 +1,49 @@
+---
+import Grid from './Grid.astro';
+import GridBox from './GridBox.astro';
+
+interface Props {
+    hasMobileBottomSlot?: boolean;
+    isWiderOnDesktop?: boolean;
+}
+
+const { hasMobileBottomSlot, isWiderOnDesktop } = Astro.props;
+---
+
+<>
+    <header class="z-50 bg-white lg:sticky lg:top-0 lg:border-b lg:border-neutral-200 lg:py-4">
+        <Grid>
+            <GridBox desktopFull classes="flex justify-between items-center min-h-[24px]">
+                <a
+                    href="/"
+                    class={`inline-block pt-4 pb-1 italic lg:py-0 ${
+                        isWiderOnDesktop && 'lg:absolute lg:left-8 xl:static'
+                    }`}
+                >
+                    iamrobin</a
+                >
+                <div class="absolute left-1/2 hidden -translate-x-1/2 transform lg:block">
+                    <slot name="desktop-center" />
+                </div>
+                <div
+                    class={`flex items-center pt-4 lg:pt-0 ${
+                        isWiderOnDesktop ? 'lg:absolute lg:right-8 xl:static' : undefined
+                    }`}
+                >
+                    <slot name="desktop-mobile-end" />
+                </div>
+            </GridBox>
+        </Grid>
+    </header>
+    {
+        hasMobileBottomSlot && (
+            <div class="sticky top-0 z-50 border-b border-neutral-200 bg-white lg:hidden">
+                <Grid classes="py-2">
+                    <GridBox desktopFull>
+                        <slot name="mobile-bottom" />
+                    </GridBox>
+                </Grid>
+            </div>
+        )
+    }
+</>

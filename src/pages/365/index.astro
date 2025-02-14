@@ -8,39 +8,20 @@ import Grid from '@components/Grid.astro';
 import GridBox from '@components/GridBox.astro';
 import Headline from '@components/Headline.astro';
 
-import RobinCamera from '../assets/images/robin-camera.png';
+import RobinCamera from '@assets/images/robin-camera.png';
 import SectionContent from '@components/SectionContent.astro';
+import { createDayArray, formatIndexNumber, getDayOfYear } from 'src/utils/365-helpers';
 
 interface PhotoModule {
     default: ImageMetadata;
 }
 
 const photos: PhotoModule[] = Object.values(
-    import.meta.glob('../../src/assets/365/*', { eager: true })
+    import.meta.glob('../../../src/assets/365/*', { eager: true })
 );
 
-const formatIndexNumber = (index: number, length: number) => {
-    const number = length - index;
-    return number.toString().padStart(number < 100 ? 3 : 0, '0');
-};
-
-const getDayOfYear = (date: Date): number => {
-    const start = new Date(date.getFullYear(), 0, 0);
-    const diff = date.getTime() - start.getTime();
-    const oneDay = 1000 * 60 * 60 * 24;
-    return Math.floor(diff / oneDay);
-};
-
-const createDayArray = (): string[] => {
-    const today = new Date();
-    const dayOfYear = getDayOfYear(today);
-    return Array.from({ length: dayOfYear }, (_, i) => {
-        const date = new Date(today.getFullYear(), 0, i + 1);
-        return date.toISOString().split('T')[0]; // YYYY-MM-DD format
-    }).reverse(); // Reverse array to have most recent date first
-};
-
-const days = createDayArray();
+const today = new Date();
+const days = createDayArray(getDayOfYear(today));
 
 const photosByDate = photos.reduce((acc: Record<string, PhotoModule>, photo: PhotoModule) => {
     try {
@@ -73,43 +54,45 @@ const photosByDate = photos.reduce((acc: Record<string, PhotoModule>, photo: Pho
             {
                 days.map((date, index) => (
                     <SliderItem size="medium" classes="group relative mt-2">
-                        <figure class="h-full w-full">
-                            {photosByDate[date] ? (
-                                <Image
-                                    src={photosByDate[date].default}
-                                    alt={`Photo from ${date}`}
-                                    widths={[640]}
-                                    sizes={`320px`}
-                                    class="bg-neutral-100"
-                                />
-                            ) : (
-                                <div class="flex h-[calc(100%-45px)] w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
-                                    <div class=" flex flex-col items-center gap-2">
-                                        <SmileyNervous
-                                            weight="regular"
-                                            size={40}
-                                            color="rgba(0,0,0,0.2)"
-                                        />
-                                        <p>
-                                            No photo
-                                            <br />
-                                            uploaded yet
-                                        </p>
+                        <a href={`365/${date}`}>
+                            <figure class="h-full w-full">
+                                {photosByDate[date] ? (
+                                    <Image
+                                        src={photosByDate[date].default}
+                                        alt={`Photo from ${date}`}
+                                        widths={[640]}
+                                        sizes={`320px`}
+                                        class="bg-neutral-100"
+                                    />
+                                ) : (
+                                    <div class="flex h-[calc(100%-45px)] w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
+                                        <div class=" flex flex-col items-center gap-2">
+                                            <SmileyNervous
+                                                weight="regular"
+                                                size={40}
+                                                color="rgba(0,0,0,0.2)"
+                                            />
+                                            <p>
+                                                No photo
+                                                <br />
+                                                uploaded yet
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
-                            <figcaption
-                                class={`mt-2 flex items-center gap-3 font-mono text-xs ${
-                                    photosByDate[date] === undefined ? 'text-black-400' : ''
-                                }`}
-                            >
-                                <span class="text-md font-bold">
-                                    {formatIndexNumber(index, photos.length)}
-                                </span>
-                                <span>–</span>
-                                <span>{date}</span>
-                            </figcaption>
-                        </figure>
+                                )}
+                                <figcaption
+                                    class={`mt-2 flex items-center gap-3 font-mono text-xs ${
+                                        photosByDate[date] === undefined ? 'text-black-400' : ''
+                                    }`}
+                                >
+                                    <span class="text-md font-bold">
+                                        {formatIndexNumber(index, photos.length)}
+                                    </span>
+                                    <span>–</span>
+                                    <span>{date}</span>
+                                </figcaption>
+                            </figure>
+                        </a>
                     </SliderItem>
                 ))
             }

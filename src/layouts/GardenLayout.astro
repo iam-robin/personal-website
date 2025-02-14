@@ -7,8 +7,10 @@ import MobileMenu from '@components/MobileMenu.astro';
 import GardenSidebar from '@components/GardenSidebar.astro';
 import type { GardenCategory } from 'src/api/github';
 import DistortFilter from '@components/DistortFilter.astro';
-import GardenHeader from '@components/garden/GardenHeader.astro';
+import HeaderSimple from '@components/HeaderSimple.astro';
 import ContactLinksSection from '@components/ContactLinksSection.astro';
+import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
+import { navData } from '@components/Header.astro';
 
 interface Props {
     title: string;
@@ -53,7 +55,23 @@ const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
         />
     </head>
     <body class="min-h-[calc(100vh-56px)] overflow-x-hidden">
-        <GardenHeader slug={slug} path={path} />
+        <HeaderSimple hasMobileBottomSlot={!!path || !!slug} isWiderOnDesktop>
+            <nav class="flex gap-8" slot="desktop-center">
+                {
+                    navData.map((item) => (
+                        <a
+                            data-navLink
+                            href={item.path}
+                            class="nav-item group relative font-mono text-xs uppercase tracking-widest hover:text-blue"
+                        >
+                            {item.name}
+                            <span class="pointer-events-none absolute -left-3 top-[6px] mx-auto h-[6px] w-[6px] rounded-full bg-blue opacity-0 transition-all duration-300" />
+                        </a>
+                    ))
+                }
+            </nav>
+            <GardenBreadcrumb path={path} slug={slug} slot="mobile-bottom" />
+        </HeaderSimple>
         <MobileMenu />
         <main class="relative">
             <div class="sticky-sidebar hidden lg:sticky lg:top-[57px] lg:float-left lg:block">
