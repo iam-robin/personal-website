@@ -30,14 +30,15 @@ const allPhotos: PhotoModule[] = Object.values(
 
 // Filter photos to only include those that match the date
 const photos: PhotoModule[] = allPhotos.filter((photo) => {
+    if (!photo || !photo.default || !photo.default.src) return false;
     const filename = photo.default.src.split('/').pop() || '';
     return filename.startsWith(day);
 });
 
 // Sort photos by timestamp if you have multiple photos for the same day
 const sortedPhotos = photos.sort((a, b) => {
-    const timeA = a.default.src.split('_')[1]?.split('.')[0] || '';
-    const timeB = b.default.src.split('_')[1]?.split('.')[0] || '';
+    const timeA = a.default?.src.split('_')[1]?.split('.')[0] || '';
+    const timeB = b.default?.src.split('_')[1]?.split('.')[0] || '';
     return timeA.localeCompare(timeB);
 });
 
@@ -76,15 +77,19 @@ const prevDay = currentDayIndex < allDays.length - 1 ? allDays[currentDayIndex +
         class="flex min-h-[calc(100vh-82px-78px)] items-center justify-center lg:min-h-[calc(100vh-3.5rem)]"
         id="photo-container"
     >
-        <div class="flex h-[70vh] max-h-[1000px] items-center px-4 lg:h-[80vh] lg:px-0">
-            <Image
-                src={sortedPhotos[0].default}
-                alt={`Photo taken on ${day}`}
-                width={sortedPhotos[0].default.width}
-                height={sortedPhotos[0].default.height}
-                class="h-full w-auto object-contain text-[0px]"
-            />
-        </div>
+        {
+            sortedPhotos.length !== 0 && (
+                <div class="flex h-[70vh] max-h-[1000px] items-center px-4 lg:h-[80vh] lg:px-0">
+                    <Image
+                        src={sortedPhotos[0]?.default}
+                        alt={`Photo taken on ${day}`}
+                        width={sortedPhotos[0]?.default.width}
+                        height={sortedPhotos[0]?.default.height}
+                        class="h-full w-auto object-contain text-[0px]"
+                    />
+                </div>
+            )
+        }
         {sortedPhotos.length === 0 && <p>No photos found for this date.</p>}
     </div>
     <div class="flex justify-between md:block">
