@@ -12,6 +12,7 @@
     "dependencies": {
         "@astrojs/check": "^0.9.4",
         "@astrojs/react": "^4.1.6",
+        "@astrojs/rss": "^4.0.11",
         "@astrojs/tailwind": "^5.1.5",
         "@phosphor-icons/react": "^2.1.6",
         "@types/react": "^18.3.1",

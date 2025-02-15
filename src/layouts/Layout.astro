@@ -26,6 +26,7 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
         <meta name="description" content="robins own little space on the internet" />
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="alternate" type="application/rss+xml" title="365 RSS Feed" href="/365.xml" />
         <meta name="generator" content={Astro.generator} />
         <title>{adjustedTitle}</title>
         <script src="/iamrobin/js/script.js" data-api="/iamrobin/api/event" data-domain="iamrob.in"
