@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import ExifReader from 'exifreader';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,6 +25,7 @@ fs.readdir(photosDir, (err, files) => {
 
     files.forEach((file) => {
         if (path.extname(file) === '.jpg') {
+            const filePath = path.join(photosDir, file);
             const fileNameWithoutExt = path.basename(file, '.jpg');
             const [datePart, timePart] = fileNameWithoutExt.split('_');
             const isoDate = `${datePart}T${timePart.replace(/-/g, ':')}`; // Convert to ISO 8601 format
@@ -40,11 +42,26 @@ fs.readdir(photosDir, (err, files) => {
                     .join('\n');
             }
 
+            // Read the photo file and extract EXIF data
+            const photoBuffer = fs.readFileSync(filePath);
+            const tags = ExifReader.load(photoBuffer);
+
+            const cameraBrand = tags['Make'] ? tags['Make'].description : 'Unknown';
+            const cameraModel = tags['Model'] ? tags['Model'].description : 'Unknown';
+            const lensBrand = tags['LensMake'] ? tags['LensMake'].description : 'Unknown';
+            const lensModel = tags['LensModel'] ? tags['LensModel'].description : 'Unknown';
+            const focalLength = tags['FocalLength'] ? tags['FocalLength'].description : 'Unknown';
+
             const mdContent = `---
 image: 'src/assets/365/photos/${file}'
 date: ${isoDate}
 day: '${datePart}'
 time: '${timePart.replace(/-/g, ':')}'
+cameraBrand: '${cameraBrand}'
+cameraModel: '${cameraModel}'
+lensBrand: '${lensBrand}'
+lensModel: '${lensModel}'
+focalLength: '${focalLength}'
 ${additionalContent}
 ---`;
 
