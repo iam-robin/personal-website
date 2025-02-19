@@ -20,3 +20,8 @@ export const formatIndexNumber = (index: number, length: number) => {
     const number = length - index;
     return number.toString().padStart(number < 100 ? 3 : 0, '0');
 };
+
+export async function loadImage(imagePath: string) {
+    const imageModule = await import(`/${imagePath}`);
+    return imageModule.default;
+}
