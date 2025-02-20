@@ -53,7 +53,7 @@ fs.readdir(photosDir, (err, files) => {
             const focalLength = tags['FocalLength'] ? tags['FocalLength'].description : 'Unknown';
 
             const mdContent = `---
-image: '/365/photos/${file}'
+image: 'src/assets/365/photos/${file}'
 date: ${isoDate}
 day: '${datePart}'
 time: '${timePart.replace(/-/g, ':')}'

@@ -6,7 +6,7 @@ import SectionContent from '@components/SectionContent.astro';
 import Slider from '@components/slider/Slider.astro';
 import SliderItem from '@components/slider/SliderItem.astro';
 import { getCollection } from 'astro:content';
-import { createDayArray, formatIndexNumber, getDayOfYear, loadImage } from 'src/utils/365-helpers';
+import { createDayArray, formatIndexNumber, getDayOfYear } from 'src/utils/365-helpers';
 import { Image } from 'astro:assets';
 import Layout from '@layouts/Layout.astro';
 import { SmileyNervous } from '@phosphor-icons/react';
@@ -18,15 +18,8 @@ const days = createDayArray(getDayOfYear(today));
 const photoItems = await getCollection('365');
 photoItems.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-const photoItemsWithMetadata = await Promise.all(
-    photoItems.map(async (photoItem) => {
-        const imageMetadata = await loadImage(photoItem.data.image);
-        return { ...photoItem, imageMetadata };
-    })
-);
-
 const getPhotoForDay = (day: string) => {
-    return photoItemsWithMetadata.find((photoItem) => photoItem.data.day === day);
+    return photoItems.find((photoItem) => photoItem.data.day === day);
 };
 ---
 
@@ -40,166 +33,52 @@ const getPhotoForDay = (day: string) => {
         </SectionContent>
         <Slider classes="xl:mt-12">
             {
-                days.map(
-                    (day, index) => (
-                        <SliderItem size="medium" classes="relative mt-2">
-                            {getPhotoForDay(day) ? (
-                                <a
-                                    href={`365/${getPhotoForDay(day)?.data.day}`}
-                                    class="h-full w-full"
-                                >
-                                    <figure class="h-full w-full">
-                                        <Image
-                                            src={getPhotoForDay(day)?.imageMetadata}
-                                            alt={
-                                                getPhotoForDay(day)?.data.description
-                                                    ? getPhotoForDay(day)?.data.description
-                                                    : `Photo from ${getPhotoForDay(day)?.data.day}`
-                                            }
-                                            widths={[640]}
-                                            sizes={`320px`}
-                                            class="bg-neutral-100"
-                                        />
-                                        <figcaption class="mt-2 flex items-center gap-3 font-mono text-xs">
-                                            <span>
-                                                {formatIndexNumber(index - 1, photoItems.length)}
-                                            </span>
-                                            <span>–</span>
-                                            <span>{day}</span>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            ) : (
-                                <div class="flex h-full w-full flex-col gap-2">
-                                    <div class="flex h-full w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
-                                        <div class=" flex flex-col items-center gap-2">
-                                            <SmileyNervous
-                                                weight="regular"
-                                                size={40}
-                                                color="rgba(0,0,0,0.2)"
-                                            />
-                                            <p>
-                                                No photo
-                                                <br />
-                                                uploaded yet
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <p class="font-mono text-xs text-black-400">{day}</p>
-                                </div>
-                            )}
-                            {/* <a href={`365/${date}`} class="h-full w-full">
+                days.map((day, index) => (
+                    <SliderItem size="medium" classes="relative mt-2">
+                        {getPhotoForDay(day) ? (
+                            <a href={`365/${getPhotoForDay(day)?.data.day}`} class="h-full w-full">
                                 <figure class="h-full w-full">
-                                    {photosByDate[date] ? (
-                                        <Image
-                                            src={photosByDate[date].default}
-                                            alt={`Photo from ${date}`}
-                                            widths={[640]}
-                                            sizes={`320px`}
-                                            class="bg-neutral-100"
-                                        />
-                                    ) : (
-                                        <div class="flex h-[calc(100%-45px)] w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
-                                            <div class=" flex flex-col items-center gap-2">
-                                                <SmileyNervous
-                                                    weight="regular"
-                                                    size={40}
-                                                    color="rgba(0,0,0,0.2)"
-                                                />
-                                                <p>
-                                                    No photo
-                                                    <br />
-                                                    uploaded yet
-                                                </p>
-                                            </div>
-                                        </div>
-                                    )}
-                                    <figcaption
-                                        class={`mt-2 flex items-center gap-3 font-mono text-xs ${
-                                            photosByDate[date] === undefined ? 'text-black-400' : ''
-                                        }`}
-                                    >
-                                        <span class="text-md font-bold">
-                                            {formatIndexNumber(index, photos.length)}
+                                    <Image
+                                        src={getPhotoForDay(day)?.data.image}
+                                        alt={
+                                            getPhotoForDay(day)?.data.description
+                                                ? getPhotoForDay(day)?.data.description
+                                                : `Photo from ${getPhotoForDay(day)?.data.day}`
+                                        }
+                                        widths={[640]}
+                                        sizes={`320px`}
+                                        class="bg-neutral-100"
+                                    />
+                                    <figcaption class="mt-2 flex items-center gap-3 font-mono text-xs">
+                                        <span>
+                                            {formatIndexNumber(index - 1, photoItems.length)}
                                         </span>
                                         <span>–</span>
-                                        <span>{date}</span>
+                                        <span>{day}</span>
                                     </figcaption>
                                 </figure>
-                            </a> */}
-                        </SliderItem>
-                    )
-                    // photoItemsWithMetadata.map((photoItem) => (
-                    //     <SliderItem size="medium" classes="relative mt-2">
-                    //         <a href={`365/${photoItem.data.day}`} class="h-full w-full">
-                    //             <figure class="h-full w-full">
-                    //                 <Image
-                    //                     src={photoItem.imageMetadata}
-                    //                     alt={
-                    //                         photoItem.data.description
-                    //                             ? photoItem.data.description
-                    //                             : `Photo from ${photoItem.data.day}`
-                    //                     }
-                    //                     widths={[640]}
-                    //                     sizes={`320px`}
-                    //                     class="bg-neutral-100"
-                    //                 />
-
-                    //                 <figcaption
-                    //                     class={`mt-2 flex items-center gap-3 font-mono text-xs ${
-                    //                         true ? 'text-black-400' : ''
-                    //                     }`}
-                    //                 >
-                    //                     {/* <span class="text-md font-bold">
-                    //                         {formatIndexNumber(index, photos.length)}
-                    //                     </span>
-                    //                     <span>–</span> */}
-                    //                     <span>{photoItem.data.day}</span>
-                    //                 </figcaption>
-                    //             </figure>
-                    //         </a>
-                    //         {/* <a href={`365/${date}`} class="h-full w-full">
-                    //             <figure class="h-full w-full">
-                    //                 {photosByDate[date] ? (
-                    //                     <Image
-                    //                         src={photosByDate[date].default}
-                    //                         alt={`Photo from ${date}`}
-                    //                         widths={[640]}
-                    //                         sizes={`320px`}
-                    //                         class="bg-neutral-100"
-                    //                     />
-                    //                 ) : (
-                    //                     <div class="flex h-[calc(100%-45px)] w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
-                    //                         <div class=" flex flex-col items-center gap-2">
-                    //                             <SmileyNervous
-                    //                                 weight="regular"
-                    //                                 size={40}
-                    //                                 color="rgba(0,0,0,0.2)"
-                    //                             />
-                    //                             <p>
-                    //                                 No photo
-                    //                                 <br />
-                    //                                 uploaded yet
-                    //                             </p>
-                    //                         </div>
-                    //                     </div>
-                    //                 )}
-                    //                 <figcaption
-                    //                     class={`mt-2 flex items-center gap-3 font-mono text-xs ${
-                    //                         photosByDate[date] === undefined ? 'text-black-400' : ''
-                    //                     }`}
-                    //                 >
-                    //                     <span class="text-md font-bold">
-                    //                         {formatIndexNumber(index, photos.length)}
-                    //                     </span>
-                    //                     <span>–</span>
-                    //                     <span>{date}</span>
-                    //                 </figcaption>
-                    //             </figure>
-                    //         </a> */}
-                    //     </SliderItem>
-                    // ))
-                )
+                            </a>
+                        ) : (
+                            <div class="flex h-full w-full flex-col gap-2">
+                                <div class="flex h-full w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
+                                    <div class=" flex flex-col items-center gap-2">
+                                        <SmileyNervous
+                                            weight="regular"
+                                            size={40}
+                                            color="rgba(0,0,0,0.2)"
+                                        />
+                                        <p>
+                                            No photo
+                                            <br />
+                                            uploaded yet
+                                        </p>
+                                    </div>
+                                </div>
+                                <p class="font-mono text-xs text-black-400">{day}</p>
+                            </div>
+                        )}
+                    </SliderItem>
+                ))
             }
             <SliderItem emptyEnd />
         </Slider>

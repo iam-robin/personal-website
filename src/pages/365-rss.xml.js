@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 
 export async function GET(context) {
     const photoItems = await getCollection('365');
+    console.log('🚀 ~ GET ~ photoItems:', photoItems[0].data.image);
 
     return rss({
         title: 'iamrobin 365 Project',
@@ -17,10 +18,10 @@ export async function GET(context) {
             description: item.data.description,
             customData: `<media:content
             type="image/jpeg"
-            width="200"
-            height="600"
+            width="${item.data.image.width}"
+            height="${item.data.image.height}"
             medium="image"
-            url="${context.site + item.data.image}" />
+            url="${item.data.image.src}" />
         `
         })),
         customData: `<language>en-us</language>`

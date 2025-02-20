@@ -40,10 +40,6 @@ jobs:
               if: steps.check_commit.outputs.should_continue == 'true'
               run: node scripts/rename-photos.js src/assets/365/photos
 
-            - name: Run copy photos to public folder script
-              if: steps.check_commit.outputs.should_continue == 'true'
-              run: node scripts/copy-photos-to-public.js src/assets/365/photos public/365/photos
-
             - name: Run create photo collection item script
               if: steps.check_commit.outputs.should_continue == 'true'
               run: node scripts/create-photo-collection-item.js
