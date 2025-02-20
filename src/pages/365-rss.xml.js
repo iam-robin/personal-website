@@ -21,7 +21,7 @@ export async function GET(context) {
             width="${item.data.image.width}"
             height="${item.data.image.height}"
             medium="image"
-            url="${item.data.image.src}" />
+            url="${context.site + item.data.image.src}" />
         `
         })),
         customData: `<language>en-us</language>`
