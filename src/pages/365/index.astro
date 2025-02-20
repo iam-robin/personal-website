@@ -28,7 +28,7 @@ const getPhotoForDay = (day: string) => {
         class="flex flex-col justify-center pb-16 pt-32 lg:py-40"
         style="min-height: calc(100vh - 120px)"
     >
-        <SectionContent classes="w-full" title="365 project" linkText="RSS feed" linkUrl="#">
+        <SectionContent classes="w-full" title="365 project">
             I’m capturing and sharing one photo each day for a year.
         </SectionContent>
         <Slider classes="xl:mt-12">
@@ -39,7 +39,7 @@ const getPhotoForDay = (day: string) => {
                             <a href={`365/${getPhotoForDay(day)?.data.day}`} class="h-full w-full">
                                 <figure class="h-full w-full">
                                     <Image
-                                        src={getPhotoForDay(day)?.data.image}
+                                        src={getPhotoForDay(day)?.data.image as ImageMetadata}
                                         alt={
                                             getPhotoForDay(day)?.data.description
                                                 ? getPhotoForDay(day)?.data.description
