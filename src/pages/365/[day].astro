@@ -1,0 +1,144 @@
+---
+import PhotoDetailLayout from '@layouts/PhotoDetailLayout.astro';
+import { Image } from 'astro:assets';
+import { ArrowLeft, ArrowRight, X } from '@phosphor-icons/react';
+import HeaderSimple from '@components/HeaderSimple.astro';
+import { getCollection } from 'astro:content';
+
+interface PhotoItem {
+    data: {
+        description: string;
+        image: ImageMetadata;
+        day: string;
+    };
+    slug: string;
+}
+
+export async function getStaticPaths() {
+    const photoItems = await getCollection('365');
+    photoItems.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+    return photoItems.map((currentPhotoItem) => {
+        return {
+            params: { day: currentPhotoItem.data.day },
+            props: { currentPhotoItem, photoItems }
+        };
+    });
+}
+
+const { currentPhotoItem, photoItems } = Astro.props as {
+    currentPhotoItem: PhotoItem;
+    photoItems: PhotoItem[];
+};
+
+const currentIndex = photoItems.findIndex((item) => item.slug === currentPhotoItem.slug);
+const nextDay = currentIndex > 0 ? photoItems[currentIndex - 1] : null;
+const prevDay = currentIndex < photoItems.length - 1 ? photoItems[currentIndex + 1] : null;
+---
+
+<PhotoDetailLayout title={`${currentPhotoItem.data.day} - 365 Project`}>
+    <HeaderSimple hasMobileBottomSlot isWiderOnDesktop>
+        <ul class="flex gap-2 font-mono text-xs" slot="desktop-center">
+            <li>
+                <a href="/365">365</a>
+            </li>
+            <li>/</li>
+            <li>
+                <a class="font-bold" href={`/365/${currentPhotoItem.data.day}`}
+                    >{currentPhotoItem.data.day}</a
+                >
+            </li>
+        </ul>
+        <ul class="flex gap-2 font-mono text-xs" slot="mobile-bottom">
+            <li>
+                <a href="/365">365</a>
+            </li>
+            <li>/</li>
+            <li>
+                <a class="font-bold" href={`/365/${currentPhotoItem.data.day}`}
+                    >{currentPhotoItem.data.day}</a
+                >
+            </li>
+        </ul>
+        <a href="/365" class="flex items-center gap-4" slot="desktop-mobile-end">
+            <X size={20} weight="bold" />
+        </a>
+    </HeaderSimple>
+    <div
+        class="flex min-h-[calc(100vh-82px-78px)] items-center justify-center lg:min-h-[calc(100vh-3.5rem)]"
+        id="photo-container"
+    >
+        <div class="flex h-[70vh] max-h-[1000px] items-center px-4 lg:h-[80vh] lg:px-0">
+            <Image
+                src={currentPhotoItem.data.image}
+                alt={currentPhotoItem.data.description
+                    ? currentPhotoItem.data.description
+                    : `Photo from ${currentPhotoItem.data.day}`}
+                width={1334}
+                height={2000}
+                class="h-full w-auto object-contain text-[0px]"
+            />
+        </div>
+    </div>
+    <div class="flex justify-between md:block">
+        {
+            nextDay && (
+                <a
+                    class="group bottom-0 left-0 top-14 flex items-center justify-start py-6 pl-4 md:absolute md:w-32 md:pl-6 md:transition-all md:hover:pl-4 lg:w-1/4 lg:pl-10 lg:hover:pl-8"
+                    href={nextDay.data.day}
+                    id="next-day-link"
+                >
+                    <div class="flex items-center gap-2 md:flex-col md:gap-4 lg:flex-row">
+                        <ArrowLeft
+                            size={30}
+                            className="md:translate-x-1 md:transition-all md:group-hover:translate-x-0"
+                        />
+                        <span class="font-mono text-sm md:translate-x-6 md:opacity-0 md:transition-all md:group-hover:translate-x-0 md:group-hover:opacity-100 lg:text-base">
+                            {nextDay.data.day}
+                        </span>
+                    </div>
+                </a>
+            )
+        }
+        {
+            prevDay && (
+                <a
+                    class="group bottom-0 right-0 top-14 flex items-center justify-end py-6 pr-4 md:absolute md:w-32 md:pr-6 md:transition-all md:hover:pr-4 lg:w-1/4 lg:pr-10 lg:hover:pr-8"
+                    href={prevDay.data.day}
+                    id="prev-day-link"
+                >
+                    <div class="flex items-center gap-2 md:flex-col-reverse md:gap-4 lg:flex-row">
+                        <span class="font-mono text-sm md:-translate-x-6 md:opacity-0 md:transition-all md:group-hover:translate-x-0 md:group-hover:opacity-100 lg:text-base">
+                            {prevDay.data.day}
+                        </span>
+                        <ArrowRight
+                            size={30}
+                            className="md:translate-x-1 md:transition-all md:group-hover:translate-x-0"
+                        />
+                    </div>
+                </a>
+            )
+        }
+    </div>
+</PhotoDetailLayout>
+
+<script>
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            const prevLink = document.getElementById('prev-day-link');
+            if (prevLink) {
+                const href = prevLink.getAttribute('href');
+                if (href) {
+                    window.location.href = href;
+                }
+            }
+        } else if (e.key === 'ArrowLeft') {
+            const nextLink = document.getElementById('next-day-link');
+            if (nextLink) {
+                const href = nextLink.getAttribute('href');
+                if (href) {
+                    window.location.href = href;
+                }
+            }
+        }
+    });
+</script>
