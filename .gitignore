@@ -20,3 +20,11 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# Synology NAS specific files
+@eaDir/
+*@SynoResource
+*.jpg@SynoResource
+*.jpg@SynoEAStream
+#SynoResource*
+.SynoResource
