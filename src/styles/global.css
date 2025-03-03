@@ -24,7 +24,7 @@
     font-family: 'Fira Mono';
     font-style: normal;
     font-weight: 400;
-    src: url('../fonts/fira-mono-v14-latin-regular.woff2') format('woff2');
+    src: url('/fonts/fira-mono-v14-latin-regular.woff2') format('woff2');
 }
 /* fira-mono-700 - latin */
 @font-face {
@@ -32,12 +32,12 @@
     font-family: 'Fira Mono';
     font-style: normal;
     font-weight: 700;
-    src: url('../fonts/fira-mono-v14-latin-700.woff2') format('woff2');
+    src: url('/fonts/fira-mono-v14-latin-700.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'LiebeHeide';
-    src: url('../fonts/LiebeHeide-FinelinerBold.otf') format('opentype');
+    src: url('/fonts/LiebeHeide-FinelinerBold.otf') format('opentype');
     font-weight: bold;
     font-style: normal;
 }
