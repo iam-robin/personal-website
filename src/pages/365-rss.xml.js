@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 
 export async function GET(context) {
     const photoItems = await getCollection('365');
-    console.log('🚀 ~ GET ~ photoItems:', photoItems[0].data.image);
 
     return rss({
         title: 'iamrobin 365 Project',
@@ -13,8 +12,8 @@ export async function GET(context) {
             media: 'http://search.yahoo.com/mrss/'
         },
         items: photoItems.map((item) => ({
-            title: item.data.title,
-            pubDate: item.data.pubDate,
+            title: item.data.day,
+            pubDate: item.data.date,
             description: item.data.description,
             customData: `<media:content
             type="image/jpeg"
