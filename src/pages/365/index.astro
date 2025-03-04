@@ -28,7 +28,12 @@ const getPhotoForDay = (day: string) => {
         class="flex flex-col justify-center pb-16 pt-32 lg:py-40"
         style="min-height: calc(100vh - 120px)"
     >
-        <SectionContent classes="w-full" title="365 project">
+        <SectionContent
+            classes="w-full"
+            title="365 project"
+            linkText="RSS feed"
+            linkUrl="/365-rss.xml"
+        >
             I’m capturing and sharing one photo each day for a year.
         </SectionContent>
         <Slider classes="xl:mt-12">
