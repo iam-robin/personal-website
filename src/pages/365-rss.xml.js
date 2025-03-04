@@ -1,5 +1,6 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
+import sanitizeHtml from 'sanitize-html';
 
 export async function GET(context) {
     const photoItems = await getCollection('365');
@@ -15,6 +16,20 @@ export async function GET(context) {
             title: item.data.day,
             pubDate: item.data.date,
             description: item.data.description,
+            link: context.site + '365/' + item.data.day,
+            content: sanitizeHtml(
+                '<img src="' +
+                    context.site +
+                    item.data.image.src +
+                    '" alt="' +
+                    'Photo from' +
+                    item.data.day +
+                    '">' +
+                    (item.data.description ? '<p>' + item.data.description + '</p>\n' : ''),
+                {
+                    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img'])
+                }
+            ),
             customData: `<media:content
             type="image/jpeg"
             width="${item.data.image.width}"
