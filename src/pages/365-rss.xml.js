@@ -12,6 +12,7 @@ export async function GET(context) {
         xmlns: {
             media: 'http://search.yahoo.com/mrss/'
         },
+        stylesheet: '/rss/styles.xsl',
         items: photoItems.map((item) => ({
             title: item.data.day,
             pubDate: item.data.date,
@@ -25,7 +26,12 @@ export async function GET(context) {
                     'Photo from' +
                     item.data.day +
                     '">' +
-                    (item.data.description ? '<p>' + item.data.description + '</p>\n' : ''),
+                    (item.data.description ? '<p>' + item.data.description + '</p>\n' : '') +
+                    (item.data.tags && item.data.tags.length > 0
+                        ? '<ul>' +
+                          item.data.tags.map((tag) => `<li>${tag}</li>`).join('') +
+                          '</ul>\n'
+                        : ''),
                 {
                     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img'])
                 }
