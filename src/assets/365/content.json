@@ -1,24 +1,28 @@
 {
-    "2025-01-08": {
-        "description": "hallo",
-        "tags": ["tag1", "tag2"]
+    "2025-03-03": {
+        "description": "Cycling through the Olympic Park on the way home from work. Wonderful light mood. And photographing the Olympic Tower is always a good idea.",
+        "tags": ["Munich", "Olympiapark"]
     },
-    "2025-01-07": {
-        "description": "Excepteur et ullamco pariatur laboris."
+    "2025-03-02": {
+        "description": "Lazy Sunday photo of our trays in the kitchen",
+        "tags": ["Home"]
     },
-    "2025-01-06": {
-        "description": "Excepteur et ullamco pariatur laboris."
+    "2025-02-24": {
+        "description": "Spring is it you?"
     },
-    "2025-01-05": {
-        "description": "Excepteur et ullamco pariatur laboris."
+    "2025-02-23": {
+        "description": "Home project: adjusting and relocating picture frames on the wall. It's a never-ending story."
     },
-    "2025-01-03": {
-        "description": "Excepteur et ullamco pariatur laboris."
+    "2025-02-21": {
+        "description": "Construction site I pass by every day on my bike ride to work. I will miss the old buildings once they are fully replaced by the new, uniform ones.",
+        "tags": ["Munich"]
     },
-    "2025-01-02": {
-        "description": "Excepteur et ullamco pariatur laboris."
+    "2025-02-18": {
+        "description": "Late afternoon walk at Königsplatz. The light was just perfect.",
+        "tags": ["Munich"]
     },
-    "2025-01-01": {
-        "description": "Excepteur et ullamco pariatur laboris."
+    "2025-02-17": {
+        "description": "Snow + olympic park = happy me",
+        "tags": ["Munich", "Olympiapark"]
     }
 }
