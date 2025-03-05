@@ -1,0 +1,51 @@
+---
+interface Props {
+    tags: {
+        name: string;
+        count: number;
+    }[];
+    selectedTag?: string;
+}
+
+const { tags, selectedTag } = Astro.props;
+
+// Sort tags by count (most frequent first)
+const sortedTags = [...tags].sort((a, b) => b.count - a.count);
+---
+
+<div class="mb-10">
+    <h2 class="mb-4 font-mono text-xs uppercase tracking-widest">Filter by tag</h2>
+    <div class="flex flex-wrap gap-2">
+        <a
+            href="/blog"
+            class={`px-3 py-1 rounded-full border font-mono text-xs ${
+                !selectedTag
+                    ? 'bg-blue text-white border-blue'
+                    : 'border-neutral-200 hover:border-blue hover:text-blue'
+            }`}
+        >
+            all
+        </a>
+        {
+            sortedTags.map((tag) => (
+                <a
+                    href={`/blog/tag/${tag.name}`}
+                    class={`flex items-center rounded-full border px-3 py-1 font-mono text-xs ${
+                        selectedTag === tag.name
+                            ? 'border-blue bg-blue text-white'
+                            : 'border-neutral-200 hover:border-blue hover:text-blue'
+                    }`}
+                >
+                    {tag.name}
+                    <span
+                        class={`ml-1 ${
+                            selectedTag === tag.name ? 'text-white-700' : 'text-neutral-400'
+                        }`}
+                    >
+                        ({tag.count})
+                    </span>
+                </a>
+            ))
+        }
+    </div>
+</div>

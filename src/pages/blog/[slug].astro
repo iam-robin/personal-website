@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/sidenotes.css';
+import '../../styles/blog-styles.css';
+import GridBox from '@components/GridBox.astro';
+import Grid from '@components/Grid.astro';
+import TableOfContents from '@components/TableOfContents.astro';
+import { extractHeadings } from '../../utils/markdown';
+
+// Generate static paths for all blog posts
+export async function getStaticPaths() {
+    const blogEntries = await getCollection('blog');
+
+    return Promise.all(
+        blogEntries.map(async (entry) => {
+            // Extract headings from the markdown content
+            const headings = await extractHeadings(entry.body);
+
+            return {
+                params: { slug: entry.slug },
+                props: {
+                    entry,
+                    headings
+                }
+            };
+        })
+    );
+}
+
+// Get the blog post for this page
+const { entry, headings } = Astro.props;
+const { Content } = await entry.render();
+
+// Format date
+const formattedDate = entry.data.date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+});
+---
+
+<Layout title={`${entry.data.title} | iamrob.in`}>
+    <Grid>
+        <GridBox desktopStart={1} desktopEnd={7}>
+            <a href="/blog" class="mb-8 block text-blue hover:underline"> ← Back to Blog</a>
+
+            <article class="prose prose-lg max-w-none">
+                <h1 class="mb-4 text-3xl font-bold">{entry.data.title}</h1>
+
+                <div class="mb-8 text-neutral-500">
+                    {formattedDate}
+                    {
+                        entry.data.tags && entry.data.tags.length > 0 && (
+                            <div class="mt-2">
+                                {entry.data.tags.map((tag) => (
+                                    <a
+                                        href={`/blog/tag/${tag}`}
+                                        class="mr-2 inline-block rounded bg-neutral-50 px-2 py-1 text-sm text-neutral-600 hover:bg-blue-light hover:text-blue"
+                                    >
+                                        #{tag}
+                                    </a>
+                                ))}
+                            </div>
+                        )
+                    }
+                </div>
+
+                <TableOfContents headings={headings} />
+
+                <Content />
+            </article>
+        </GridBox>
+    </Grid>
+</Layout>
+
+<script src="../../scripts/sidenotes.js"></script>

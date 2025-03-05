@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import TagCloud from '@components/TagCloud.astro';
+
+// Get all blog posts and sort by date
+const allBlogPosts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+});
+
+const sortedPosts = allBlogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Format date function
+const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+};
+
+// Generate tag counts for the tag cloud
+const allTags = allBlogPosts.flatMap((post) => post.data.tags || []);
+const tagCounts = allTags.reduce(
+    (acc, tag) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+        return acc;
+    },
+    {} as Record<string, number>
+);
+
+const tagCloudData = Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
+---
+
+<Layout title="Blog | iamrob.in">
+    <Grid>
+        <GridBox desktopFull>
+            <h1 class="text-4xl mb-8 font-bold">Blog</h1>
+
+            <TagCloud tags={tagCloudData} />
+
+            <div class="space-y-12">
+                {
+                    sortedPosts.map((post) => (
+                        <div class="border-gray-200 border-b pb-8">
+                            <h2 class="mb-2 text-2xl font-semibold">
+                                <a href={`/blog/${post.slug}`} class="hover:text-blue-600">
+                                    {post.data.title}
+                                </a>
+                            </h2>
+                            <div class="text-gray-500 mb-4">
+                                {formatDate(post.data.date)}
+                                {post.data.tags && post.data.tags.length > 0 && (
+                                    <span class="ml-2">
+                                        •
+                                        {post.data.tags.map((tag, i) => (
+                                            <>
+                                                <a
+                                                    href={`/blog/tag/${tag}`}
+                                                    class="hover:text-blue-600"
+                                                >
+                                                    #{tag}
+                                                </a>
+                                                {i < post.data.tags.length - 1 && ' '}
+                                            </>
+                                        ))}
+                                    </span>
+                                )}
+                            </div>
+                            {post.data.description && (
+                                <p class="text-gray-700">{post.data.description}</p>
+                            )}
+                            <div class="mt-4">
+                                <a
+                                    href={`/blog/${post.slug}`}
+                                    class="text-blue-600 hover:underline"
+                                >
+                                    Read more →
+                                </a>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>

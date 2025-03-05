@@ -16,6 +16,18 @@ const photo365Collection = defineCollection({
         })
 });
 
+const blogCollection = defineCollection({
+    type: 'content',
+    schema: z.object({
+        title: z.string(),
+        date: z.date(),
+        tags: z.array(z.string()),
+        description: z.string().optional(),
+        draft: z.boolean().optional().default(false)
+    })
+});
+
 export const collections = {
-    365: photo365Collection
+    365: photo365Collection,
+    blog: blogCollection
 };

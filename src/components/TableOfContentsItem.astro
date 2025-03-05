@@ -1,0 +1,25 @@
+---
+import type { Heading } from '../utils/markdown';
+
+interface Props {
+    heading: Heading;
+}
+
+const { heading } = Astro.props;
+const hasChildren = heading.children && heading.children.length > 0;
+---
+
+<li class="mb-1">
+    <a href={`#${heading.slug}`} class="text-black-700 no-underline hover:text-blue hover:underline"
+        >{heading.text}</a
+    >
+    {
+        hasChildren && (
+            <ul class="m-0 mt-1 list-none p-0 pl-6">
+                {heading.children!.map((child) => (
+                    <Astro.self heading={child} />
+                ))}
+            </ul>
+        )
+    }
+</li>

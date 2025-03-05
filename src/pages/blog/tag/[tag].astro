@@ -1,0 +1,118 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import TagCloud from '@components/TagCloud.astro';
+
+export async function getStaticPaths() {
+    const allPosts = await getCollection('blog');
+
+    // Get all unique tags
+    const uniqueTags = [...new Set(allPosts.flatMap((post) => post.data.tags || []))];
+
+    // For each unique tag, create a page
+    return uniqueTags.map((tag) => {
+        const filteredPosts = allPosts.filter((post) => post.data.tags?.includes(tag));
+        return {
+            params: { tag },
+            props: { posts: filteredPosts, tag }
+        };
+    });
+}
+
+const { posts, tag } = Astro.props;
+
+// Sort by date
+const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Format date function
+const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+};
+
+// Get all blog posts for tag cloud
+const allBlogPosts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+});
+
+// Generate tag counts for the tag cloud
+const allTags = allBlogPosts.flatMap((post) => post.data.tags || []);
+const tagCounts = allTags.reduce(
+    (acc, tag) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+        return acc;
+    },
+    {} as Record<string, number>
+);
+
+const tagCloudData = Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
+---
+
+<Layout title={`Blog: #${tag} | iamrob.in`}>
+    <Grid>
+        <GridBox desktopFull>
+            <h1 class="text-4xl mb-4 font-bold">Blog: <span class="text-blue">#{tag}</span></h1>
+            <p class="mb-10 text-neutral-500">Posts tagged with "{tag}"</p>
+
+            <TagCloud tags={tagCloudData} selectedTag={tag} />
+
+            <div class="space-y-12">
+                {
+                    sortedPosts.map((post) => (
+                        <div class="border-gray-200 border-b pb-8">
+                            <h2 class="mb-2 text-2xl font-semibold">
+                                <a href={`/blog/${post.slug}`} class="hover:text-blue">
+                                    {post.data.title}
+                                </a>
+                            </h2>
+                            <div class="mb-4 text-neutral-500">
+                                {formatDate(post.data.date)}
+                                {post.data.tags && post.data.tags.length > 0 && (
+                                    <span class="ml-2">
+                                        •
+                                        {post.data.tags.map((postTag, i) => (
+                                            <>
+                                                <a
+                                                    href={`/blog/tag/${postTag}`}
+                                                    class={`${
+                                                        postTag === tag
+                                                            ? 'text-blue'
+                                                            : 'text-neutral-500'
+                                                    } hover:text-blue`}
+                                                >
+                                                    #{postTag}
+                                                </a>
+                                                {i < post.data.tags.length - 1 && ' '}
+                                            </>
+                                        ))}
+                                    </span>
+                                )}
+                            </div>
+                            {post.data.description && (
+                                <p class="text-neutral-700">{post.data.description}</p>
+                            )}
+                            <div class="mt-4">
+                                <a href={`/blog/${post.slug}`} class="text-blue hover:underline">
+                                    Read more →
+                                </a>
+                            </div>
+                        </div>
+                    ))
+                }
+
+                {
+                    sortedPosts.length === 0 && (
+                        <div class="py-8 text-center">
+                            <p class="text-lg text-neutral-500">No posts found with this tag.</p>
+                        </div>
+                    )
+                }
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>
