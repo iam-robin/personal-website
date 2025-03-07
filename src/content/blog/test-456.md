@@ -19,6 +19,15 @@ if (!directory) {
 }
 ```
 
+## Markdown Table test
+
+| Tool              | In Stock | Price |
+| :---------------- | :------: | ----: |
+| Python Hat        |   True   | 23.99 |
+| SQL Hat           |   True   | 23.99 |
+| Codecademy Tee    |  False   | 19.99 |
+| Codecademy Hoodie |  False   | 42.99 |
+
 ## Why Astro?
 
 Astro is an amazing framework for content-focused websites. Here are some features I love:

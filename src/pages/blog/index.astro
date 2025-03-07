@@ -4,6 +4,9 @@ import Layout from '../../layouts/Layout.astro';
 import Grid from '@components/Grid.astro';
 import GridBox from '@components/GridBox.astro';
 import TagCloud from '@components/TagCloud.astro';
+import YearDivider from '@components/blog/YearDivider.astro';
+import BlogPostCard from '@components/blog/BlogPostCard.astro';
+import SectionContent from '@components/SectionContent.astro';
 
 // Get all blog posts and sort by date
 const allBlogPosts = await getCollection('blog', ({ data }) => {
@@ -11,15 +14,6 @@ const allBlogPosts = await getCollection('blog', ({ data }) => {
 });
 
 const sortedPosts = allBlogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-
-// Format date function
-const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-};
 
 // Generate tag counts for the tag cloud
 const allTags = allBlogPosts.flatMap((post) => post.data.tags || []);
@@ -35,53 +29,35 @@ const tagCloudData = Object.entries(tagCounts).map(([name, count]) => ({ name, c
 ---
 
 <Layout title="Blog | iamrob.in">
-    <Grid>
+    <Grid classes="py-40">
         <GridBox desktopFull>
-            <h1 class="text-4xl mb-8 font-bold">Blog</h1>
+            <SectionContent title="Blog">
+                After years of wanting to have a blog, I am finally putting pen to paper (or fingers
+                to keyboard). It took me some time to build the courage, but now I’m excited to dive
+                into a variety of topics that interest me. Your feedback and perspectives are always
+                welcome and I'm looking forward to the conversations that will come from these
+                posts.
+            </SectionContent>
 
-            <TagCloud tags={tagCloudData} />
+            <TagCloud tags={tagCloudData} basePath="/blog" />
 
             <div class="space-y-12">
                 {
-                    sortedPosts.map((post) => (
-                        <div class="border-gray-200 border-b pb-8">
-                            <h2 class="mb-2 text-2xl font-semibold">
-                                <a href={`/blog/${post.slug}`} class="hover:text-blue-600">
-                                    {post.data.title}
-                                </a>
-                            </h2>
-                            <div class="text-gray-500 mb-4">
-                                {formatDate(post.data.date)}
-                                {post.data.tags && post.data.tags.length > 0 && (
-                                    <span class="ml-2">
-                                        •
-                                        {post.data.tags.map((tag, i) => (
-                                            <>
-                                                <a
-                                                    href={`/blog/tag/${tag}`}
-                                                    class="hover:text-blue-600"
-                                                >
-                                                    #{tag}
-                                                </a>
-                                                {i < post.data.tags.length - 1 && ' '}
-                                            </>
-                                        ))}
-                                    </span>
-                                )}
-                            </div>
-                            {post.data.description && (
-                                <p class="text-gray-700">{post.data.description}</p>
-                            )}
-                            <div class="mt-4">
-                                <a
-                                    href={`/blog/${post.slug}`}
-                                    class="text-blue-600 hover:underline"
-                                >
-                                    Read more →
-                                </a>
-                            </div>
-                        </div>
-                    ))
+                    (() => {
+                        let currentYear: number | null = null;
+                        return sortedPosts.map((post) => {
+                            const postYear = post.data.date.getFullYear();
+                            const yearChanged = currentYear !== postYear;
+                            currentYear = postYear;
+
+                            return (
+                                <>
+                                    {yearChanged && <YearDivider year={postYear} />}
+                                    <BlogPostCard post={post} />
+                                </>
+                            );
+                        });
+                    })()
                 }
             </div>
         </GridBox>

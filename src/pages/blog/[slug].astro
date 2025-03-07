@@ -41,37 +41,33 @@ const formattedDate = entry.data.date.toLocaleDateString('en-US', {
 ---
 
 <Layout title={`${entry.data.title} | iamrob.in`}>
-    <Grid>
-        <GridBox desktopStart={1} desktopEnd={7}>
-            <a href="/blog" class="mb-8 block text-blue hover:underline"> ← Back to Blog</a>
+    <a href="/blog" class="mb-8 block text-blue hover:underline"> ← Back to Blog</a>
 
-            <article class="prose prose-lg max-w-none">
-                <h1 class="mb-4 text-3xl font-bold">{entry.data.title}</h1>
+    <article class="prose prose-lg mx-auto max-w-2xl px-4">
+        <h1 class="mb-4 text-3xl font-bold">{entry.data.title}</h1>
 
-                <div class="mb-8 text-neutral-500">
-                    {formattedDate}
-                    {
-                        entry.data.tags && entry.data.tags.length > 0 && (
-                            <div class="mt-2">
-                                {entry.data.tags.map((tag) => (
-                                    <a
-                                        href={`/blog/tag/${tag}`}
-                                        class="mr-2 inline-block rounded bg-neutral-50 px-2 py-1 text-sm text-neutral-600 hover:bg-blue-light hover:text-blue"
-                                    >
-                                        #{tag}
-                                    </a>
-                                ))}
-                            </div>
-                        )
-                    }
-                </div>
+        <div class="mb-8 text-neutral-500">
+            {formattedDate}
+            {
+                entry.data.tags && entry.data.tags.length > 0 && (
+                    <div class="mt-2">
+                        {entry.data.tags.map((tag) => (
+                            <a
+                                href={`/blog/tag/${tag}`}
+                                class="mr-2 inline-block rounded bg-neutral-50 px-2 py-1 text-sm text-neutral-600 hover:bg-blue-light hover:text-blue"
+                            >
+                                #{tag}
+                            </a>
+                        ))}
+                    </div>
+                )
+            }
+        </div>
 
-                <TableOfContents headings={headings} />
+        <TableOfContents headings={headings} />
 
-                <Content />
-            </article>
-        </GridBox>
-    </Grid>
+        <Content />
+    </article>
 </Layout>
 
 <script src="../../scripts/sidenotes.js"></script>
