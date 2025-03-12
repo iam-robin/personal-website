@@ -28,7 +28,7 @@
         "react-dom": "^18.3.1",
         "sanitize-html": "^2.14.0",
         "tailwindcss": "^3.3.5",
-        "typescript": "^5.4.2"
+        "typescript": "^5.8.2"
     },
     "devDependencies": {
         "@iconify-json/ph": "^1.1.10",
