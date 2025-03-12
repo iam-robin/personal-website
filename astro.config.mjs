@@ -6,12 +6,5 @@ import react from '@astrojs/react';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://iamrob.in',
-    integrations: [tailwind(), icon(), react()],
-    vite: {
-        resolve: {
-            alias: {
-                zwitch: '/src/utils/module-fixes.js'
-            }
-        }
-    }
+    integrations: [tailwind(), icon(), react()]
 });
