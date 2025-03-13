@@ -2,10 +2,13 @@
     "name": "personal-website-astro",
     "type": "module",
     "version": "0.0.1",
+    "engines": {
+        "node": ">=20.0.0"
+    },
     "scripts": {
         "dev": "astro dev",
         "start": "astro dev",
-        "build": "astro check && astro build",
+        "build": "node -v && npm -v && astro check && astro build",
         "preview": "astro preview",
         "astro": "astro"
     },
