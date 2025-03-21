@@ -54,7 +54,12 @@ const pageTitle = `Bookmarks: ${tag}`;
     <BookmarksStage />
     <Grid classes="mt-16">
         <GridBox desktopFull>
-            <TagCloud tags={tagCloudData} selectedTag={tag} basePath="/bookmarks" />
+            <TagCloud
+                tags={tagCloudData}
+                selectedTag={tag}
+                basePath="/bookmarks"
+                total={allBookmarks.length}
+            />
             <ul class="mb-40">
                 {bookmarks.map((bookmark: Bookmark) => <BookmarkItem bookmark={bookmark} />)}
             </ul>
@@ -73,3 +78,5 @@ const pageTitle = `Bookmarks: ${tag}`;
         text-underline-offset: 0.2em;
     }
 </style>
+
+<script src="../../../scripts/listItemImageHoverEffect.js"></script>

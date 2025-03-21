@@ -1,4 +1,6 @@
 ---
+import { CaretDown } from '@phosphor-icons/react';
+
 interface Props {
     tags: {
         name: string;
@@ -6,9 +8,11 @@ interface Props {
     }[];
     selectedTag?: string;
     basePath: string;
+    isCategory?: boolean;
+    total?: number;
 }
 
-const { tags, selectedTag, basePath } = Astro.props;
+const { tags, selectedTag, basePath, isCategory, total } = Astro.props;
 
 // Sort tags by count (most frequent first)
 const sortedTags = [...tags].sort((a, b) => b.count - a.count);
@@ -16,22 +20,16 @@ const sortedTags = [...tags].sort((a, b) => b.count - a.count);
 
 <details open class="group mb-12 rounded-lg border border-black-50 bg-neutral-50 p-4">
     <summary
-        class="-m-4 flex cursor-pointer select-none items-center justify-between p-4 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+        class="-m-2 flex cursor-pointer select-none items-center justify-between p-4 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue"
         aria-label="Toggle tag filter"
     >
-        <span class="font-mono text-xs uppercase tracking-widest">Filter by tag</span>
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="h-4 w-4 transition-transform duration-300 group-open:rotate-180"
-            aria-hidden="true"
-        >
-            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"
-            ></path>
-        </svg>
+        <div class="font-mono text-xs uppercase tracking-widest">
+            Filter by {isCategory ? 'category' : 'tag'}
+            {selectedTag && <span class="group-open:hidden">/ ({selectedTag})</span>}
+        </div>
+        <div class="transition-transform duration-300 group-open:rotate-180">
+            <CaretDown weight="bold" size={20} />
+        </div>
     </summary>
 
     <div class="mt-4 pt-2">
@@ -41,15 +39,24 @@ const sortedTags = [...tags].sort((a, b) => b.count - a.count);
                 class={`flex items-center rounded-full border px-3 py-1 font-mono text-xs transition-colors ${
                     !selectedTag
                         ? 'border-blue bg-blue text-white'
-                        : 'border-neutral-200 hover:border-blue hover:text-blue'
+                        : 'border-neutral-200 bg-white hover:border-blue hover:text-blue'
                 }`}
             >
-                all
+                <span>all</span>
+                {
+                    total && (
+                        <span
+                            class={`ml-1 ${!selectedTag ? 'text-white-700' : 'text-neutral-400'}`}
+                        >
+                            ({total})
+                        </span>
+                    )
+                }
             </a>
             {
                 sortedTags.map((tag) => (
                     <a
-                        href={`${basePath}/tag/${tag.name}`}
+                        href={`${basePath}/${isCategory ? 'category' : 'tag'}/${tag.name}`}
                         class={`flex items-center rounded-full border px-3 py-1 font-mono text-xs transition-colors ${
                             selectedTag === tag.name
                                 ? 'border-blue bg-blue text-white'

@@ -25,12 +25,16 @@ const { hasMobileBottomSlot, isWiderOnDesktop } = Astro.props;
                 <div class="absolute left-1/2 hidden -translate-x-1/2 transform lg:block">
                     <slot name="desktop-center" />
                 </div>
+                <div></div>
                 <div
                     class={`flex items-center pt-4 lg:pt-0 ${
                         isWiderOnDesktop ? 'lg:absolute lg:right-8 xl:static' : undefined
                     }`}
                 >
                     <slot name="desktop-mobile-end" />
+                </div>
+                <div>
+                    <slot name="desktop-end" />
                 </div>
             </GridBox>
         </Grid>

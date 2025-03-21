@@ -8,7 +8,6 @@ import { fetchBookmarks } from 'src/api/raindrop';
 import type { Bookmark } from '@components/bookmarks/BookmarkItem.astro';
 import BookmarksStage from '@components/bookmarks/BookmarksStage.astro';
 
-const pageTitle = 'Bookmarks';
 const bookmarks: Bookmark[] = await fetchBookmarks(0);
 
 // Get tag counts
@@ -30,7 +29,7 @@ tags.sort((a, b) => b.count - a.count);
     <BookmarksStage />
     <Grid classes="mt-16">
         <GridBox desktopFull>
-            <TagCloud tags={tags} basePath="/bookmarks" />
+            <TagCloud tags={tags} basePath="/bookmarks" total={bookmarks.length} />
             <ul class="mb-40">
                 {bookmarks.map((bookmark: Bookmark) => <BookmarkItem bookmark={bookmark} />)}
             </ul>
@@ -49,3 +48,5 @@ tags.sort((a, b) => b.count - a.count);
         text-underline-offset: 0.2em;
     }
 </style>
+
+<script src="../../scripts/listItemImageHoverEffect.js"></script>

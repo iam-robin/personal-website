@@ -1,16 +1,33 @@
 ---
 import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
+import Layout from '@layouts/Layout.astro';
 import Grid from '@components/Grid.astro';
-import GridBox from '@components/GridBox.astro';
-import TagCloud from '@components/TagCloud.astro';
 import YearContainer from '@components/blog/YearContainer.astro';
+import GridBox from '@components/GridBox.astro';
 import SectionContent from '@components/SectionContent.astro';
+import TagCloud from '@components/TagCloud.astro';
 
-// Get all blog posts and sort by date
+// Generate a path for each unique category
+export async function getStaticPaths() {
+    const blogPosts = await getCollection('blog');
+
+    // Get unique categories
+    const categories = [...new Set(blogPosts.map((post) => post.data.category))];
+
+    // Create a path for each category
+    return categories.map((category) => {
+        return {
+            params: { category },
+            props: { category }
+        };
+    });
+}
+
+const { category } = Astro.params;
+
 const allBlogPosts = await getCollection('blog');
-
-const sortedPosts = allBlogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const filteredPosts = allBlogPosts.filter((post) => post.data.category === category);
+const sortedPosts = filteredPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const postsByYear = sortedPosts.reduce(
     (acc, post) => {
@@ -28,7 +45,6 @@ const years = Object.keys(postsByYear)
     .map(Number)
     .sort((a, b) => b - a);
 
-// Generate tag counts for the tag cloud
 const allCategories = allBlogPosts.flatMap((post) => post.data.category || []);
 const categoryCounts = allCategories.reduce(
     (acc, tag) => {
@@ -37,11 +53,10 @@ const categoryCounts = allCategories.reduce(
     },
     {} as Record<string, number>
 );
-
 const categoryCloudData = Object.entries(categoryCounts).map(([name, count]) => ({ name, count }));
 ---
 
-<Layout title="Blog | iamrob.in">
+<Layout title={`Blog | ${category}`}>
     <Grid classes="py-40">
         <GridBox desktopFull>
             <SectionContent title="Blog">
@@ -55,6 +70,7 @@ const categoryCloudData = Object.entries(categoryCounts).map(([name, count]) => 
             <TagCloud
                 tags={categoryCloudData}
                 basePath="/blog"
+                selectedTag={category}
                 isCategory
                 total={allBlogPosts.length}
             />
@@ -66,4 +82,4 @@ const categoryCloudData = Object.entries(categoryCounts).map(([name, count]) => 
     </Grid>
 </Layout>
 
-<script src="../../scripts/listItemImageHoverEffect.js"></script>
+<script src="../../../scripts/listItemImageHoverEffect.js"></script>

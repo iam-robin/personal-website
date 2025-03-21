@@ -8,7 +8,9 @@ export default {
         options: {
             safelist: [
                 { pattern: /(col-start|col-end)-./, variants: ['', 'sm', 'md', 'lg'] },
-                { pattern: /left-\d{1,2}/, variants: ['', 'sm', 'md', 'lg'] }
+                { pattern: /left-\d{1,2}/, variants: ['', 'sm', 'md', 'lg'] },
+                'pr-2.5',
+                'my-10'
             ]
         }
     },

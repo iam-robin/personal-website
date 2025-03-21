@@ -2,8 +2,8 @@
 .sidenote {
     float: right;
     clear: right;
-    margin-right: -45%;
-    width: 30%;
+    margin-right: calc(-200px - 104px); /* 200px width and 64px padding */
+    width: 200px;
     margin-top: 0;
     margin-bottom: 0;
     font-size: 0.9rem;
@@ -37,6 +37,10 @@
     content: counter(sidenote-counter) '. ';
     font-size: 0.8em;
     top: -0.5em;
+}
+
+.data-footnote-backref {
+    display: none;
 }
 
 /* Hide sidenote content on small screens */

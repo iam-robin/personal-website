@@ -17,14 +17,15 @@ const photo365Collection = defineCollection({
 });
 
 const blogCollection = defineCollection({
-    type: 'content',
-    schema: z.object({
-        title: z.string(),
-        date: z.date(),
-        tags: z.array(z.string()),
-        description: z.string().optional(),
-        draft: z.boolean().optional().default(false)
-    })
+    schema: ({ image }) =>
+        z.object({
+            title: z.string(),
+            subtitle: z.string().optional(),
+            image: image().optional(),
+            description: z.string().optional(),
+            date: z.date(),
+            category: z.string().optional()
+        })
 });
 
 export const collections = {

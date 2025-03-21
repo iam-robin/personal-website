@@ -1,0 +1,21 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BlogPostItem from './BlogPostItem.astro';
+
+interface Props {
+    year: number;
+    posts: CollectionEntry<'blog'>[];
+    currentCategory?: string;
+}
+
+const { year, posts = [], currentCategory } = Astro.props;
+---
+
+<div class="relative grid grid-cols-12 gap-4">
+    <h2 class="sticky font-mono top-12 pt-10 pb-2 col-start-1 col-end-3 mb-8 h-fit">
+        {year}
+    </h2>
+    <div class="col-start-4 col-end-13">
+        {posts.map((post) => <BlogPostItem post={post} currentCategory={currentCategory} />)}
+    </div>
+</div>

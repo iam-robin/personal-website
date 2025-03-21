@@ -12,7 +12,6 @@ article h6 {
 }
 
 /* Optional: Add a small hover indicator for headings with IDs */
-article h1:hover::before,
 article h2:hover::before,
 article h3:hover::before,
 article h4:hover::before,
