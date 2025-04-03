@@ -20,10 +20,10 @@ function convertFootnotesToSidenotes() {
         return;
     }
 
-    // Hide the footnotes section
+    // Add desktop-only class to the footnotes section instead of hiding it completely
     const footnotesSection = document.querySelector('.footnotes, section.footnotes, div.footnotes');
     if (footnotesSection) {
-        footnotesSection.style.display = 'none';
+        footnotesSection.classList.add('desktop-hidden');
     }
 
     // Process each footnote reference
@@ -51,7 +51,7 @@ function convertFootnotesToSidenotes() {
             toggleCheckbox.className = 'margin-toggle';
 
             const sidenote = document.createElement('span');
-            sidenote.className = 'sidenote';
+            sidenote.className = 'sidenote desktop-only';
             sidenote.innerHTML = footnoteContent;
 
             // Handle different DOM structures (sup > a or just a)
@@ -61,21 +61,35 @@ function convertFootnotesToSidenotes() {
             container.insertBefore(sidenoteNumber, parent);
             container.insertBefore(toggleCheckbox, parent);
             container.insertBefore(sidenote, parent);
-            container.removeChild(parent);
+
+            // On mobile, keep original reference link to navigate to footnotes
+            if (parent.tagName === 'SUP') {
+                parent.classList.add('mobile-only');
+            } else {
+                // Create a mobile-only sup with the original reference
+                const mobileRef = ref.cloneNode(true);
+                const mobileSup = document.createElement('sup');
+                mobileSup.appendChild(mobileRef);
+                mobileSup.classList.add('mobile-only');
+                container.insertBefore(mobileSup, parent);
+                container.removeChild(parent);
+            }
         }
     });
 
-    // Add click handler for mobile sidenotes
-    document.querySelectorAll('.sidenote-number').forEach((sidenote) => {
-        sidenote.addEventListener('click', function (e) {
-            if (window.innerWidth <= 1024) {
-                e.preventDefault();
-                const checkboxId = this.getAttribute('for');
-                const checkbox = document.getElementById(checkboxId);
-                if (checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                }
-            }
-        });
-    });
+    // Add CSS to control visibility based on screen size
+    const styleElement = document.createElement('style');
+    styleElement.textContent = `
+        @media (min-width: 1025px) {
+            .desktop-hidden { display: none; }
+            .mobile-only { display: none; }
+        }
+        @media (max-width: 1024px) {
+            .desktop-only { display: none; }
+            .desktop-hidden { display: block; }
+            .margin-toggle:not(:checked) + .sidenote { display: none; }
+            .margin-toggle { display: none; }
+        }
+    `;
+    document.head.appendChild(styleElement);
 }

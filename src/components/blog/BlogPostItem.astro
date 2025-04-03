@@ -66,8 +66,9 @@ const getCategoryIcon = (category: string) => {
         <div class="font-mono">
             {formatDate(post.data.date)}
         </div>
-        <p class="text-base font-bold">
-            {post.data.title}
+        <p class="text-base">
+            <span class="font-bold">{post.data.title}</span>
+            {post.data.subtitle && <span> – {post.data.subtitle}</span>}
         </p>
     </div>
     <div class="flex items-center gap-10">
