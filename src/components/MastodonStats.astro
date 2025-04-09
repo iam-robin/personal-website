@@ -1,0 +1,57 @@
+---
+import { getMastodonStatus } from '../api/mastodon';
+import { Heart, RocketLaunch, ChatCircleText, ArrowUpRight } from '@phosphor-icons/react';
+
+interface Props {
+    statusId: string;
+}
+
+const { statusId } = Astro.props;
+
+let status;
+let error;
+
+try {
+    status = await getMastodonStatus(statusId);
+} catch (e) {
+    error = e instanceof Error ? e.message : 'Failed to fetch status';
+}
+---
+
+{
+    !error && (
+        <div class="group relative flex cursor-pointer flex-col rounded-lg bg-neutral-100 p-8 font-mono transition-all hover:rotate-1 hover:scale-105 hover:bg-lilac md:flex-row md:items-end">
+            <div class="order-2 mt-4 h-full text-base leading-7 md:order-1 md:mt-0 md:w-2/3">
+                Don’t let this be a monologue — <br />
+                drop your thoughts on Mastodon.
+            </div>
+            <div class="order-1 flex flex-col justify-between gap-6 md:order-2 md:min-h-[120px] md:w-1/3 md:items-end">
+                <div class="self-end text-neutral-500 transition-all group-hover:-translate-y-2 group-hover:translate-x-2 group-hover:text-lilac-dark">
+                    <ArrowUpRight weight="bold" size={20} />
+                </div>
+                <ul class="list-style-none !m-0 flex gap-6 !p-0 text-sm">
+                    <li class="!m-0 flex items-center gap-1 !p-0">
+                        <Heart weight="bold" size={18} />{' '}
+                        {status?.favourites_count ? status.favourites_count : '-'}
+                    </li>
+                    <li class="!m-0 flex items-center gap-1 !p-0">
+                        <RocketLaunch weight="bold" size={18} />{' '}
+                        {status?.reblogs_count ? status.reblogs_count : '-'}
+                    </li>
+                    <li class="!m-0 flex items-center gap-1 !p-0">
+                        <ChatCircleText weight="bold" size={18} />{' '}
+                        {status?.replies_count ? status.replies_count : '-'}
+                    </li>
+                </ul>
+            </div>
+            <a
+                href={status?.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="absolute bottom-0 left-0 right-0 top-0 h-full w-full"
+            >
+                <span class="sr-only">To the Mastodon post</span>
+            </a>
+        </div>
+    )
+}

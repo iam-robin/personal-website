@@ -24,7 +24,8 @@ const blogCollection = defineCollection({
             image: image().optional(),
             description: z.string().optional(),
             date: z.date(),
-            category: z.string().optional()
+            category: z.string().optional(),
+            mastodonId: z.string().optional()
         })
 });
 

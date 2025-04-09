@@ -7,6 +7,7 @@ import GridBox from '@components/GridBox.astro';
 import Grid from '@components/Grid.astro';
 import TableOfContents from '@components/TableOfContents.astro';
 import { extractHeadings } from '../../utils/markdown';
+import MastodonStats from '@components/MastodonStats.astro';
 
 // Generate static paths for all blog posts
 export async function getStaticPaths() {
@@ -73,8 +74,14 @@ const formattedDate = entry.data.date.toLocaleDateString('en-US', {
                 </div>
 
                 <TableOfContents headings={headings} />
-
                 <Content />
+                {
+                    entry.data.mastodonId && (
+                        <div class="mt-16">
+                            <MastodonStats statusId={entry.data.mastodonId} />
+                        </div>
+                    )
+                }
             </article>
         </GridBox>
     </Grid>
