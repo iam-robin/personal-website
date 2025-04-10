@@ -1,0 +1,79 @@
+---
+import { CaretDown } from '@phosphor-icons/react';
+
+interface Props {
+    tags: {
+        name: string;
+        count: number;
+    }[];
+    selectedTag?: string;
+    basePath: string;
+    isCategory?: boolean;
+    total?: number;
+}
+
+const { tags, selectedTag, basePath, isCategory, total } = Astro.props;
+
+// Sort tags by count (most frequent first)
+const sortedTags = [...tags].sort((a, b) => b.count - a.count);
+---
+
+<details open class="group mb-12 rounded-lg border border-black-50 bg-neutral-50 p-4">
+    <summary
+        class="-m-2 flex cursor-pointer select-none items-center justify-between p-4 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+        aria-label="Toggle tag filter"
+    >
+        <div class="font-mono text-xs uppercase tracking-widest">
+            Filter by {isCategory ? 'category' : 'tag'}
+            {selectedTag && <span class="group-open:hidden">/ ({selectedTag})</span>}
+        </div>
+        <div class="transition-transform duration-300 group-open:rotate-180">
+            <CaretDown weight="bold" size={20} />
+        </div>
+    </summary>
+
+    <div class="mt-4 pt-2">
+        <div class="flex flex-wrap gap-2">
+            <a
+                href={`${basePath}`}
+                class={`flex items-center rounded-full border px-3 py-1 font-mono text-xs transition-colors ${
+                    !selectedTag
+                        ? 'border-blue bg-blue text-white'
+                        : 'border-neutral-200 bg-white hover:border-blue hover:text-blue'
+                }`}
+            >
+                <span>all</span>
+                {
+                    total && (
+                        <span
+                            class={`ml-1 ${!selectedTag ? 'text-white-700' : 'text-neutral-400'}`}
+                        >
+                            ({total})
+                        </span>
+                    )
+                }
+            </a>
+            {
+                sortedTags.map((tag) => (
+                    <a
+                        href={`${basePath}/${isCategory ? 'category' : 'tag'}/${tag.name}`}
+                        class={`flex items-center rounded-full border px-3 py-1 font-mono text-xs transition-colors ${
+                            selectedTag === tag.name
+                                ? 'border-blue bg-blue text-white'
+                                : 'border-neutral-200 bg-white hover:border-blue hover:text-blue'
+                        }`}
+                    >
+                        {tag.name}
+                        <span
+                            class={`ml-1 ${
+                                selectedTag === tag.name ? 'text-white-700' : 'text-neutral-400'
+                            }`}
+                        >
+                            ({tag.count})
+                        </span>
+                    </a>
+                ))
+            }
+        </div>
+    </div>
+</details>

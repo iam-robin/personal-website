@@ -23,7 +23,7 @@ const getPhotoForDay = (day: string) => {
 };
 ---
 
-<Layout title="365">
+<Layout title="365" description="365 project - one photo a day for a year" ogimageName="365.jpg">
     <div
         class="flex flex-col justify-center pb-16 pt-32 lg:py-40"
         style="min-height: calc(100vh - 120px)"
@@ -34,7 +34,8 @@ const getPhotoForDay = (day: string) => {
             linkText="RSS feed"
             linkUrl="/365-rss.xml"
         >
-            I’m capturing and sharing one photo each day for a year.
+            I’m capturing and sharing one photo daily for a year. I may not upload them on the same
+            day, as I enjoy taking photos more than sharing them.
         </SectionContent>
         <Slider classes="xl:mt-12">
             {

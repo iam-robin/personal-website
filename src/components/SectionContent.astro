@@ -15,7 +15,7 @@ interface Props {
 const { title, linkText, linkUrl, classes, contentStart = 5 } = Astro.props;
 ---
 
-<Grid classes={`mb-6 sm:mb-8 lg:mb-16 ${classes}`}>
+<Grid classes={`mb-6 sm:mb-8 lg:mb-16 ${classes} !px-0`}>
     <GridBox desktopStart={1} desktopEnd={4} tabletStart={1} tabletEnd={4} mobileFull>
         <Headline level={3}>
             {title ? title : <slot name="title" />}

@@ -1,0 +1,35 @@
+---
+import InlineLink from '@components/InlineLink.astro';
+import SectionContent from '@components/SectionContent.astro';
+---
+
+<SectionContent title="Bookmarks" classes="pt-40">
+    <p class="font-mono">
+        Daily I receive new articles, videos, essays, etc. in the RSS reader of my choice: <InlineLink
+            external
+            href="https://reederapp.com/"
+        >
+            Reeder
+        </InlineLink>. I categorize and tag items I have read and found interesting in <InlineLink
+            external
+            href="https://raindrop.io/"
+        >
+            Raindrop.io
+        </InlineLink>. Thanks to their fantastic API, I can also share that list here on my personal
+        website.
+    </p>
+    <ul class="mt-8 flex items-center gap-4 font-mono text-xs">
+        <li>
+            <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-green"></span>Article
+        </li>
+        <li>
+            <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-lilac"></span>Website
+        </li>
+        <li>
+            <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-blue"></span>Video
+        </li>
+        <li>
+            <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-red"></span>Misc
+        </li>
+    </ul>
+</SectionContent>

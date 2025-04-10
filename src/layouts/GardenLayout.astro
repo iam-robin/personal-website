@@ -20,7 +20,7 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
-const resolvedImageWithDomain = new URL('/opengraph-garden.jpg', Astro.site).toString();
+const resolvedImageWithDomain = new URL('/opengraph/garden.jpg', Astro.site).toString();
 
 const { title, categories, path, slug } = Astro.props;
 const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
@@ -56,7 +56,7 @@ const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
     </head>
     <body class="min-h-[calc(100vh-56px)] overflow-x-hidden">
         <HeaderSimple hasMobileBottomSlot={!!path || !!slug} isWiderOnDesktop>
-            <nav class="flex gap-8" slot="desktop-center">
+            <nav class="hidden justify-end gap-8 lg:flex" slot="desktop-end">
                 {
                     navData.map((item) => (
                         <a

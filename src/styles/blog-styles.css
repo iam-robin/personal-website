@@ -1,0 +1,30 @@
+/* Styles specific to blog posts */
+
+/* Add scroll margin to headings to account for the fixed header */
+article h1,
+article h2,
+article h3,
+article h4,
+article h5,
+article h6 {
+    scroll-margin-top: 100px; /* Fixed value that accommodates your header height with padding */
+    position: relative;
+}
+
+/* Optional: Add a small hover indicator for headings with IDs */
+article h2:hover::before,
+article h3:hover::before,
+article h4:hover::before,
+article h5:hover::before,
+article h6:hover::before {
+    content: '#';
+    position: absolute;
+    left: -1em;
+    color: #689bf7;
+    opacity: 0.8;
+}
+
+/* Make sure anchor links use smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}

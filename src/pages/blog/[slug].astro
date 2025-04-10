@@ -1,0 +1,94 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/sidenotes.css';
+import '../../styles/blog-styles.css';
+import GridBox from '@components/GridBox.astro';
+import Grid from '@components/Grid.astro';
+import TableOfContents from '@components/TableOfContents.astro';
+import { extractHeadings } from '../../utils/markdown';
+import MastodonStats from '@components/MastodonStats.astro';
+
+// Generate static paths for all blog posts
+export async function getStaticPaths() {
+    const blogEntries = await getCollection('blog');
+
+    return Promise.all(
+        blogEntries.map(async (entry) => {
+            // Extract headings from the markdown content
+            const headings = await extractHeadings(entry.body);
+
+            return {
+                params: { slug: entry.slug },
+                props: {
+                    entry,
+                    headings
+                }
+            };
+        })
+    );
+}
+
+// Get the blog post for this page
+const { entry, headings } = Astro.props;
+const { Content } = await entry.render();
+
+// Format date
+const formattedDate = entry.data.date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+});
+---
+
+<Layout
+    title={`${entry.data.title} | iamrob.in`}
+    description={entry.data.description ? entry.data.description : undefined}
+    ogimageName={entry.data.ogImageName ? entry.data.ogImageName : undefined}
+>
+    <Grid>
+        <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
+            <article class="prose prose-lg mx-auto w-full max-w-[720px] md:prose-xl lg:mx-0">
+                <a href="/blog" class="mb-8 block text-sm text-blue hover:underline">
+                    ← Back to Blog</a
+                >
+                <h1 class="mb-8 text-lg font-bold sm:text-xl md:text-2xl">
+                    {entry.data.title}{entry.data.subtitle ? ' -' : ''}
+                    {
+                        entry.data.subtitle && (
+                            <span class="hidden sm:inline">
+                                <br />
+                            </span>
+                        )
+                    }
+                    {entry.data.subtitle && <span>{entry.data.subtitle}</span>}
+                </h1>
+                <div class="mb-8 text-neutral-500">
+                    {formattedDate}
+                    {
+                        entry.data.category && (
+                            <a
+                                href={`/blog/category/${entry.data.category}`}
+                                class="mr-2 inline-block rounded bg-neutral-50 px-2 py-1 text-sm text-neutral-600 hover:bg-blue-light hover:text-blue"
+                            >
+                                #{entry.data.category}
+                            </a>
+                        )
+                    }
+                </div>
+
+                <TableOfContents headings={headings} />
+                <Content />
+                {
+                    entry.data.mastodonId && (
+                        <div class="mt-16">
+                            <MastodonStats statusId={entry.data.mastodonId} />
+                        </div>
+                    )
+                }
+            </article>
+        </GridBox>
+    </Grid>
+</Layout>
+
+<script src="../../scripts/sidenotes.js"></script>

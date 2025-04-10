@@ -25,7 +25,7 @@ const domain = url.hostname;
 ---
 
 <!-- DESKTOP VERSION -->
-<li class="bookmark-item group relative hidden md:block">
+<li class="list-item-image-hover-effect group relative hidden md:block">
     <a href={bookmark.link} class="flex items-center justify-between gap-4 py-2">
         <img
             class="cover-image max-w-64 pointer-events-none absolute z-10 hidden max-h-40 shadow-lg md:group-hover:block"
@@ -114,42 +114,3 @@ const domain = url.hostname;
         </div>
     </a>
 </li>
-
-<script>
-    const coverDistance = 16;
-    document.addEventListener('DOMContentLoaded', () => {
-        const bookmarkItems = document.querySelectorAll('.bookmark-item');
-
-        bookmarkItems.forEach((item: Element) => {
-            const cover = item.querySelectorAll('.cover-image')[0] as HTMLImageElement;
-            item.addEventListener('mouseover', (event: any) => {
-                positionCover(event, item, cover);
-                bookmarkItems.forEach((otherItem) => {
-                    if (otherItem !== item) {
-                        otherItem.classList.add('opacity-20');
-                    }
-                });
-            });
-
-            item.addEventListener('mousemove', (event: any) => {
-                positionCover(event, item, cover);
-            });
-
-            item.addEventListener('mouseout', () => {
-                cover.style.left = 'auto';
-                cover.style.top = 'auto';
-                bookmarkItems.forEach((otherItem) => {
-                    otherItem.classList.remove('opacity-20');
-                });
-            });
-        });
-    });
-
-    const positionCover = (event: any, item: Element, cover: HTMLImageElement) => {
-        const rect = item.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        cover.style.left = `${x + coverDistance}px`;
-        cover.style.top = `${y - cover.offsetHeight - coverDistance}px`;
-    };
-</script>

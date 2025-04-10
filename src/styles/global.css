@@ -47,7 +47,7 @@ html {
 }
 
 :root {
-    --active-bg-color: #f8fafc;
+    --active-bg-color: #f1f5f9;
 }
 
 .noteCardEffect {
@@ -106,5 +106,10 @@ html {
     display: none;
 }
 .corner-shadow-effect.hide-after:after {
+    display: none;
+}
+
+details > summary::marker,
+details > summary::-webkit-details-marker {
     display: none;
 }

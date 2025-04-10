@@ -1,0 +1,95 @@
+/* Sidenotes styling based on Gwern.net implementation */
+.sidenote {
+    float: right;
+    clear: right;
+    margin-right: calc(-200px - 104px); /* 200px width and 64px padding */
+    width: 200px;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    line-height: 1.3;
+    vertical-align: baseline;
+    position: relative;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.sidenote-number {
+    counter-increment: sidenote-counter;
+}
+
+.sidenote-number:after,
+.sidenote:before {
+    font-family: 'Fira Mono', monospace;
+    position: relative;
+    vertical-align: baseline;
+}
+
+.sidenote-number:after {
+    content: counter(sidenote-counter);
+    font-size: 0.8em;
+    top: -0.5em;
+    left: 0.1em;
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+}
+
+.sidenote:before {
+    content: counter(sidenote-counter) '. ';
+    font-size: 0.8em;
+    top: -0.5em;
+}
+
+.data-footnote-backref {
+    display: none;
+}
+
+/* Hide sidenote content on small screens */
+@media (max-width: 1024px) {
+    label.margin-toggle:not(.sidenote-number) {
+        display: inline;
+    }
+
+    .sidenote {
+        display: none;
+    }
+
+    .sidenote-number:after {
+        font-family: 'Fira Mono', monospace;
+        content: counter(sidenote-counter);
+        vertical-align: super;
+        font-size: 0.8em;
+        color: rgba(0, 0, 0, 0.7);
+        cursor: pointer;
+    }
+
+    .margin-toggle:checked + .sidenote {
+        display: block;
+        float: left;
+        left: 0;
+        clear: both;
+        width: 95%;
+        margin: 1rem 2.5%;
+        position: relative;
+    }
+}
+
+/* Reset counter at the start of the content */
+article {
+    counter-reset: sidenote-counter;
+}
+
+/* Hover styling */
+.sidenote-number:hover,
+.sidenote-number:hover:after {
+    color: #689bf7;
+}
+
+/* Hide checkboxes */
+input.margin-toggle {
+    display: none;
+}
+
+/* Mobile toggle labels */
+label.margin-toggle:not(.sidenote-number) {
+    display: none;
+}

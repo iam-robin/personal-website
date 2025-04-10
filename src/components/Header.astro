@@ -21,6 +21,10 @@ export const navData: NavItem[] = [
         path: '/garden'
     },
     {
+        name: 'Blog',
+        path: '/blog'
+    },
+    {
         name: '365 project',
         path: '/365'
     }
@@ -54,8 +58,8 @@ export const navData: NavItem[] = [
                 </a>
             </div>
         </GridBox>
-        <GridBox desktopStart={5} desktopEnd={10} classes="hidden lg:block">
-            <nav class="flex gap-8">
+        <GridBox desktopStart={4} desktopEnd={12} classes="hidden lg:block">
+            <nav class="flex justify-end gap-8">
                 {
                     navData.map((item) => (
                         <a
@@ -89,7 +93,14 @@ export const navData: NavItem[] = [
 <script>
     const navLinks = document.querySelectorAll('[data-navLink]');
     navLinks.forEach((link) => {
-        if (link.getAttribute('href') === window.location.pathname) {
+        const href = link.getAttribute('href');
+
+        // Special case for home page
+        if (href === '/' && window.location.pathname === '/') {
+            link.classList.add('active');
+        }
+        // For other pages, check if the current path starts with the nav item path
+        else if (href !== '/' && href && window.location.pathname.startsWith(href)) {
             link.classList.add('active');
         }
     });

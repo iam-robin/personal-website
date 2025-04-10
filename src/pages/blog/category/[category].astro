@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import YearContainer from '@components/blog/YearContainer.astro';
+import GridBox from '@components/GridBox.astro';
+import SectionContent from '@components/SectionContent.astro';
+import TagCloud from '@components/TagCloud.astro';
+
+// Generate a path for each unique category
+export async function getStaticPaths() {
+    const blogPosts = await getCollection('blog');
+
+    // Get unique categories
+    const categories = [...new Set(blogPosts.map((post) => post.data.category))];
+
+    // Create a path for each category
+    return categories.map((category) => {
+        return {
+            params: { category },
+            props: { category }
+        };
+    });
+}
+
+const { category } = Astro.params;
+
+const allBlogPosts = await getCollection('blog');
+const filteredPosts = allBlogPosts.filter((post) => post.data.category === category);
+const sortedPosts = filteredPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const postsByYear = sortedPosts.reduce(
+    (acc, post) => {
+        const year = post.data.date.getFullYear();
+        if (!acc[year]) {
+            acc[year] = [];
+        }
+        acc[year].push(post);
+        return acc;
+    },
+    {} as Record<number, typeof sortedPosts>
+);
+
+const years = Object.keys(postsByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
+
+const allCategories = allBlogPosts.flatMap((post) => post.data.category || []);
+const categoryCounts = allCategories.reduce(
+    (acc, tag) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+        return acc;
+    },
+    {} as Record<string, number>
+);
+const categoryCloudData = Object.entries(categoryCounts).map(([name, count]) => ({ name, count }));
+---
+
+<Layout title={`Blog | ${category}`}>
+    <Grid classes="py-40">
+        <GridBox desktopFull>
+            <SectionContent title="Blog">
+                After years of wanting to have a blog, I am finally putting pen to paper (or fingers
+                to keyboard). It took me some time to build the courage, but now I’m excited to dive
+                into a variety of topics that interest me. Your feedback and perspectives are always
+                welcome and I'm looking forward to the conversations that will come from these
+                posts.
+            </SectionContent>
+
+            <TagCloud
+                tags={categoryCloudData}
+                basePath="/blog"
+                selectedTag={category}
+                isCategory
+                total={allBlogPosts.length}
+            />
+
+            <div>
+                {years.map((year) => <YearContainer posts={postsByYear[year]} year={year} />)}
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>
+
+<script src="../../../scripts/listItemImageHoverEffect.js"></script>
