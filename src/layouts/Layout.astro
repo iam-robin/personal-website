@@ -9,13 +9,16 @@ import DistortFilter from '@components/DistortFilter.astro';
 
 interface Props {
     title: string;
+    description?: string;
+    ogimageName?: string;
 }
 
-const { title } = Astro.props;
+const { title, description, ogimageName } = Astro.props;
 const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
+const adjustedDescription = description ? description : 'personal website of iamrobin';
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
-const imageFileName = title === '365' ? '/opengraph-365.jpg' : '/opengraph.jpg';
+const imageFileName = ogimageName ? `/opengraph/${ogimageName}` : '/opengraph/opengraph.jpg';
 const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
 ---
 
@@ -37,7 +40,7 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
         ></script>
         <SEO
             title={adjustedTitle}
-            description="personal website of iamrobin"
+            description={adjustedDescription}
             canonical={canonicalURL}
             openGraph={{
                 basic: {

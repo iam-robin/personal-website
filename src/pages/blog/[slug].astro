@@ -41,7 +41,11 @@ const formattedDate = entry.data.date.toLocaleDateString('en-US', {
 });
 ---
 
-<Layout title={`${entry.data.title} | iamrob.in`}>
+<Layout
+    title={`${entry.data.title} | iamrob.in`}
+    description={entry.data.description ? entry.data.description : undefined}
+    ogimageName={entry.data.ogImageName ? entry.data.ogImageName : undefined}
+>
     <Grid>
         <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
             <article class="prose prose-lg mx-auto w-full max-w-[720px] md:prose-xl lg:mx-0">

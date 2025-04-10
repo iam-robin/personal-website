@@ -108,3 +108,8 @@ html {
 .corner-shadow-effect.hide-after:after {
     display: none;
 }
+
+details > summary::marker,
+details > summary::-webkit-details-marker {
+    display: none;
+}

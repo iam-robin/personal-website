@@ -20,7 +20,7 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
-const resolvedImageWithDomain = new URL('/opengraph-garden.jpg', Astro.site).toString();
+const resolvedImageWithDomain = new URL('/opengraph/garden.jpg', Astro.site).toString();
 
 const { title, categories, path, slug } = Astro.props;
 const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
