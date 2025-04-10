@@ -48,7 +48,7 @@ const getPhotoForDay = (day: string) => {
                                         src={getPhotoForDay(day)?.data.image as ImageMetadata}
                                         alt={
                                             getPhotoForDay(day)?.data.description
-                                                ? getPhotoForDay(day)?.data.description
+                                                ? (getPhotoForDay(day)?.data.description as string)
                                                 : `Photo from ${getPhotoForDay(day)?.data.day}`
                                         }
                                         widths={[640]}
