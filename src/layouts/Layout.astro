@@ -14,7 +14,7 @@ interface Props {
 }
 
 const { title, description, ogimageName } = Astro.props;
-const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
+const adjustedTitle = title ? 'iamrobin' + ' – ' + title : 'iamrobin';
 const adjustedDescription = description ? description : 'personal website of iamrobin';
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
