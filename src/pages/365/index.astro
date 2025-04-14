@@ -11,6 +11,7 @@ import { Image } from 'astro:assets';
 import Layout from '@layouts/Layout.astro';
 import { SmileyNervous } from '@phosphor-icons/react';
 import RobinCamera from '@assets/images/robin-camera.png';
+import Toggle from '@components/Toggle.astro';
 
 const today = new Date();
 const days = createDayArray(getDayOfYear(today));
@@ -18,9 +19,18 @@ const days = createDayArray(getDayOfYear(today));
 const photoItems = await getCollection('365');
 photoItems.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
+// Create an indexed photo map for proper numbering
+const indexedPhotoMap = new Map();
+photoItems.forEach((item, index) => {
+    indexedPhotoMap.set(item.data.day, photoItems.length - index);
+});
+
 const getPhotoForDay = (day: string) => {
     return photoItems.find((photoItem) => photoItem.data.day === day);
 };
+
+// Check if there are any placeholder days
+const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
 ---
 
 <Layout title="365" description="365 project - one photo a day for a year" ogimageName="365.jpg">
@@ -34,22 +44,35 @@ const getPhotoForDay = (day: string) => {
             linkText="RSS feed"
             linkUrl="/365-rss.xml"
         >
-            I’m capturing and sharing one photo daily for a year. I may not upload them on the same
+            I'm capturing and sharing one photo daily for a year. I may not upload them on the same
             day, as I enjoy taking photos more than sharing them.
         </SectionContent>
-        <Slider classes="xl:mt-12">
+
+        {/* Only render the toggle if there are placeholder days */}
+        {
+            hasPlaceholderDays && (
+                <Grid classes="w-full xl:mt-12">
+                    <GridBox desktopFull tabletFull mobileFull>
+                        <Toggle id="toggle-placeholders" label="Show empty days" />
+                    </GridBox>
+                </Grid>
+            )
+        }
+
+        <Slider>
             {
-                days.map((day, index) => (
-                    <SliderItem size="medium" classes="relative mt-2">
-                        {getPhotoForDay(day) ? (
-                            <a href={`365/${getPhotoForDay(day)?.data.day}`} class="h-full w-full">
+                days.map((day, index) => {
+                    const hasPhoto = getPhotoForDay(day);
+                    return hasPhoto ? (
+                        <SliderItem size="medium" classes="relative mt-2">
+                            <a href={`365/${hasPhoto.data.day}`} class="h-full w-full">
                                 <figure class="h-full w-full">
                                     <Image
-                                        src={getPhotoForDay(day)?.data.image as ImageMetadata}
+                                        src={hasPhoto.data.image as ImageMetadata}
                                         alt={
-                                            getPhotoForDay(day)?.data.description
-                                                ? (getPhotoForDay(day)?.data.description as string)
-                                                : `Photo from ${getPhotoForDay(day)?.data.day}`
+                                            hasPhoto.data.description
+                                                ? (hasPhoto.data.description as string)
+                                                : `Photo from ${hasPhoto.data.day}`
                                         }
                                         widths={[640]}
                                         sizes={`320px`}
@@ -57,17 +80,19 @@ const getPhotoForDay = (day: string) => {
                                     />
                                     <figcaption class="mt-2 flex items-center gap-3 font-mono text-xs">
                                         <span>
-                                            {formatIndexNumber(index - 2, photoItems.length)}
+                                            {indexedPhotoMap.get(day).toString().padStart(3, '0')}
                                         </span>
                                         <span>–</span>
                                         <span>{day}</span>
                                     </figcaption>
                                 </figure>
                             </a>
-                        ) : (
+                        </SliderItem>
+                    ) : (
+                        <SliderItem classes="placeholder-item hidden">
                             <div class="flex h-full w-full flex-col gap-2">
                                 <div class="flex h-full w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
-                                    <div class=" flex flex-col items-center gap-2">
+                                    <div class="flex flex-col items-center gap-2">
                                         <SmileyNervous
                                             weight="regular"
                                             size={40}
@@ -82,13 +107,14 @@ const getPhotoForDay = (day: string) => {
                                 </div>
                                 <p class="font-mono text-xs text-black-400">{day}</p>
                             </div>
-                        )}
-                    </SliderItem>
-                ))
+                        </SliderItem>
+                    );
+                })
             }
             <SliderItem emptyEnd />
         </Slider>
     </div>
+
     <div class="pb-40">
         <Grid>
             <GridBox
@@ -128,3 +154,42 @@ const getPhotoForDay = (day: string) => {
         </Grid>
     </div>
 </Layout>
+
+<script>
+    const togglePlaceholders = document.getElementById('toggle-placeholders') as HTMLInputElement;
+    const placeholderItems = document.querySelectorAll('.placeholder-item');
+
+    // Check localStorage for saved preference on page load
+    const showEmptyDays = localStorage.getItem('showEmptyDays') === 'true';
+
+    // Set initial toggle state based on saved preference
+    if (togglePlaceholders) {
+        togglePlaceholders.checked = showEmptyDays;
+
+        // Apply visibility settings on page load
+        placeholderItems.forEach((item) => {
+            if (showEmptyDays) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        });
+
+        // Add change event listener
+        togglePlaceholders.addEventListener('change', (e) => {
+            const target = e.target as HTMLInputElement;
+
+            // Save preference to localStorage
+            localStorage.setItem('showEmptyDays', target.checked.toString());
+
+            // Update visibility of placeholder items
+            placeholderItems.forEach((item) => {
+                if (target.checked) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        });
+    }
+</script>
