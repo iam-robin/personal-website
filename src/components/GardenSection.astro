@@ -1,9 +1,9 @@
 ---
-import Slider from './slider/Slider.astro';
-import SliderItem from './slider/SliderItem.astro';
 import SectionContent from './SectionContent.astro';
 import { getNewestObsidianGardenEntries } from 'src/api/github';
 import NoteCard from './garden/NoteCard.astro';
+import NewSlider from './newSlider/NewSlider.astro';
+import NewSliderItem from './newSlider/NewSliderItem.astro';
 
 const newestObsidianEntries = await getNewestObsidianGardenEntries(10, 'created');
 ---
@@ -13,14 +13,18 @@ const newestObsidianEntries = await getNewestObsidianGardenEntries(10, 'created'
         My Digital Garden is a collection of evolving ideas and discoveries. Here, you can explore
         the last notes I’ve added—freshly synced from my Obsidian workspace.
     </SectionContent>
-    <Slider>
+    <NewSlider>
         {
             newestObsidianEntries.map((note) => (
-                <SliderItem classes="py-8" size="small">
+                <NewSliderItem
+                    classes="py-8"
+                    largeFraction={4}
+                    mediumFraction={2.5}
+                    smallFraction={1.5}
+                >
                     <NoteCard data={note} path={`garden/${note.path}`} category={note.path} />
-                </SliderItem>
+                </NewSliderItem>
             ))
         }
-        <SliderItem emptyEnd />
-    </Slider>
+    </NewSlider>
 </div>

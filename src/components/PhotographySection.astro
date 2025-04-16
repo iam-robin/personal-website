@@ -1,6 +1,4 @@
 ---
-import Slider, { type SliderLink } from './slider/Slider.astro';
-import SliderItem from './slider/SliderItem.astro';
 import { Image } from 'astro:assets';
 
 import Photo01 from '../assets/landingpage-photos/01.jpg';
@@ -29,6 +27,8 @@ import Photo365_04 from '../assets/365/photos/2025-01-15_16-32-24.jpg';
 import SectionContent from './SectionContent.astro';
 import Grid from './Grid.astro';
 import GridBox from './GridBox.astro';
+import NewSliderItem from './newSlider/NewSliderItem.astro';
+import NewSlider from './newSlider/NewSlider.astro';
 
 const photos = [
     Photo01,
@@ -49,12 +49,6 @@ const photos = [
     Photo14,
     Photo16
 ];
-
-const sliderLink: SliderLink = {
-    text: 'More photos',
-    href: 'https://glass.photo/iamrobin',
-    external: true
-};
 ---
 
 <div>
@@ -66,11 +60,11 @@ const sliderLink: SliderLink = {
         I have been enjoying using a camera to capture visually appealing moments for over a decade
         now.
     </SectionContent>
-    <Slider link={sliderLink}>
+    <NewSlider>
         {
             photos.map((photo) => (
                 <>
-                    <SliderItem>
+                    <NewSliderItem largeFraction={3} mediumFraction={2.5} smallFraction={1.25}>
                         <Image
                             src={photo}
                             alt="test image"
@@ -78,12 +72,11 @@ const sliderLink: SliderLink = {
                             sizes={`320px`}
                             class="bg-neutral-100"
                         />
-                    </SliderItem>
+                    </NewSliderItem>
                 </>
             ))
         }
-        <SliderItem emptyEnd />
-    </Slider>
+    </NewSlider>
     <div class="pb-16 pt-32">
         <Grid classes="md:h-[464px] bg-neutral-100 lg:rounded-xl">
             <GridBox

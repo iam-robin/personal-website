@@ -3,8 +3,6 @@ import Grid from '@components/Grid.astro';
 import GridBox from '@components/GridBox.astro';
 import Headline from '@components/Headline.astro';
 import SectionContent from '@components/SectionContent.astro';
-import Slider from '@components/slider/Slider.astro';
-import SliderItem from '@components/slider/SliderItem.astro';
 import { getCollection } from 'astro:content';
 import { createDayArray, formatIndexNumber, getDayOfYear } from 'src/utils/365-helpers';
 import { Image } from 'astro:assets';
@@ -12,6 +10,8 @@ import Layout from '@layouts/Layout.astro';
 import { SmileyNervous } from '@phosphor-icons/react';
 import RobinCamera from '@assets/images/robin-camera.png';
 import Toggle from '@components/Toggle.astro';
+import NewSlider from '@components/newSlider/NewSlider.astro';
+import NewSliderItem from '@components/newSlider/NewSliderItem.astro';
 
 const today = new Date();
 const days = createDayArray(getDayOfYear(today));
@@ -59,12 +59,12 @@ const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
             )
         }
 
-        <Slider>
+        <NewSlider>
             {
                 days.map((day, index) => {
                     const hasPhoto = getPhotoForDay(day);
                     return hasPhoto ? (
-                        <SliderItem size="medium" classes="relative mt-2">
+                        <NewSliderItem largeFraction={3} mediumFraction={2.5} smallFraction={1.25}>
                             <a href={`365/${hasPhoto.data.day}`} class="h-full w-full">
                                 <figure class="h-full w-full">
                                     <Image
@@ -74,8 +74,6 @@ const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
                                                 ? (hasPhoto.data.description as string)
                                                 : `Photo from ${hasPhoto.data.day}`
                                         }
-                                        widths={[640]}
-                                        sizes={`320px`}
                                         class="bg-neutral-100"
                                     />
                                     <figcaption class="mt-2 flex items-center gap-3 font-mono text-xs">
@@ -87,9 +85,9 @@ const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
                                     </figcaption>
                                 </figure>
                             </a>
-                        </SliderItem>
+                        </NewSliderItem>
                     ) : (
-                        <SliderItem classes="placeholder-item hidden">
+                        <NewSliderItem classes="placeholder-item hidden">
                             <div class="flex h-full w-full flex-col gap-2">
                                 <div class="flex h-full w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
                                     <div class="flex flex-col items-center gap-2">
@@ -107,12 +105,11 @@ const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
                                 </div>
                                 <p class="font-mono text-xs text-black-400">{day}</p>
                             </div>
-                        </SliderItem>
+                        </NewSliderItem>
                     );
                 })
             }
-            <SliderItem emptyEnd />
-        </Slider>
+        </NewSlider>
     </div>
 
     <div class="pb-40">

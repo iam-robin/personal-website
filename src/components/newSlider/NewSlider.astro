@@ -1,0 +1,100 @@
+---
+import { Icon } from 'astro-icon/components';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+---
+
+<div class="slider-and-button-wrapper">
+    <div
+        class="slider-wrapper grid grid-cols-[1fr_minmax(0,theme(width.screen-lg))_1fr] lg:grid-cols-[1fr_minmax(0,1024px)_1fr] relative"
+    >
+        <div
+            class="slider-container col-span-full lg:grid lg:grid-cols-subgrid overflow-x-scroll scrollbar-hide overscroll-x-contain snap-x snap-proximity"
+        >
+            <ul
+                class="col-start-2 col-end-3 flex gap-4 sm:gap-6 lg:gap-8 py-4 pl-4 md:pl-8 lg:pl-0"
+            >
+                <slot />
+                <!-- End spacer to align last item with content grid -->
+                <li
+                    aria-hidden="true"
+                    class="flex-none lg:w-0 w-4 md:w-8"
+                    style="padding-right: calc((100vw - 1024px) / 2 - 2rem);"
+                >
+                </li>
+            </ul>
+        </div>
+    </div>
+    <Grid classes="hidden md:grid mt-4">
+        <GridBox desktopFull classes="flex justify-end items-center">
+            <div class="flex gap-2">
+                <button
+                    class="prev-button h-10 w-10 flex items-center justify-center group transition rounded-full hover:bg-neutral-100 disabled:text-neutral-300 disabled:hover:bg-transparent"
+                    data-direction="prev"
+                >
+                    <Icon
+                        class="translate-x-1 transition group-hover:translate-x-0 group-disabled:group-hover:translate-x-1"
+                        name="ph:arrow-left"
+                        size={30}
+                    />
+                </button>
+                <button
+                    class="next-button h-10 w-10 flex items-center justify-center group transition rounded-full hover:bg-neutral-100 disabled:text-neutral-300 disabled:hover:bg-transparent"
+                    data-direction="next"
+                >
+                    <Icon
+                        class="-translate-x-1 transition group-hover:translate-x-0 group-disabled:group-hover:-translate-x-1"
+                        name="ph:arrow-right"
+                        size={30}
+                    />
+                </button>
+            </div>
+        </GridBox>
+    </Grid>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sliders = document.querySelectorAll('.slider-and-button-wrapper');
+
+        sliders.forEach((sliderWrapper) => {
+            const slider = sliderWrapper.querySelector('.slider-container');
+            const prevButton = sliderWrapper.querySelector('.prev-button');
+            const nextButton = sliderWrapper.querySelector('.next-button');
+
+            const updateButtonState = () => {
+                if (!slider) return;
+
+                // Check if viewport is md or larger
+                const isMdOrLarger = window.matchMedia('(min-width: 768px)').matches;
+
+                if (!isMdOrLarger) {
+                    // Always disable buttons on smaller viewports
+                    prevButton?.setAttribute('disabled', 'true');
+                    nextButton?.setAttribute('disabled', 'true');
+                    return;
+                }
+
+                // Enable or disable buttons based on scroll position for md and larger
+                const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+                prevButton?.toggleAttribute('disabled', slider.scrollLeft <= 0);
+                nextButton?.toggleAttribute('disabled', slider.scrollLeft >= maxScrollLeft);
+            };
+
+            [prevButton, nextButton].forEach((button) => {
+                button?.addEventListener('click', () => {
+                    const direction = button.getAttribute('data-direction');
+                    const scrollAmount = 1024; // Scroll by the width of the container
+                    slider?.scrollBy({
+                        left: direction === 'next' ? scrollAmount : -scrollAmount,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            slider?.addEventListener('scroll', updateButtonState);
+            window.addEventListener('resize', updateButtonState); // Recheck on resize
+            updateButtonState(); // Initialize button state on load
+        });
+    });
+</script>

@@ -10,7 +10,16 @@ export default {
                 { pattern: /(col-start|col-end)-./, variants: ['', 'sm', 'md', 'lg'] },
                 { pattern: /left-\d{1,2}/, variants: ['', 'sm', 'md', 'lg'] },
                 'pr-2.5',
-                'my-10'
+                'my-10',
+                ...[1.25, 1.5, 2.5, 3.5].flatMap((fraction) => [
+                    `w-[calc(100%/${fraction}-1rem+${1 / fraction}rem)]`
+                ]),
+                ...[2, 2.25, 2.5, 3, 4].flatMap((fraction) => [
+                    `sm:w-[calc(100%/${fraction}-1.5rem+${1.5 / fraction}rem)]`
+                ]),
+                ...[1, 2, 3, 4, 5, 6].flatMap((fraction) => [
+                    `lg:w-[calc(100%/${fraction}-2rem+${2 / fraction}rem)]`
+                ])
             ]
         }
     },
@@ -99,5 +108,9 @@ export default {
             }
         }
     },
-    plugins: [require('@whiterussianstudio/tailwind-easing'), require('@tailwindcss/typography')]
+    plugins: [
+        require('@whiterussianstudio/tailwind-easing'),
+        require('@tailwindcss/typography'),
+        require('tailwind-scrollbar-hide')
+    ]
 };

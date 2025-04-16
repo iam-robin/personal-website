@@ -1,10 +1,10 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { projects } from 'src/content/projects';
-import Slider from './slider/Slider.astro';
-import SliderItem from './slider/SliderItem.astro';
 import ProjectItem from './ProjectItem.astro';
 import SectionContent from './SectionContent.astro';
+import NewSliderItem from './newSlider/NewSliderItem.astro';
+import NewSlider from './newSlider/NewSlider.astro';
 ---
 
 <div>
@@ -13,10 +13,15 @@ import SectionContent from './SectionContent.astro';
         them get lost in my notes or as random thoughts on my computer. But can you believe it? Some
         of them actually happen.
     </SectionContent>
-    <Slider>
+    <NewSlider>
         {
             projects.map((project, index) => (
-                <SliderItem classes="py-3" size="medium">
+                <NewSliderItem
+                    classes="py-3"
+                    largeFraction={3}
+                    mediumFraction={2.5}
+                    smallFraction={1.25}
+                >
                     <ProjectItem
                         bgColor={project.bgColor}
                         href={project.href}
@@ -29,10 +34,10 @@ import SectionContent from './SectionContent.astro';
                         customOpenString={project.customOpenString}
                         comingSoon={project.comingSoon}
                     />
-                </SliderItem>
+                </NewSliderItem>
             ))
         }
-        <SliderItem>
+        <NewSliderItem>
             <a
                 href="https://read.cv/iamrobin"
                 class="group flex aspect-square w-full items-end rounded-xl border-2 border-dashed border-black-200 p-6 transition-all duration-300 hover:bg-neutral-100"
@@ -50,7 +55,6 @@ import SectionContent from './SectionContent.astro';
                     </div>
                 </div>
             </a>
-        </SliderItem>
-        <SliderItem emptyEnd />
-    </Slider>
+        </NewSliderItem>
+    </NewSlider>
 </div>

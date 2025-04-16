@@ -1,0 +1,22 @@
+---
+// This component represents a single slider item.
+interface Props {
+    smallFraction?: 1.25 | 1.5 | 2.5 | 3.5;
+    mediumFraction?: 2 | 2.25 | 2.5 | 3 | 4;
+    largeFraction?: 1 | 2 | 3 | 4 | 5 | 6;
+    classes?: string;
+}
+
+const { smallFraction = 1, mediumFraction = 2, largeFraction = 3, classes } = Astro.props;
+---
+
+<li
+    class={`flex-none snap-center
+        w-[calc(100%/${smallFraction}-1rem+${1 / smallFraction}rem)]
+        sm:w-[calc(100%/${mediumFraction}-1.5rem+${1.5 / mediumFraction}rem)]
+        lg:w-[calc(100%/${largeFraction}-2rem+${2 / largeFraction}rem)] ${classes}`}
+>
+    <div class="flex items-center justify-center h-full">
+        <slot />
+    </div>
+</li>
