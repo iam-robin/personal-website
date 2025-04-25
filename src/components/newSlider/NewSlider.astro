@@ -2,6 +2,12 @@
 import { Icon } from 'astro-icon/components';
 import Grid from '@components/Grid.astro';
 import GridBox from '@components/GridBox.astro';
+
+interface Props {
+    sliderId: string;
+}
+
+const { sliderId } = Astro.props as Props;
 ---
 
 <div class="slider-and-button-wrapper">
@@ -9,6 +15,7 @@ import GridBox from '@components/GridBox.astro';
         class="slider-wrapper grid grid-cols-[1fr_minmax(0,theme(width.screen-lg))_1fr] lg:grid-cols-[1fr_minmax(0,1024px)_1fr] relative"
     >
         <div
+            id={sliderId}
             class="slider-container col-span-full lg:grid lg:grid-cols-subgrid overflow-x-scroll scrollbar-hide overscroll-x-contain snap-x snap-proximity"
         >
             <ul
@@ -26,7 +33,10 @@ import GridBox from '@components/GridBox.astro';
         </div>
     </div>
     <Grid classes="hidden md:grid mt-4">
-        <GridBox desktopFull classes="flex justify-end items-center">
+        <GridBox desktopFull classes="flex justify-between items-center">
+            <div>
+                <slot name="bottom-left" />
+            </div>
             <div class="flex gap-2">
                 <button
                     class="prev-button h-10 w-10 flex items-center justify-center group transition rounded-full hover:bg-neutral-100 disabled:text-neutral-300 disabled:hover:bg-transparent"
