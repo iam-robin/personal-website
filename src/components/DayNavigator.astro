@@ -69,31 +69,50 @@ allDaysOfYear.forEach((day: string) => {
         {
             Object.entries(daysByMonth)
                 .reverse()
-                .map(([month, monthDays]) => (
-                    <div class="month-section">
-                        <div class="month-label">{monthNames[parseInt(month) - 1]}</div>
-                        <div class="day-markers">
-                            {[...monthDays].reverse().map((day: string) => {
-                                const hasPhoto = daysWithPhotos.has(day);
-                                const monday = isMonday(day);
-                                const monthAndDay = day.split('-').slice(1).join('-');
-                                return (
-                                    <div class="day-marker-container">
-                                        <button
-                                            class={`day-marker ${hasPhoto ? '' : 'disabled'} ${monday ? 'monday' : ''}`}
-                                            data-day={day}
-                                            aria-label={`Navigate to ${day}`}
-                                            disabled={!hasPhoto}
-                                        />
-                                        <div class="day-label hidden group-hover:block">
-                                            {monthAndDay}
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                .map(([month, monthDays], monthIndex, monthsArray) => {
+                    const isFirstMonth = monthIndex === 0;
+                    const isLastMonth = monthIndex === monthsArray.length - 1;
+
+                    return (
+                        <div class="month-section">
+                            <div class="month-label">{monthNames[parseInt(month) - 1]}</div>
+                            <div class="day-markers">
+                                {[...monthDays]
+                                    .reverse()
+                                    .map((day: string, dayIndex, daysArray) => {
+                                        const hasPhoto = daysWithPhotos.has(day);
+                                        const monday = isMonday(day);
+                                        const monthAndDay = day.split('-').slice(1).join('-');
+
+                                        // Add edge classes for tooltip positioning
+                                        let edgeClass = '';
+                                        if (isFirstMonth && dayIndex < 3) {
+                                            edgeClass = 'tooltip-right';
+                                        } else if (
+                                            isLastMonth &&
+                                            dayIndex >= daysArray.length - 3
+                                        ) {
+                                            edgeClass = 'tooltip-left';
+                                        }
+
+                                        return (
+                                            <div class={`day-marker-container ${edgeClass}`}>
+                                                <button
+                                                    class={`day-marker ${hasPhoto ? '' : 'disabled'} ${monday ? 'monday' : ''}`}
+                                                    data-day={day}
+                                                    aria-label={`Navigate to ${day}`}
+                                                    disabled={!hasPhoto}
+                                                />
+                                                <div class="day-label hidden group-hover:block">
+                                                    {monthAndDay}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                            </div>
                         </div>
-                    </div>
-                ))
+                    );
+                })
         }
     </div>
 </div>
@@ -162,6 +181,7 @@ allDaysOfYear.forEach((day: string) => {
     .day-label {
         display: none;
         position: absolute;
+        width: max-content;
         bottom: -32px;
         left: 50%;
         transform: translateX(-50%);
@@ -238,5 +258,16 @@ allDaysOfYear.forEach((day: string) => {
     .day-marker.disabled:hover::before {
         height: var(--marker-height);
         background-color: var(--marker-color-disabled);
+    }
+
+    .day-marker-container.tooltip-right .day-label {
+        left: 0;
+        transform: translateX(0);
+    }
+
+    .day-marker-container.tooltip-left .day-label {
+        left: auto;
+        right: 0;
+        transform: translateX(0);
     }
 </style>
