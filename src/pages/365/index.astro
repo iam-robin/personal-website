@@ -207,10 +207,10 @@ const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
         const dayMarkers: NodeListOf<HTMLElement> = document.querySelectorAll('.day-marker');
         const sliderItems: NodeListOf<HTMLElement> = document.querySelectorAll('.new-slider-item');
         const slider: HTMLElement = document.getElementById('photos-slider') as HTMLElement;
-        let activeDay = null;
+        let activeDay: string | null | undefined = null;
 
         // Function to update the active marker
-        function updateActiveMarker(day) {
+        function updateActiveMarker(day: string | undefined) {
             if (activeDay === day) return;
 
             activeDay = day;
@@ -241,15 +241,23 @@ const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
                         markerRect.right <= navigatorRect.right;
 
                     if (!isVisible) {
+                        // Get the full offset position relative to the scroll container
+                        let fullOffset = activeMarker.offsetLeft;
+                        let currentElement = activeMarker.offsetParent as HTMLElement;
+
+                        // Add up all offsets until we reach the scroll container
+                        while (currentElement && currentElement !== navigator) {
+                            fullOffset += currentElement.offsetLeft;
+                            currentElement = currentElement.offsetParent as HTMLElement;
+                        }
+
                         // Calculate the scroll position to center the active marker
                         const scrollPosition =
-                            activeMarker.offsetLeft -
-                            navigatorRect.width / 2 +
-                            markerRect.width / 2;
+                            fullOffset - navigatorRect.width / 2 + markerRect.width / 2;
 
-                        // Scroll smoothly to the active marker
+                        // Ensure we don't scroll to negative values
                         navigator.scrollTo({
-                            left: scrollPosition,
+                            left: Math.max(0, scrollPosition),
                             behavior: 'smooth'
                         });
                     }
