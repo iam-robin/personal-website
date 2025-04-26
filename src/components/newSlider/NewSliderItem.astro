@@ -5,9 +5,16 @@ interface Props {
     mediumFraction?: 2 | 2.25 | 2.5 | 3 | 4;
     largeFraction?: 1 | 2 | 3 | 4 | 5 | 6;
     classes?: string;
+    itemIdentifierAttribute?: string;
 }
 
-const { smallFraction = 1, mediumFraction = 2, largeFraction = 3, classes } = Astro.props;
+const {
+    smallFraction = 1,
+    mediumFraction = 2,
+    largeFraction = 3,
+    classes,
+    itemIdentifierAttribute
+} = Astro.props;
 ---
 
 <li
@@ -15,6 +22,7 @@ const { smallFraction = 1, mediumFraction = 2, largeFraction = 3, classes } = As
         w-[calc(100%/${smallFraction}-1rem+${1 / smallFraction}rem)]
         sm:w-[calc(100%/${mediumFraction}-1.5rem+${1.5 / mediumFraction}rem)]
         lg:w-[calc(100%/${largeFraction}-2rem+${2 / largeFraction}rem)] ${classes}`}
+    data-item-identifier={itemIdentifierAttribute}
 >
     <div class="flex items-center justify-center h-full">
         <slot />

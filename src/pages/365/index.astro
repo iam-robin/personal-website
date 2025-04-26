@@ -4,7 +4,7 @@ import GridBox from '@components/GridBox.astro';
 import Headline from '@components/Headline.astro';
 import SectionContent from '@components/SectionContent.astro';
 import { getCollection } from 'astro:content';
-import { createDayArray, formatIndexNumber, getDayOfYear } from 'src/utils/365-helpers';
+import { createDayArray, getDayOfYear } from 'src/utils/365-helpers';
 import { Image } from 'astro:assets';
 import Layout from '@layouts/Layout.astro';
 import { SmileyNervous } from '@phosphor-icons/react';
@@ -12,6 +12,7 @@ import RobinCamera from '@assets/images/robin-camera.png';
 import Toggle from '@components/Toggle.astro';
 import NewSlider from '@components/newSlider/NewSlider.astro';
 import NewSliderItem from '@components/newSlider/NewSliderItem.astro';
+import DayNavigator from '@components/DayNavigator.astro';
 
 const today = new Date();
 const days = createDayArray(getDayOfYear(today));
@@ -48,23 +49,24 @@ const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
             day, as I enjoy taking photos more than sharing them.
         </SectionContent>
 
-        {/* Only render the toggle if there are placeholder days */}
-        {
-            hasPlaceholderDays && (
-                <Grid classes="w-full xl:mt-12">
-                    <GridBox desktopFull tabletFull mobileFull>
-                        <Toggle id="toggle-placeholders" label="Show empty days" />
-                    </GridBox>
-                </Grid>
-            )
-        }
+        <Grid classes="w-full xl:mt-12">
+            <GridBox desktopFull tabletFull mobileFull>
+                <DayNavigator days={days} photoItems={photoItems} />
+            </GridBox>
+        </Grid>
 
-        <NewSlider>
+        <NewSlider sliderId="photos-slider">
             {
                 days.map((day, index) => {
                     const hasPhoto = getPhotoForDay(day);
                     return hasPhoto ? (
-                        <NewSliderItem largeFraction={3} mediumFraction={2.5} smallFraction={1.25}>
+                        <NewSliderItem
+                            largeFraction={3}
+                            mediumFraction={2.5}
+                            smallFraction={1.25}
+                            itemIdentifierAttribute={day}
+                            classes="new-slider-item"
+                        >
                             <a href={`365/${hasPhoto.data.day}`} class="h-full w-full">
                                 <figure class="h-full w-full">
                                     <Image
@@ -87,7 +89,10 @@ const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
                             </a>
                         </NewSliderItem>
                     ) : (
-                        <NewSliderItem classes="placeholder-item hidden">
+                        <NewSliderItem
+                            classes="placeholder-item hidden"
+                            itemIdentifierAttribute={day}
+                        >
                             <div class="flex h-full w-full flex-col gap-2">
                                 <div class="flex h-full w-full items-center justify-center self-start border-2 border-dashed border-black-200 text-center text-black-400">
                                     <div class="flex flex-col items-center gap-2">
@@ -108,6 +113,13 @@ const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
                         </NewSliderItem>
                     );
                 })
+            }
+            {
+                hasPlaceholderDays && (
+                    <div slot="bottom-left">
+                        <Toggle id="toggle-placeholders" label="Show empty days" />
+                    </div>
+                )
             }
         </NewSlider>
     </div>
@@ -189,4 +201,189 @@ const hasPlaceholderDays = days.some((day) => !getPhotoForDay(day));
             });
         });
     }
+
+    // Day navigator functionality
+    document.addEventListener('DOMContentLoaded', () => {
+        const dayMarkers: NodeListOf<HTMLElement> = document.querySelectorAll('.day-marker');
+        const sliderItems: NodeListOf<HTMLElement> = document.querySelectorAll('.new-slider-item');
+        const slider: HTMLElement = document.getElementById('photos-slider') as HTMLElement;
+        let activeDay: string | null | undefined = null;
+
+        // Function to update the active marker
+        function updateActiveMarker(day: string | undefined) {
+            if (activeDay === day) return;
+
+            activeDay = day;
+            dayMarkers.forEach((marker: HTMLElement) => {
+                if (marker.dataset.day === day) {
+                    marker.classList.add('active');
+                } else {
+                    marker.classList.remove('active');
+                }
+            });
+
+            // Find the active marker and scroll navigator if needed
+            const activeMarker = document.querySelector(
+                `.day-marker[data-day="${day}"].active`
+            ) as HTMLElement;
+
+            if (activeMarker) {
+                const navigator = document.querySelector('.day-navigator') as HTMLElement;
+
+                if (navigator) {
+                    // Check if the marker is currently visible in the navigator viewport
+                    const markerRect = activeMarker.getBoundingClientRect();
+                    const navigatorRect = navigator.getBoundingClientRect();
+
+                    // Check if marker is outside the visible area
+                    const isVisible =
+                        markerRect.left >= navigatorRect.left &&
+                        markerRect.right <= navigatorRect.right;
+
+                    if (!isVisible) {
+                        // Get the full offset position relative to the scroll container
+                        let fullOffset = activeMarker.offsetLeft;
+                        let currentElement = activeMarker.offsetParent as HTMLElement;
+
+                        // Add up all offsets until we reach the scroll container
+                        while (currentElement && currentElement !== navigator) {
+                            fullOffset += currentElement.offsetLeft;
+                            currentElement = currentElement.offsetParent as HTMLElement;
+                        }
+
+                        // Calculate the scroll position to center the active marker
+                        const scrollPosition =
+                            fullOffset - navigatorRect.width / 2 + markerRect.width / 2;
+
+                        // Ensure we don't scroll to negative values
+                        navigator.scrollTo({
+                            left: Math.max(0, scrollPosition),
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            }
+        }
+
+        // Click handlers for day markers
+        dayMarkers.forEach((marker) => {
+            marker.addEventListener('click', () => {
+                const day = marker.dataset.day;
+                const targetItem = document.querySelector(
+                    `.new-slider-item[data-item-identifier="${day}"]`
+                ) as HTMLElement;
+
+                if (targetItem) {
+                    // Calculate position within the slider
+                    const sliderRect = slider.getBoundingClientRect();
+                    const targetRect = targetItem.getBoundingClientRect();
+
+                    // Scroll the slider to this item
+                    slider?.scrollTo({
+                        left: targetItem.offsetLeft - (sliderRect.width - targetRect.width) / 2,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Track scroll to update active marker
+        let scrollTimeout: number | null = null;
+        if (slider) {
+            slider.addEventListener(
+                'scroll',
+                () => {
+                    // Throttle scroll events
+                    if (scrollTimeout !== null) {
+                        window.clearTimeout(scrollTimeout);
+                    }
+
+                    scrollTimeout = window.setTimeout(() => {
+                        // Instead of tracking a single item, collect all with max visibility
+                        let maxVisiblePercentage = 0;
+                        let itemsWithMaxVisibility: HTMLElement[] = [];
+
+                        sliderItems.forEach((item) => {
+                            if (window.getComputedStyle(item).display !== 'none') {
+                                // Get item's position relative to the slider
+                                const itemLeft = item.offsetLeft;
+                                const itemWidth = item.offsetWidth;
+                                const itemRight = itemLeft + itemWidth;
+
+                                // Get slider's current scroll position and dimensions
+                                const sliderScrollLeft = slider.scrollLeft;
+                                const sliderWidth = slider.clientWidth;
+                                const sliderRight = sliderScrollLeft + sliderWidth;
+
+                                // Calculate visible portion of the item
+                                const visibleLeft = Math.max(itemLeft, sliderScrollLeft);
+                                const visibleRight = Math.min(itemRight, sliderRight);
+                                const visibleWidth = Math.max(0, visibleRight - visibleLeft);
+
+                                // Calculate visible percentage
+                                const percentVisible = visibleWidth / itemWidth;
+
+                                if (percentVisible > maxVisiblePercentage) {
+                                    // New maximum, reset collection and add item
+                                    maxVisiblePercentage = percentVisible;
+                                    itemsWithMaxVisibility = [item];
+                                } else if (percentVisible === maxVisiblePercentage) {
+                                    // Same percentage as max, add to collection
+                                    itemsWithMaxVisibility.push(item);
+                                }
+                            }
+                        });
+
+                        // Choose the item closest to the viewport center
+                        let mostVisibleItem: HTMLElement | null = null;
+
+                        if (itemsWithMaxVisibility.length > 0) {
+                            if (itemsWithMaxVisibility.length === 1) {
+                                // Only one item with max visibility
+                                mostVisibleItem = itemsWithMaxVisibility[0];
+                            } else {
+                                // Multiple items with same visibility - find the one closest to viewport center
+                                const sliderCenter = slider.scrollLeft + slider.clientWidth / 2;
+                                let minDistance = Infinity;
+
+                                itemsWithMaxVisibility.forEach((item) => {
+                                    // Calculate item's center position
+                                    const itemCenter = item.offsetLeft + item.offsetWidth / 2;
+
+                                    // Calculate distance to viewport center
+                                    const distance = Math.abs(itemCenter - sliderCenter);
+
+                                    // Update if this item is closer to center
+                                    if (distance < minDistance) {
+                                        minDistance = distance;
+                                        mostVisibleItem = item;
+                                    }
+                                });
+                            }
+                        }
+
+                        if (mostVisibleItem) {
+                            updateActiveMarker(
+                                (mostVisibleItem as HTMLElement).dataset.itemIdentifier
+                            );
+                        }
+
+                        scrollTimeout = null;
+                    }, 0);
+                },
+                { passive: true }
+            );
+        }
+
+        // Set initial active day
+        if (sliderItems.length > 0) {
+            const visibleItem = Array.from(sliderItems).find(
+                (item) => window.getComputedStyle(item).display !== 'none'
+            );
+
+            if (visibleItem) {
+                updateActiveMarker(visibleItem.dataset.itemIdentifier);
+            }
+        }
+    });
 </script>
