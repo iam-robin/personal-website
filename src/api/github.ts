@@ -38,7 +38,8 @@ export const categoriesWhitelist = [
     'society',
     'psychology',
     'photography',
-    'technology'
+    'technology',
+    'poems'
 ];
 
 export async function parseMarkdownContent(content: any) {

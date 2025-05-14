@@ -17,8 +17,8 @@ export const colors = [
     '#F4E8C8',
     '#CCA7ED',
     '#F29874',
-    '#F4DAA0',
-    '#6C95CF'
+    '#6C95CF',
+    '#F4DAA0'
 ];
 
 export const NoteCard: React.FC<NoteCardProps> = ({
