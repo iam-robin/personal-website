@@ -6,6 +6,7 @@ date: 2025-05-05
 category: 'software'
 ogImageName: 'youtube-rss.jpg'
 description: 'Using RSS to Follow YouTube Channels. Without Shorts and other Distractions.'
+mastodonId: '114510976139755616'
 ---
 
 I want to share my approach to reducing the time I spend on YouTube and focusing only on the videos
