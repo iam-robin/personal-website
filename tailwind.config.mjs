@@ -105,7 +105,31 @@ export default {
                 xs: '480px',
                 'lg-with-padding': '1088px',
                 xl: '1600px'
-            }
+            },
+            typography: ({ theme }) => ({
+                DEFAULT: {
+                    css: [
+                        {
+                            code: {
+                                color: theme('colors.blue.DEFAULT'),
+                                backgroundColor: theme('colors.neutral.100'),
+                                fontWeight: '400',
+                                borderRadius: theme('borderRadius.DEFAULT'),
+                                paddingLeft: theme('spacing[2]'),
+                                paddingRight: theme('spacing[2]'),
+                                paddingTop: theme('spacing.1'),
+                                paddingBottom: theme('spacing.1')
+                            },
+                            'code::before': {
+                                content: 'none'
+                            },
+                            'code::after': {
+                                content: 'none'
+                            }
+                        }
+                    ]
+                }
+            })
         }
     },
     plugins: [
