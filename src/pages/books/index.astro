@@ -1,0 +1,46 @@
+---
+import InlineLink from '@components/InlineLink.astro';
+import SectionContent from '@components/SectionContent.astro';
+import Layout from '@layouts/Layout.astro';
+import { currentlyReadingQueryResponse, shelfQueryResponse } from 'src/api/literal';
+import { getAllObsidianGardenEntries, type GardenEntry } from 'src/api/github';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import OldBookItem from '@components/books/OldBookItem.astro';
+import type { Shelf } from '@components/books/BookSection.astro';
+
+const shelfData = await shelfQueryResponse();
+const yearlyShelfData = shelfData.filter((shelf: any) => shelf.title.startsWith('20'));
+
+// Sort shelves by year in descending order to get the most recent year first
+yearlyShelfData.sort((a: Shelf, b: Shelf) => b.title.localeCompare(a.title));
+
+// If we have at least one yearly shelf, redirect to it
+if (yearlyShelfData.length > 0) {
+    const mostRecentYear: string = yearlyShelfData[0].title;
+    return Astro.redirect(`/books/${mostRecentYear}`);
+}
+
+// const currentlyReadingJson = await currentlyReadingQueryResponse();
+// const currentlyReadingData = currentlyReadingJson.data;
+
+// const currentYear = new Date().getFullYear();
+// const currentYearString = currentYear.toString();
+// let currentYearShelf = shelfData.find((shelf: Shelf) => shelf.title === currentYearString);
+
+// if (!currentYearShelf) {
+//     currentYearShelf = {
+//         title: currentYearString,
+//         books: []
+//     };
+//     shelfData.getShelvesByProfileId.push(currentYearShelf);
+// }
+
+// currentlyReadingData.booksByReadingStateAndProfile.forEach((book: Book) => {
+//     book.currentlyReading = true;
+//     currentYearShelf.books.unshift(book);
+// });
+
+// const obsidianEntries = await getAllObsidianGardenEntries('books');
+// const obsidianBookEntryNames = obsidianEntries.map((entry: GardenEntry) => entry.name);
+---

@@ -1,8 +1,8 @@
 ---
 import type { Author } from './BookSection.astro';
 import { getImage } from 'astro:assets';
-import badge from '../../assets/shape1.svg';
-const optimizedBadge = await getImage({ src: badge, format: 'webp' });
+// import badge from '../../assets/shape1.svg';
+// const optimizedBadge = await getImage({ src: badge, format: 'webp' });
 
 interface Props {
     cover: string;
@@ -20,10 +20,7 @@ const { cover, title, authors, currentlyReading } = Astro.props as Props;
     >
         {
             currentlyReading && (
-                <span
-                    style={`background-image: url(${optimizedBadge.src});`}
-                    class="absolute -right-4 -top-4 flex h-20 w-20 rotate-12 items-center justify-center rounded-full bg-cover bg-no-repeat text-center text-2xs leading-4 text-lilac-dark transition-all duration-300 group-hover:rotate-[18deg] group-hover:scale-105"
-                >
+                <span class="absolute -right-4 -top-4 flex h-20 w-20 rotate-12 items-center justify-center rounded-full bg-cover bg-no-repeat text-center text-2xs leading-4 text-lilac-dark transition-all duration-300 group-hover:rotate-[18deg] group-hover:scale-105">
                     currently reading
                 </span>
             )

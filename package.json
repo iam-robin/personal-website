@@ -25,6 +25,7 @@
         "astro-icon": "^1.0.4",
         "astro-remote": "^0.3.3",
         "astro-seo": "^0.8.4",
+        "color-thief-node": "^1.0.4",
         "exifreader": "^4.30.1",
         "gray-matter": "^4.0.3",
         "hast-util-to-html": "^9.0.5",

@@ -1,0 +1,103 @@
+---
+import { shelfQueryResponse } from 'src/api/literal';
+import InlineLink from '@components/InlineLink.astro';
+import SectionContent from '@components/SectionContent.astro';
+import Layout from '@layouts/Layout.astro';
+import OldBookItem from '@components/books/OldBookItem.astro';
+import NewSlider from '@components/newSlider/NewSlider.astro';
+import NewSliderItem from '@components/newSlider/NewSliderItem.astro';
+import BookItem from '@components/books/BookItem.astro';
+
+interface Author {
+    name: string;
+}
+
+interface Book {
+    title: string;
+    cover: string;
+    pageCount: number;
+    id: string;
+    slug: string;
+    authors: Author[];
+    currentlyReading?: boolean;
+    review: {
+        id: string;
+        rating: number;
+        spoiler: boolean;
+        text: string;
+        createdAt: string;
+        updatedAt: string;
+        tags: any[];
+    };
+}
+
+interface Shelf {
+    title: string;
+    books: Book[];
+}
+
+export async function getStaticPaths() {
+    const shelfData = await shelfQueryResponse();
+    const yearlyShelfData = shelfData.filter((shelf: any) => shelf.title.startsWith('20'));
+
+    // Generate a path for each tag
+    return yearlyShelfData.map((shelf: Shelf) => {
+        const year: string = shelf.title;
+        const books: Book[] = shelf.books;
+
+        return {
+            params: { year },
+            props: {
+                year,
+                books
+            }
+        };
+    });
+}
+
+const { year, books }: { year: string; books: Book[] } = Astro.props;
+---
+
+<Layout title="Books">
+    {year}
+    <SectionContent title="Books" classes="pt-40">
+        I would like to read more books. Keeping a list of all the books I've read and enjoyed will
+        hopefully help me do that. Each book links to its corresponding page on the awesome book
+        platform <InlineLink external href="https://literal.club/iamrobin">Literal</InlineLink>.
+    </SectionContent>
+    <NewSlider sliderId="photos-slider">
+        {
+            books.map((book: Book) => (
+                <NewSliderItem
+                    largeFraction={4}
+                    mediumFraction={2.5}
+                    smallFraction={1.25}
+                    itemIdentifierAttribute={book.title}
+                >
+                    <BookItem title={book.title} cover={book.cover} pageCount={book.pageCount} />
+                </NewSliderItem>
+            ))
+        }
+    </NewSlider>
+    <!-- <Grid>
+        <GridBox desktopFull>
+            {
+                books?.map((shelf: Shelf) => (
+                    <div class="mb-8">
+                        <h2 class="mb-2 font-mono text-lg font-bold">{shelf.title}</h2>
+                        <ul class="flex flex-wrap gap-2 mb-4">
+                            <li class="cursor-pointer rounded bg-neutral-100 px-2 py-1 text-neutral-800">
+                                All <sup>{shelf.books.length}</sup>
+                            </li>
+                        </ul>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                            {shelf.books.map((book) => (
+                                <div>{book.title}</div>
+                            ))}
+                        </div>
+                    </div>
+                ))
+            }
+        </GridBox>
+    </Grid> -->
+</Layout>
