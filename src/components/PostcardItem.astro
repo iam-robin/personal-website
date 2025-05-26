@@ -1,0 +1,135 @@
+---
+export interface Props {
+    author: string;
+    body: string;
+    date: Date;
+    distorted?: boolean;
+}
+
+const { author, body, date, distorted = true } = Astro.props as Props;
+
+const randomMarginBottom = Math.floor(Math.random() * 8);
+const randomMarginRight = Math.floor(Math.random() * 8);
+const randomRotation = Math.floor(Math.random() * 4 - 2);
+
+// Array of pen colors
+const penColors = [
+    '#000000', // Black
+    '#0A3161', // Navy Blue
+    '#00356B', // Dark Blue
+    '#1F3A3D', // Dark Teal
+    '#2E5090', // Royal Blue
+    '#3B2F2F' // Dark Brown
+    // '#4B0082' // Indigo
+];
+
+// Array of paper colors (vintage postcard colors)
+const paperColors = [
+    '#FCFAF7', // Off-white
+    '#FAF9F6', // Eggshell
+    '#F9F8F4', // Lighter Cream
+    '#F8F7F2', // Pale Parchment
+    '#F9F6F0', // Soft Ivory
+    '#F8F6F2', // Pale Beige
+    '#F7F4EF', // Lighter Antique
+    '#F2F0E6' // Soft Ecru
+];
+
+// Select a random pen color from the array
+const randomPenColorIndex = Math.floor(Math.random() * penColors.length);
+const penColor = penColors[randomPenColorIndex];
+
+// Select a random paper color from the array
+const randomPaperColorIndex = Math.floor(Math.random() * paperColors.length);
+const paperColor = paperColors[randomPaperColorIndex];
+
+// Random font size factor (shared between all elements)
+const sizeFactor = 0.9 + Math.random() * 0.2;
+const fontSize = `${sizeFactor}em`;
+
+// Random line-height factor for body text
+const lineHeightFactor = 1.1 + Math.random() * 0.4; // Random between 1.1 and 1.5
+const lineHeight = lineHeightFactor.toFixed(2);
+
+// Random values for author positioning
+const authorLeftOffset = Math.floor(Math.random() * 10) - 5; // -5px to +5px
+const authorTopOffset = Math.floor(Math.random() * 6) - 3; // -3px to +3px
+const authorRotation = Math.floor(Math.random() * 6) - 3; // -3deg to +3deg
+
+// Random values for date positioning
+const dateLeftOffset = Math.floor(Math.random() * 10) - 5; // -5px to +5px
+const dateTopOffset = Math.floor(Math.random() * 6) - 3; // -3px to +3px
+const dateRotation = Math.floor(Math.random() * 6) - 3; // -3deg to +3deg
+
+// Random values for body positioning
+const bodyLeftOffset = Math.floor(Math.random() * 8) - 4; // -4px to +4px
+const bodyTopOffset = Math.floor(Math.random() * 8) - 4; // -4px to +4px
+const bodyRotation = Math.floor(Math.random() * 4) - 2; // -2deg to +2deg
+
+// Format the date
+const formattedDate = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+});
+
+const transformStyles = distorted
+    ? `transform: translateY(${randomMarginBottom}px) translateX(${randomMarginRight}px) rotate(${randomRotation}deg);`
+    : `transform: rotate(${randomRotation}deg);`;
+
+const authorStyles = `transform: translateX(${authorLeftOffset}px) translateY(${authorTopOffset}px) rotate(${authorRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
+const dateStyles = `transform: translateX(${dateLeftOffset}px) translateY(${dateTopOffset}px) rotate(${dateRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
+const bodyStyles = `transform: translateX(${bodyLeftOffset}px) translateY(${bodyTopOffset}px) rotate(${bodyRotation}deg); font-size: ${fontSize}; line-height: ${lineHeight}; color: ${penColor}; filter: url(#distort-xl);`;
+---
+
+<div
+    class="corner-shadow-effect aspect-[3/2] w-full max-w-2xl"
+    style={transformStyles}
+    data-rotation={randomRotation}
+>
+    <div
+        class="flex justify-between h-full w-full border border-black-100"
+        style={`background-color: ${paperColor};`}
+    >
+        <div class="w-6/12 py-6 px-8 font-script text-md relative">
+            <span class="absolute" style={bodyStyles}>{body}</span>
+        </div>
+        <div class="w-[1px] bg-black-200 h-3/4 self-center"></div>
+        <div class="w-6/12 flex flex-col justify-between py-6 px-8">
+            <div class="h-1/2 flex justify-end">
+                <div class="h-16 w-14 bg-red"></div>
+            </div>
+            <div class="h-1/2 flex items-end">
+                <ul class="w-full space-y-3">
+                    <li class="flex flex-col gap-1">
+                        <span class="font-mono text-xs -mb-1 text-black-600">From:</span>
+                        <div
+                            class="text-md font-script border-b border-black-600 border-dotted h-8"
+                        >
+                            <span class="absolute" style={authorStyles}>{author}</span>
+                        </div>
+                    </li>
+                    <li class="flex flex-col gap-1">
+                        <span class="font-mono text-xs -mb-1 text-black-600">Date:</span>
+                        <div
+                            class="text-md font-script border-b border-black-600 border-dotted h-8"
+                        >
+                            <span class="absolute" style={dateStyles}>{formattedDate}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const effectElements = document.querySelectorAll('.corner-shadow-effect');
+        effectElements.forEach((effectElement) => {
+            const rotation = parseFloat((effectElement as HTMLElement).dataset.rotation || '0');
+            const className = rotation >= 0 ? 'hide-after' : 'hide-before';
+            effectElement.classList.add(className);
+        });
+    });
+</script>

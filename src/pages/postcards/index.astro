@@ -1,0 +1,41 @@
+---
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import NewSlider from '@components/newSlider/NewSlider.astro';
+import NewSliderItem from '@components/newSlider/NewSliderItem.astro';
+import PostcardItem from '@components/PostcardItem.astro';
+import SectionContent from '@components/SectionContent.astro';
+import Layout from '@layouts/Layout.astro';
+
+import { db, Postcard } from 'astro:db';
+
+// Render the new list of comments on each request
+const postcards = await db.select().from(Postcard);
+---
+
+<Layout title="Legal notice">
+    <Grid classes="pt-40">
+        <GridBox desktopFull>
+            <SectionContent title="Postcards" classes="!px-0">
+                Labore consequat aliquip commodo quis irure culpa. Est ullamco proident sunt aliquip
+                eu enim pariatur non pariatur cupidatat. Mollit irure labore Lorem minim magna
+                nostrud. Commodo do labore est Lorem quis non. Non tempor tempor fugiat nulla tempor
+                aliqua culpa ipsum occaecat sint in do nisi irure officia. Ea magna cupidatat ex.
+            </SectionContent>
+        </GridBox>
+    </Grid>
+    <NewSlider>
+        {
+            postcards.map(({ author, body, date }) => (
+                <NewSliderItem
+                    largeFraction={2}
+                    mediumFraction={2.5}
+                    smallFraction={1.25}
+                    classes="py-4"
+                >
+                    <PostcardItem author={author} body={body} date={date} />
+                </NewSliderItem>
+            ))
+        }
+    </NewSlider>
+</Layout>

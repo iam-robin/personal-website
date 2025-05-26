@@ -1,0 +1,25 @@
+---
+import { db, Postcard } from 'astro:db';
+export const prerender = false;
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const author = formData?.get('author');
+    const body = formData?.get('body');
+    const date = new Date();
+    const isPublished = true;
+    if (typeof author === 'string' && typeof body === 'string') {
+        await db.insert(Postcard).values({ author, body, date, isPublished });
+    }
+}
+---
+
+<form method="POST" style="display: grid">
+    <label for="author">Author</label>
+    <input id="author" name="author" />
+
+    <label for="body">Body</label>
+    <textarea id="body" name="body"></textarea>
+
+    <button type="submit">Submit</button>
+</form>

@@ -8,12 +8,13 @@
     "scripts": {
         "dev": "astro dev",
         "start": "astro dev",
-        "build": "node -v && npm -v && astro check && astro build",
+        "build": "node -v && npm -v && astro check && astro build --remote",
         "preview": "astro preview",
         "astro": "astro"
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",
+        "@astrojs/db": "^0.14.14",
         "@astrojs/react": "^4.2.1",
         "@astrojs/rss": "^4.0.11",
         "@astrojs/tailwind": "^6.0.0",
