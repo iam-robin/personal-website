@@ -13,29 +13,54 @@ import { db, Postcard } from 'astro:db';
 const postcards = await db.select().from(Postcard);
 ---
 
-<Layout title="Legal notice">
+<Layout title="Postcards">
     <Grid classes="pt-40">
         <GridBox desktopFull>
-            <SectionContent title="Postcards" classes="!px-0">
-                Labore consequat aliquip commodo quis irure culpa. Est ullamco proident sunt aliquip
-                eu enim pariatur non pariatur cupidatat. Mollit irure labore Lorem minim magna
-                nostrud. Commodo do labore est Lorem quis non. Non tempor tempor fugiat nulla tempor
-                aliqua culpa ipsum occaecat sint in do nisi irure officia. Ea magna cupidatat ex.
+            <SectionContent
+                title="Postcards"
+                classes="!px-0"
+                linkText="Send a postcard"
+                linkUrl="/postcards/new"
+            >
+                Postcards from friends and visitors around the world. Each one has its unique
+                handwriting style and character. Want to send your own? Click the link above.
             </SectionContent>
         </GridBox>
     </Grid>
-    <NewSlider>
-        {
-            postcards.map(({ author, body, date }) => (
-                <NewSliderItem
-                    largeFraction={2}
-                    mediumFraction={2.5}
-                    smallFraction={1.25}
-                    classes="py-4"
-                >
-                    <PostcardItem author={author} body={body} date={date} />
-                </NewSliderItem>
-            ))
-        }
-    </NewSlider>
+    <div class="mb-40">
+        <NewSlider>
+            {
+                postcards.map((postcard) => (
+                    <NewSliderItem
+                        largeFraction={2}
+                        mediumFraction={2.5}
+                        smallFraction={1.25}
+                        classes="py-4"
+                    >
+                        <PostcardItem
+                            author={postcard.author}
+                            body={postcard.body}
+                            date={postcard.date}
+                            marginBottom={postcard.marginBottom}
+                            marginRight={postcard.marginRight}
+                            rotation={postcard.rotation}
+                            penColor={postcard.penColor}
+                            paperColor={postcard.paperColor}
+                            fontSizeFactor={postcard.fontSizeFactor}
+                            lineHeight={postcard.lineHeight}
+                            authorLeftOffset={postcard.authorLeftOffset}
+                            authorTopOffset={postcard.authorTopOffset}
+                            authorRotation={postcard.authorRotation}
+                            dateLeftOffset={postcard.dateLeftOffset}
+                            dateTopOffset={postcard.dateTopOffset}
+                            dateRotation={postcard.dateRotation}
+                            bodyLeftOffset={postcard.bodyLeftOffset}
+                            bodyTopOffset={postcard.bodyTopOffset}
+                            bodyRotation={postcard.bodyRotation}
+                        />
+                    </NewSliderItem>
+                ))
+            }
+        </NewSlider>
+    </div>
 </Layout>
