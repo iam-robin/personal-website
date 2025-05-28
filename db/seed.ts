@@ -29,7 +29,10 @@ export default async function () {
             // Body text positioning
             bodyLeftOffset: 1,
             bodyTopOffset: -2,
-            bodyRotation: -1
+            bodyRotation: -1,
+            //stamp
+            stampSvg:
+                '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#FFCC00"/></svg>'
         },
         {
             id: 2,
@@ -58,7 +61,9 @@ export default async function () {
             // Body text positioning
             bodyLeftOffset: -2,
             bodyTopOffset: 3,
-            bodyRotation: 0
+            bodyRotation: 0,
+            //stamp
+            stampSvg: ''
         },
         {
             id: 3,
@@ -87,7 +92,9 @@ export default async function () {
             // Body text positioning
             bodyLeftOffset: 0,
             bodyTopOffset: -1,
-            bodyRotation: 1
+            bodyRotation: 1,
+            //stamp
+            stampSvg: ''
         }
     ]);
 }

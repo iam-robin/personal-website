@@ -21,6 +21,7 @@ export interface Props {
     bodyLeftOffset?: number;
     bodyTopOffset?: number;
     bodyRotation?: number;
+    stampSvg?: string;
 }
 
 const {
@@ -49,7 +50,8 @@ const {
     // Body text positioning
     bodyLeftOffset = Math.floor(Math.random() * 8) - 4,
     bodyTopOffset = Math.floor(Math.random() * 8) - 4,
-    bodyRotation = Math.floor(Math.random() * 4) - 2
+    bodyRotation = Math.floor(Math.random() * 4) - 2,
+    stampSvg = ''
 } = Astro.props as Props;
 
 // Calculate font size from size factor
@@ -89,9 +91,18 @@ const shadowClass = rotation >= 0 ? 'hide-after' : 'hide-before';
         <div class="w-[1px] bg-black-200 h-3/4 self-center"></div>
         <div class="w-6/12 flex flex-col justify-between py-6 px-8">
             <div class="h-1/2 flex justify-end">
-                <div class="stamp inline-block w-[60px] h-[66px] p-[3px] bg-white relative">
+                <div class="stamp inline-block w-[66px] h-[66px] p-[3px] bg-white relative">
                     <div class="bg-white h-full w-full p-[2px]">
-                        <div class="bg-red h-full w-full"></div>
+                        {
+                            stampSvg ? (
+                                <div
+                                    class="h-full w-full flex items-center justify-center"
+                                    set:html={stampSvg}
+                                />
+                            ) : (
+                                <div class="bg-red h-full w-full" />
+                            )
+                        }
                     </div>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 ---
 import { db, Postcard } from 'astro:db';
 import Layout from '@layouts/Layout.astro';
+
 export const prerender = false;
 
 // Define color arrays (same as in PostcardItem.astro)
@@ -31,6 +32,7 @@ if (Astro.request.method === 'POST') {
     const body = formData?.get('body');
     const date = new Date();
     const isPublished = true;
+    const stampSvg = formData?.get('stamp-svg');
 
     // Generate random style values
     const randomMarginBottom = Math.floor(Math.random() * 8);
@@ -84,7 +86,9 @@ if (Astro.request.method === 'POST') {
             dateRotation,
             bodyLeftOffset,
             bodyTopOffset,
-            bodyRotation
+            bodyRotation,
+            // Add the SVG string
+            stampSvg: typeof stampSvg === 'string' ? stampSvg : ''
         });
 
         // Redirect to postcards page after submission
@@ -118,6 +122,26 @@ if (Astro.request.method === 'POST') {
                     class="border border-black-200 p-2 rounded"></textarea>
             </div>
 
+            <div class="flex flex-col">
+                <label class="mb-1 font-medium">Your Stamp</label>
+                <div class="relative">
+                    <div class="stamp inline-block w-[144px] h-[144px] p-[6px] bg-white relative">
+                        <div class="bg-white h-full w-full">
+                            <div id="stamp-preview"></div>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="regenerate-stamp"
+                        class="absolute top-2 right-2 bg-black text-white rounded-full p-1 text-xs"
+                    >
+                        Regenerate
+                    </button>
+                </div>
+                <input type="hidden" id="stamp-svg" name="stamp-svg" value="" />
+            </div>
+
             <button
                 type="submit"
                 class="bg-black text-white py-2 px-4 rounded hover:bg-black-700 transition"
@@ -127,3 +151,286 @@ if (Astro.request.method === 'POST') {
         </form>
     </div>
 </Layout>
+
+<style>
+    .stamp {
+        -webkit-filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.5));
+        background: radial-gradient(transparent 0px, transparent 4px, white 4px, white);
+        background-size: 12px 12px;
+        background-position: -18px -18px;
+    }
+</style>
+
+<script>
+    import p5 from 'p5';
+    import P5SVGExtension from 'p5.js-svg';
+
+    // Ensure p5.js-svg extension is applied
+    if (typeof P5SVGExtension === 'function') {
+        P5SVGExtension(p5);
+    } else {
+        console.error('P5SVGExtension is not a function. SVG rendering might fail.');
+    }
+
+    const sketch = (p) => {
+        // Canvas and Grid Constants
+        const CANVAS_WIDTH = 132;
+        const CANVAS_HEIGHT = 132;
+        const MIN_CELLS = 1;
+        const MAX_CELLS = 3;
+
+        const CANVAS_COLOR = '#fff'; // Overall canvas background
+
+        let p5canvas: p5.Renderer;
+        let numCells: number;
+        let cellSize: number;
+        let shapeDrawingFunctions: Array<(x: number, y: number, size: number) => void> = [];
+        let currentPalette: string[] | undefined; // To store the randomly selected palette
+
+        // Define Color Palettes
+        const colorPalettes: string[][] = [
+            ['#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF'], // Bright & Playful
+            ['#2C3E50', '#E74C3C', '#ECF0F1', '#3498DB', '#2ECC71'], // Modern Flat
+            ['#A8DADC', '#457B9D', '#1D3557', '#F1FAEE', '#E63946'], // Oceanic
+            ['#264653', '#2A9D8F', '#E9C46A', '#F4A261', '#E76F51'], // Earthy & Warm
+            ['#003049', '#D62828', '#F77F00', '#FCBF49', '#EAE2B7'], // Retro
+            ['#333333', '#666666', '#999999', '#CCCCCC', '#EEEEEE'], // Grayscale
+            ['#E63946', '#F1FAEE', '#A8DADC', '#457B9D', '#1D3557'], // Vibrant Red/Blue (variation of Oceanic)
+            ['#D90429', '#EF233C', '#EDF2F4', '#8D99AE', '#2B2D42'], // Strong Reds & Grays
+            ['#007F5F', '#2B9348', '#55A630', '#80B918', '#AACC00'], // Shades of Green
+            ['#ACB0D4', '#6F6FF1', '#F38556', '#03017F', '#45519D'], // Purple/Blue/Orange
+            ['#5F45B2', '#9467C6', '#C888D9', '#FEACEE', '#428FFB'] // Pastel Purple/Blue
+        ];
+
+        // Helper function to get a random color from the current palette
+        const getRandomColorFromPalette = (): string => {
+            if (currentPalette && currentPalette.length > 0) {
+                return p.random(currentPalette);
+            }
+            // Fallback to a random hex color if palette is not set (should not happen)
+            return (
+                '#' +
+                Math.floor(Math.random() * 16777215)
+                    .toString(16)
+                    .padStart(6, '0')
+            );
+        };
+
+        // Function to select a new random palette
+        const selectNewPalette = () => {
+            currentPalette = p.random(colorPalettes);
+        };
+
+        // Function to generate new grid parameters
+        const generateGridParameters = () => {
+            numCells = p.floor(p.random(MIN_CELLS, MAX_CELLS + 1));
+            cellSize = CANVAS_WIDTH / numCells;
+        };
+
+        // Define shape drawing functions
+        const initializeShapeFunctions = (): void => {
+            shapeDrawingFunctions = [
+                // Full Square
+                (x: number, y: number, size: number) => {
+                    p.rect(x, y, size, size);
+                },
+                // Full Circle
+                (x: number, y: number, size: number) => {
+                    p.ellipse(x + size / 2, y + size / 2, size, size);
+                },
+                // Triangles (filling half the square)
+                (x: number, y: number, size: number) => {
+                    p.triangle(x, y, x + size, y, x, y + size);
+                },
+                (x: number, y: number, size: number) => {
+                    p.triangle(x + size, y + size, x, y + size, x + size, y);
+                },
+                (x: number, y: number, size: number) => {
+                    p.triangle(x, y, x + size, y, x + size, y + size);
+                },
+                (x: number, y: number, size: number) => {
+                    p.triangle(x, y + size, x + size, y + size, x, y);
+                },
+                // Half Circles
+                (x: number, y: number, size: number) => {
+                    p.arc(x + size / 2, y + size / 2, size, size, p.PI, p.TWO_PI, p.PIE);
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(x + size / 2, y + size / 2, size, size, 0, p.PI, p.PIE);
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(
+                        x + size / 2,
+                        y + size / 2,
+                        size,
+                        size,
+                        p.HALF_PI,
+                        p.PI + p.HALF_PI,
+                        p.PIE
+                    );
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(
+                        x + size / 2,
+                        y + size / 2,
+                        size,
+                        size,
+                        p.PI + p.HALF_PI,
+                        p.HALF_PI,
+                        p.PIE
+                    );
+                },
+                // Quarter Circles
+                (x: number, y: number, size: number) => {
+                    p.arc(x + size, y + size, size * 2, size * 2, p.PI, p.PI + p.HALF_PI, p.PIE);
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(x, y + size, size * 2, size * 2, p.PI + p.HALF_PI, p.TWO_PI, p.PIE);
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(x + size, y, size * 2, size * 2, p.HALF_PI, p.PI, p.PIE);
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(x, y, size * 2, size * 2, 0, p.HALF_PI, p.PIE);
+                },
+                // Bean/Lens shape (diagonal top-left to bottom-right)
+                (x: number, y: number, size: number) => {
+                    p.beginShape();
+                    p.vertex(x, y);
+                    p.quadraticVertex(x, y + size, x + size, y + size);
+                    p.quadraticVertex(x + size, y, x, y);
+                    p.endShape(p.CLOSE);
+                },
+                // Bean/Lens shape (diagonal top-right to bottom-left)
+                (x: number, y: number, size: number) => {
+                    p.beginShape();
+                    p.vertex(x + size, y);
+                    p.quadraticVertex(x, y, x, y + size);
+                    p.quadraticVertex(x + size, y + size, x + size, y);
+                    p.endShape(p.CLOSE);
+                },
+                // Four Triangles meeting at center (dividing square by diagonals)
+                // Each triangle gets a different color from the palette.
+                (x: number, y: number, size: number) => {
+                    const centerX = x + size / 2;
+                    const centerY = y + size / 2;
+
+                    // Top triangle
+                    p.fill(getRandomColorFromPalette());
+                    p.triangle(x, y, x + size, y, centerX, centerY);
+
+                    // Right triangle
+                    p.fill(getRandomColorFromPalette());
+                    p.triangle(x + size, y, x + size, y + size, centerX, centerY);
+
+                    // Bottom triangle
+                    p.fill(getRandomColorFromPalette());
+                    p.triangle(x + size, y + size, x, y + size, centerX, centerY);
+
+                    // Left triangle
+                    p.fill(getRandomColorFromPalette());
+                    p.triangle(x, y + size, x, y, centerX, centerY);
+                },
+                // Concentric Circles
+                (x: number, y: number, size: number) => {
+                    const centerX = x + size / 2;
+                    const centerY = y + size / 2;
+                    const outerDiameter = size;
+                    const innerDiameter = size * 0.6; // Inner circle is 60% of the outer
+
+                    // Outer circle
+                    p.fill(getRandomColorFromPalette());
+                    p.ellipse(centerX, centerY, outerDiameter, outerDiameter);
+
+                    // Inner circle
+                    p.fill(getRandomColorFromPalette());
+                    p.ellipse(centerX, centerY, innerDiameter, innerDiameter);
+                }
+            ];
+        };
+
+        // Function to update the hidden SVG input field
+        const updateStampSvgInput = () => {
+            const hiddenInput = document.getElementById('stamp-svg') as HTMLInputElement | null;
+            if (!hiddenInput) {
+                console.error('Hidden input #stamp-svg not found!');
+                return;
+            }
+
+            if (p5canvas && p5canvas.svg && typeof p5canvas.svg.outerHTML === 'string') {
+                const svgString = p5canvas.svg.outerHTML;
+                if (svgString && svgString.length > 0 && svgString.startsWith('<svg')) {
+                    hiddenInput.value = svgString;
+                } else {
+                    hiddenInput.value = '';
+                }
+            } else {
+                hiddenInput.value = '';
+            }
+        };
+
+        p.setup = () => {
+            const renderer = p5.SVG || p.SVG;
+            p5canvas = p.createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT, renderer || undefined);
+
+            const parentDiv = document.getElementById('stamp-preview');
+            if (!parentDiv) {
+                console.error('[p.setup] Parent div #stamp-preview not found!');
+            } else {
+                if (p5canvas) {
+                    p5canvas.parent('stamp-preview');
+                }
+            }
+
+            p.noStroke();
+            p.noLoop();
+
+            initializeShapeFunctions();
+            selectNewPalette(); // Select initial palette
+            generateGridParameters();
+        };
+
+        p.draw = () => {
+            p.background(CANVAS_COLOR);
+
+            for (let i = 0; i < numCells; i++) {
+                for (let j = 0; j < numCells; j++) {
+                    const cellX = i * cellSize;
+                    const cellY = j * cellSize;
+
+                    p.fill(getRandomColorFromPalette());
+                    p.rect(cellX, cellY, cellSize, cellSize);
+
+                    p.fill(getRandomColorFromPalette());
+
+                    if (shapeDrawingFunctions && shapeDrawingFunctions.length > 0) {
+                        const drawRandomShape = p.random(shapeDrawingFunctions);
+                        drawRandomShape(cellX, cellY, cellSize);
+                    }
+                }
+            }
+            updateStampSvgInput();
+        };
+
+        p.regenerate = () => {
+            selectNewPalette(); // Select a new palette on regenerate
+            generateGridParameters();
+            p.redraw();
+        };
+    };
+
+    const p5Instance = new p5(sketch);
+
+    const regenerateButton = document.getElementById('regenerate-stamp');
+    if (regenerateButton) {
+        regenerateButton.addEventListener('click', () => {
+            if (p5Instance && typeof p5Instance.regenerate === 'function') {
+                p5Instance.regenerate();
+            } else {
+                console.error('p5 instance or regenerate function not available.');
+            }
+        });
+    } else {
+        console.error('Regenerate button not found.');
+    }
+</script>

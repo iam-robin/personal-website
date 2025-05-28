@@ -29,7 +29,9 @@ const Postcard = defineTable({
         // Body text positioning
         bodyLeftOffset: column.number(),
         bodyTopOffset: column.number(),
-        bodyRotation: column.number()
+        bodyRotation: column.number(),
+        //stamp
+        stampSvg: column.text()
     }
 });
 
