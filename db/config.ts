@@ -31,7 +31,17 @@ const Postcard = defineTable({
         bodyTopOffset: column.number(),
         bodyRotation: column.number(),
         //stamp
-        stampSvg: column.text()
+        stampSvg: column.text(),
+        //country
+        country: column.text({ optional: true }),
+        // Post Office Stamp styling
+        postOfficeStampTop: column.number({ optional: true }), // Percentage
+        postOfficeStampRight: column.number({ optional: true }), // Percentage
+        postOfficeStampRotation: column.number({ optional: true }), // Degrees
+        // New Wavy Lines Stamp styling
+        wavyStampTop: column.number({ optional: true }), // Percentage
+        wavyStampRight: column.number({ optional: true }), // Percentage
+        wavyStampRotation: column.number({ optional: true }) // Degrees
     }
 });
 

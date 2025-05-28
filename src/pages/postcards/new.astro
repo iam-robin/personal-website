@@ -30,6 +30,7 @@ if (Astro.request.method === 'POST') {
     const formData = await Astro.request.formData();
     const author = formData?.get('author');
     const body = formData?.get('body');
+    const country = formData?.get('country');
     const date = new Date();
     const isPublished = true;
     const stampSvg = formData?.get('stamp-svg');
@@ -64,6 +65,20 @@ if (Astro.request.method === 'POST') {
     const bodyTopOffset = Math.floor(Math.random() * 8) - 4;
     const bodyRotation = Math.floor(Math.random() * 4) - 2;
 
+    // Post Office Stamp positioning & rotation
+    const postOfficeStampTop = Math.floor(Math.random() * 31) - 5; // -5% to 25%
+    const postOfficeStampRight = Math.floor(Math.random() * 81) - 10; // -10% to 70%
+    const postOfficeStampRotation = Math.floor(Math.random() * 31) - 15; // -15 to +15 degrees
+
+    // Wavy Lines Stamp positioning & rotation
+    // Aim to place it near the post office stamp, often to its left or slightly overlapping
+    // Top: similar range to post office stamp
+    // Right: further to the right (meaning more to the left on screen) than post office stamp, or slightly overlapping
+    // Post office stamp is 72px wide. Wavy stamp might be ~50px wide.
+    const wavyStampTop = Math.floor(Math.random() * 31) - 5; // -5% to 25%
+    const wavyStampRight = postOfficeStampRight + Math.floor(Math.random() * 60) + 20; // 20px to 80px to the left of post office stamp's right edge
+    const wavyStampRotation = Math.floor(Math.random() * 21) - 10; // -10 to +10 degrees
+
     if (typeof author === 'string' && typeof body === 'string') {
         await db.insert(Postcard).values({
             author,
@@ -87,8 +102,16 @@ if (Astro.request.method === 'POST') {
             bodyLeftOffset,
             bodyTopOffset,
             bodyRotation,
-            // Add the SVG string
-            stampSvg: typeof stampSvg === 'string' ? stampSvg : ''
+            stampSvg: typeof stampSvg === 'string' ? stampSvg : '',
+            country: typeof country === 'string' && country.trim() !== '' ? country : undefined,
+            // Save Post Office Stamp styles
+            postOfficeStampTop,
+            postOfficeStampRight,
+            postOfficeStampRotation,
+            // Save Wavy Lines Stamp styles
+            wavyStampTop,
+            wavyStampRight,
+            wavyStampRotation
         });
 
         // Redirect to postcards page after submission
@@ -120,6 +143,16 @@ if (Astro.request.method === 'POST') {
                     rows="6"
                     required
                     class="border border-black-200 p-2 rounded"></textarea>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="country" class="mb-1 font-medium">Country (Optional)</label>
+                <input
+                    id="country"
+                    name="country"
+                    class="border border-black-200 p-2 rounded"
+                    maxlength="18"
+                />
             </div>
 
             <div class="flex flex-col">
@@ -198,6 +231,9 @@ if (Astro.request.method === 'POST') {
             ['#E63946', '#F1FAEE', '#A8DADC', '#457B9D', '#1D3557'], // Vibrant Red/Blue (variation of Oceanic)
             ['#D90429', '#EF233C', '#EDF2F4', '#8D99AE', '#2B2D42'], // Strong Reds & Grays
             ['#007F5F', '#2B9348', '#55A630', '#80B918', '#AACC00'], // Shades of Green
+            ['#023E8A', '#0077B6', '#0096C7', '#00B4D8', '#48CAE4'], // Shades of Blue
+            ['#6A0572', '#A6036F', '#D0006F', '#FF006E', '#FFB703'], // Shades of Purple/Blue/Orange
+            ['#FF9A8B', '#FF6F61', '#6A0572', '#D0006F', '#FFB703'], // Pink/Red/Orange
             ['#ACB0D4', '#6F6FF1', '#F38556', '#03017F', '#45519D'], // Purple/Blue/Orange
             ['#5F45B2', '#9467C6', '#C888D9', '#FEACEE', '#428FFB'] // Pastel Purple/Blue
         ];

@@ -22,6 +22,14 @@ export interface Props {
     bodyTopOffset?: number;
     bodyRotation?: number;
     stampSvg?: string;
+    country?: string | null; // Add country prop
+    postOfficeStampTop?: number | null;
+    postOfficeStampRight?: number | null;
+    postOfficeStampRotation?: number | null;
+    // Wavy Lines Stamp styling props
+    wavyStampTop?: number | null; // Percentage
+    wavyStampRight?: number | null; // Pixels
+    wavyStampRotation?: number | null; // Degrees
 }
 
 const {
@@ -29,36 +37,38 @@ const {
     body,
     date,
     distorted = true,
-    // Use passed props or generate random values
     marginBottom = Math.floor(Math.random() * 8),
     marginRight = Math.floor(Math.random() * 8),
     rotation = Math.floor(Math.random() * 4 - 2),
-    // Default pen and paper colors if not provided
     penColor = '#000000',
     paperColor = '#FAF9F6',
-    // Font sizing
     fontSizeFactor = 0.9 + Math.random() * 0.2,
     lineHeight: lineHeightFactor = 1.1 + Math.random() * 0.4,
-    // Author positioning
     authorLeftOffset = Math.floor(Math.random() * 10) - 5,
     authorTopOffset = Math.floor(Math.random() * 6) - 3,
     authorRotation = Math.floor(Math.random() * 6) - 3,
-    // Date positioning
     dateLeftOffset = Math.floor(Math.random() * 10) - 5,
     dateTopOffset = Math.floor(Math.random() * 6) - 3,
     dateRotation = Math.floor(Math.random() * 6) - 3,
-    // Body text positioning
     bodyLeftOffset = Math.floor(Math.random() * 8) - 4,
     bodyTopOffset = Math.floor(Math.random() * 8) - 4,
     bodyRotation = Math.floor(Math.random() * 4) - 2,
-    stampSvg = ''
+    stampSvg = '',
+    country,
+    // Destructure Post Office Stamp styles, providing defaults if not passed
+    postOfficeStampTop = Math.floor(Math.random() * 31) - 5, // Default: -5% to 25%
+    postOfficeStampRight = Math.floor(Math.random() * 81) - 10, // Default: -10px to 70px
+    postOfficeStampRotation = Math.floor(Math.random() * 31) - 15, // Default: -15 to 15 deg
+    wavyStampTop = Math.floor(Math.random() * 31) - 5, // Default: -5% to 25%
+    wavyStampRight = (postOfficeStampRight || 0) + Math.floor(Math.random() * 60) + 20, // Default: near post office stamp
+    wavyStampRotation = Math.floor(Math.random() * 21) - 10 // Default: -10 to 10 deg
 } = Astro.props as Props;
 
 // Calculate font size from size factor
 const fontSize = `${fontSizeFactor}em`;
 const lineHeight = lineHeightFactor.toFixed(2);
 
-// Format the date
+// Format the date for general display
 const formattedDate = date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -75,6 +85,36 @@ const bodyStyles = `transform: translateX(${bodyLeftOffset}px) translateY(${body
 
 // Determine shadow class at build time based on rotation
 const shadowClass = rotation >= 0 ? 'hide-after' : 'hide-before';
+
+// Data for the post office stamp
+const stampCountryText = (country ? country : 'WORLD WIDE WEB').toUpperCase();
+const stampDateDay = date.toLocaleDateString('en-GB', { day: '2-digit' });
+const stampDateMonth = date.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
+const stampDateYear = date.toLocaleDateString('en-GB', { year: 'numeric' });
+// Generate a unique ID for the SVG path for textPath
+const uniqueStampPathId = `stampPath-${author.replace(/\W/g, '')}${date.getTime()}`;
+
+// Styles for the Post Office Stamp container
+const postOfficeStampContainerStyles = `
+    position: absolute;
+    top: ${postOfficeStampTop}%;
+    right: ${postOfficeStampRight}%;
+    transform: rotate(${postOfficeStampRotation}deg);
+    z-index: 10;
+    opacity: 0.6;
+    filter: url(#distort-xl);
+`;
+
+// Styles for the Wavy Lines Stamp container
+const wavyLinesStampContainerStyles = `
+    position: absolute;
+    top: ${wavyStampTop}%;
+    right: ${wavyStampRight}px;
+    transform: rotate(${wavyStampRotation}deg);
+    z-index: 9; /* Slightly lower z-index than post office stamp if they overlap */
+    opacity: 0.5;
+    filter: url(#distort-xl);
+`;
 ---
 
 <div
@@ -89,7 +129,7 @@ const shadowClass = rotation >= 0 ? 'hide-after' : 'hide-before';
             <span class="absolute" style={bodyStyles}>{body}</span>
         </div>
         <div class="w-[1px] bg-black-200 h-3/4 self-center"></div>
-        <div class="w-6/12 flex flex-col justify-between py-6 px-8">
+        <div class="w-6/12 flex flex-col justify-between py-6 px-8 relative overflow-hidden">
             <div class="h-1/2 flex justify-end">
                 <div class="stamp inline-block w-[66px] h-[66px] p-[3px] bg-white relative">
                     <div class="bg-white h-full w-full p-[2px]">
@@ -106,6 +146,98 @@ const shadowClass = rotation >= 0 ? 'hide-after' : 'hide-before';
                     </div>
                 </div>
             </div>
+
+            {/* New Post Office SVG Stamp - replacing the old placeholder div */}
+            <div style={postOfficeStampContainerStyles}>
+                {/* Adjusted positioning */}
+                <svg
+                    width="72"
+                    height="72"
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <defs>
+                        {
+                            /* Path for upper text. M x y A rx ry x-axis-rotation large-arc-flag sweep-flag x y */
+                        }
+                        <path id={uniqueStampPathId} d="M 12,58 A 38,38 0 1 1 88,58" fill="none"
+                        ></path>
+                    </defs>
+
+                    {/* Outer circle */}
+                    <circle cx="50" cy="50" r="47" stroke="#4A4A4A" stroke-width="2.5" fill="none"
+                    ></circle>
+                    {/* Optional inner decorative circle */}
+                    <circle cx="50" cy="50" r="42" stroke="#6C6C6C" stroke-width="1.5" fill="none"
+                    ></circle>
+
+                    {/* Country Text on upper arc */}
+                    <text
+                        font-family="'Helvetica Neue', Arial, sans-serif"
+                        font-size="10"
+                        letter-spacing="0.5"
+                        fill="#333333"
+                        font-weight="600"
+                    >
+                        <textPath
+                            xlink:href={`#${uniqueStampPathId}`}
+                            startOffset="50%"
+                            text-anchor="middle"
+                        >
+                            {stampCountryText}
+                        </textPath>
+                    </text>
+
+                    {/* Date in the middle */}
+                    <text
+                        x="50"
+                        y="45"
+                        font-family="'Courier New', Courier, monospace"
+                        font-weight="bold"
+                        font-size="12"
+                        text-anchor="middle"
+                        fill="#333333"
+                    >
+                        {stampDateDay}
+                    </text>
+                    <text
+                        x="50"
+                        y="58"
+                        font-family="'Courier New', Courier, monospace"
+                        font-weight="bold"
+                        font-size="12"
+                        text-anchor="middle"
+                        fill="#333333"
+                    >
+                        {stampDateMonth}
+                    </text>
+                    <text
+                        x="50"
+                        y="71"
+                        font-family="'Courier New', Courier, monospace"
+                        font-weight="bold"
+                        font-size="12"
+                        text-anchor="middle"
+                        fill="#333333"
+                    >
+                        {stampDateYear}
+                    </text>
+                </svg>
+            </div>
+
+            {/* Wavy Lines SVG Stamp */}
+            <div style={wavyLinesStampContainerStyles}>
+                <svg width="80" height="40" viewBox="0 0 50 40" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#333333" stroke-width="1.8" fill="none" stroke-linecap="round">
+                        <path d="M 2 6 Q 10 2, 18 6 T 34 6 T 50 6"></path>
+                        <path d="M 2 12 Q 10 8, 18 12 T 34 12 T 50 12"></path>
+                        <path d="M 2 18 Q 10 14, 18 18 T 34 18 T 50 18"></path>
+                        <path d="M 2 24 Q 10 20, 18 24 T 34 24 T 50 24"></path>
+                        <path d="M 2 30 Q 10 26, 18 30 T 34 30 T 50 30"></path>
+                    </g>
+                </svg>
+            </div>
+
             <div class="h-1/2 flex items-end">
                 <ul class="w-full space-y-3">
                     <li class="flex flex-col gap-1">
@@ -124,6 +256,7 @@ const shadowClass = rotation >= 0 ? 'hide-after' : 'hide-before';
                             <span class="absolute" style={dateStyles}>{formattedDate}</span>
                         </div>
                     </li>
+                    {/* Country field removed from here as it's now in the stamp */}
                 </ul>
             </div>
         </div>
@@ -132,6 +265,7 @@ const shadowClass = rotation >= 0 ? 'hide-after' : 'hide-before';
 
 <style>
     .stamp {
+        /* This is for the artistic stamp container */
         -webkit-filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.3));
         background: radial-gradient(transparent 0px, transparent 2px, white 2px, white);
         background-size: 6px 6px;

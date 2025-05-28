@@ -58,6 +58,13 @@ const postcards = await db.select().from(Postcard).orderBy(desc(Postcard.date));
                             bodyTopOffset={postcard.bodyTopOffset}
                             bodyRotation={postcard.bodyRotation}
                             stampSvg={postcard.stampSvg}
+                            country={postcard.country}
+                            postOfficeStampTop={postcard.postOfficeStampTop}
+                            postOfficeStampRight={postcard.postOfficeStampRight}
+                            postOfficeStampRotation={postcard.postOfficeStampRotation}
+                            wavyStampTop={postcard.wavyStampTop}
+                            wavyStampRight={postcard.wavyStampRight}
+                            wavyStampRotation={postcard.wavyStampRotation}
                         />
                     </NewSliderItem>
                 ))
