@@ -1,0 +1,74 @@
+---
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import NewSlider from '@components/newSlider/NewSlider.astro';
+import NewSliderItem from '@components/newSlider/NewSliderItem.astro';
+import PostcardItem from '@components/PostcardItem.astro';
+import SectionContent from '@components/SectionContent.astro';
+import Layout from '@layouts/Layout.astro';
+
+import { db, Postcard, desc } from 'astro:db'; // Import desc
+
+// Render the new list of comments on each request, ordered by date descending
+const postcards = await db.select().from(Postcard).orderBy(desc(Postcard.date));
+---
+
+<Layout title="Postcards">
+    <Grid classes="pt-40">
+        <GridBox desktopFull>
+            <SectionContent
+                title="Postcards"
+                classes="!px-0"
+                linkText="Send a postcard"
+                linkUrl="/postcards/new"
+            >
+                Postcards from friends and visitors around the world. Each one has its unique
+                handwriting style and character. Want to send your own? Click the link above.
+            </SectionContent>
+        </GridBox>
+    </Grid>
+    <div class="mb-40">
+        <NewSlider>
+            {
+                postcards.map((postcard) => (
+                    <NewSliderItem
+                        largeFraction={2}
+                        mediumFraction={2.5}
+                        smallFraction={1.25}
+                        classes="py-4"
+                    >
+                        <PostcardItem
+                            author={postcard.author}
+                            body={postcard.body}
+                            date={postcard.date}
+                            marginBottom={postcard.marginBottom}
+                            marginRight={postcard.marginRight}
+                            rotation={postcard.rotation}
+                            penColor={postcard.penColor}
+                            paperColor={postcard.paperColor}
+                            fontSizeFactor={postcard.fontSizeFactor}
+                            lineHeight={postcard.lineHeight}
+                            authorLeftOffset={postcard.authorLeftOffset}
+                            authorTopOffset={postcard.authorTopOffset}
+                            authorRotation={postcard.authorRotation}
+                            dateLeftOffset={postcard.dateLeftOffset}
+                            dateTopOffset={postcard.dateTopOffset}
+                            dateRotation={postcard.dateRotation}
+                            bodyLeftOffset={postcard.bodyLeftOffset}
+                            bodyTopOffset={postcard.bodyTopOffset}
+                            bodyRotation={postcard.bodyRotation}
+                            stampSvg={postcard.stampSvg}
+                            country={postcard.country}
+                            postOfficeStampTop={postcard.postOfficeStampTop}
+                            postOfficeStampRight={postcard.postOfficeStampRight}
+                            postOfficeStampRotation={postcard.postOfficeStampRotation}
+                            wavyStampTop={postcard.wavyStampTop}
+                            wavyStampRight={postcard.wavyStampRight}
+                            wavyStampRotation={postcard.wavyStampRotation}
+                        />
+                    </NewSliderItem>
+                ))
+            }
+        </NewSlider>
+    </div>
+</Layout>

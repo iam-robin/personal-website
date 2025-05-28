@@ -1,0 +1,82 @@
+---
+
+---
+
+<div id="svg-container"></div>
+
+<script>
+    import p5 from 'p5';
+    import P5SVGExtension from 'p5.js-svg';
+
+    P5SVGExtension(p5);
+
+    const sketch = (p) => {
+        // Constants from your example
+        const CANVAS_COLOR = '#fff'; // White background
+        const FILL_COLOR = '#5850FE'; // Blueish
+        const STROKE_COLOR = 0; // Black stroke
+        const STROKEWIDTH = 1; // Adjusted for visibility, can be 0
+
+        const ITEMSIZE = 24;
+        const COLUMNS = 16;
+        const ROWS = 16;
+        const PADDING = ITEMSIZE / 2;
+
+        const GRIDBOX = ITEMSIZE + PADDING; // Simplified, assuming STROKEWIDTH is part of ITEMSIZE or handled by p5's stroke alignment
+        const START = GRIDBOX / 2 - PADDING / 2; // Adjusted for centering items in their grid cells
+
+        let p5canvas;
+
+        p.setup = () => {
+            const totalX = GRIDBOX * COLUMNS;
+            const totalY = GRIDBOX * ROWS;
+
+            // Check if p5.SVG or p.SVG is available
+            console.log('p5.js-svg: In setup - p5.SVG (static):', p5.SVG);
+            console.log('p5.js-svg: In setup - p.SVG (instance):', p.SVG);
+
+            const renderer = p5.SVG || p.SVG; // Prefer static, then instance
+
+            if (!renderer) {
+                console.error(
+                    'p5.js-svg: SVG renderer type still not found in setup. Defaulting to canvas.'
+                );
+            }
+
+            p5canvas = p.createCanvas(totalX, totalY, renderer || undefined); // Use undefined to let p5 default if renderer is not 'svg'
+            p5canvas.parent('svg-container');
+
+            p.stroke(STROKE_COLOR);
+            p.strokeWeight(STROKEWIDTH);
+            // p.loop(); // loop is default, explicitly calling if needed for clarity
+            // p.frameRate(fps); // fps is not defined here, remove or set a value like 30
+
+            console.log('p5.js sketch setup complete. Renderer used:', renderer);
+            p.noLoop(); // For a static drawing as in previous examples
+        };
+
+        p.draw = () => {
+            p.background(CANVAS_COLOR);
+
+            for (let x = 0; x < COLUMNS; x++) {
+                for (let y = 0; y < ROWS; y++) {
+                    const currentX = START + x * GRIDBOX;
+                    const currentY = START + y * GRIDBOX;
+
+                    // Outer rectangle (like a background for the cell item)
+                    p.fill('#D1DAE1'); // Light gray
+                    p.rectMode(p.CENTER); // Draw rect from its center
+                    p.rect(currentX, currentY, ITEMSIZE, ITEMSIZE);
+
+                    // Inner ellipse
+                    p.fill(FILL_COLOR);
+                    p.ellipse(currentX, currentY, ITEMSIZE * 0.8, ITEMSIZE * 0.8); // Slightly smaller ellipse
+                }
+            }
+            console.log('p5.js draw complete.');
+        };
+    };
+
+    // Initialize p5.js in instance mode
+    new p5(sketch);
+</script>
