@@ -10,7 +10,6 @@ import db from '@astrojs/db';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://iamrob.in',
-    output: 'hybrid',
     adapter: vercel(),
     integrations: [tailwind(), icon(), react(), db()],
     markdown: {
