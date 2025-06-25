@@ -4,43 +4,49 @@ import GridBox from '@components/GridBox.astro';
 import NewSlider from '@components/newSlider/NewSlider.astro';
 import NewSliderItem from '@components/newSlider/NewSliderItem.astro';
 import PostcardItem from '@components/PostcardItem.astro';
-import SectionContent from '@components/SectionContent.astro';
 import Layout from '@layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import RobinCoffee from '@assets/images/robin-coffee.png';
+import NewPostcardSticker from '@assets/new-postcard.svg';
 
-import { db, Postcard, desc } from 'astro:db'; // Import desc
+import { db, Postcard, desc, eq } from 'astro:db'; // Import desc and eq
+import Headline from '@components/Headline.astro';
+import SectionContent from '@components/SectionContent.astro';
 
-// Render the new list of comments on each request, ordered by date descending
-const postcards = await db.select().from(Postcard).orderBy(desc(Postcard.date));
+// Render only published postcards, ordered by date descending
+const postcards = await db
+    .select()
+    .from(Postcard)
+    .where(eq(Postcard.isPublished, true))
+    .orderBy(desc(Postcard.date));
 ---
 
-<Layout title="Postcards">
-    <Grid classes="pt-40">
-        <GridBox desktopFull>
-            <SectionContent
-                title="Postcards"
-                classes="!px-0"
-                linkText="Send a postcard"
-                linkUrl="/postcards/new"
-            >
-                Postcards from friends and visitors around the world. Each one has its unique
-                handwriting style and character. Want to send your own? Click the link above.
-            </SectionContent>
-        </GridBox>
-    </Grid>
-    <div class="mb-40">
+<Layout title="Postcards" ogimageName="postcards.jpg">
+    <SectionContent
+        classes="w-full pt-40"
+        title="Postcards"
+        linkText="Send Postcard"
+        linkUrl="/postcards/new"
+        buttonStyle={true}
+    >
+        I love the idea of people stopping by and leaving a trace — something small that makes this
+        website feel a little more alive. It's like a guestbook, just a bit more personal.
+    </SectionContent>
+    <div class="mb-8 sm:mb-32">
         <NewSlider>
             {
                 postcards.map((postcard) => (
                     <NewSliderItem
                         largeFraction={2}
-                        mediumFraction={2.5}
-                        smallFraction={1.25}
+                        mediumFraction={1.25}
+                        smallFraction={1}
                         classes="py-4"
                     >
                         <PostcardItem
                             author={postcard.author}
                             body={postcard.body}
                             date={postcard.date}
+                            websiteUrl={postcard.websiteUrl}
                             marginBottom={postcard.marginBottom}
                             marginRight={postcard.marginRight}
                             rotation={postcard.rotation}
@@ -70,5 +76,49 @@ const postcards = await db.select().from(Postcard).orderBy(desc(Postcard.date));
                 ))
             }
         </NewSlider>
+    </div>
+    <div class="pb-40">
+        <Grid>
+            <GridBox
+                desktopStart={3}
+                desktopEnd={5}
+                tabletStart={1}
+                tabletEnd={3}
+                classes="flex items-center justify-center lg:justify-start mt-12 md:mt-0"
+            >
+                <Image
+                    src={RobinCoffee}
+                    alt="Illustration of me walking with a camera"
+                    widths={[640]}
+                    sizes={`320px`}
+                    class="max-w-[140px]"
+                />
+            </GridBox>
+            <GridBox
+                desktopStart={6}
+                desktopEnd={10}
+                tabletStart={4}
+                tabletEnd={7}
+                classes="flex flex-col justify-center -mt-20"
+            >
+                <a href="/postcards/new" class="text-center self-end mr-6 z-10">
+                    <Image
+                        src={NewPostcardSticker}
+                        alt="Illustration of me walking with a camera"
+                        widths={[240]}
+                        sizes={`240px`}
+                        class="max-w-[100px]"
+                    />
+                </a>
+                <div class="mt-4 md:-mt-8">
+                    <Headline level={3}>Drop me a line</Headline>
+                    <p class="mt-2 md:mt-6">
+                        A quiet way to say hello, and a reminder that there are people out there
+                        reading, visiting, connecting — even if just for a moment. Feel free to
+                        leave a postcard!
+                    </p>
+                </div>
+            </GridBox>
+        </Grid>
     </div>
 </Layout>

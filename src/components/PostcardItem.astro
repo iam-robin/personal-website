@@ -23,11 +23,12 @@ export interface Props {
     bodyRotation?: number;
     stampSvg?: string;
     country?: string | null; // Add country prop
+    websiteUrl?: string | null; // Add website URL prop
     postOfficeStampTop?: number | null;
     postOfficeStampRight?: number | null;
     postOfficeStampRotation?: number | null;
     // Wavy Lines Stamp styling props
-    wavyStampTop?: number | null; // Percentage
+    wavyStampTop?: number | null; // Pixels
     wavyStampRight?: number | null; // Pixels
     wavyStampRotation?: number | null; // Degrees
 }
@@ -55,12 +56,13 @@ const {
     bodyRotation = Math.floor(Math.random() * 4) - 2,
     stampSvg = '',
     country,
+    websiteUrl,
     // Destructure Post Office Stamp styles, providing defaults if not passed
-    postOfficeStampTop = Math.floor(Math.random() * 31) - 5, // Default: -5% to 25%
-    postOfficeStampRight = Math.floor(Math.random() * 81) - 10, // Default: -10px to 70px
+    postOfficeStampTop = Math.floor(Math.random() * 93) - 12, // Default: -12px to 80px
+    postOfficeStampRight = Math.floor(Math.random() * 133) - 12, // Default: -10px to 70px
     postOfficeStampRotation = Math.floor(Math.random() * 31) - 15, // Default: -15 to 15 deg
-    wavyStampTop = Math.floor(Math.random() * 31) - 5, // Default: -5% to 25%
-    wavyStampRight = (postOfficeStampRight || 0) + Math.floor(Math.random() * 60) + 20, // Default: near post office stamp
+    wavyStampTop = Math.floor(Math.random() * 69) - 4, // Default
+    wavyStampRight = Math.floor(Math.random() * 97) - 24, // Default
     wavyStampRotation = Math.floor(Math.random() * 21) - 10 // Default: -10 to 10 deg
 } = Astro.props as Props;
 
@@ -97,39 +99,43 @@ const uniqueStampPathId = `stampPath-${author.replace(/\W/g, '')}${date.getTime(
 // Styles for the Post Office Stamp container
 const postOfficeStampContainerStyles = `
     position: absolute;
-    top: ${postOfficeStampTop}%;
-    right: ${postOfficeStampRight}%;
+    top: ${postOfficeStampTop}px;
+    right: ${postOfficeStampRight}px;
     transform: rotate(${postOfficeStampRotation}deg);
     z-index: 10;
-    opacity: 0.6;
+    opacity: 0.4;
     filter: url(#distort-xl);
 `;
 
 // Styles for the Wavy Lines Stamp container
 const wavyLinesStampContainerStyles = `
     position: absolute;
-    top: ${wavyStampTop}%;
+    top: ${wavyStampTop}px;
     right: ${wavyStampRight}px;
     transform: rotate(${wavyStampRotation}deg);
     z-index: 9; /* Slightly lower z-index than post office stamp if they overlap */
-    opacity: 0.5;
+    opacity: 0.4;
     filter: url(#distort-xl);
 `;
+
+console.log({ websiteUrl });
 ---
 
 <div
-    class={`corner-shadow-effect aspect-[3/2] w-full max-w-2xl ${shadowClass}`}
+    class={`corner-shadow-effect sm:aspect-[3/2] w-full max-w-2xl ${shadowClass}`}
     style={transformStyles}
 >
     <div
-        class="flex justify-between h-full w-full border border-black-100"
+        class="flex flex-col sm:flex-row justify-between h-full w-full border border-black-100"
         style={`background-color: ${paperColor};`}
     >
-        <div class="w-6/12 py-6 px-8 font-script text-md relative">
-            <span class="absolute" style={bodyStyles}>{body}</span>
+        <div class="w-full sm:w-1/2 py-6 sm:px-8 font-script text-md relative px-4 overflow-hidden">
+            <span class="sm:absolute" style={bodyStyles} set:html={body.replace(/\n/g, '<br />')} />
         </div>
-        <div class="w-[1px] bg-black-200 h-3/4 self-center"></div>
-        <div class="w-6/12 flex flex-col justify-between py-6 px-8 relative overflow-hidden">
+        <div class="hidden sm:block w-[1px] bg-black-200 h-3/4 self-center"></div>
+        <div
+            class="w-full sm:w-1/2 flex flex-col justify-between py-6 px-8 relative sm:overflow-hidden"
+        >
             <div class="h-1/2 flex justify-end">
                 <div class="stamp inline-block w-[66px] h-[66px] p-[3px] bg-white relative">
                     <div class="bg-white h-full w-full p-[2px]">
@@ -245,7 +251,23 @@ const wavyLinesStampContainerStyles = `
                         <div
                             class="text-md font-script border-b border-black-600 border-dotted h-8"
                         >
-                            <span class="absolute" style={authorStyles}>{author}</span>
+                            {
+                                websiteUrl ? (
+                                    <a
+                                        href={websiteUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="absolute hover:underline"
+                                        style={authorStyles}
+                                    >
+                                        {author} ↗
+                                    </a>
+                                ) : (
+                                    <span class="absolute" style={authorStyles}>
+                                        {author}
+                                    </span>
+                                )
+                            }
                         </div>
                     </li>
                     <li class="flex flex-col gap-1">

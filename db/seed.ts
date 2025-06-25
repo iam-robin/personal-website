@@ -8,6 +8,7 @@ export default async function () {
             body: 'Culpa esse officia consequat qui eu quis cillum cillum minim excepteur culpa cillum.',
             date: new Date('2023-10-01'),
             isPublished: true,
+            websiteUrl: 'https://google.com',
             // Card positioning and rotation
             marginBottom: 3,
             marginRight: 5,
@@ -34,11 +35,11 @@ export default async function () {
             stampSvg:
                 '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="132" height="132" viewBox="0 0 132 132"><defs></defs><g><rect fill="rgb(255,255,255)" stroke="none" x="0" y="0" width="132" height="132" transform="matrix(1 0 0 1 0 0)" fill-opacity="1"></rect><path fill="rgb(254,172,238)" stroke="none" paint-order="stroke fill markers" d=" M 0 0 L 132 0 L 132 132 L 0 132 L 0 0 Z" fill-opacity="1"></path><path fill="rgb(148,103,198)" stroke="none" paint-order="stroke fill markers" d=" M 132 66 A 66 66 0 0 1 0 66.00000000000001 L 66 66 Z" fill-opacity="1"></path></g></svg>',
             country: 'Germany',
-            postOfficeStampTop: 15, // %
+            postOfficeStampTop: -12, // px
             postOfficeStampRight: 20, // px
             postOfficeStampRotation: -5, // deg
-            wavyStampTop: 20, // %
-            wavyStampRight: 10, // %
+            wavyStampTop: 20, // px
+            wavyStampRight: 72, // px
             wavyStampRotation: 5 // deg
         },
         {
@@ -47,6 +48,7 @@ export default async function () {
             body: 'Et culpa ex officia sint velit irure occaecat do proident eu laboris veniam elit.',
             date: new Date('2023-12-20'),
             isPublished: true,
+            websiteUrl: 'https://pinterest.com',
             marginBottom: 4,
             marginRight: 2,
             rotation: -1,
@@ -66,11 +68,11 @@ export default async function () {
             stampSvg:
                 '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="132" height="132" viewBox="0 0 132 132"><defs></defs><g><rect fill="rgb(255,255,255)" stroke="none" x="0" y="0" width="132" height="132" transform="matrix(1 0 0 1 0 0)" fill-opacity="1"></rect><path fill="rgb(252,191,73)" stroke="none" paint-order="stroke fill markers" d=" M 0 0 L 132 0 L 132 132 L 0 132 L 0 0 Z" fill-opacity="1"></path><path fill="rgb(247,127,0)" stroke="none" paint-order="stroke fill markers" d=" M -2.424800662311759e-14 0 A 132 132 0 0 1 132 132 L 0 132 Z" fill-opacity="1"></path></g></svg>',
             country: 'Austria',
-            postOfficeStampTop: 25,
+            postOfficeStampTop: 120,
             postOfficeStampRight: 10,
             postOfficeStampRotation: 8,
-            wavyStampTop: 30,
-            wavyStampRight: 16,
+            wavyStampTop: 72,
+            wavyStampRight: -24,
             wavyStampRotation: -3
         },
         {
@@ -101,8 +103,8 @@ export default async function () {
             postOfficeStampTop: 30,
             postOfficeStampRight: 30,
             postOfficeStampRotation: 0,
-            wavyStampTop: 10,
-            wavyStampRight: 5,
+            wavyStampTop: 4,
+            wavyStampRight: 50,
             wavyStampRotation: 0
         },
         {
@@ -133,8 +135,8 @@ export default async function () {
             postOfficeStampTop: 10,
             postOfficeStampRight: 40,
             postOfficeStampRotation: 12,
-            wavyStampTop: 15,
-            wavyStampRight: 13,
+            wavyStampTop: 45,
+            wavyStampRight: 24,
             wavyStampRotation: 10
         }
     ]);

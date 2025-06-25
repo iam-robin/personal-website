@@ -34,6 +34,8 @@ const Postcard = defineTable({
         stampSvg: column.text(),
         //country
         country: column.text({ optional: true }),
+        //website
+        websiteUrl: column.text({ optional: true }),
         // Post Office Stamp styling
         postOfficeStampTop: column.number({ optional: true }), // Percentage
         postOfficeStampRight: column.number({ optional: true }), // Percentage
