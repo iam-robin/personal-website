@@ -428,7 +428,11 @@ if (Astro.request.method === 'POST') {
                 return;
             }
 
-            if (p5canvas && (p5canvas as any).svg && typeof (p5canvas as any).svg.outerHTML === 'string') {
+            if (
+                p5canvas &&
+                (p5canvas as any).svg &&
+                typeof (p5canvas as any).svg.outerHTML === 'string'
+            ) {
                 const svgString = (p5canvas as any).svg.outerHTML;
                 if (svgString && svgString.length > 0 && svgString.startsWith('<svg')) {
                     hiddenInput.value = svgString;
