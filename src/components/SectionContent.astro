@@ -10,9 +10,18 @@ interface Props {
     linkText?: string;
     linkUrl?: string;
     contentStart?: DesktopColSpan;
+    buttonStyle?: boolean;
+    buttonIcon?: any;
 }
 
-const { title, linkText, linkUrl, classes, contentStart = 5 } = Astro.props;
+const {
+    title,
+    linkText,
+    linkUrl,
+    classes,
+    contentStart = 5,
+    buttonStyle
+} = Astro.props;
 ---
 
 <Grid classes={`mb-6 sm:mb-8 lg:mb-16 ${classes}`}>
@@ -41,9 +50,18 @@ const { title, linkText, linkUrl, classes, contentStart = 5 } = Astro.props;
                 mobileFull
                 classes="hidden sm:flex lg:justify-end items-start mt-6 sm:mt-3 lg:mt-0"
             >
-                <Link href={linkUrl} external>
-                    {linkText}
-                </Link>
+                {buttonStyle ? (
+                    <a
+                        href={linkUrl}
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors"
+                    >
+                        {linkText}
+                    </a>
+                ) : (
+                    <Link href={linkUrl} external>
+                        {linkText}
+                    </Link>
+                )}
             </GridBox>
         )
     }

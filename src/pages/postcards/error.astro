@@ -1,0 +1,27 @@
+---
+import Layout from '@layouts/Layout.astro';
+---
+
+<Layout title="Error Sending Postcard">
+    <div class="container max-w-md mx-auto py-40 px-4 text-center">
+        <h1 class="text-3xl font-bold mb-4 text-red-600">Something Went Wrong</h1>
+        <p class="text-gray-600 mb-8">
+            There was an error submitting your postcard. Please try again or contact support if the problem persists.
+        </p>
+        <div class="space-y-4">
+            <a 
+                href="/postcards/new" 
+                class="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition-colors"
+            >
+                Try Again
+            </a>
+            <br>
+            <a 
+                href="/postcards" 
+                class="text-gray-600 hover:text-gray-800 underline"
+            >
+                Back to Postcards
+            </a>
+        </div>
+    </div>
+</Layout>

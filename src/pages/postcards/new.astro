@@ -1,0 +1,511 @@
+---
+import { db, Postcard } from 'astro:db';
+import Layout from '@layouts/Layout.astro';
+
+export const prerender = false;
+
+// Define color arrays (same as in PostcardItem.astro)
+const penColors = [
+    '#000000', // Black
+    '#0A3161', // Navy Blue
+    '#00356B', // Dark Blue
+    '#1F3A3D', // Dark Teal
+    '#2E5090', // Royal Blue
+    '#3B2F2F' // Dark Brown
+];
+
+const paperColors = [
+    '#FCFAF7', // Off-white
+    '#FAF9F6', // Eggshell
+    '#F9F8F4', // Lighter Cream
+    '#F8F7F2', // Pale Parchment
+    '#F9F6F0', // Soft Ivory
+    '#F8F6F2', // Pale Beige
+    '#F7F4EF', // Lighter Antique
+    '#F2F0E6' // Soft Ecru
+];
+
+// Process form submission
+if (Astro.request.method === 'POST') {
+    try {
+        const formData = await Astro.request.formData();
+        const author = formData?.get('author');
+        const body = formData?.get('body');
+        const country = formData?.get('country');
+        const websiteUrl = formData?.get('websiteUrl');
+        const date = new Date();
+        const isPublished = false;
+        const stampSvg = formData?.get('stamp-svg');
+
+        // Generate random style values
+        const randomMarginBottom = Math.floor(Math.random() * 8);
+        const randomMarginRight = Math.floor(Math.random() * 8);
+        const randomRotation = Math.floor(Math.random() * 4 - 2);
+
+        // Select random colors
+        const randomPenColorIndex = Math.floor(Math.random() * penColors.length);
+        const penColor = penColors[randomPenColorIndex];
+        const randomPaperColorIndex = Math.floor(Math.random() * paperColors.length);
+        const paperColor = paperColors[randomPaperColorIndex];
+
+        // Font size and line height
+        const fontSizeFactor = 0.9 + Math.random() * 0.2;
+        const lineHeightFactor = 1.1 + Math.random() * 0.4;
+
+        // Author positioning
+        const authorLeftOffset = Math.floor(Math.random() * 10) - 5;
+        const authorTopOffset = Math.floor(Math.random() * 6) - 3;
+        const authorRotation = Math.floor(Math.random() * 6) - 3;
+
+        // Date positioning
+        const dateLeftOffset = Math.floor(Math.random() * 10) - 5;
+        const dateTopOffset = Math.floor(Math.random() * 6) - 3;
+        const dateRotation = Math.floor(Math.random() * 6) - 3;
+
+        // Body positioning
+        const bodyLeftOffset = Math.floor(Math.random() * 8) - 4;
+        const bodyTopOffset = Math.floor(Math.random() * 8) - 4;
+        const bodyRotation = Math.floor(Math.random() * 4) - 2;
+
+        // Post Office Stamp positioning & rotation
+        const postOfficeStampTop = Math.floor(Math.random() * 93) - 12; // -12px to 80px
+        const postOfficeStampRight = Math.floor(Math.random() * 133) - 12; // -12px to 120px
+        const postOfficeStampRotation = Math.floor(Math.random() * 31) - 15; // -15 to +15 degrees
+
+        // Wavy Lines Stamp positioning & rotation
+        const wavyStampTop = Math.floor(Math.random() * 69) + 4; // 4px to 72px
+        const wavyStampRight = Math.floor(Math.random() * 97) - 24; // -24px to 72px
+        const wavyStampRotation = Math.floor(Math.random() * 21) - 10; // -10 to +10 degrees
+
+        if (typeof author === 'string' && typeof body === 'string') {
+            await db.insert(Postcard).values({
+                author,
+                body,
+                date,
+                isPublished,
+                // Store all the style values
+                marginBottom: randomMarginBottom,
+                marginRight: randomMarginRight,
+                rotation: randomRotation,
+                penColor,
+                paperColor,
+                fontSizeFactor,
+                lineHeight: lineHeightFactor,
+                authorLeftOffset,
+                authorTopOffset,
+                authorRotation,
+                dateLeftOffset,
+                dateTopOffset,
+                dateRotation,
+                bodyLeftOffset,
+                bodyTopOffset,
+                bodyRotation,
+                stampSvg: typeof stampSvg === 'string' ? stampSvg : '',
+                country: typeof country === 'string' && country.trim() !== '' ? country : undefined,
+                websiteUrl:
+                    typeof websiteUrl === 'string' && websiteUrl.trim() !== ''
+                        ? websiteUrl
+                        : undefined,
+                // Save Post Office Stamp styles
+                postOfficeStampTop,
+                postOfficeStampRight,
+                postOfficeStampRotation,
+                // Save Wavy Lines Stamp styles
+                wavyStampTop,
+                wavyStampRight,
+                wavyStampRotation
+            });
+
+            // Redirect to success page after successful submission
+            return Astro.redirect('/postcards/success');
+        } else {
+            // Redirect to error page if required fields are missing
+            return Astro.redirect('/postcards/error');
+        }
+    } catch (error) {
+        // Redirect to error page if database operation fails
+        console.error('Error submitting postcard:', error);
+        return Astro.redirect('/postcards/error');
+    }
+}
+---
+
+<Layout title="Send a Postcard">
+    <div class="container max-w-md mx-auto py-40 px-4">
+        <h1 class="text-2xl font-bold mb-8">Send a Postcard</h1>
+
+        <form method="POST" class="flex flex-col space-y-8">
+            <div class="flex flex-col">
+                <label for="author" class="mb-1 font-medium">Your Name</label>
+                <input
+                    id="author"
+                    name="author"
+                    required
+                    class="border border-black-200 p-2 rounded"
+                />
+            </div>
+
+            <div class="flex flex-col">
+                <label for="body" class="mb-1 font-medium">Your Message</label>
+                <textarea
+                    id="body"
+                    name="body"
+                    rows="6"
+                    required
+                    maxlength="270"
+                    class="border border-black-200 p-2 rounded"></textarea>
+                <span class="text-xs text-neutral-400 mt-1"
+                    >Max. 270 characters, line breaks allowed</span
+                >
+            </div>
+
+            <div class="flex flex-col">
+                <label for="country" class="mb-1 font-medium">Country (Optional)</label>
+                <input
+                    id="country"
+                    name="country"
+                    class="border border-black-200 p-2 rounded"
+                    maxlength="18"
+                />
+                <span class="text-xs text-neutral-400 mt-1"
+                    >It’s just used to include a cute stamp from your country
+                </span>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="websiteUrl" class="mb-1 font-medium">Your Website (Optional)</label>
+                <input
+                    id="websiteUrl"
+                    name="websiteUrl"
+                    type="url"
+                    placeholder="https://example.com"
+                    class="border border-black-200 p-2 rounded"
+                />
+                <span class="text-xs text-neutral-400 mt-1"
+                    >Make your postcard linked to your website</span
+                >
+            </div>
+
+            <div class="flex flex-col pb-10">
+                <label class="mb-4 font-medium">Your Stamp</label>
+                <div class="relative">
+                    <div class="stamp inline-block w-[144px] h-[144px] p-[6px] bg-white relative">
+                        <div class="bg-white h-full w-full">
+                            <div id="stamp-preview"></div>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="regenerate-stamp"
+                        class="absolute top-2 right-2 border border-black rounded-full px-3 py-1 text-xs"
+                    >
+                        Regenerate
+                    </button>
+                </div>
+                <input type="hidden" id="stamp-svg" name="stamp-svg" value="" />
+            </div>
+
+            <button
+                type="submit"
+                class="bg-black text-white py-2 px-4 rounded hover:bg-black-700 transition"
+            >
+                Send Postcard
+            </button>
+            <p class="text-xs text-neutral-400 mt-4 text-center">
+                Only the information you provide above is stored in a database.<br />No IP addresses
+                or any other personal data is collected.
+            </p>
+        </form>
+    </div>
+</Layout>
+
+<style>
+    .stamp {
+        -webkit-filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.5));
+        background: radial-gradient(transparent 0px, transparent 4px, white 4px, white);
+        background-size: 12px 12px;
+        background-position: -18px -18px;
+    }
+</style>
+
+<script>
+    import p5 from 'p5';
+    import P5SVGExtension from 'p5.js-svg';
+
+    // Ensure p5.js-svg extension is applied
+    if (typeof P5SVGExtension === 'function') {
+        P5SVGExtension(p5);
+    } else {
+        console.error('P5SVGExtension is not a function. SVG rendering might fail.');
+    }
+
+    const sketch = (p: any) => {
+        // Canvas and Grid Constants
+        const CANVAS_WIDTH = 132;
+        const CANVAS_HEIGHT = 132;
+        const MIN_CELLS = 1;
+        const MAX_CELLS = 3;
+
+        const CANVAS_COLOR = '#fff'; // Overall canvas background
+
+        let p5canvas: any;
+        let numCells: number;
+        let cellSize: number;
+        let shapeDrawingFunctions: Array<(x: number, y: number, size: number) => void> = [];
+        let currentPalette: string[] | undefined; // To store the randomly selected palette
+
+        // Define Color Palettes
+        const colorPalettes: string[][] = [
+            ['#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF'], // Bright & Playful
+            ['#2C3E50', '#E74C3C', '#ECF0F1', '#3498DB', '#2ECC71'], // Modern Flat
+            ['#A8DADC', '#457B9D', '#1D3557', '#F1FAEE', '#E63946'], // Oceanic
+            ['#264653', '#2A9D8F', '#E9C46A', '#F4A261', '#E76F51'], // Earthy & Warm
+            ['#003049', '#D62828', '#F77F00', '#FCBF49', '#EAE2B7'], // Retro
+            ['#333333', '#666666', '#999999', '#CCCCCC', '#EEEEEE'], // Grayscale
+            ['#E63946', '#F1FAEE', '#A8DADC', '#457B9D', '#1D3557'], // Vibrant Red/Blue (variation of Oceanic)
+            ['#D90429', '#EF233C', '#EDF2F4', '#8D99AE', '#2B2D42'], // Strong Reds & Grays
+            ['#007F5F', '#2B9348', '#55A630', '#80B918', '#AACC00'], // Shades of Green
+            ['#023E8A', '#0077B6', '#0096C7', '#00B4D8', '#48CAE4'], // Shades of Blue
+            ['#6A0572', '#A6036F', '#D0006F', '#FF006E', '#FFB703'], // Shades of Purple/Blue/Orange
+            ['#FF9A8B', '#FF6F61', '#6A0572', '#D0006F', '#FFB703'], // Pink/Red/Orange
+            ['#ACB0D4', '#6F6FF1', '#F38556', '#03017F', '#45519D'], // Purple/Blue/Orange
+            ['#5F45B2', '#9467C6', '#C888D9', '#FEACEE', '#428FFB'] // Pastel Purple/Blue
+        ];
+
+        // Helper function to get a random color from the current palette
+        const getRandomColorFromPalette = (): string => {
+            if (currentPalette && currentPalette.length > 0) {
+                return p.random(currentPalette);
+            }
+            // Fallback to a random hex color if palette is not set (should not happen)
+            return (
+                '#' +
+                Math.floor(Math.random() * 16777215)
+                    .toString(16)
+                    .padStart(6, '0')
+            );
+        };
+
+        // Function to select a new random palette
+        const selectNewPalette = () => {
+            currentPalette = p.random(colorPalettes);
+        };
+
+        // Function to generate new grid parameters
+        const generateGridParameters = () => {
+            numCells = p.floor(p.random(MIN_CELLS, MAX_CELLS + 1));
+            cellSize = CANVAS_WIDTH / numCells;
+        };
+
+        // Define shape drawing functions
+        const initializeShapeFunctions = (): void => {
+            shapeDrawingFunctions = [
+                // Full Square
+                (x: number, y: number, size: number) => {
+                    p.rect(x, y, size, size);
+                },
+                // Full Circle
+                (x: number, y: number, size: number) => {
+                    p.ellipse(x + size / 2, y + size / 2, size, size);
+                },
+                // Triangles (filling half the square)
+                (x: number, y: number, size: number) => {
+                    p.triangle(x, y, x + size, y, x, y + size);
+                },
+                (x: number, y: number, size: number) => {
+                    p.triangle(x + size, y + size, x, y + size, x + size, y);
+                },
+                (x: number, y: number, size: number) => {
+                    p.triangle(x, y, x + size, y, x + size, y + size);
+                },
+                (x: number, y: number, size: number) => {
+                    p.triangle(x, y + size, x + size, y + size, x, y);
+                },
+                // Half Circles
+                (x: number, y: number, size: number) => {
+                    p.arc(x + size / 2, y + size / 2, size, size, p.PI, p.TWO_PI, p.PIE);
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(x + size / 2, y + size / 2, size, size, 0, p.PI, p.PIE);
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(
+                        x + size / 2,
+                        y + size / 2,
+                        size,
+                        size,
+                        p.HALF_PI,
+                        p.PI + p.HALF_PI,
+                        p.PIE
+                    );
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(
+                        x + size / 2,
+                        y + size / 2,
+                        size,
+                        size,
+                        p.PI + p.HALF_PI,
+                        p.HALF_PI,
+                        p.PIE
+                    );
+                },
+                // Quarter Circles
+                (x: number, y: number, size: number) => {
+                    p.arc(x + size, y + size, size * 2, size * 2, p.PI, p.PI + p.HALF_PI, p.PIE);
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(x, y + size, size * 2, size * 2, p.PI + p.HALF_PI, p.TWO_PI, p.PIE);
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(x + size, y, size * 2, size * 2, p.HALF_PI, p.PI, p.PIE);
+                },
+                (x: number, y: number, size: number) => {
+                    p.arc(x, y, size * 2, size * 2, 0, p.HALF_PI, p.PIE);
+                },
+                // Bean/Lens shape (diagonal top-left to bottom-right)
+                (x: number, y: number, size: number) => {
+                    p.beginShape();
+                    p.vertex(x, y);
+                    p.quadraticVertex(x, y + size, x + size, y + size);
+                    p.quadraticVertex(x + size, y, x, y);
+                    p.endShape(p.CLOSE);
+                },
+                // Bean/Lens shape (diagonal top-right to bottom-left)
+                (x: number, y: number, size: number) => {
+                    p.beginShape();
+                    p.vertex(x + size, y);
+                    p.quadraticVertex(x, y, x, y + size);
+                    p.quadraticVertex(x + size, y + size, x + size, y);
+                    p.endShape(p.CLOSE);
+                },
+                // Four Triangles meeting at center (dividing square by diagonals)
+                // Each triangle gets a different color from the palette.
+                (x: number, y: number, size: number) => {
+                    const centerX = x + size / 2;
+                    const centerY = y + size / 2;
+
+                    // Top triangle
+                    p.fill(getRandomColorFromPalette());
+                    p.triangle(x, y, x + size, y, centerX, centerY);
+
+                    // Right triangle
+                    p.fill(getRandomColorFromPalette());
+                    p.triangle(x + size, y, x + size, y + size, centerX, centerY);
+
+                    // Bottom triangle
+                    p.fill(getRandomColorFromPalette());
+                    p.triangle(x + size, y + size, x, y + size, centerX, centerY);
+
+                    // Left triangle
+                    p.fill(getRandomColorFromPalette());
+                    p.triangle(x, y + size, x, y, centerX, centerY);
+                },
+                // Concentric Circles
+                (x: number, y: number, size: number) => {
+                    const centerX = x + size / 2;
+                    const centerY = y + size / 2;
+                    const outerDiameter = size;
+                    const innerDiameter = size * 0.6; // Inner circle is 60% of the outer
+
+                    // Outer circle
+                    p.fill(getRandomColorFromPalette());
+                    p.ellipse(centerX, centerY, outerDiameter, outerDiameter);
+
+                    // Inner circle
+                    p.fill(getRandomColorFromPalette());
+                    p.ellipse(centerX, centerY, innerDiameter, innerDiameter);
+                }
+            ];
+        };
+
+        // Function to update the hidden SVG input field
+        const updateStampSvgInput = () => {
+            const hiddenInput = document.getElementById('stamp-svg') as HTMLInputElement | null;
+            if (!hiddenInput) {
+                console.error('Hidden input #stamp-svg not found!');
+                return;
+            }
+
+            if (
+                p5canvas &&
+                (p5canvas as any).svg &&
+                typeof (p5canvas as any).svg.outerHTML === 'string'
+            ) {
+                const svgString = (p5canvas as any).svg.outerHTML;
+                if (svgString && svgString.length > 0 && svgString.startsWith('<svg')) {
+                    hiddenInput.value = svgString;
+                } else {
+                    hiddenInput.value = '';
+                }
+            } else {
+                hiddenInput.value = '';
+            }
+        };
+
+        p.setup = () => {
+            const renderer = (p5 as any).SVG || (p as any).SVG;
+            p5canvas = p.createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT, renderer || undefined);
+
+            const parentDiv = document.getElementById('stamp-preview');
+            if (!parentDiv) {
+                console.error('[p.setup] Parent div #stamp-preview not found!');
+            } else {
+                if (p5canvas) {
+                    p5canvas.parent('stamp-preview');
+                }
+            }
+
+            p.noStroke();
+            p.noLoop();
+
+            initializeShapeFunctions();
+            selectNewPalette(); // Select initial palette
+            generateGridParameters();
+        };
+
+        p.draw = () => {
+            p.background(CANVAS_COLOR);
+
+            for (let i = 0; i < numCells; i++) {
+                for (let j = 0; j < numCells; j++) {
+                    const cellX = i * cellSize;
+                    const cellY = j * cellSize;
+
+                    p.fill(getRandomColorFromPalette());
+                    p.rect(cellX, cellY, cellSize, cellSize);
+
+                    p.fill(getRandomColorFromPalette());
+
+                    if (shapeDrawingFunctions && shapeDrawingFunctions.length > 0) {
+                        const drawRandomShape = p.random(shapeDrawingFunctions);
+                        drawRandomShape(cellX, cellY, cellSize);
+                    }
+                }
+            }
+            updateStampSvgInput();
+        };
+
+        (p as any).regenerate = () => {
+            selectNewPalette(); // Select a new palette on regenerate
+            generateGridParameters();
+            p.redraw();
+        };
+    };
+
+    const p5Instance = new p5(sketch);
+
+    const regenerateButton = document.getElementById('regenerate-stamp');
+    if (regenerateButton) {
+        regenerateButton.addEventListener('click', () => {
+            if (p5Instance && typeof (p5Instance as any).regenerate === 'function') {
+                (p5Instance as any).regenerate();
+            } else {
+                console.error('p5 instance or regenerate function not available.');
+            }
+        });
+    } else {
+        console.error('Regenerate button not found.');
+    }
+</script>

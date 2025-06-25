@@ -1,0 +1,21 @@
+---
+import Headline from '@components/Headline.astro';
+import Layout from '@layouts/Layout.astro';
+---
+
+<Layout title="Postcard Sent Successfully">
+    <div class="container max-w-md mx-auto py-40 px-4 text-center">
+        <Headline level={2}>Thanks for your postcard!</Headline>
+        <p class="text-gray-600 my-8">
+            Just like real postcards, this one needs a little time to travel — with a short stop at
+            my virtual mailbox. I’ll give it a quick peek first, just to make sure everything stays
+            friendly and spam-free.
+        </p>
+        <a
+            href="/postcards"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition-colors"
+        >
+            Back to Postcards
+        </a>
+    </div>
+</Layout>

@@ -1,0 +1,132 @@
+---
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import NewSlider from '@components/newSlider/NewSlider.astro';
+import NewSliderItem from '@components/newSlider/NewSliderItem.astro';
+import PostcardItem from '@components/PostcardItem.astro';
+import Layout from '@layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import RobinCoffee from '@assets/images/robin-coffee.png';
+import NewPostcardSticker from '@assets/new-postcard.svg';
+
+import { db, Postcard, desc, eq } from 'astro:db'; // Import desc and eq
+import Headline from '@components/Headline.astro';
+import SectionContent from '@components/SectionContent.astro';
+
+// --- DEBUGGING START ---
+// Temporarily fetch all postcards to inspect their data in the terminal
+const allPostcards = await db.select().from(Postcard);
+console.log('All postcards from DB:', allPostcards);
+// --- DEBUGGING END ---
+
+// Render only published postcards, ordered by date descending
+const postcards = await db
+    .select()
+    .from(Postcard)
+    .where(eq(Postcard.isPublished, true))
+    .orderBy(desc(Postcard.date));
+
+console.log('Postcards to render:', postcards);
+---
+
+<Layout title="Postcards" ogimageName="postcards.jpg">
+    <SectionContent
+        classes="w-full pt-40"
+        title="Postcards"
+        linkText="Send Postcard"
+        linkUrl="/postcards/new"
+        buttonStyle={true}
+    >
+        I love the idea of people stopping by and leaving a trace — something small that makes this
+        website feel a little more alive. It's like a guestbook, just a bit more personal.
+    </SectionContent>
+    <div class="mb-8 sm:mb-32">
+        <NewSlider>
+            {
+                postcards.map((postcard) => (
+                    <NewSliderItem
+                        largeFraction={2}
+                        mediumFraction={1.25}
+                        smallFraction={1}
+                        classes="py-4"
+                    >
+                        <PostcardItem
+                            author={postcard.author}
+                            body={postcard.body}
+                            date={postcard.date}
+                            websiteUrl={postcard.websiteUrl ?? undefined}
+                            marginBottom={postcard.marginBottom ?? undefined}
+                            marginRight={postcard.marginRight ?? undefined}
+                            rotation={postcard.rotation ?? undefined}
+                            penColor={postcard.penColor ?? undefined}
+                            paperColor={postcard.paperColor ?? undefined}
+                            fontSizeFactor={postcard.fontSizeFactor ?? undefined}
+                            lineHeight={postcard.lineHeight ?? undefined}
+                            authorLeftOffset={postcard.authorLeftOffset ?? undefined}
+                            authorTopOffset={postcard.authorTopOffset ?? undefined}
+                            authorRotation={postcard.authorRotation ?? undefined}
+                            dateLeftOffset={postcard.dateLeftOffset ?? undefined}
+                            dateTopOffset={postcard.dateTopOffset ?? undefined}
+                            dateRotation={postcard.dateRotation ?? undefined}
+                            bodyLeftOffset={postcard.bodyLeftOffset ?? undefined}
+                            bodyTopOffset={postcard.bodyTopOffset ?? undefined}
+                            bodyRotation={postcard.bodyRotation ?? undefined}
+                            stampSvg={postcard.stampSvg ?? undefined}
+                            country={postcard.country ?? undefined}
+                            postOfficeStampTop={postcard.postOfficeStampTop ?? undefined}
+                            postOfficeStampRight={postcard.postOfficeStampRight ?? undefined}
+                            postOfficeStampRotation={postcard.postOfficeStampRotation ?? undefined}
+                            wavyStampTop={postcard.wavyStampTop ?? undefined}
+                            wavyStampRight={postcard.wavyStampRight ?? undefined}
+                            wavyStampRotation={postcard.wavyStampRotation ?? undefined}
+                        />
+                    </NewSliderItem>
+                ))
+            }
+        </NewSlider>
+    </div>
+    <div class="pb-40">
+        <Grid>
+            <GridBox
+                desktopStart={3}
+                desktopEnd={5}
+                tabletStart={1}
+                tabletEnd={3}
+                classes="flex items-center justify-center lg:justify-start mt-12 md:mt-0"
+            >
+                <Image
+                    src={RobinCoffee}
+                    alt="Illustration of me walking with a camera"
+                    widths={[640]}
+                    sizes={`320px`}
+                    class="max-w-[140px]"
+                />
+            </GridBox>
+            <GridBox
+                desktopStart={6}
+                desktopEnd={10}
+                tabletStart={4}
+                tabletEnd={7}
+                classes="flex flex-col justify-center -mt-20"
+            >
+                <a href="/postcards/new" class="text-center self-end mr-6 z-10">
+                    <Image
+                        src={NewPostcardSticker}
+                        alt="Illustration of me walking with a camera"
+                        widths={[240]}
+                        sizes={`240px`}
+                        class="max-w-[100px]"
+                    />
+                </a>
+                <div class="mt-4 md:-mt-8">
+                    <Headline level={3}>Drop me a line</Headline>
+                    <p class="mt-2 md:mt-6">
+                        A quiet way to say hello, and a reminder that there are people out there
+                        reading, visiting, connecting — even if just for a moment. Feel free to
+                        leave a postcard!
+                    </p>
+                </div>
+            </GridBox>
+        </Grid>
+    </div>
+</Layout>
