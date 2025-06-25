@@ -9,29 +9,29 @@ const Postcard = defineTable({
         date: column.date(),
         isPublished: column.boolean(),
         // Card positioning and rotation
-        marginBottom: column.number(),
-        marginRight: column.number(),
-        rotation: column.number(),
+        marginBottom: column.number({ optional: true }),
+        marginRight: column.number({ optional: true }),
+        rotation: column.number({ optional: true }),
         // Pen and paper colors
-        penColor: column.text(),
-        paperColor: column.text(),
+        penColor: column.text({ optional: true }),
+        paperColor: column.text({ optional: true }),
         // Font sizing
-        fontSizeFactor: column.number(),
-        lineHeight: column.number(),
+        fontSizeFactor: column.number({ optional: true }),
+        lineHeight: column.number({ optional: true }),
         // Author positioning
-        authorLeftOffset: column.number(),
-        authorTopOffset: column.number(),
-        authorRotation: column.number(),
+        authorLeftOffset: column.number({ optional: true }),
+        authorTopOffset: column.number({ optional: true }),
+        authorRotation: column.number({ optional: true }),
         // Date positioning
-        dateLeftOffset: column.number(),
-        dateTopOffset: column.number(),
-        dateRotation: column.number(),
+        dateLeftOffset: column.number({ optional: true }),
+        dateTopOffset: column.number({ optional: true }),
+        dateRotation: column.number({ optional: true }),
         // Body text positioning
-        bodyLeftOffset: column.number(),
-        bodyTopOffset: column.number(),
-        bodyRotation: column.number(),
+        bodyLeftOffset: column.number({ optional: true }),
+        bodyTopOffset: column.number({ optional: true }),
+        bodyRotation: column.number({ optional: true }),
         //stamp
-        stampSvg: column.text(),
+        stampSvg: column.text({ optional: true }),
         //country
         country: column.text({ optional: true }),
         //website
