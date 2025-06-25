@@ -19,8 +19,8 @@ import Layout from '@layouts/Layout.astro';
             <Headline level={4}>Contact</Headline>
             <ul>
                 <li>Robin Spielmann</li>
-                <li>Pelkovenstr. 70</li>
-                <li>80992 München</li>
+                <li>Schwindstraße 5</li>
+                <li>80798 München</li>
             </ul>
         </GridBox>
         <GridBox desktopFull classes="flex flex-col gap-12 mt-20">
@@ -80,6 +80,28 @@ import Layout from '@layouts/Layout.astro';
                     point out that data transmission over the Internet (eg communication by e-mail)
                     security gaps. A complete protection of data against access by third parties is
                     not possible.
+                </p>
+            </div>
+            <div>
+                <Headline level={4}>Postcard Data Collection</Headline>
+                <p>
+                    When you submit a postcard through our website's postcard feature, we collect
+                    and store the following information in our database (powered by Turso/LibSQL,
+                    hosted on AWS EU-West-1):
+                </p>
+                <ul class="list-disc ml-6 mt-4 space-y-2">
+                    <li><strong>Required:</strong> Your name and message content</li>
+                    <li><strong>Optional:</strong> Your country and website URL (if provided)</li>
+                    <li>
+                        <strong>Automatically generated:</strong> Submission date and styling parameters
+                        for display purposes
+                    </li>
+                </ul>
+                <p class="mt-4">
+                    We do not collect IP addresses, email addresses, or any other personal
+                    identifiers beyond what you voluntarily provide. All postcards are subject to
+                    moderation before being published. You can contact us at hey@iamrob.in to
+                    request removal of your postcard data.
                 </p>
             </div>
         </GridBox>
