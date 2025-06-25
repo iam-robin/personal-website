@@ -240,7 +240,7 @@ if (Astro.request.method === 'POST') {
         console.error('P5SVGExtension is not a function. SVG rendering might fail.');
     }
 
-    const sketch = (p) => {
+    const sketch = (p: any) => {
         // Canvas and Grid Constants
         const CANVAS_WIDTH = 132;
         const CANVAS_HEIGHT = 132;
@@ -249,7 +249,7 @@ if (Astro.request.method === 'POST') {
 
         const CANVAS_COLOR = '#fff'; // Overall canvas background
 
-        let p5canvas: p5.Renderer;
+        let p5canvas: any;
         let numCells: number;
         let cellSize: number;
         let shapeDrawingFunctions: Array<(x: number, y: number, size: number) => void> = [];
@@ -428,8 +428,8 @@ if (Astro.request.method === 'POST') {
                 return;
             }
 
-            if (p5canvas && p5canvas.svg && typeof p5canvas.svg.outerHTML === 'string') {
-                const svgString = p5canvas.svg.outerHTML;
+            if (p5canvas && (p5canvas as any).svg && typeof (p5canvas as any).svg.outerHTML === 'string') {
+                const svgString = (p5canvas as any).svg.outerHTML;
                 if (svgString && svgString.length > 0 && svgString.startsWith('<svg')) {
                     hiddenInput.value = svgString;
                 } else {
@@ -441,7 +441,7 @@ if (Astro.request.method === 'POST') {
         };
 
         p.setup = () => {
-            const renderer = p5.SVG || p.SVG;
+            const renderer = (p5 as any).SVG || (p as any).SVG;
             p5canvas = p.createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT, renderer || undefined);
 
             const parentDiv = document.getElementById('stamp-preview');
@@ -483,7 +483,7 @@ if (Astro.request.method === 'POST') {
             updateStampSvgInput();
         };
 
-        p.regenerate = () => {
+        (p as any).regenerate = () => {
             selectNewPalette(); // Select a new palette on regenerate
             generateGridParameters();
             p.redraw();
@@ -495,8 +495,8 @@ if (Astro.request.method === 'POST') {
     const regenerateButton = document.getElementById('regenerate-stamp');
     if (regenerateButton) {
         regenerateButton.addEventListener('click', () => {
-            if (p5Instance && typeof p5Instance.regenerate === 'function') {
-                p5Instance.regenerate();
+            if (p5Instance && typeof (p5Instance as any).regenerate === 'function') {
+                (p5Instance as any).regenerate();
             } else {
                 console.error('p5 instance or regenerate function not available.');
             }

@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react';
 import Slider from '@components/slider/Slider';
 import SliderItem from '@components/slider/SliderItem';
-import AlbumItem from './AlbumItem';
 import PlaylistItem from './PlaylistItem';
 import type { Playlist } from '@components/MusicSection.astro';
 import Container from '@components/Container';

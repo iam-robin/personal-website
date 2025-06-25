@@ -10,7 +10,7 @@
 
     P5SVGExtension(p5);
 
-    const sketch = (p) => {
+    const sketch = (p: any) => {
         // Constants from your example
         const CANVAS_COLOR = '#fff'; // White background
         const FILL_COLOR = '#5850FE'; // Blueish
@@ -32,10 +32,10 @@
             const totalY = GRIDBOX * ROWS;
 
             // Check if p5.SVG or p.SVG is available
-            console.log('p5.js-svg: In setup - p5.SVG (static):', p5.SVG);
-            console.log('p5.js-svg: In setup - p.SVG (instance):', p.SVG);
+            console.log('p5.js-svg: In setup - p5.SVG (static):', (p5 as any).SVG);
+            console.log('p5.js-svg: In setup - p.SVG (instance):', (p as any).SVG);
 
-            const renderer = p5.SVG || p.SVG; // Prefer static, then instance
+            const renderer = (p5 as any).SVG || (p as any).SVG; // Prefer static, then instance
 
             if (!renderer) {
                 console.error(
