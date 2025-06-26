@@ -1,4 +1,6 @@
 ---
+import DOMPurify from 'isomorphic-dompurify';
+
 export interface Props {
     author: string;
     body: string;
@@ -66,6 +68,9 @@ const {
     wavyStampRotation = Math.floor(Math.random() * 21) - 10 // Default: -10 to 10 deg
 } = Astro.props as Props;
 
+// Sanitize the SVG string to prevent XSS
+const sanitizedStampSvg = DOMPurify.sanitize(stampSvg);
+
 // Calculate font size from size factor
 const fontSize = `${fontSizeFactor}em`;
 const lineHeight = lineHeightFactor.toFixed(2);
@@ -83,7 +88,7 @@ const transformStyles = distorted
 
 const authorStyles = `transform: translateX(${authorLeftOffset}px) translateY(${authorTopOffset}px) rotate(${authorRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
 const dateStyles = `transform: translateX(${dateLeftOffset}px) translateY(${dateTopOffset}px) rotate(${dateRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
-const bodyStyles = `transform: translateX(${bodyLeftOffset}px) translateY(${bodyTopOffset}px) rotate(${bodyRotation}deg); font-size: ${fontSize}; line-height: ${lineHeight}; color: ${penColor}; filter: url(#distort-xl);`;
+const bodyStyles = `transform: translateX(${bodyLeftOffset}px) translateY(${bodyTopOffset}px) rotate(${bodyRotation}deg); font-size: ${fontSize}; line-height: ${lineHeight}; color: ${penColor}; filter: url(#distort-xl); white-space: pre-wrap;`;
 
 // Determine shadow class at build time based on rotation
 const shadowClass = rotation >= 0 ? 'hide-after' : 'hide-before';
@@ -128,7 +133,7 @@ const wavyLinesStampContainerStyles = `
         style={`background-color: ${paperColor};`}
     >
         <div class="w-full sm:w-1/2 py-6 sm:px-8 font-script text-md relative px-4 overflow-hidden">
-            <span class="sm:absolute" style={bodyStyles} set:html={body.replace(/\n/g, '<br />')} />
+            <span class="sm:absolute" style={bodyStyles}>{body}</span>
         </div>
         <div class="hidden sm:block w-[1px] bg-black-200 h-3/4 self-center"></div>
         <div
@@ -141,7 +146,7 @@ const wavyLinesStampContainerStyles = `
                             stampSvg ? (
                                 <div
                                     class="h-full w-full flex items-center justify-center"
-                                    set:html={stampSvg}
+                                    set:html={sanitizedStampSvg}
                                 />
                             ) : (
                                 <div class="bg-red h-full w-full" />

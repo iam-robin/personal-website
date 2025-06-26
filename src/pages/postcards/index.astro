@@ -13,20 +13,12 @@ import { db, Postcard, desc, eq } from 'astro:db'; // Import desc and eq
 import Headline from '@components/Headline.astro';
 import SectionContent from '@components/SectionContent.astro';
 
-// --- DEBUGGING START ---
-// Temporarily fetch all postcards to inspect their data in the terminal
-const allPostcards = await db.select().from(Postcard);
-console.log('All postcards from DB:', allPostcards);
-// --- DEBUGGING END ---
-
 // Render only published postcards, ordered by date descending
 const postcards = await db
     .select()
     .from(Postcard)
     .where(eq(Postcard.isPublished, true))
     .orderBy(desc(Postcard.date));
-
-console.log('Postcards to render:', postcards);
 ---
 
 <Layout title="Postcards" ogimageName="postcards.jpg">
