@@ -14,14 +14,7 @@ interface Props {
     buttonIcon?: any;
 }
 
-const {
-    title,
-    linkText,
-    linkUrl,
-    classes,
-    contentStart = 5,
-    buttonStyle
-} = Astro.props;
+const { title, linkText, linkUrl, classes, contentStart = 5, buttonStyle } = Astro.props;
 ---
 
 <Grid classes={`mb-6 sm:mb-8 lg:mb-16 ${classes}`}>
@@ -48,7 +41,7 @@ const {
                 tabletStart={5}
                 tabletEnd={8}
                 mobileFull
-                classes="hidden sm:flex lg:justify-end items-start mt-6 sm:mt-3 lg:mt-0"
+                classes="flex lg:justify-end items-start mt-6 sm:mt-3 lg:mt-0"
             >
                 {buttonStyle ? (
                     <a
