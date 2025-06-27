@@ -1,28 +1,53 @@
 ---
+import Layout from '@layouts/Layout.astro';
 import Grid from '@components/Grid.astro';
 import GridBox from '@components/GridBox.astro';
 import NewSlider from '@components/newSlider/NewSlider.astro';
 import NewSliderItem from '@components/newSlider/NewSliderItem.astro';
 import PostcardItem from '@components/PostcardItem.astro';
-import Layout from '@layouts/Layout.astro';
+import TagCloud from '@components/TagCloud.astro';
+import { db, Postcard, desc, eq } from 'astro:db';
+import SectionContent from '@components/SectionContent.astro';
 import { Image } from 'astro:assets';
 import RobinCoffee from '@assets/images/robin-coffee.png';
 import NewPostcardSticker from '@assets/new-postcard.svg';
-import TagCloud from '@components/TagCloud.astro';
-
-import { db, Postcard, desc, eq } from 'astro:db'; // Import desc and eq
 import Headline from '@components/Headline.astro';
-import SectionContent from '@components/SectionContent.astro';
 
-// Render only published postcards, ordered by date descending
-const postcards = await db
-    .select()
-    .from(Postcard)
-    .where(eq(Postcard.isPublished, true))
-    .orderBy(desc(Postcard.date));
+export async function getStaticPaths() {
+    // Fetch all published postcards
+    const allPostcards = await db
+        .select()
+        .from(Postcard)
+        .where(eq(Postcard.isPublished, true))
+        .orderBy(desc(Postcard.date));
 
-// Extract unique countries and count them for the tag cloud
-const allCountries = postcards
+    // Extract all unique countries
+    const allCountries = allPostcards
+        .map((postcard) => postcard.country)
+        .filter((country) => country !== null && country !== undefined);
+    const uniqueCountries = [...new Set(allCountries)];
+
+    // Generate a path for each country
+    return uniqueCountries.map((country) => {
+        const filteredPostcards = allPostcards.filter(
+            (postcard) => postcard.country && postcard.country === country
+        );
+
+        return {
+            params: { country },
+            props: {
+                country,
+                postcards: filteredPostcards,
+                allPostcards
+            }
+        };
+    });
+}
+
+const { country, postcards, allPostcards } = Astro.props;
+
+// Generate country counts for the tag cloud
+const allCountries = allPostcards
     .map((postcard) => postcard.country)
     .filter((country) => country !== null && country !== undefined);
 
@@ -35,9 +60,11 @@ const countryCounts = allCountries.reduce(
 );
 
 const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({ name, count }));
+
+const pageTitle = `Postcards: ${country}`;
 ---
 
-<Layout title="Postcards" ogimageName="postcards.jpg">
+<Layout title={pageTitle} ogimageName="postcards.jpg">
     <SectionContent
         classes="w-full pt-40"
         title="Postcards"
@@ -52,10 +79,11 @@ const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({
         <GridBox desktopFull>
             <TagCloud
                 tags={countryCloudData}
+                selectedTag={country}
                 basePath="/postcards"
                 filterPath="country"
                 filterLabel="country"
-                total={postcards.length}
+                total={allPostcards.length}
             />
         </GridBox>
     </Grid>

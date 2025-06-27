@@ -71,7 +71,8 @@ const categoryCloudData = Object.entries(categoryCounts).map(([name, count]) => 
                 tags={categoryCloudData}
                 basePath="/blog"
                 selectedTag={category}
-                isCategory
+                filterPath="category"
+                filterLabel="category"
                 total={allBlogPosts.length}
             />
 

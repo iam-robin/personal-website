@@ -29,7 +29,13 @@ tags.sort((a, b) => b.count - a.count);
     <BookmarksStage />
     <Grid classes="mt-16">
         <GridBox desktopFull>
-            <TagCloud tags={tags} basePath="/bookmarks" total={bookmarks.length} />
+            <TagCloud 
+                tags={tags} 
+                basePath="/bookmarks" 
+                filterPath="tag"
+                filterLabel="tag"
+                total={bookmarks.length} 
+            />
             <ul class="mb-40">
                 {bookmarks.map((bookmark: Bookmark) => <BookmarkItem bookmark={bookmark} />)}
             </ul>
