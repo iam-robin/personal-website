@@ -13,6 +13,7 @@ import TagCloud from '@components/TagCloud.astro';
 import { db, Postcard, desc, eq } from 'astro:db'; // Import desc and eq
 import Headline from '@components/Headline.astro';
 import SectionContent from '@components/SectionContent.astro';
+import { isValidCountry, getCountryFlag, getStandardCountryName } from 'src/utils/countries';
 
 // Render only published postcards, ordered by date descending
 const postcards = await db
@@ -26,15 +27,25 @@ const allCountries = postcards
     .map((postcard) => postcard.country)
     .filter((country) => country !== null && country !== undefined);
 
+// Process countries: normalize case, validate, and standardize names
 const countryCounts = allCountries.reduce(
     (acc, country) => {
-        acc[country] = (acc[country] || 0) + 1;
+        // Only process valid countries
+        if (isValidCountry(country!)) {
+            // Use standardized country name (this handles case-insensitive matching)
+            const standardName = getStandardCountryName(country!);
+            acc[standardName] = (acc[standardName] || 0) + 1;
+        }
         return acc;
     },
     {} as Record<string, number>
 );
 
-const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({ name, count }));
+const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({ 
+    name, 
+    count,
+    flag: getCountryFlag(name)
+}));
 ---
 
 <Layout title="Postcards" ogimageName="postcards.jpg">

@@ -5,6 +5,7 @@ interface Props {
     tags: {
         name: string;
         count: number;
+        flag?: string; // Optional flag emoji for countries
     }[];
     selectedTag?: string;
     basePath: string;
@@ -64,6 +65,7 @@ const sortedTags = [...tags].sort((a, b) => b.count - a.count);
                                 : 'border-neutral-200 bg-white hover:border-blue hover:text-blue'
                         }`}
                     >
+                        {tag.flag && <span class="mr-1">{tag.flag}</span>}
                         {tag.name}
                         <span
                             class={`ml-1 ${

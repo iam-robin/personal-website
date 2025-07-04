@@ -8,6 +8,7 @@ import PostcardItem from '@components/PostcardItem.astro';
 import TagCloud from '@components/TagCloud.astro';
 import { db, Postcard, desc, eq } from 'astro:db';
 import SectionContent from '@components/SectionContent.astro';
+import { isValidCountry, getCountryFlag, getStandardCountryName } from 'src/utils/countries';
 import { Image } from 'astro:assets';
 import RobinCoffee from '@assets/images/robin-coffee.png';
 import NewPostcardSticker from '@assets/new-postcard.svg';
@@ -21,16 +22,19 @@ export async function getStaticPaths() {
         .where(eq(Postcard.isPublished, true))
         .orderBy(desc(Postcard.date));
 
-    // Extract all unique countries
+    // Extract all unique countries and filter to only valid ones
     const allCountries = allPostcards
         .map((postcard) => postcard.country)
-        .filter((country) => country !== null && country !== undefined);
-    const uniqueCountries = [...new Set(allCountries)];
+        .filter((country) => country !== null && country !== undefined && isValidCountry(country));
 
-    // Generate a path for each country
+    // Use standardized country names and remove duplicates
+    const standardizedCountries = allCountries.map((country) => getStandardCountryName(country!));
+    const uniqueCountries = [...new Set(standardizedCountries)];
+
+    // Generate a path for each valid country
     return uniqueCountries.map((country) => {
         const filteredPostcards = allPostcards.filter(
-            (postcard) => postcard.country && postcard.country === country
+            (postcard) => postcard.country && getStandardCountryName(postcard.country) === country
         );
 
         return {
@@ -46,20 +50,30 @@ export async function getStaticPaths() {
 
 const { country, postcards, allPostcards } = Astro.props;
 
-// Generate country counts for the tag cloud
+// Generate country counts for the tag cloud (only valid countries)
 const allCountries = allPostcards
     .map((postcard) => postcard.country)
     .filter((country) => country !== null && country !== undefined);
 
+// Process countries: normalize case, validate, and standardize names
 const countryCounts = allCountries.reduce(
     (acc, country) => {
-        acc[country] = (acc[country] || 0) + 1;
+        // Only process valid countries
+        if (isValidCountry(country!)) {
+            // Use standardized country name (this handles case-insensitive matching)
+            const standardName = getStandardCountryName(country!);
+            acc[standardName] = (acc[standardName] || 0) + 1;
+        }
         return acc;
     },
     {} as Record<string, number>
 );
 
-const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({ name, count }));
+const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({
+    name,
+    count,
+    flag: getCountryFlag(name)
+}));
 
 const pageTitle = `Postcards: ${country}`;
 ---
