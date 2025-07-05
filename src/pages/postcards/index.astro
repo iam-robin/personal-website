@@ -14,6 +14,8 @@ import { db, Postcard, desc, eq } from 'astro:db'; // Import desc and eq
 import Headline from '@components/Headline.astro';
 import SectionContent from '@components/SectionContent.astro';
 import { isValidCountry, getCountryFlag, getStandardCountryName } from 'src/utils/countries';
+import WorldMap from '@components/WorldMap.astro';
+import { CaretDown } from '@phosphor-icons/react';
 
 // Render only published postcards, ordered by date descending
 const postcards = await db
@@ -41,11 +43,13 @@ const countryCounts = allCountries.reduce(
     {} as Record<string, number>
 );
 
-const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({ 
-    name, 
+const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({
+    name,
     count,
     flag: getCountryFlag(name)
 }));
+
+const visitedCountries = countryCloudData.map((country) => country.name);
 ---
 
 <Layout title="Postcards" ogimageName="postcards.jpg">
@@ -115,7 +119,7 @@ const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({
             }
         </NewSlider>
     </div>
-    <div class="pb-40">
+    <div class="pb-24">
         <Grid>
             <GridBox
                 desktopStart={3}
@@ -156,6 +160,31 @@ const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({
                         leave a postcard!
                     </p>
                 </div>
+            </GridBox>
+        </Grid>
+    </div>
+    <div class="pb-16 hidden md:block">
+        <Grid>
+            <GridBox desktopFull>
+                <details
+                    open
+                    class="group mb-12 rounded-lg border border-black-50 bg-neutral-50 p-4"
+                >
+                    <summary
+                        class="-m-2 flex cursor-pointer select-none items-center justify-between p-4 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+                        aria-label="Toggle tag filter"
+                    >
+                        <div class="font-mono text-xs uppercase tracking-widest">
+                            Where Postcards Came From
+                        </div>
+                        <div class="transition-transform duration-300 group-open:rotate-180">
+                            <CaretDown weight="bold" size={20} />
+                        </div>
+                    </summary>
+                    <div class="py-12 -ml-24 px-4">
+                        <WorldMap visitedCountries={visitedCountries} />
+                    </div>
+                </details>
             </GridBox>
         </Grid>
     </div>
