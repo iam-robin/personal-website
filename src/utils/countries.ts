@@ -7,7 +7,7 @@ interface CountryData {
     aliases?: string[]; // Alternative names/spellings
 }
 
-const COUNTRIES: CountryData[] = [
+export const COUNTRIES: CountryData[] = [
     { name: 'Afghanistan', flag: '🇦🇫' },
     { name: 'Albania', flag: '🇦🇱' },
     { name: 'Algeria', flag: '🇩🇿' },

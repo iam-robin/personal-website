@@ -1,0 +1,83 @@
+---
+import { CaretDown } from '@phosphor-icons/react';
+import { COUNTRIES } from '../utils/countries';
+import WorldMapSvg from './WorldMapSvg.astro';
+
+const { visitedCountries = [] } = Astro.props;
+
+const countryFlags = Object.fromEntries(
+    COUNTRIES.flatMap((country) => {
+        const entries = [[country.name, country.flag]];
+        if (country.aliases) {
+            country.aliases.forEach((alias) => entries.push([alias, country.flag]));
+        }
+        return entries;
+    })
+);
+---
+
+<details open class="group mb-12 rounded-lg border border-black-50 bg-neutral-50 p-4">
+    <summary
+        class="-m-2 flex cursor-pointer select-none items-center justify-between p-4 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+        aria-label="Toggle tag filter"
+    >
+        <div class="font-mono text-xs uppercase tracking-widest">
+            From where I received Postcards
+        </div>
+        <div class="transition-transform duration-300 group-open:rotate-180">
+            <CaretDown weight="bold" size={20} />
+        </div>
+    </summary>
+    <div class="relative py-12 -ml-24 px-4">
+        <WorldMapSvg />
+        <div id="tooltip" class="hidden"></div>
+    </div>
+</details>
+
+<style>
+    #tooltip {
+        position: fixed;
+        background-color: #171717;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.85rem;
+        line-height: 1rem;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+    }
+</style>
+
+<script define:vars={{ visitedCountries, countryFlags }}>
+    document.addEventListener('DOMContentLoaded', function () {
+        const countryPaths = document.querySelectorAll('svg path');
+        const tooltip = document.getElementById('tooltip');
+
+        if (!tooltip) return;
+
+        countryPaths.forEach((path) => {
+            let countryName = path.getAttribute('name') || path.getAttribute('class');
+            if (visitedCountries.includes(countryName)) {
+                path.classList.add('active');
+            }
+
+            path.addEventListener('mouseenter', () => {
+                if (countryName) {
+                    const flag = countryFlags[countryName] || '';
+                    tooltip.innerHTML = `${flag} ${countryName}`;
+                    tooltip.classList.remove('hidden');
+                }
+            });
+
+            path.addEventListener('mousemove', (e) => {
+                tooltip.style.left = `${e.clientX + 15}px`;
+                tooltip.style.top = `${e.clientY + 15}px`;
+            });
+
+            path.addEventListener('mouseleave', () => {
+                tooltip.classList.add('hidden');
+            });
+        });
+    });
+</script>
