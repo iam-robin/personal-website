@@ -35,6 +35,34 @@ THE SOFTWARE.
         fill: #689bf7;
         stroke: #344d7b;
     }
+
+    .country-path {
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+    }
+
+    .country-path:hover {
+        opacity: 0.8;
+    }
+
+    .country-tooltip {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        pointer-events: none;
+        z-index: 1000;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .country-tooltip.show {
+        opacity: 1;
+    }
 </style>
 <svg
     fill="#fff"
@@ -2869,3 +2897,49 @@ THE SOFTWARE.
     <circle cx="673.5" cy="724.1" id="1"> </circle>
     <circle cx="1798.2" cy="719.3" id="2"> </circle>
 </svg>
+
+<div class="country-tooltip" id="country-tooltip"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tooltip = document.getElementById('country-tooltip');
+        const countryPaths = document.querySelectorAll('svg path');
+
+        if (!tooltip) {
+            console.error('Country tooltip element not found');
+            return;
+        }
+
+        countryPaths.forEach((path) => {
+            path.classList.add('country-path');
+
+            path.addEventListener('mouseenter', function (e) {
+                // Try to get country name from different attributes
+                let countryName =
+                    this.getAttribute('name') ||
+                    this.getAttribute('id') ||
+                    this.getAttribute('class');
+
+                if (!countryName) return;
+
+                countryName = countryName.replace(/\s*country-path$/, '');
+
+                tooltip.innerHTML = `${countryName}`;
+                tooltip.classList.add('show');
+                tooltip.style.left = e.pageX + 10 + 'px';
+                tooltip.style.top = e.pageY - 10 + 'px';
+            });
+
+            path.addEventListener('mousemove', function (e) {
+                if (tooltip.classList.contains('show')) {
+                    tooltip.style.left = e.pageX + 10 + 'px';
+                    tooltip.style.top = e.pageY - 10 + 'px';
+                }
+            });
+
+            path.addEventListener('mouseleave', function () {
+                tooltip.classList.remove('show');
+            });
+        });
+    });
+</script>
