@@ -1,0 +1,52 @@
+---
+interface NavItem {
+    name: string;
+    path: string;
+}
+
+export const navData: NavItem[] = [
+    {
+        name: 'Media',
+        path: '/media'
+    },
+    {
+        name: 'Bookmarks',
+        path: '/bookmarks'
+    },
+    {
+        name: 'Postcards',
+        path: '/postcards'
+    },
+    {
+        name: 'Garden',
+        path: '/garden'
+    },
+    {
+        name: 'Blog',
+        path: '/blog'
+    },
+    {
+        name: '365 project',
+        path: '/365'
+    }
+];
+---
+
+<aside class="fixed top-0 bottom-0 p-8 z-50 w-60 text-white">
+    LOGO
+    <nav class="mt-8">
+        <ul class="space-y-4">
+            {
+                navData.map((item) => (
+                    <li>
+                        <a href={item.path} class="duration-200">
+                            <span>icon</span>
+                            <span>{item.name}</span>
+                            <span>count</span>
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </nav>
+</aside>

@@ -6,6 +6,7 @@ import { SEO } from 'astro-seo';
 import MobileMenu from '@components/MobileMenu.astro';
 import ContactLinksSection from '@components/ContactLinksSection.astro';
 import DistortFilter from '@components/DistortFilter.astro';
+import Sidebar from '@components/Sidebar.astro';
 
 interface Props {
     title: string;
@@ -55,12 +56,41 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
             }}
         />
     </head>
-    <body class="min-h-[calc(100vh-56px)] overflow-x-hidden">
-        <Header />
-        <MobileMenu />
-        <slot />
-        <ContactLinksSection />
-        <Footer />
+    <body class="bg-[var(--body-bg-color)] antialiased">
+        <!-- <Header />
+        <MobileMenu /> -->
+        <Sidebar />
+
+        <!-- top spacing -->
+        <div
+            class="fixed top-0 left-[var(--margin-right-sidebar)] right-0 h-4 bg-[var(--body-bg-color)] z-50"
+        >
+        </div>
+        <!-- bottom spacing -->
+        <div
+            class="fixed bottom-0 left-[var(--margin-right-sidebar)] right-0 h-4 bg-[var(--body-bg-color)] z-50"
+        >
+        </div>
+        <!-- right spacing -->
+        <div class="fixed top-0 bottom-0 right-0 w-4 bg-[var(--body-bg-color)] z-50"></div>
+        <div
+            class="fixed inset-4 left-[var(--margin-right-sidebar)] rounded bg-[var(--content-bg-color)]"
+        >
+        </div>
+
+        <div class="relative ml-[var(--margin-right-sidebar)]">
+            <slot />
+            <ContactLinksSection />
+            <Footer />
+        </div>
+
         <DistortFilter />
+        <style>
+            :root {
+                --body-bg-color: #433e3c;
+                --content-bg-color: #fff;
+                --margin-right-sidebar: 16rem;
+            }
+        </style>
     </body>
 </html>

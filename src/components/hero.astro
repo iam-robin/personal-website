@@ -5,10 +5,8 @@ import GridBox from '@components/GridBox.astro';
 import Headline from '@components/Headline.astro';
 ---
 
-<div class="bg-neutral-100 lg:-mt-28">
-    <Grid
-        classes="pt-32 pb-20 sm:pb-30 sm:pt-[160px] md:pt-[200px] md:pb-[100px] lg:pt-[280px] lg:pb-[200px]"
-    >
+<div>
+    <Grid classes="py-20 sm:pb-30 sm:pt-[160px] md:pt-[200px] md:pb-[100px] lg:py-[200px]">
         <GridBox desktopStart={1} desktopEnd={9}>
             <Headline level={2} classes="pr-2 cursor-default">
                 <div class="group inline-block">
@@ -18,28 +16,28 @@ import Headline from '@components/Headline.astro';
                         name="sticker-smiley-40"
                     />
                 </div>
-                 I'm a Design Engineer, working at the intersection of
+                I'm a Design Engineer, working at the intersection of
                 <div class="group inline-block">
                     <Icon
                         class="-pl-2 -mr-1 ml-1 inline -translate-y-[2px] -rotate-12 text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[-24deg] group-hover:scale-[110%] sm:text-[46px] md:-translate-y-1 md:text-[48px]"
                         name="sticker-code-50"
                     />
-                     code,
+                    code,
                 </div>
                 <div class="group inline-block">
                     <Icon
                         class="-mr-1 ml-1 inline -translate-y-1 rotate-12 text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[-12deg] group-hover:scale-[110%] sm:text-[46px] md:-translate-y-2 md:text-[50px]"
                         name="sticker-design-50"
                     />
-                     design
+                    design
                 </div>
-                 and
+                and
                 <div class="group inline-block">
                     <Icon
                         class="-mr-1 ml-1 inline text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[20deg] group-hover:scale-[110%] sm:text-[46px] md:text-[46px]"
                         name="sticker-art-50"
                     />
-                     art.
+                    art.
                 </div>
             </Headline>
         </GridBox>
