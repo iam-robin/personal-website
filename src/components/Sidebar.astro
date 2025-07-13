@@ -1,33 +1,67 @@
 ---
+import { Icon } from 'astro-icon/components';
+import { getAllContentCounts } from '@utils/content-counts';
+
 interface NavItem {
     name: string;
     path: string;
+    icon: string;
+    iconBg: string;
+    iconColor: string;
+    countKey: keyof typeof counts;
 }
+
+// Fetch all content counts server-side
+const counts = await getAllContentCounts();
 
 export const navData: NavItem[] = [
     {
-        name: 'Media',
-        path: '/media'
+        name: 'Books',
+        path: '/media',
+        icon: 'ph:book-fill',
+        iconBg: 'bg-red',
+        iconColor: 'text-red-dark',
+        countKey: 'books'
     },
     {
         name: 'Bookmarks',
-        path: '/bookmarks'
+        path: '/bookmarks',
+        icon: 'ph:bookmark-fill',
+        iconBg: 'bg-blue',
+        iconColor: 'text-blue-dark',
+        countKey: 'bookmarks'
     },
     {
         name: 'Postcards',
-        path: '/postcards'
+        path: '/postcards',
+        icon: 'ph:stamp-fill',
+        iconBg: 'bg-lilac',
+        iconColor: 'text-lilac-dark',
+        countKey: 'postcards'
     },
     {
         name: 'Garden',
-        path: '/garden'
+        path: '/garden',
+        icon: 'ph:plant-fill',
+        iconBg: 'bg-green',
+        iconColor: 'text-green-dark',
+        countKey: 'garden'
     },
     {
         name: 'Blog',
-        path: '/blog'
+        path: '/blog',
+        icon: 'ph:article-fill',
+        iconBg: 'bg-yellow',
+        iconColor: 'text-yellow-dark',
+        countKey: 'blog'
     },
     {
         name: '365 project',
-        path: '/365'
+        path: '/365',
+        icon: 'ph:calendar-fill',
+        iconBg: 'bg-red',
+        iconColor: 'text-red-dark',
+        countKey: 'photos365'
     }
 ];
 ---
@@ -39,10 +73,16 @@ export const navData: NavItem[] = [
             {
                 navData.map((item) => (
                     <li>
-                        <a href={item.path} class="duration-200">
-                            <span>icon</span>
-                            <span>{item.name}</span>
-                            <span>count</span>
+                        <a href={item.path} class="flex gap-2 items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div
+                                    class={`w-6 h-6 p-0.5 ${item.iconBg} flex items-center justify-center rounded`}
+                                >
+                                    <Icon name={item.icon} class={item.iconColor} />
+                                </div>
+                                <span>{item.name}</span>
+                            </div>
+                            <span class="opacity-30">({counts[item.countKey]})</span>
                         </a>
                     </li>
                 ))

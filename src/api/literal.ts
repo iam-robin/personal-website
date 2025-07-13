@@ -40,7 +40,10 @@ export const shelfQueryResponse = async () => {
     });
 
     const data = await response.json();
-    const shelves = data.data.getShelvesByProfileId;
+    const allShelves = data.data.getShelvesByProfileId;
+    
+    // Filter shelves to only include those with titles starting with "20" (yearly shelves)
+    const shelves = allShelves.filter((shelf: any) => shelf.title.startsWith('20'));
 
     const reviewQuery = `
         query getReviews($pairs: [ProfileIdBookIdInput!]!) {
