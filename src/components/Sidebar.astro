@@ -66,23 +66,42 @@ export const navData: NavItem[] = [
 ];
 ---
 
-<aside class="fixed top-0 bottom-0 p-8 z-50 w-60 text-white">
-    LOGO
+<aside
+    class="sidebar-main fixed top-0 bottom-0 p-8 z-50 text-white overflow-hidden transition-[width,padding] duration-300 ease-in-out"
+>
+    <div class="flex items-center justify-between mb-8">
+        <span class="logo-text transition-opacity duration-300 ease-in-out">LOGO</span>
+    </div>
+    <button
+        id="sidebar-toggle"
+        class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-white/10 transition-colors"
+        aria-label="Toggle sidebar"
+    >
+        <Icon name="ph:sidebar" class="w-5 h-5" />
+    </button>
+
     <nav class="mt-8">
         <ul class="space-y-4">
             {
                 navData.map((item) => (
                     <li>
-                        <a href={item.path} class="flex gap-2 items-center justify-between">
-                            <div class="flex items-center gap-2">
+                        <a
+                            href={item.path}
+                            class="flex gap-3 items-center justify-between group hover:bg-white/5 rounded-md p-2 -m-2 transition-colors"
+                        >
+                            <div class="flex items-center gap-3 min-w-0 flex-1">
                                 <div
-                                    class={`w-6 h-6 p-0.5 ${item.iconBg} flex items-center justify-center rounded`}
+                                    class={`w-6 h-6 p-0.5 ${item.iconBg} flex items-center justify-center rounded flex-shrink-0`}
                                 >
                                     <Icon name={item.icon} class={item.iconColor} />
                                 </div>
-                                <span>{item.name}</span>
+                                <span class="nav-text transition-opacity duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+                                    {item.name}
+                                </span>
                             </div>
-                            <span class="opacity-30">({counts[item.countKey]})</span>
+                            <span class="nav-count opacity-30 transition-opacity duration-300 ease-in-out flex-shrink-0">
+                                ({counts[item.countKey]})
+                            </span>
                         </a>
                     </li>
                 ))
@@ -90,3 +109,64 @@ export const navData: NavItem[] = [
         </ul>
     </nav>
 </aside>
+
+<script>
+    // Sidebar collapse functionality
+    function initSidebar() {
+        const toggleButton = document.getElementById('sidebar-toggle');
+        const body = document.body;
+
+        // Check localStorage for saved state
+        const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+        if (isCollapsed) {
+            body.classList.add('sidebar-collapsed');
+        }
+
+        // Toggle function
+        function toggleSidebar() {
+            const isCurrentlyCollapsed = body.classList.contains('sidebar-collapsed');
+
+            if (isCurrentlyCollapsed) {
+                body.classList.remove('sidebar-collapsed');
+                localStorage.setItem('sidebar-collapsed', 'false');
+            } else {
+                body.classList.add('sidebar-collapsed');
+                localStorage.setItem('sidebar-collapsed', 'true');
+            }
+        }
+
+        // Add event listener
+        if (toggleButton) {
+            toggleButton.addEventListener('click', toggleSidebar);
+        }
+    }
+
+    // Initialize when DOM is loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSidebar);
+    } else {
+        initSidebar();
+    }
+</script>
+
+<style>
+    /* Sidebar default width using custom property */
+    .sidebar-main {
+        width: var(--sidebar-width);
+    }
+    
+    /* Collapsed state styles - These cannot be converted to Tailwind since they depend on body class */
+    body.sidebar-collapsed .sidebar-main {
+        width: var(--sidebar-width-collapsed);
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        overflow: visible;
+    }
+
+    body.sidebar-collapsed .logo-text,
+    body.sidebar-collapsed .nav-text,
+    body.sidebar-collapsed .nav-count {
+        opacity: 0;
+        pointer-events: none;
+    }
+</style>

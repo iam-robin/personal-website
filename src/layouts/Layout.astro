@@ -63,22 +63,20 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
 
         <!-- top spacing -->
         <div
-            class="fixed top-0 left-[var(--margin-right-sidebar)] right-0 h-4 bg-[var(--body-bg-color)] z-50"
+            class="sidebar-element sidebar-spacing-top fixed top-0 right-0 h-4 bg-[var(--body-bg-color)] z-50"
         >
         </div>
         <!-- bottom spacing -->
         <div
-            class="fixed bottom-0 left-[var(--margin-right-sidebar)] right-0 h-4 bg-[var(--body-bg-color)] z-50"
+            class="sidebar-element sidebar-spacing-bottom fixed bottom-0 right-0 h-4 bg-[var(--body-bg-color)] z-50"
         >
         </div>
         <!-- right spacing -->
         <div class="fixed top-0 bottom-0 right-0 w-4 bg-[var(--body-bg-color)] z-50"></div>
-        <div
-            class="fixed inset-4 left-[var(--margin-right-sidebar)] rounded bg-[var(--content-bg-color)]"
-        >
+        <div class="sidebar-element sidebar-content-bg fixed inset-4 rounded bg-[var(--content-bg-color)]">
         </div>
 
-        <div class="relative ml-[var(--margin-right-sidebar)]">
+        <div class="sidebar-element sidebar-main-content relative">
             <slot />
             <ContactLinksSection />
             <Footer />
@@ -89,7 +87,30 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
             :root {
                 --body-bg-color: #433e3c;
                 --content-bg-color: #fff;
-                --margin-right-sidebar: 16rem;
+                --sidebar-width: 16rem;
+                --sidebar-width-collapsed: 5rem;
+            }
+            
+            /* Smooth transitions for sidebar collapse - using specific properties instead of custom properties */
+            .sidebar-element {
+                transition: left 0.3s ease-in-out, margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+            }
+            
+            /* Default expanded state */
+            .sidebar-spacing-top { left: var(--sidebar-width); }
+            .sidebar-spacing-bottom { left: var(--sidebar-width); }
+            .sidebar-content-bg { left: var(--sidebar-width); }
+            .sidebar-main-content { margin-left: var(--sidebar-width); }
+            
+            /* Collapsed state styles */
+            body.sidebar-collapsed .sidebar-spacing-top { left: var(--sidebar-width-collapsed); }
+            body.sidebar-collapsed .sidebar-spacing-bottom { left: var(--sidebar-width-collapsed); }
+            body.sidebar-collapsed .sidebar-content-bg { left: var(--sidebar-width-collapsed); }
+            body.sidebar-collapsed .sidebar-main-content { margin-left: var(--sidebar-width-collapsed); }
+            
+            /* Collapsed state for sidebar width */
+            body.sidebar-collapsed {
+                --sidebar-width: var(--sidebar-width-collapsed);
             }
         </style>
     </body>
