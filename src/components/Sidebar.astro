@@ -11,8 +11,17 @@ interface NavItem {
     countKey: keyof typeof counts;
 }
 
-// Fetch all content counts server-side
-const counts = await getAllContentCounts();
+// Fetch content counts only during build, use mock data in development
+const counts = import.meta.env.DEV
+    ? {
+          books: 12,
+          bookmarks: 45,
+          postcards: 8,
+          garden: 23,
+          blog: 15,
+          photos365: 180
+      }
+    : await getAllContentCounts();
 
 export const navData: NavItem[] = [
     {
@@ -67,47 +76,108 @@ export const navData: NavItem[] = [
 ---
 
 <aside
-    class="sidebar-main fixed top-0 bottom-0 p-8 z-50 text-white overflow-hidden transition-[width,padding] duration-300 ease-in-out"
+    class="sidebar-main fixed top-0 bottom-0 p-8 z-50 text-white transition-[width,padding] duration-300 ease-in-out flex flex-col justify-between"
 >
-    <div class="flex items-center justify-between mb-8">
-        <span class="logo-text transition-opacity duration-300 ease-in-out">LOGO</span>
-    </div>
-    <button
-        id="sidebar-toggle"
-        class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-white/10 transition-colors"
-        aria-label="Toggle sidebar"
-    >
-        <Icon name="ph:sidebar" class="w-5 h-5" />
-    </button>
+    <div>
+        <div class="flex items-center justify-between mb-8">
+            <span class="logo-text transition-opacity duration-300 ease-in-out">LOGO</span>
+        </div>
+        <button
+            id="sidebar-toggle"
+            class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-white/10 transition-colors"
+            aria-label="Toggle sidebar"
+        >
+            <Icon name="ph:sidebar" class="w-5 h-5" />
+        </button>
 
-    <nav class="mt-8">
-        <ul class="space-y-4">
-            {
-                navData.map((item) => (
-                    <li>
-                        <a
-                            href={item.path}
-                            class="flex gap-3 items-center justify-between group hover:bg-white/5 rounded-md p-2 -m-2 transition-colors"
-                        >
-                            <div class="flex items-center gap-3 min-w-0 flex-1">
-                                <div
-                                    class={`w-6 h-6 p-0.5 ${item.iconBg} flex items-center justify-center rounded flex-shrink-0`}
-                                >
-                                    <Icon name={item.icon} class={item.iconColor} />
+        <nav class="mt-8">
+            <ul class="space-y-4">
+                {
+                    navData.map((item) => (
+                        <li class="relative group">
+                            <a
+                                href={item.path}
+                                class="flex gap-3 items-center justify-between group hover:bg-white/5 rounded-md p-2 -m-2 transition-colors"
+                            >
+                                <div class="flex items-center gap-3 min-w-0 flex-1">
+                                    <div
+                                        class={`w-6 h-6 p-0.5 ${item.iconBg} flex items-center justify-center rounded flex-shrink-0`}
+                                    >
+                                        <Icon name={item.icon} class={item.iconColor} />
+                                    </div>
+                                    <span class="nav-text transition-opacity duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+                                        {item.name}
+                                    </span>
                                 </div>
-                                <span class="nav-text transition-opacity duration-300 ease-in-out whitespace-nowrap overflow-hidden">
-                                    {item.name}
+                                <span class="nav-count opacity-30 transition-opacity duration-300 ease-in-out flex-shrink-0">
+                                    ({counts[item.countKey]})
                                 </span>
+                            </a>
+                            <div class="absolute left-full ml-8 top-1/2 -translate-y-1/2 bg-red opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto w-48 p-2">
+                                flyout for {item.name}
+                                <br />
+                                Aute dolore officia adipisicing sint quis deserunt aliqua.
                             </div>
-                            <span class="nav-count opacity-30 transition-opacity duration-300 ease-in-out flex-shrink-0">
-                                ({counts[item.countKey]})
-                            </span>
-                        </a>
-                    </li>
-                ))
-            }
+                        </li>
+                    ))
+                }
+            </ul>
+        </nav>
+    </div>
+    <div class="footer-container relative">
+        <!-- Toggle button for collapsed state -->
+        <button
+            id="footer-toggle"
+            class="footer-toggle-btn flex items-center justify-center w-8 h-8 rounded-md hover:bg-white/10 transition-colors opacity-0 pointer-events-none"
+            aria-label="Footer menu"
+        >
+            <Icon name="ph:dots-three" class="w-5 h-5" />
+        </button>
+
+        <!-- Direct links for expanded state -->
+        <ul class="footer-links transition-opacity duration-300 ease-in-out">
+            <li><a href="/legal" class="hover:text-white/80 transition-colors">Legal notice</a></li>
+            <li>
+                <a href="/changelog" class="hover:text-white/80 transition-colors">Changelog</a>
+            </li>
+            <li>
+                <a
+                    href="https://github.com/iam-robin/personal-website"
+                    class="hover:text-white/80 transition-colors">Source code</a
+                >
+            </li>
         </ul>
-    </nav>
+
+        <!-- Flyout menu for collapsed state -->
+        <div
+            id="footer-flyout"
+            class="footer-flyout absolute bottom-0 left-full ml-4 bg-[#433e3c] border border-white/10 rounded-md p-2 min-w-[160px] opacity-0 pointer-events-none transition-opacity duration-200 z-[9999]"
+        >
+            <ul class="space-y-1">
+                <li>
+                    <a
+                        href="/legal"
+                        class="block px-2 py-1 text-sm hover:bg-white/10 rounded transition-colors"
+                        >Legal notice</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="/changelog"
+                        class="block px-2 py-1 text-sm hover:bg-white/10 rounded transition-colors"
+                        >Changelog</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="https://github.com/iam-robin/personal-website"
+                        class="block px-2 py-1 text-sm hover:bg-white/10 rounded transition-colors"
+                        >Source code</a
+                    >
+                </li>
+            </ul>
+        </div>
+    </div>
 </aside>
 
 <script>
@@ -147,6 +217,59 @@ export const navData: NavItem[] = [
     } else {
         initSidebar();
     }
+
+    // Footer flyout functionality
+    function initFooterFlyout() {
+        const footerToggle = document.getElementById('footer-toggle');
+        const footerFlyout = document.getElementById('footer-flyout');
+
+        if (!footerToggle || !footerFlyout) return;
+
+        let isOpen = false;
+
+        function toggleFlyout() {
+            isOpen = !isOpen;
+            if (isOpen) {
+                footerFlyout!.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                footerFlyout!.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function closeFlyout() {
+            if (isOpen) {
+                isOpen = false;
+                footerFlyout!.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        // Toggle on button click
+        footerToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFlyout();
+        });
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            const target = e.target as Element;
+            if (!footerToggle.contains(target) && !footerFlyout!.contains(target)) {
+                closeFlyout();
+            }
+        });
+
+        // Close when sidebar is expanded
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', closeFlyout);
+        }
+    }
+
+    // Initialize footer flyout when DOM is loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFooterFlyout);
+    } else {
+        initFooterFlyout();
+    }
 </script>
 
 <style>
@@ -154,7 +277,6 @@ export const navData: NavItem[] = [
     .sidebar-main {
         width: var(--sidebar-width);
     }
-    
     /* Collapsed state styles - These cannot be converted to Tailwind since they depend on body class */
     body.sidebar-collapsed .sidebar-main {
         width: var(--sidebar-width-collapsed);
@@ -165,8 +287,19 @@ export const navData: NavItem[] = [
 
     body.sidebar-collapsed .logo-text,
     body.sidebar-collapsed .nav-text,
-    body.sidebar-collapsed .nav-count {
+    body.sidebar-collapsed .nav-count,
+    body.sidebar-collapsed .footer-links {
         opacity: 0;
         pointer-events: none;
+    }
+
+    body.sidebar-collapsed .footer-links {
+        height: 0;
+    }
+
+    /* Footer toggle button - show only when collapsed */
+    body.sidebar-collapsed .footer-toggle-btn {
+        opacity: 1;
+        pointer-events: auto;
     }
 </style>
