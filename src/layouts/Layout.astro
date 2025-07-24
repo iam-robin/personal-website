@@ -79,11 +79,10 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
         </div>
 
         <div
-            class="main-content-margin-left relative transition-[margin-left] duration-300 ease-in-out"
+            class="main-content-margin-left my-4 mr-4 relative transition-[margin-left] duration-300 ease-in-out"
         >
             <slot />
             <ContactLinksSection />
-            <Footer />
         </div>
 
         <DistortFilter />
