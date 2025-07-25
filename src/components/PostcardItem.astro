@@ -82,19 +82,19 @@ const bodyLineBreaks = body.split('\n').length - 1;
 // Calculate adjusted font size for body text based on content density
 let bodyFontSizeFactor = fontSizeFactor;
 
-// Apply reduction for long text (>170 characters)
-if (bodyCharCount > 170) {
-    bodyFontSizeFactor *= 0.85;
+// Apply reduction for long text (>180 characters)
+if (bodyCharCount > 180) {
+    bodyFontSizeFactor *= 0.95;
 }
 
 // Apply reduction for excessive line breaks (>2)
 if (bodyLineBreaks > 2) {
-    bodyFontSizeFactor *= 0.9;
+    bodyFontSizeFactor *= 0.8;
 }
 
 // Apply additional reduction if both conditions are met
-if (bodyCharCount > 170 && bodyLineBreaks > 2) {
-    bodyFontSizeFactor *= 0.85; // Additional reduction
+if (bodyCharCount > 180 && bodyLineBreaks > 2) {
+    bodyFontSizeFactor *= 0.9; // Additional reduction
 }
 
 const bodyFontSize = `${bodyFontSizeFactor}em`;
