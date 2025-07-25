@@ -75,6 +75,30 @@ const sanitizedStampSvg = DOMPurify.sanitize(stampSvg);
 const fontSize = `${fontSizeFactor}em`;
 const lineHeight = lineHeightFactor.toFixed(2);
 
+// Analyze body text for dynamic font sizing
+const bodyCharCount = body.length;
+const bodyLineBreaks = body.split('\n').length - 1;
+
+// Calculate adjusted font size for body text based on content density
+let bodyFontSizeFactor = fontSizeFactor;
+
+// Apply reduction for long text (>170 characters)
+if (bodyCharCount > 170) {
+    bodyFontSizeFactor *= 0.85;
+}
+
+// Apply reduction for excessive line breaks (>2)
+if (bodyLineBreaks > 2) {
+    bodyFontSizeFactor *= 0.9;
+}
+
+// Apply additional reduction if both conditions are met
+if (bodyCharCount > 170 && bodyLineBreaks > 2) {
+    bodyFontSizeFactor *= 0.85; // Additional reduction
+}
+
+const bodyFontSize = `${bodyFontSizeFactor}em`;
+
 // Format the date for general display
 const formattedDate = date.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -88,7 +112,7 @@ const transformStyles = distorted
 
 const authorStyles = `transform: translateX(${authorLeftOffset}px) translateY(${authorTopOffset}px) rotate(${authorRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
 const dateStyles = `transform: translateX(${dateLeftOffset}px) translateY(${dateTopOffset}px) rotate(${dateRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
-const bodyStyles = `transform: translateX(${bodyLeftOffset}px) translateY(${bodyTopOffset}px) rotate(${bodyRotation}deg); font-size: ${fontSize}; line-height: ${lineHeight}; color: ${penColor}; filter: url(#distort-xl); white-space: pre-wrap;`;
+const bodyStyles = `transform: translateX(${bodyLeftOffset}px) translateY(${bodyTopOffset}px) rotate(${bodyRotation}deg); font-size: ${bodyFontSize}; line-height: ${lineHeight}; color: ${penColor}; filter: url(#distort-xl); white-space: pre-wrap;`;
 
 // Determine shadow class at build time based on rotation
 const shadowClass = rotation >= 0 ? 'hide-after' : 'hide-before';
