@@ -1,6 +1,8 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { getAllContentCounts } from '@utils/content-counts';
+import { Image } from 'astro:assets';
+import StickerLogo from '@assets/sticker-logo.svg';
 
 interface NavItem {
     name: string;
@@ -9,6 +11,7 @@ interface NavItem {
     iconBg: string;
     iconColor: string;
     countKey: keyof typeof counts;
+    description: string;
 }
 
 // Fetch content counts only during build, use mock data in development
@@ -30,7 +33,9 @@ export const navData: NavItem[] = [
         icon: 'ph:book-fill',
         iconBg: 'bg-red',
         iconColor: 'text-red-dark',
-        countKey: 'books'
+        countKey: 'books',
+        description:
+            "What I've been reading lately — books, audiobooks, and the occasional guilty pleasure that made me think."
     },
     {
         name: 'Bookmarks',
@@ -38,7 +43,9 @@ export const navData: NavItem[] = [
         icon: 'ph:bookmark-fill',
         iconBg: 'bg-blue',
         iconColor: 'text-blue-dark',
-        countKey: 'bookmarks'
+        countKey: 'bookmarks',
+        description:
+            "Links I've saved because they taught me something or made me curious enough to share."
     },
     {
         name: 'Postcards',
@@ -46,7 +53,9 @@ export const navData: NavItem[] = [
         icon: 'ph:stamp-fill',
         iconBg: 'bg-lilac',
         iconColor: 'text-lilac-dark',
-        countKey: 'postcards'
+        countKey: 'postcards',
+        description:
+            'An interactive map where you can leave digital postcards — because the internet needs more genuine human connection.'
     },
     {
         name: 'Garden',
@@ -54,7 +63,9 @@ export const navData: NavItem[] = [
         icon: 'ph:plant-fill',
         iconBg: 'bg-green',
         iconColor: 'text-green-dark',
-        countKey: 'garden'
+        countKey: 'garden',
+        description:
+            'Growing thoughts and half-formed ideas that might bloom into something useful (or at least interesting).'
     },
     {
         name: 'Blog',
@@ -62,7 +73,9 @@ export const navData: NavItem[] = [
         icon: 'ph:article-fill',
         iconBg: 'bg-yellow',
         iconColor: 'text-yellow-dark',
-        countKey: 'blog'
+        countKey: 'blog',
+        description:
+            'Longer thoughts on design, technology, and whatever else catches my attention long enough to write about.'
     },
     {
         name: '365 project',
@@ -70,7 +83,9 @@ export const navData: NavItem[] = [
         icon: 'ph:calendar-fill',
         iconBg: 'bg-red',
         iconColor: 'text-red-dark',
-        countKey: 'photos365'
+        countKey: 'photos365',
+        description:
+            'A daily photo journal documenting life through my camera lens — the mundane, beautiful, and everything in between.'
     }
 ];
 ---
@@ -79,8 +94,23 @@ export const navData: NavItem[] = [
     class="sidebar-main fixed top-0 bottom-0 p-8 z-50 text-white transition-[width,padding] duration-300 ease-in-out flex flex-col justify-between"
 >
     <div>
-        <div class="flex items-center justify-between mb-8">
-            <span class="logo-text transition-opacity duration-300 ease-in-out">LOGO</span>
+        <div class="mb-8 min-h-16">
+            <a href="/" class="flex gap-3 items-center">
+                <Image
+                    src={StickerLogo}
+                    alt="Holographic sticker of my face"
+                    widths={[128]}
+                    sizes={`128px`}
+                    class="max-w-[56px] sticker-logo transition-[max-width, margin] duration-300 ease-in-out"
+                    data-rarity="common"
+                />
+                <div
+                    class="font-mono text-2xs text-nowrap logo-text transition-opacity duration-300 ease-in-out"
+                >
+                    <p class="font-bold">Robin Spielmann</p>
+                    <p>Design Engineer</p>
+                </div>
+            </a>
         </div>
         <button
             id="sidebar-toggle"
@@ -113,10 +143,8 @@ export const navData: NavItem[] = [
                                     ({counts[item.countKey]})
                                 </span>
                             </a>
-                            <div class="absolute left-full ml-8 top-1/2 -translate-y-1/2 bg-red opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto w-48 p-2">
-                                flyout for {item.name}
-                                <br />
-                                Aute dolore officia adipisicing sint quis deserunt aliqua.
+                            <div class="absolute left-full ml-10 top-1/2 -translate-y-1/2 bg-[#433E3C] text-white rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto w-72 p-4 z-50">
+                                <div class="text-sm leading-relaxed">{item.description}</div>
                             </div>
                         </li>
                     ))
@@ -301,5 +329,11 @@ export const navData: NavItem[] = [
     body.sidebar-collapsed .footer-toggle-btn {
         opacity: 1;
         pointer-events: auto;
+    }
+
+    /* Make sticker logo smaller when collapsed */
+    body.sidebar-collapsed .sticker-logo {
+        max-width: 48px;
+        margin-left: -8px;
     }
 </style>
