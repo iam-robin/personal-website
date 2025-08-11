@@ -104,11 +104,11 @@ export const navData: NavItem[] = [
                     class="max-w-[56px] sticker-logo transition-[max-width, margin] duration-300 ease-in-out"
                     data-rarity="common"
                 />
-                <div
-                    class="font-mono text-2xs text-nowrap logo-text transition-opacity duration-300 ease-in-out"
-                >
-                    <p class="font-bold">Robin Spielmann</p>
-                    <p>Design Engineer</p>
+                <div class="text-nowrap logo-text transition-opacity duration-300 ease-in-out">
+                    <p class="text-[15px] font-bold text-white-800">Robin Spielmann</p>
+                    <p class="text-2xs font-mono text-white-600 tight-word-spacing">
+                        Design Engineer
+                    </p>
                 </div>
             </a>
         </div>
@@ -143,8 +143,12 @@ export const navData: NavItem[] = [
                                     ({counts[item.countKey]})
                                 </span>
                             </a>
-                            <div class="absolute left-full ml-10 top-1/2 -translate-y-1/2 bg-[#433E3C] text-white rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto w-72 p-4 z-50">
+                            <div class="absolute left-full ml-12 top-1/2 -translate-y-1/2 bg-[#fff] border text-black border-black rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto w-72 p-4 z-50">
                                 <div class="text-sm leading-relaxed">{item.description}</div>
+                                <!-- Triangle pointer with border -->
+                                <div class="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8.5px] border-t-transparent border-b-[8.5px] border-b-transparent border-r-[8.5px] border-r-black"></div>
+                                <!-- Triangle pointer fill -->
+                                <div class="absolute right-full top-1/2 -translate-y-1/2 translate-x-[0.8px] w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-white"></div>
                             </div>
                         </li>
                     ))
@@ -335,5 +339,10 @@ export const navData: NavItem[] = [
     body.sidebar-collapsed .sticker-logo {
         max-width: 48px;
         margin-left: -8px;
+    }
+
+    /* Reduce word spacing between Design and Engineer */
+    .tight-word-spacing {
+        word-spacing: -0.2em;
     }
 </style>
