@@ -3,6 +3,8 @@ import { Icon } from 'astro-icon/components';
 import { getAllContentCounts } from '@utils/content-counts';
 import { Image } from 'astro:assets';
 import StickerLogo from '@assets/sticker-logo.svg';
+import NavFlyoutMock from '@assets/nav-flyout-mock.png';
+import NavFlyoutMock2 from '@assets/nav-flyout-mock-2.png';
 
 interface NavItem {
     name: string;
@@ -12,6 +14,7 @@ interface NavItem {
     iconColor: string;
     countKey: keyof typeof counts;
     description: string;
+    teaserImage: ImageMetadata;
 }
 
 // Fetch content counts only during build, use mock data in development
@@ -35,7 +38,8 @@ export const navData: NavItem[] = [
         iconColor: 'text-red-dark',
         countKey: 'books',
         description:
-            "What I've been reading lately — books, audiobooks, and the occasional guilty pleasure that made me think."
+            "What I've been reading lately — books, audiobooks, and the occasional guilty pleasure that made me think.",
+        teaserImage: NavFlyoutMock
     },
     {
         name: 'Bookmarks',
@@ -45,7 +49,8 @@ export const navData: NavItem[] = [
         iconColor: 'text-blue-dark',
         countKey: 'bookmarks',
         description:
-            "Links I've saved because they taught me something or made me curious enough to share."
+            "Links I've saved because they taught me something or made me curious enough to share.",
+        teaserImage: NavFlyoutMock2
     },
     {
         name: 'Postcards',
@@ -55,7 +60,8 @@ export const navData: NavItem[] = [
         iconColor: 'text-lilac-dark',
         countKey: 'postcards',
         description:
-            'An interactive map where you can leave digital postcards — because the internet needs more genuine human connection.'
+            'An interactive map where you can leave digital postcards — because the internet needs more genuine human connection.',
+        teaserImage: NavFlyoutMock
     },
     {
         name: 'Garden',
@@ -65,7 +71,8 @@ export const navData: NavItem[] = [
         iconColor: 'text-green-dark',
         countKey: 'garden',
         description:
-            'Growing thoughts and half-formed ideas that might bloom into something useful (or at least interesting).'
+            'Growing thoughts and half-formed ideas that might bloom into something useful (or at least interesting).',
+        teaserImage: NavFlyoutMock2
     },
     {
         name: 'Blog',
@@ -75,7 +82,8 @@ export const navData: NavItem[] = [
         iconColor: 'text-yellow-dark',
         countKey: 'blog',
         description:
-            'Longer thoughts on design, technology, and whatever else catches my attention long enough to write about.'
+            'Longer thoughts on design, technology, and whatever else catches my attention long enough to write about.',
+        teaserImage: NavFlyoutMock
     },
     {
         name: '365 project',
@@ -85,7 +93,8 @@ export const navData: NavItem[] = [
         iconColor: 'text-red-dark',
         countKey: 'photos365',
         description:
-            'A daily photo journal documenting life through my camera lens — the mundane, beautiful, and everything in between.'
+            'A daily photo journal documenting life through my camera lens — the mundane, beautiful, and everything in between.',
+        teaserImage: NavFlyoutMock2
     }
 ];
 ---
@@ -101,30 +110,47 @@ export const navData: NavItem[] = [
                     alt="Holographic sticker of my face"
                     widths={[128]}
                     sizes={`128px`}
-                    class="max-w-[56px] sticker-logo transition-[max-width, margin] duration-300 ease-in-out"
+                    class="max-w-[50px] sticker-logo transition-[max-width, margin] duration-300 ease-in-out"
                     data-rarity="common"
                 />
                 <div class="text-nowrap logo-text transition-opacity duration-300 ease-in-out">
-                    <p class="text-[15px] font-bold text-white-800">Robin Spielmann</p>
+                    <p class="text-[15px] font-bold text-white-900">Robin Spielmann</p>
                     <p class="text-2xs font-mono text-white-600 tight-word-spacing">
                         Design Engineer
                     </p>
                 </div>
             </a>
         </div>
-        <button
-            id="sidebar-toggle"
-            class="flex items-center justify-center w-8 h-8 rounded-md hover:bg-white/10 transition-colors"
-            aria-label="Toggle sidebar"
+        <div
+            class="flex gap-3 items-center group hover:bg-white/5 rounded-md p-2 -m-2 transition-colors"
         >
-            <Icon name="ph:sidebar" class="w-5 h-5" />
-        </button>
+            <div
+                class="w-6 h-6 p-0.5 bg-gray-500 flex items-center justify-center rounded flex-shrink-0"
+            >
+                <Icon name="ph:sidebar" class="text-gray-800 w-6 h-6" />
+            </div>
+            <span
+                class="nav-text font-mono text-2xs text-white-800 transition-opacity duration-300 ease-in-out whitespace-nowrap overflow-hidden"
+            >
+                Collapse
+            </span>
+            <button
+                id="sidebar-toggle"
+                class="absolute inset-0 w-full h-full opacity-0"
+                aria-label="Toggle sidebar"
+            >
+            </button>
+        </div>
 
         <nav class="mt-8">
             <ul class="space-y-4">
                 {
                     navData.map((item) => (
-                        <li class="relative group">
+                        <li
+                            class="relative nav-item"
+                            data-title={item.name}
+                            data-description={item.description}
+                        >
                             <a
                                 href={item.path}
                                 class="flex gap-3 items-center justify-between group hover:bg-white/5 rounded-md p-2 -m-2 transition-colors"
@@ -143,18 +169,44 @@ export const navData: NavItem[] = [
                                     ({counts[item.countKey]})
                                 </span>
                             </a>
-                            <div class="absolute left-full ml-12 top-1/2 -translate-y-1/2 bg-[#fff] border text-black border-black rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto w-72 p-4 z-50">
-                                <div class="text-sm leading-relaxed">{item.description}</div>
-                                <!-- Triangle pointer with border -->
-                                <div class="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8.5px] border-t-transparent border-b-[8.5px] border-b-transparent border-r-[8.5px] border-r-black"></div>
-                                <!-- Triangle pointer fill -->
-                                <div class="absolute right-full top-1/2 -translate-y-1/2 translate-x-[0.8px] w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-white"></div>
-                            </div>
                         </li>
                     ))
                 }
             </ul>
         </nav>
+
+        <!-- Shared navigation flyout -->
+        <div
+            id="nav-flyout"
+            class="absolute left-full ml-3 bg-[#101827] border text-white border-[#394762] rounded-lg opacity-0 pointer-events-none w-72 p-4 z-50 transition-all duration-200 ease-out"
+        >
+            <div id="nav-flyout-images" class="relative w-full h-20 rounded mb-3 overflow-hidden">
+                {
+                    navData.map((item, index) => (
+                        <Image
+                            id={`nav-flyout-image-${index}`}
+                            src={item.teaserImage}
+                            alt={`${item.name} section preview`}
+                            class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-200"
+                            widths={[288]}
+                            sizes="288px"
+                        />
+                    ))
+                }
+            </div>
+            <div id="nav-flyout-title" class="text-base font-semibold mb-2"></div>
+            <div id="nav-flyout-content" class="text-sm leading-relaxed"></div>
+            <!-- Triangle pointer with border -->
+            <div
+                class="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8.5px] border-t-transparent border-b-[8.5px] border-b-transparent border-r-[8.5px] border-r-[#394762]"
+            >
+            </div>
+            <!-- Triangle pointer fill -->
+            <div
+                class="absolute right-full top-1/2 -translate-y-1/2 translate-x-[0.8px] w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-[#101827]"
+            >
+            </div>
+        </div>
     </div>
     <div class="footer-container relative">
         <!-- Toggle button for collapsed state -->
@@ -302,6 +354,84 @@ export const navData: NavItem[] = [
     } else {
         initFooterFlyout();
     }
+
+    // Navigation flyout functionality
+    function initNavFlyout() {
+        const navItems = document.querySelectorAll('.nav-item');
+        const flyout = document.getElementById('nav-flyout');
+        const flyoutTitle = document.getElementById('nav-flyout-title');
+        const flyoutContent = document.getElementById('nav-flyout-content');
+
+        if (!flyout || !flyoutTitle || !flyoutContent) return;
+
+        let currentItem = null;
+
+        navItems.forEach((navItem, index) => {
+            navItem.addEventListener('mouseenter', () => {
+                const title = navItem.getAttribute('data-title');
+                const description = navItem.getAttribute('data-description');
+
+                // Update content
+                flyoutTitle.textContent = title;
+                flyoutContent.textContent = description;
+
+                // Show the correct image and hide others
+                const images = document.querySelectorAll('[id^="nav-flyout-image-"]');
+                images.forEach((img, imgIndex) => {
+                    if (imgIndex === index) {
+                        img.classList.remove('opacity-0');
+                        img.classList.add('opacity-100');
+                    } else {
+                        img.classList.remove('opacity-100');
+                        img.classList.add('opacity-0');
+                    }
+                });
+
+                // Position the flyout relative to the nav item
+                const navRect = navItem.getBoundingClientRect();
+                const sidebar = document.querySelector('.sidebar-main');
+                const sidebarRect = sidebar?.getBoundingClientRect();
+
+                if (sidebarRect) {
+                    const relativeTop = navRect.top - sidebarRect.top + navRect.height / 2;
+                    flyout.style.top = `${relativeTop}px`;
+                    flyout.style.transform = 'translateY(-50%)';
+                }
+
+                // Show the flyout
+                flyout.classList.remove('opacity-0', 'pointer-events-none');
+
+                currentItem = navItem;
+            });
+
+            navItem.addEventListener('mouseleave', (e) => {
+                // Small delay to allow moving to flyout
+                setTimeout(() => {
+                    if (!flyout.matches(':hover') && currentItem === navItem) {
+                        flyout.classList.add('opacity-0', 'pointer-events-none');
+                        currentItem = null;
+                    }
+                }, 100);
+            });
+        });
+
+        // Keep flyout open when hovering over it
+        flyout.addEventListener('mouseenter', () => {
+            flyout.classList.remove('opacity-0', 'pointer-events-none');
+        });
+
+        flyout.addEventListener('mouseleave', () => {
+            flyout.classList.add('opacity-0', 'pointer-events-none');
+            currentItem = null;
+        });
+    }
+
+    // Initialize navigation flyout when DOM is loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initNavFlyout);
+    } else {
+        initNavFlyout();
+    }
 </script>
 
 <style>
@@ -337,8 +467,8 @@ export const navData: NavItem[] = [
 
     /* Make sticker logo smaller when collapsed */
     body.sidebar-collapsed .sticker-logo {
-        max-width: 48px;
-        margin-left: -8px;
+        max-width: 40px;
+        margin-left: -4px;
     }
 
     /* Reduce word spacing between Design and Engineer */
