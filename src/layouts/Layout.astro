@@ -94,6 +94,13 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
                 --sidebar-width-collapsed: 5rem;
             }
 
+            /* Responsive sidebar width */
+            @media (min-width: 1480px) {
+                :root {
+                    --sidebar-width: 20rem;
+                }
+            }
+
             /* Default expanded state */
             .main-content-left {
                 left: var(--sidebar-width);

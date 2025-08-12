@@ -102,38 +102,27 @@ export const navData: NavItem[] = [
 <aside
     class="sidebar-main fixed top-0 bottom-0 p-8 z-50 text-white transition-[width,padding] duration-300 ease-in-out flex flex-col justify-between"
 >
-    <div>
-        <div class="mb-8 min-h-16">
-            <a href="/" class="flex gap-3 items-center">
+    <div class="relative">
+        <div class="min-h-16">
+            <a href="/" class="flex gap-3 flex-col items-center">
                 <Image
                     src={StickerLogo}
                     alt="Holographic sticker of my face"
                     widths={[128]}
                     sizes={`128px`}
-                    class="max-w-[50px] sticker-logo transition-[max-width, margin] duration-300 ease-in-out"
+                    class="max-w-[72px] sticker-logo transition-[max-width, margin] duration-300 ease-in-out"
                     data-rarity="common"
                 />
                 <div class="text-nowrap logo-text transition-opacity duration-300 ease-in-out">
-                    <p class="text-[15px] font-bold text-white-900">Robin Spielmann</p>
-                    <p class="text-2xs font-mono text-white-600 tight-word-spacing">
+                    <p class="text-sm font-bold text-white-900">Robin Spielmann</p>
+                    <p class="text-xs font-mono text-white-600 tight-word-spacing">
                         Design Engineer
                     </p>
                 </div>
             </a>
         </div>
-        <div
-            class="flex gap-3 items-center group hover:bg-white/5 rounded-md p-2 -m-2 transition-colors"
-        >
-            <div
-                class="w-6 h-6 p-0.5 bg-gray-500 flex items-center justify-center rounded flex-shrink-0"
-            >
-                <Icon name="ph:sidebar" class="text-gray-800 w-6 h-6" />
-            </div>
-            <span
-                class="nav-text font-mono text-2xs text-white-800 transition-opacity duration-300 ease-in-out whitespace-nowrap overflow-hidden"
-            >
-                Collapse
-            </span>
+        <div class="absolute -right-24 top-0 bg-red rounded-md p-2">
+            <Icon name="ph:sidebar" class="text-gray-800 w-6 h-6" />
             <button
                 id="sidebar-toggle"
                 class="absolute inset-0 w-full h-full opacity-0"
@@ -142,7 +131,7 @@ export const navData: NavItem[] = [
             </button>
         </div>
 
-        <nav class="mt-8">
+        <nav class="mt-32">
             <ul class="space-y-4">
                 {
                     navData.map((item) => (
@@ -178,7 +167,7 @@ export const navData: NavItem[] = [
         <!-- Shared navigation flyout -->
         <div
             id="nav-flyout"
-            class="absolute left-full ml-3 bg-[#101827] border text-white border-[#394762] rounded-lg opacity-0 pointer-events-none w-72 p-4 z-50 transition-all duration-200 ease-out"
+            class="absolute left-full ml-10 bg-[#101827] border text-white border-[#394762] rounded-lg opacity-0 pointer-events-none w-72 p-4 z-50 transition-all duration-200 ease-out"
         >
             <div id="nav-flyout-images" class="relative w-full h-20 rounded mb-3 overflow-hidden">
                 {
@@ -393,7 +382,8 @@ export const navData: NavItem[] = [
                 const sidebarRect = sidebar?.getBoundingClientRect();
 
                 if (sidebarRect) {
-                    const relativeTop = navRect.top - sidebarRect.top + navRect.height / 2;
+                    const relativeTop = navRect.top - sidebarRect.top - 10;
+
                     flyout.style.top = `${relativeTop}px`;
                     flyout.style.transform = 'translateY(-50%)';
                 }
