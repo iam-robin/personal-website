@@ -268,7 +268,7 @@ export const navData: NavItem[] = [
     // Sidebar collapse functionality
     function initSidebar() {
         const toggleButton = document.getElementById('sidebar-toggle');
-        const body = document.body;
+        const htmlElement = document.documentElement;
 
         // Function to check if desktop functionality should be enabled
         function isDesktop() {
@@ -282,13 +282,13 @@ export const navData: NavItem[] = [
                 return;
             }
 
-            const isCurrentlyCollapsed = body.classList.contains('sidebar-collapsed');
+            const isCurrentlyCollapsed = htmlElement.classList.contains('sidebar-collapsed');
 
             if (isCurrentlyCollapsed) {
-                body.classList.remove('sidebar-collapsed');
+                htmlElement.classList.remove('sidebar-collapsed');
                 localStorage.setItem('sidebar-collapsed', 'false');
             } else {
-                body.classList.add('sidebar-collapsed');
+                htmlElement.classList.add('sidebar-collapsed');
                 localStorage.setItem('sidebar-collapsed', 'true');
             }
         }
@@ -298,13 +298,13 @@ export const navData: NavItem[] = [
             if (isDesktop()) {
                 const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
                 if (isCollapsed) {
-                    body.classList.add('sidebar-collapsed');
+                    htmlElement.classList.add('sidebar-collapsed');
                 } else {
-                    body.classList.remove('sidebar-collapsed');
+                    htmlElement.classList.remove('sidebar-collapsed');
                 }
             } else {
                 // Remove any collapsed state on mobile/tablet
-                body.classList.remove('sidebar-collapsed');
+                htmlElement.classList.remove('sidebar-collapsed');
             }
         }
 
@@ -412,7 +412,7 @@ export const navData: NavItem[] = [
         navItems.forEach((navItem, index) => {
             navItem.addEventListener('mouseenter', () => {
                 // Only show flyout when sidebar is collapsed
-                const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+                const isCollapsed = document.documentElement.classList.contains('sidebar-collapsed');
                 if (!isCollapsed) {
                     return;
                 }
@@ -477,34 +477,34 @@ export const navData: NavItem[] = [
     .sidebar-main {
         width: var(--sidebar-width);
     }
-    /* Collapsed state styles - These cannot be converted to Tailwind since they depend on body class */
-    body.sidebar-collapsed .sidebar-main {
+    /* Collapsed state styles - These cannot be converted to Tailwind since they depend on html class */
+    html.sidebar-collapsed .sidebar-main {
         width: var(--sidebar-width-collapsed);
         padding-left: 1.5rem;
         padding-right: 1.5rem;
         overflow: visible;
     }
 
-    body.sidebar-collapsed .logo-text,
-    body.sidebar-collapsed .nav-text,
-    body.sidebar-collapsed .nav-count,
-    body.sidebar-collapsed .footer-links {
+    html.sidebar-collapsed .logo-text,
+    html.sidebar-collapsed .nav-text,
+    html.sidebar-collapsed .nav-count,
+    html.sidebar-collapsed .footer-links {
         opacity: 0;
         pointer-events: none;
     }
 
-    body.sidebar-collapsed .footer-links {
+    html.sidebar-collapsed .footer-links {
         height: 0;
     }
 
     /* Footer toggle button - show only when collapsed */
-    body.sidebar-collapsed .footer-toggle-btn {
+    html.sidebar-collapsed .footer-toggle-btn {
         opacity: 1;
         pointer-events: auto;
     }
 
     /* Make sticker logo smaller when collapsed */
-    body.sidebar-collapsed .sticker-logo {
+    html.sidebar-collapsed .sticker-logo {
         max-width: 40px;
         margin-left: -4px;
     }

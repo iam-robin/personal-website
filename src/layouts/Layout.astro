@@ -37,6 +37,18 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
         <link rel="alternate" type="application/rss+xml" title="365 RSS Feed" href="/365-rss.xml" />
         <meta name="generator" content={Astro.generator} />
         <title>{adjustedTitle}</title>
+        <!-- Critical CSS for sidebar state - prevents FOUC -->
+        <script>
+            (function() {
+                // Apply sidebar state before page renders to prevent flash
+                if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+                    const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+                    if (isCollapsed) {
+                        document.documentElement.classList.add('sidebar-collapsed');
+                    }
+                }
+            })();
+        </script>
         <script src="/iamrobin/js/script.js" data-api="/iamrobin/api/event" data-domain="iamrob.in"
         ></script>
         <SEO
@@ -113,16 +125,16 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
             }
 
             /* Collapsed state styles */
-            body.sidebar-collapsed .main-content-left {
+            html.sidebar-collapsed .main-content-left {
                 left: var(--sidebar-width-collapsed);
             }
 
-            body.sidebar-collapsed .main-content-margin-left {
+            html.sidebar-collapsed .main-content-margin-left {
                 margin-left: var(--sidebar-width-collapsed);
             }
 
             /* Collapsed state for sidebar width */
-            body.sidebar-collapsed {
+            html.sidebar-collapsed {
                 --sidebar-width: var(--sidebar-width-collapsed);
             }
 
