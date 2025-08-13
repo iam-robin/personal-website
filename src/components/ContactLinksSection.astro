@@ -15,7 +15,7 @@ const { classes } = Astro.props as Props;
 <div
     class:list={[
         classes,
-        'bg-neutral-100 pb-16 pt-20 text-neutral-800 transition-all duration-300 lg:pb-52 lg:pt-40 rounded-b'
+        'pb-16 pt-20 text-neutral-800 transition-all duration-300 lg:pb-52 rounded-b'
     ]}
     id="contact-container"
 >
@@ -121,7 +121,7 @@ const { classes } = Astro.props as Props;
                     }
                 });
 
-                container?.classList.remove('bg-neutral-100', 'text-neutral-800');
+                container?.classList.remove('text-neutral-800');
                 container?.classList.add(bgColor, textColor);
             });
             item.addEventListener('mouseout', () => {
@@ -133,7 +133,7 @@ const { classes } = Astro.props as Props;
                     }
                 });
                 container?.classList.remove(bgColor, textColor);
-                container?.classList.add('bg-neutral-100', 'text-neutral-800');
+                container?.classList.add('text-neutral-800');
             });
         });
     });

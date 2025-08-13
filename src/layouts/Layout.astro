@@ -56,30 +56,32 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
             }}
         />
     </head>
-    <body class="bg-[var(--body-bg-color)] antialiased">
-        <!-- <Header />
-        <MobileMenu /> -->
+    <body class="md:bg-[var(--body-bg-color)] antialiased">
+        <MobileMenu />
         <Sidebar />
 
         <!-- top spacing -->
         <div
-            class="main-content-left fixed top-0 right-0 h-4 bg-[var(--body-bg-color)] z-50 transition-[left] duration-300 ease-in-out"
+            class="main-content-left hidden md:block fixed top-0 right-0 h-4 bg-[var(--body-bg-color)] z-50 transition-[left] duration-300 ease-in-out"
         >
         </div>
         <!-- bottom spacing -->
         <div
-            class="main-content-left fixed bottom-0 right-0 h-4 bg-[var(--body-bg-color)] z-50 transition-[left] duration-300 ease-in-out"
+            class="main-content-left hidden md:block fixed bottom-0 right-0 h-4 bg-[var(--body-bg-color)] z-50 transition-[left] duration-300 ease-in-out"
         >
         </div>
         <!-- right spacing -->
-        <div class="fixed top-0 bottom-0 right-0 w-4 bg-[var(--body-bg-color)] z-50"></div>
         <div
-            class="main-content-left fixed inset-4 rounded bg-[var(--content-bg-color)] transition-[left] duration-300 ease-in-out -z-10"
+            class="fixed hidden md:block top-0 bottom-0 right-0 w-4 bg-[var(--body-bg-color)] z-50"
+        >
+        </div>
+        <div
+            class="main-content-left hidden md:block fixed inset-4 rounded bg-[var(--content-bg-color)] transition-[left] duration-300 ease-in-out -z-10"
         >
         </div>
 
         <div
-            class="main-content-margin-left my-4 mr-4 relative transition-[margin-left] duration-300 ease-in-out"
+            class="main-content-margin-left md:my-4 md:mr-4 relative transition-[margin-left] duration-300 ease-in-out"
         >
             <slot />
             <ContactLinksSection />
@@ -122,6 +124,29 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
             /* Collapsed state for sidebar width */
             body.sidebar-collapsed {
                 --sidebar-width: var(--sidebar-width-collapsed);
+            }
+
+            /* Responsive main content margins */
+            @media (max-width: 767px) {
+                /* No sidebar on mobile - content takes full width minus padding */
+                .main-content-left {
+                    left: 0;
+                }
+
+                .main-content-margin-left {
+                    margin-left: 0;
+                }
+            }
+
+            @media (min-width: 768px) and (max-width: 1023px) {
+                /* Force collapsed sidebar on tablets */
+                .main-content-left {
+                    left: var(--sidebar-width-collapsed);
+                }
+
+                .main-content-margin-left {
+                    margin-left: var(--sidebar-width-collapsed);
+                }
             }
         </style>
     </body>

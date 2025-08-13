@@ -1,8 +1,10 @@
 <nav
-    class="pointer-events-none fixed bottom-5 left-1 right-1 z-50 flex cursor-pointer items-center justify-center lg:hidden"
+    class="pointer-events-none fixed bottom-5 left-1 right-1 z-50 flex cursor-pointer items-center justify-center md:hidden"
 >
     <details class="pointer-events-auto relative w-52 select-none text-center text-md text-white">
-        <summary class="flex h-14 items-center justify-center rounded-3xl bg-black">
+        <summary
+            class="flex h-14 items-center justify-center rounded-3xl bg-[var(--body-bg-color)]"
+        >
             <span class="menu absolute left-8 mt-0.5">
                 <!-- <List weight="bold" size={20} /> -->
             </span>
@@ -11,7 +13,9 @@
             </span>
             Menu
         </summary>
-        <ul class="absolute bottom-16 flex w-full flex-col rounded-3xl bg-black py-5">
+        <ul
+            class="absolute bottom-16 flex w-full flex-col rounded-3xl bg-[var(--body-bg-color)] py-5"
+        >
             <li class="py-1 hover:bg-lilac-light hover:text-black"><a href="/">Home</a></li>
             <li class="py-1 hover:bg-lilac-light hover:text-black"><a href="/media">Media</a></li>
             <li class="py-1 hover:bg-lilac-light hover:text-black">
