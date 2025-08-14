@@ -1,0 +1,49 @@
+---
+import InvertedCorner from './InvertedCorner.astro';
+
+interface Props {
+    position: 'top' | 'bottom';
+    fill?: string;
+    showCorners?: boolean;
+}
+
+const { position, fill = 'var(--body-bg-color)', showCorners = true } = Astro.props;
+
+const positionClasses = {
+    top: {
+        container: 'top-[0]',
+        cornerPosition: '-bottom-6',
+        leftCornerRotation: '-rotate-90',
+        rightCornerRotation: ''
+    },
+    bottom: {
+        container: 'bottom-[0]',
+        cornerPosition: '-top-6',
+        leftCornerRotation: 'rotate-180',
+        rightCornerRotation: 'rotate-90'
+    }
+};
+
+const classes = positionClasses[position];
+---
+
+<div
+    class={`hidden md:block fixed ${classes.container} z-20 h-16 transition-[left,right,height] duration-300 ease-in-out md:left-[var(--sidebar-width)] md:right-4 md:h-8`}
+>
+    <div class="bg-[var(--body-bg-color)] mx-auto h-full relative after:content-['']">
+        {
+            showCorners && (
+                <>
+                    <InvertedCorner
+                        class={`absolute ${classes.cornerPosition} h-6 w-6 left-[0] -z-10 ${classes.leftCornerRotation}`}
+                        fill={fill}
+                    />
+                    <InvertedCorner
+                        class={`absolute ${classes.cornerPosition} h-6 w-6 right-[0] -z-10 ${classes.rightCornerRotation}`}
+                        fill={fill}
+                    />
+                </>
+            )
+        }
+    </div>
+</div>

@@ -1,12 +1,11 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { SEO } from 'astro-seo';
 import MobileMenu from '@components/MobileMenu.astro';
 import ContactLinksSection from '@components/ContactLinksSection.astro';
 import DistortFilter from '@components/DistortFilter.astro';
 import Sidebar from '@components/Sidebar.astro';
+import SpacingWithCorners from '@components/SpacingWithCorners.astro';
 
 interface Props {
     title: string;
@@ -39,7 +38,7 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
         <title>{adjustedTitle}</title>
         <!-- Critical CSS for sidebar state - prevents FOUC -->
         <script>
-            (function() {
+            (function () {
                 // Apply sidebar state before page renders to prevent flash
                 if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
                     const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
@@ -72,28 +71,11 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
         <MobileMenu />
         <Sidebar />
 
-        <!-- top spacing -->
-        <div
-            class="main-content-left hidden md:block fixed top-0 right-0 h-4 bg-[var(--body-bg-color)] z-50 transition-[left] duration-300 ease-in-out"
-        >
-        </div>
-        <!-- bottom spacing -->
-        <div
-            class="main-content-left hidden md:block fixed bottom-0 right-0 h-4 bg-[var(--body-bg-color)] z-50 transition-[left] duration-300 ease-in-out"
-        >
-        </div>
-        <!-- right spacing -->
-        <div
-            class="fixed hidden md:block top-0 bottom-0 right-0 w-4 bg-[var(--body-bg-color)] z-50"
-        >
-        </div>
-        <div
-            class="main-content-left hidden md:block fixed inset-4 rounded bg-[var(--content-bg-color)] transition-[left] duration-300 ease-in-out -z-10"
-        >
-        </div>
+        <SpacingWithCorners position="top" />
+        <SpacingWithCorners position="bottom" />
 
         <div
-            class="main-content-margin-left md:my-4 md:mr-4 relative transition-[margin-left] duration-300 ease-in-out"
+            class="bg-white md:ml-[var(--sidebar-width)] md:my-8 md:mr-4 relative transition-[margin-left] duration-300 ease-in-out"
         >
             <slot />
             <ContactLinksSection />
@@ -103,62 +85,40 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
         <style>
             :root {
                 --body-bg-color: #101827;
-                --content-bg-color: #fff;
-                --sidebar-width: 16rem;
+                --sidebar-width-base-value: 16rem;
+                --sidebar-width-base-value-large: 20rem;
                 --sidebar-width-collapsed: 5rem;
+
+                --sidebar-width: 0;
             }
 
-            /* Responsive sidebar width */
-            @media (min-width: 1480px) {
+            /* Disable bounce scrolling globally */
+            html,
+            body {
+                overscroll-behavior: none;
+            }
+
+            @media (min-width: 768px) {
                 :root {
-                    --sidebar-width: 20rem;
+                    --sidebar-width: var(--sidebar-width-collapsed);
                 }
             }
 
-            /* Default expanded state */
-            .main-content-left {
-                left: var(--sidebar-width);
+            @media (min-width: 1024px) {
+                :root {
+                    --sidebar-width: var(--sidebar-width-base-value);
+                }
             }
 
-            .main-content-margin-left {
-                margin-left: var(--sidebar-width);
-            }
-
-            /* Collapsed state styles */
-            html.sidebar-collapsed .main-content-left {
-                left: var(--sidebar-width-collapsed);
-            }
-
-            html.sidebar-collapsed .main-content-margin-left {
-                margin-left: var(--sidebar-width-collapsed);
+            @media (min-width: 1480px) {
+                :root {
+                    --sidebar-width: var(--sidebar-width-base-value-large);
+                }
             }
 
             /* Collapsed state for sidebar width */
             html.sidebar-collapsed {
                 --sidebar-width: var(--sidebar-width-collapsed);
-            }
-
-            /* Responsive main content margins */
-            @media (max-width: 767px) {
-                /* No sidebar on mobile - content takes full width minus padding */
-                .main-content-left {
-                    left: 0;
-                }
-
-                .main-content-margin-left {
-                    margin-left: 0;
-                }
-            }
-
-            @media (min-width: 768px) and (max-width: 1023px) {
-                /* Force collapsed sidebar on tablets */
-                .main-content-left {
-                    left: var(--sidebar-width-collapsed);
-                }
-
-                .main-content-margin-left {
-                    margin-left: var(--sidebar-width-collapsed);
-                }
             }
         </style>
     </body>

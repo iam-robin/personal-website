@@ -412,7 +412,8 @@ export const navData: NavItem[] = [
         navItems.forEach((navItem, index) => {
             navItem.addEventListener('mouseenter', () => {
                 // Only show flyout when sidebar is collapsed
-                const isCollapsed = document.documentElement.classList.contains('sidebar-collapsed');
+                const isCollapsed =
+                    document.documentElement.classList.contains('sidebar-collapsed');
                 if (!isCollapsed) {
                     return;
                 }

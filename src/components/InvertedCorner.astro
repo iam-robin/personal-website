@@ -1,0 +1,19 @@
+---
+interface Props {
+    fill?: string;
+    class?: string;
+}
+
+const { fill = 'var(--body-bg-color)', class: className = '' } = Astro.props;
+---
+
+<svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class={className}
+>
+    <path d="M24 24C24 10.7452 13.2548 5.15406e-07 0 0H24V24Z" fill={fill}></path>
+</svg>
