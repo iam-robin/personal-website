@@ -4,14 +4,16 @@ import SectionContent from '@components/SectionContent.astro';
 import GardenLayout from '@layouts/GardenLayout.astro';
 import { getNewestObsidianGardenEntries, getObsidianGardenCategories } from 'src/api/github';
 import NotesOverview from '@components/garden/NotesOverview';
+import Layout from '@layouts/Layout.astro';
 
 const obsidianCategories = await getObsidianGardenCategories();
 const lastCreatedObsidianEntries = await getNewestObsidianGardenEntries(9, 'created');
 const lastEditedObsidianEntries = await getNewestObsidianGardenEntries(9, 'edited');
 ---
 
-<GardenLayout title="Digital Garden" categories={obsidianCategories}>
-    <div class="flex flex-col lg:pl-8 xl:pl-0">
+<!-- <GardenLayout title="Digital Garden" categories={obsidianCategories}></GardenLayout> -->
+<Layout title="Digital Garden">
+    <div class="flex flex-col pb-24">
         <SectionContent classes="mt-16" contentStart={6}>
             <span slot="title">Digital Garden</span>
             My Digital Garden is a growing collection of thoughts, ideas, and knowledge I’ve gathered
@@ -31,4 +33,4 @@ const lastEditedObsidianEntries = await getNewestObsidianGardenEntries(9, 'edite
             client:load
         />
     </div>
-</GardenLayout>
+</Layout>

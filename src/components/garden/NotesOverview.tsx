@@ -42,7 +42,7 @@ const NotesOverview: React.FC<NotesOverviewProps> = ({
     return (
         <Container>
             {categories && (
-                <div className="mb-20 mt-12 lg:hidden">
+                <div className="mb-20 mt-12">
                     <div className="mb-5 font-bold">Topics</div>
                     <ul className="flex flex-wrap gap-3">
                         {categoriesWithCounts.map((categoryWithCount, i) => (

@@ -1,8 +1,8 @@
 ---
 import '../styles/global.css';
+import '../styles/markdown.css';
 import { SEO } from 'astro-seo';
 import MobileMenu from '@components/MobileMenu.astro';
-import ContactLinksSection from '@components/ContactLinksSection.astro';
 import DistortFilter from '@components/DistortFilter.astro';
 import Sidebar from '@components/Sidebar.astro';
 import SpacingWithCorners from '@components/SpacingWithCorners.astro';
@@ -71,14 +71,13 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
         <MobileMenu />
         <Sidebar />
 
-        <SpacingWithCorners position="top" />
-        <SpacingWithCorners position="bottom" />
+        <SpacingWithCorners position="top" showCorners={false} />
+        <SpacingWithCorners position="bottom" showCorners={false} />
 
         <div
-            class="bg-white max-w-[var(--content-box-max-width)] md:ml-[var(--sidebar-width)] md:my-8 md:mr-4 relative transition-[margin-left] duration-300 ease-in-out 2xl:ml-[var(--content-2xl-left-spacing-center)]"
+            class="bg-white max-w-[var(--content-box-garden-max-width)] md:left-[var(--sidebar-width)] md:my-8 md:mr-4 relative transition-[margin-left] duration-300 ease-in-out 2xl:ml-[var(--content-garden-2xl-left-spacing-center)]"
         >
             <slot />
-            <ContactLinksSection />
         </div>
 
         <DistortFilter />
@@ -89,12 +88,12 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
                 --sidebar-width-base-value-large: 20rem;
                 --sidebar-width-collapsed: 5rem;
                 --content-box-max-width: 1400px;
+                --content-box-garden-max-width: 800px;
 
                 --sidebar-width: 0;
 
-                /* [calc((100vw-var(--sidebar-width)-var(--content-box-max-width))/2+var(--sidebar-width))] */
-                --content-2xl-left-spacing-center: calc(
-                    (100vw - var(--sidebar-width) - var(--content-box-max-width)) / 2 +
+                --content-garden-2xl-left-spacing-center: calc(
+                    (100vw - var(--sidebar-width) - var(--content-box-garden-max-width)) / 2 +
                         var(--sidebar-width)
                 );
             }
