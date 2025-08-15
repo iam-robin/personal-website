@@ -1,11 +1,11 @@
 ---
 title: 'Using RSS to Follow Sub-Reddits'
-subtitle: 'configured for Relevant Posts Only'
+subtitle: 'Relevant Posts Only'
 image: 'src/assets/blog/reddit-to-rss.png'
 date: 2025-08-15
 category: 'digital minimalism'
 ogImageName: 'reddit-rss.jpg'
-description: 'Using RSS to Follow Subreddits – configured for a Curated Feed'
+description: 'Using RSS to Follow Subreddits – Relevant Posts Only'
 mastodonId: ''
 ---
 
