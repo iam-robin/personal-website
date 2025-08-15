@@ -6,7 +6,7 @@ date: 2025-08-15
 category: 'digital minimalism'
 ogImageName: 'reddit-rss.jpg'
 description: 'Using RSS to Follow Subreddits – Relevant Posts Only'
-mastodonId: ''
+mastodonId: '115033223757952479'
 ---
 
 A few month ago, I wrote about how I pulled all my favorite YouTube channels into my RSS feed to
