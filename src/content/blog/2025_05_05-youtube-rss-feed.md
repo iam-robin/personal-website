@@ -3,7 +3,7 @@ title: 'Using RSS to Follow YouTube Channels'
 subtitle: 'without Shorts and other Distractions'
 image: 'src/assets/blog/youtube-to-rss.png'
 date: 2025-05-05
-category: 'software'
+category: 'digital minimalism'
 ogImageName: 'youtube-rss.jpg'
 description: 'Using RSS to Follow YouTube Channels. Without Shorts and other Distractions.'
 mastodonId: '114510976139755616'

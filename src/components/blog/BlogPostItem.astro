@@ -8,7 +8,9 @@ import {
     Note,
     PaintBrush,
     Brain,
-    PersonArmsSpread
+    PersonArmsSpread,
+    Rss,
+    CircleDashed
 } from '@phosphor-icons/react';
 import { Image } from 'astro:assets';
 
@@ -42,6 +44,10 @@ const getCategoryIcon = (category: string) => {
             return PersonArmsSpread;
         case 'ai':
             return Brain;
+        case 'rss':
+            return Rss;
+        case 'digital minimalism':
+            return CircleDashed;
         default:
             return Cube;
     }
