@@ -13,7 +13,7 @@ interface NavItem {
     iconBg: string;
     iconColor: string;
     countKey: keyof typeof counts;
-    description: string;
+    description?: string;
     teaserImage: ImageMetadata;
 }
 
@@ -37,8 +37,6 @@ export const navData: NavItem[] = [
         iconBg: 'bg-red',
         iconColor: 'text-red-dark',
         countKey: 'books',
-        description:
-            "What I've been reading lately — books, audiobooks, and the occasional guilty pleasure that made me think.",
         teaserImage: NavFlyoutMock
     },
     {
@@ -48,8 +46,6 @@ export const navData: NavItem[] = [
         iconBg: 'bg-blue',
         iconColor: 'text-blue-dark',
         countKey: 'bookmarks',
-        description:
-            "Links I've saved because they taught me something or made me curious enough to share.",
         teaserImage: NavFlyoutMock2
     },
     {
@@ -59,8 +55,6 @@ export const navData: NavItem[] = [
         iconBg: 'bg-lilac',
         iconColor: 'text-lilac-dark',
         countKey: 'postcards',
-        description:
-            'An interactive map where you can leave digital postcards — because the internet needs more genuine human connection.',
         teaserImage: NavFlyoutMock2
     },
     {
@@ -70,8 +64,6 @@ export const navData: NavItem[] = [
         iconBg: 'bg-green',
         iconColor: 'text-green-dark',
         countKey: 'garden',
-        description:
-            'Growing thoughts and half-formed ideas that might bloom into something useful (or at least interesting).',
         teaserImage: NavFlyoutMock2
     },
     {
@@ -81,8 +73,6 @@ export const navData: NavItem[] = [
         iconBg: 'bg-yellow',
         iconColor: 'text-yellow-dark',
         countKey: 'blog',
-        description:
-            'Longer thoughts on design, technology, and whatever else catches my attention long enough to write about.',
         teaserImage: NavFlyoutMock
     },
     {
@@ -92,8 +82,6 @@ export const navData: NavItem[] = [
         iconBg: 'bg-red',
         iconColor: 'text-red-dark',
         countKey: 'photos365',
-        description:
-            'A daily photo journal documenting life through my camera lens — the mundane, beautiful, and everything in between.',
         teaserImage: NavFlyoutMock2
     }
 ];
@@ -120,15 +108,6 @@ export const navData: NavItem[] = [
                     </p>
                 </div>
             </a>
-        </div>
-        <div class="hidden lg:block absolute -right-24 top-0 bg-red rounded-md p-2">
-            <Icon name="ph:sidebar" class="text-gray-800 w-6 h-6" />
-            <button
-                id="sidebar-toggle"
-                class="absolute inset-0 w-full h-full opacity-0"
-                aria-label="Toggle sidebar"
-            >
-            </button>
         </div>
 
         <nav class="mt-32">
@@ -164,27 +143,12 @@ export const navData: NavItem[] = [
             </ul>
         </nav>
 
-        <!-- Shared navigation flyout -->
+        <!-- Navigation flyout for tablets -->
         <div
             id="nav-flyout"
-            class="absolute left-full ml-10 bg-[#101827] border text-white border-[#394762] rounded-lg opacity-0 pointer-events-none w-72 p-4 z-50 transition-all duration-200 ease-out"
+            class="absolute left-full ml-4 bg-[#101827] border text-white border-[#394762] rounded-lg opacity-0 pointer-events-none p-3 z-50 transition-all duration-200 ease-out"
         >
-            <!-- <div id="nav-flyout-images" class="relative w-full rounded mb-3 overflow-hidden">
-                {
-                    navData.map((item, index) => (
-                        <Image
-                            id={`nav-flyout-image-${index}`}
-                            src={item.teaserImage}
-                            alt={`${item.name} section preview`}
-                            class="block w-full h-auto opacity-0 transition-opacity duration-200"
-                            widths={[288]}
-                            sizes="288px"
-                        />
-                    ))
-                }
-            </div> -->
-            <div id="nav-flyout-title" class="text-sm font-semibold mb-1"></div>
-            <div id="nav-flyout-content" class="text-xs leading-relaxed"></div>
+            <div id="nav-flyout-title" class="text-sm font-semibold"></div>
             <!-- Triangle pointer with border -->
             <div
                 class="absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8.5px] border-t-transparent border-b-[8.5px] border-b-transparent border-r-[8.5px] border-r-[#394762]"
@@ -265,68 +229,6 @@ export const navData: NavItem[] = [
 </aside>
 
 <script>
-    // Sidebar collapse functionality
-    function initSidebar() {
-        const toggleButton = document.getElementById('sidebar-toggle');
-        const htmlElement = document.documentElement;
-
-        // Function to check if desktop functionality should be enabled
-        function isDesktop() {
-            return window.innerWidth >= 1024;
-        }
-
-        // Toggle function
-        function toggleSidebar() {
-            // Only allow toggle on desktop
-            if (!isDesktop()) {
-                return;
-            }
-
-            const isCurrentlyCollapsed = htmlElement.classList.contains('sidebar-collapsed');
-
-            if (isCurrentlyCollapsed) {
-                htmlElement.classList.remove('sidebar-collapsed');
-                localStorage.setItem('sidebar-collapsed', 'false');
-            } else {
-                htmlElement.classList.add('sidebar-collapsed');
-                localStorage.setItem('sidebar-collapsed', 'true');
-            }
-        }
-
-        // Initialize collapse state only on desktop
-        function initializeCollapseState() {
-            if (isDesktop()) {
-                const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
-                if (isCollapsed) {
-                    htmlElement.classList.add('sidebar-collapsed');
-                } else {
-                    htmlElement.classList.remove('sidebar-collapsed');
-                }
-            } else {
-                // Remove any collapsed state on mobile/tablet
-                htmlElement.classList.remove('sidebar-collapsed');
-            }
-        }
-
-        // Add event listener
-        if (toggleButton) {
-            toggleButton.addEventListener('click', toggleSidebar);
-        }
-
-        // Initialize state
-        initializeCollapseState();
-
-        // Re-initialize on window resize
-        window.addEventListener('resize', initializeCollapseState);
-    }
-
-    // Initialize when DOM is loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initSidebar);
-    } else {
-        initSidebar();
-    }
-
     // Footer flyout functionality
     function initFooterFlyout() {
         // Function to check if footer flyout should be enabled
@@ -374,12 +276,6 @@ export const navData: NavItem[] = [
                 closeFlyout();
             }
         });
-
-        // Close when sidebar is expanded
-        const sidebarToggle = document.getElementById('sidebar-toggle');
-        if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', closeFlyout);
-        }
     }
 
     // Initialize footer flyout when DOM is loaded
@@ -389,41 +285,31 @@ export const navData: NavItem[] = [
         initFooterFlyout();
     }
 
-    // Navigation flyout functionality
+    // Navigation flyout functionality for tablets only
     function initNavFlyout() {
-        // Function to check if nav flyout should be enabled
+        // Function to check if nav flyout should be enabled (tablets only)
         function shouldEnableNavFlyout() {
-            return window.innerWidth >= 1024;
+            return window.innerWidth >= 768 && window.innerWidth <= 1023;
         }
 
         if (!shouldEnableNavFlyout()) {
-            return; // Exit early, no nav flyouts needed on mobile/tablet
+            return; // Exit early, only show on tablets
         }
 
         const navItems = document.querySelectorAll('.nav-item');
         const flyout = document.getElementById('nav-flyout');
         const flyoutTitle = document.getElementById('nav-flyout-title');
-        const flyoutContent = document.getElementById('nav-flyout-content');
 
-        if (!flyout || !flyoutTitle || !flyoutContent) return;
+        if (!flyout || !flyoutTitle) return;
 
         let currentItem: Element | null = null;
 
-        navItems.forEach((navItem, index) => {
+        navItems.forEach((navItem) => {
             navItem.addEventListener('mouseenter', () => {
-                // Only show flyout when sidebar is collapsed
-                const isCollapsed =
-                    document.documentElement.classList.contains('sidebar-collapsed');
-                if (!isCollapsed) {
-                    return;
-                }
-
                 const title = navItem.getAttribute('data-title');
-                const description = navItem.getAttribute('data-description');
 
-                // Update content
+                // Update content with just the title
                 flyoutTitle.textContent = title;
-                flyoutContent.textContent = description;
 
                 // Position the flyout relative to the nav item
                 const navRect = navItem.getBoundingClientRect();
@@ -432,14 +318,12 @@ export const navData: NavItem[] = [
 
                 if (sidebarRect) {
                     const relativeTop = navRect.top - sidebarRect.top - 10;
-
                     flyout.style.top = `${relativeTop}px`;
                     flyout.style.transform = 'translateY(-50%)';
                 }
 
                 // Show the flyout
                 flyout.classList.remove('opacity-0', 'pointer-events-none');
-
                 currentItem = navItem;
             });
 
@@ -463,6 +347,14 @@ export const navData: NavItem[] = [
             flyout.classList.add('opacity-0', 'pointer-events-none');
             currentItem = null;
         });
+
+        // Hide flyout on window resize if no longer in tablet range
+        window.addEventListener('resize', () => {
+            if (!shouldEnableNavFlyout()) {
+                flyout.classList.add('opacity-0', 'pointer-events-none');
+                currentItem = null;
+            }
+        });
     }
 
     // Initialize navigation flyout when DOM is loaded
@@ -478,37 +370,6 @@ export const navData: NavItem[] = [
     .sidebar-main {
         width: var(--sidebar-width);
     }
-    /* Collapsed state styles - These cannot be converted to Tailwind since they depend on html class */
-    html.sidebar-collapsed .sidebar-main {
-        width: var(--sidebar-width-collapsed);
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-        overflow: visible;
-    }
-
-    html.sidebar-collapsed .logo-text,
-    html.sidebar-collapsed .nav-text,
-    html.sidebar-collapsed .nav-count,
-    html.sidebar-collapsed .footer-links {
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    html.sidebar-collapsed .footer-links {
-        height: 0;
-    }
-
-    /* Footer toggle button - show only when collapsed */
-    html.sidebar-collapsed .footer-toggle-btn {
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    /* Make sticker logo smaller when collapsed */
-    html.sidebar-collapsed .sticker-logo {
-        max-width: 40px;
-        margin-left: -4px;
-    }
 
     /* Reduce word spacing between Design and Engineer */
     .tight-word-spacing {
@@ -523,7 +384,7 @@ export const navData: NavItem[] = [
     }
 
     @media (min-width: 768px) and (max-width: 1023px) {
-        /* Force collapsed state on tablets */
+        /* Use collapsed width on tablets */
         .sidebar-main {
             width: var(--sidebar-width-collapsed);
             padding-left: 1.5rem;
@@ -551,6 +412,18 @@ export const navData: NavItem[] = [
         .sticker-logo {
             max-width: 40px;
             margin-left: -4px;
+        }
+
+        /* Show navigation flyout on tablets */
+        #nav-flyout {
+            display: block;
+        }
+    }
+
+    /* Hide navigation flyout on mobile and desktop */
+    @media (max-width: 767px), (min-width: 1024px) {
+        #nav-flyout {
+            display: none !important;
         }
     }
 </style>
