@@ -1,6 +1,7 @@
 ---
 import { db, Postcard } from 'astro:db';
 import Layout from '@layouts/Layout.astro';
+import { sendPostcardNotification } from '@utils/email';
 
 export const prerender = false;
 
@@ -114,6 +115,18 @@ if (Astro.request.method === 'POST') {
                 wavyStampTop,
                 wavyStampRight,
                 wavyStampRotation
+            });
+
+            // Send email notification after successful database insertion
+            await sendPostcardNotification({
+                author,
+                body,
+                country: typeof country === 'string' && country.trim() !== '' ? country : undefined,
+                websiteUrl:
+                    typeof websiteUrl === 'string' && websiteUrl.trim() !== ''
+                        ? websiteUrl
+                        : undefined,
+                date
             });
 
             // Redirect to success page after successful submission
