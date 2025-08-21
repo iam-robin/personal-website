@@ -10,15 +10,6 @@ interface PostcardData {
 
 export async function sendPostcardNotification(postcard: PostcardData): Promise<void> {
     try {
-        console.log(
-            'Available env vars:',
-            Object.keys(import.meta.env).filter((key) => key.includes('RESEND'))
-        );
-        console.log(
-            'RESEND_API_KEY value:',
-            import.meta.env.RESEND_API_KEY ? 'Found' : 'Not found'
-        );
-
         if (!import.meta.env.RESEND_API_KEY) {
             console.warn('RESEND_API_KEY not found, skipping email notification');
             return;
