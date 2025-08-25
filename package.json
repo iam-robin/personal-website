@@ -31,6 +31,7 @@
         "gray-matter": "^4.0.3",
         "hast-util-to-html": "^9.0.5",
         "isomorphic-dompurify": "^2.25.0",
+        "node-html-parser": "^7.0.1",
         "p5": "^1.11.7",
         "p5.js-svg": "^1.6.0",
         "react": "^18.3.1",
