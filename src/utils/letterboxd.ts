@@ -58,7 +58,9 @@ export async function scrapeLetterboxdFilms(
             const titleEl = entry.querySelector('.inline-production-masthead h2 a');
             const title = titleEl.innerHTML;
             const permalinkWithProfile = titleEl.getAttribute('href');
-            const permalink = permalinkWithProfile.split('/').slice(2).join('/');
+            let permalink = permalinkWithProfile.split('/').slice(2).join('/');
+            // Remove trailing number (e.g., /1/, /2/) for rewatches
+            permalink = permalink.replace(/\/\d+\/$/, '/');
             const dateLink = entry.querySelector('.daydate')?.getAttribute('href');
             const dateParts = dateLink.split('/').filter(Boolean);
             const date = dateParts.slice(-3).join('-');
