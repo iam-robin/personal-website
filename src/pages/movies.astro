@@ -1,0 +1,111 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import MovieYearContainer from '@components/movies/MovieYearContainer.astro';
+import SectionContent from '@components/SectionContent.astro';
+import { scrapeLetterboxdFilms } from '@utils/letterboxd';
+import { getMockMovieData } from '@utils/mockMovies';
+
+const username = 'iamrobin';
+let movieData;
+let error = null;
+
+// Use mock data in development to avoid slow scraping on each reload
+const isDevelopment = import.meta.env.DEV;
+
+if (isDevelopment) {
+    movieData = getMockMovieData();
+    console.log('Using mock movie data for development');
+} else {
+    try {
+        movieData = await scrapeLetterboxdFilms(username, 5); // Limit to 5 pages for build performance
+    } catch (e) {
+        console.error('Failed to fetch Letterboxd data:', e);
+        error = e instanceof Error ? e.message : 'Unknown error occurred';
+        movieData = { films: [], count: 0, updated_at: new Date().toISOString() };
+    }
+}
+
+const { films, count, updated_at } = movieData;
+
+// Filter films to only show those watched after 2023 (2024 and onwards)
+const recentFilms = films.filter((film) => {
+    const watchDate = new Date(film.watched_on);
+    return watchDate.getFullYear() >= 2024;
+});
+
+// Sort films by watch date (most recent first)
+const sortedFilms = recentFilms.sort(
+    (a, b) => new Date(b.watched_on).getTime() - new Date(a.watched_on).getTime()
+);
+
+// Group films by year they were watched
+const filmsByYear = sortedFilms.reduce(
+    (acc, film) => {
+        const year = new Date(film.watched_on).getFullYear();
+        if (!acc[year]) {
+            acc[year] = [];
+        }
+        acc[year].push(film);
+        return acc;
+    },
+    {} as Record<number, typeof sortedFilms>
+);
+
+const years = Object.keys(filmsByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
+---
+
+<Layout title="Movies" description={`${count} movies watched on Letterboxd`}>
+    <Grid classes="py-40">
+        <GridBox desktopFull>
+            <SectionContent title="Movies" classes="!px-0">
+                I keep track of the films I watch on Letterboxd, where I log and organize everything
+                I’ve seen. To make this collection easier to browse, the data is automatically
+                updated and displayed here on my website. It serves as a personal archive and a way
+                to look back at my movie watching over time.
+            </SectionContent>
+
+            {
+                error && (
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                        <p class="text-red-800">Failed to load movie data: {error}</p>
+                    </div>
+                )
+            }
+
+            {
+                films.length > 0 && (
+                    <div>
+                        {years.map((year) => (
+                            <MovieYearContainer films={filmsByYear[year]} year={year} />
+                        ))}
+                    </div>
+                )
+            }
+
+            {
+                films.length === 0 && !error && (
+                    <div class="text-center py-20">
+                        <div class="text-6xl mb-4">🎬</div>
+                        <h2 class="text-xl font-medium mb-2">No movies found</h2>
+                        <p class="text-neutral-600">Check back later for movie updates.</p>
+                    </div>
+                )
+            }
+        </GridBox>
+    </Grid>
+</Layout>
+
+<style>
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+
+<script src="../scripts/listItemImageHoverEffect.js"></script>

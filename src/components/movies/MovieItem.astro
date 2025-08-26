@@ -1,0 +1,101 @@
+---
+import StarHalfIcon from '@components/icons/star-half-icon.astro';
+import StarIcon from '@components/icons/star-icon.astro';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+    film: {
+        title: string;
+        watched_on: string;
+        rating: number;
+        liked: boolean;
+        rewatched: boolean;
+        permalink: string;
+        posterUrl?: string;
+    };
+}
+
+const { film } = Astro.props;
+
+const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit'
+    });
+};
+
+// Generate stars for rating
+const fullStars = Math.floor(film.rating);
+const hasHalfStar = film.rating % 1 >= 0.5;
+const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+---
+
+<div
+    class="list-item-image-hover-effect group relative flex flex-col justify-between gap-4 border-b border-neutral-300 py-4 md:flex-row md:gap-12 md:py-10"
+>
+    {
+        film.posterUrl && (
+            <img
+                class="cover-image pointer-events-none absolute z-10 hidden max-w-[160px] shadow-lg md:group-hover:block"
+                src={film.posterUrl}
+                alt={`${film.title} poster`}
+                width="160"
+                height="240"
+                loading="lazy"
+            />
+        )
+    }
+    <div class="flex items-start justify-between gap-10 md:items-center">
+        <div class="hidden font-mono md:block shrink-0">
+            {formatDate(film.watched_on)}
+        </div>
+        <p class="text-base flex flex-col font-bold">
+            {film.title}
+        </p>
+    </div>
+    <div class="flex items-center gap-3">
+        <div class="font-mono text-neutral-400 md:hidden">
+            {formatDate(film.watched_on)}
+        </div>
+        <div class="font-mono text-neutral-400 md:hidden">|</div>
+        <div class="flex items-center gap-2">
+            {
+                film.rewatched && (
+                    <span class="bg-neutral-200 text-neutral-500 px-1.5 py-0.5 rounded text-xs">
+                        rewatch
+                    </span>
+                )
+            }
+            {film.liked && <Icon name="ph:heart-fill" width={16} class="text-red" />}
+        </div>
+        <div class="text-neutral-400 flex items-center gap-3">
+            {
+                film.rating > 0 && (
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xs font-mono text-neutral-800 md:min-w-11 text-right mt-1">
+                            ({film.rating})
+                        </span>
+                        <div class="flex items-center">
+                            {Array.from({ length: fullStars }, (_, i) => (
+                                <StarIcon class="text-black w-4" />
+                            ))}
+                            {hasHalfStar && <StarHalfIcon class="text-black w-4" />}
+                            {Array.from({ length: emptyStars }, (_, i) => (
+                                <StarIcon class="text-neutral-200 w-4" />
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
+        </div>
+    </div>
+    <a
+        href={`https://letterboxd.com/${film.permalink}/`}
+        target="_blank"
+        rel="noopener"
+        class="absolute bottom-0 left-0 right-0 top-0 h-full w-full"
+    >
+        <span class="sr-only">View on Letterboxd</span>
+    </a>
+</div>
