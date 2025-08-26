@@ -73,14 +73,14 @@ const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
             {
                 film.rating > 0 && (
                     <div class="flex items-center gap-2">
-                        <span class="text-2xs font-mono text-neutral-800 min-w-11 text-right mt-1">
+                        <span class="text-2xs font-mono text-neutral-800 md:min-w-11 text-right mt-1">
                             ({film.rating})
                         </span>
                         <div class="flex items-center">
                             {Array.from({ length: fullStars }, (_, i) => (
-                                <StarIcon class="text-yellow w-4" />
+                                <StarIcon class="text-black w-4" />
                             ))}
-                            {hasHalfStar && <StarHalfIcon class="text-yellow w-4" />}
+                            {hasHalfStar && <StarHalfIcon class="text-black w-4" />}
                             {Array.from({ length: emptyStars }, (_, i) => (
                                 <StarIcon class="text-neutral-200 w-4" />
                             ))}
