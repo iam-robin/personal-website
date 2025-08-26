@@ -1,17 +1,30 @@
 ---
 import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import MovieYearContainer from '@components/movies/MovieYearContainer.astro';
+import SectionContent from '@components/SectionContent.astro';
 import { scrapeLetterboxdFilms } from '@utils/letterboxd';
+import { getMockMovieData } from '@utils/mockMovies';
 
 const username = 'iamrobin';
 let movieData;
 let error = null;
 
-try {
-    movieData = await scrapeLetterboxdFilms(username, 5); // Limit to 5 pages for build performance
-} catch (e) {
-    console.error('Failed to fetch Letterboxd data:', e);
-    error = e instanceof Error ? e.message : 'Unknown error occurred';
-    movieData = { films: [], count: 0, updated_at: new Date().toISOString() };
+// Use mock data in development to avoid slow scraping on each reload
+const isDevelopment = import.meta.env.DEV;
+
+if (isDevelopment) {
+    movieData = getMockMovieData();
+    console.log('Using mock movie data for development');
+} else {
+    try {
+        movieData = await scrapeLetterboxdFilms(username, 5); // Limit to 5 pages for build performance
+    } catch (e) {
+        console.error('Failed to fetch Letterboxd data:', e);
+        error = e instanceof Error ? e.message : 'Unknown error occurred';
+        movieData = { films: [], count: 0, updated_at: new Date().toISOString() };
+    }
 }
 
 const { films, count, updated_at } = movieData;
@@ -27,20 +40,34 @@ const sortedFilms = recentFilms.sort(
     (a, b) => new Date(b.watched_on).getTime() - new Date(a.watched_on).getTime()
 );
 
-// console.log('sortedFilms', sortedFilms);
+// Group films by year they were watched
+const filmsByYear = sortedFilms.reduce(
+    (acc, film) => {
+        const year = new Date(film.watched_on).getFullYear();
+        if (!acc[year]) {
+            acc[year] = [];
+        }
+        acc[year].push(film);
+        return acc;
+    },
+    {} as Record<number, typeof sortedFilms>
+);
+
+const years = Object.keys(filmsByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
 ---
 
 <Layout title="Movies" description={`${count} movies watched on Letterboxd`}>
-    <div class="container mx-auto px-4 py-40">
-        <div class="max-w-6xl mx-auto">
-            <div class="mb-12">
-                <h1 class="text-4xl font-bold mb-4">Movies</h1>
-                <p class="text-neutral-600 mb-2">
-                    {count} movies watched • Last updated: {
-                        new Date(updated_at).toLocaleDateString()
-                    }
-                </p>
-            </div>
+    <Grid classes="py-40">
+        <GridBox desktopFull>
+            <SectionContent title="Movies" classes="!px-0">
+                An overview of the movies I have watched. The data is automatically retrieved from
+                my Letterboxd profile.
+                <br />
+                <br />
+                {count} movies watched • Last updated: {new Date(updated_at).toLocaleDateString()}
+            </SectionContent>
 
             {
                 error && (
@@ -52,100 +79,10 @@ const sortedFilms = recentFilms.sort(
 
             {
                 films.length > 0 && (
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-                        {sortedFilms.map((film) => {
-                            const watchDate = new Date(film.watched_on);
-                            const formattedDate = watchDate.toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric'
-                            });
-
-                            // Extract year from title (assuming format "Title (Year)")
-                            const titleMatch = film.title.match(/^(.+)\s\((\d{4})\)$/);
-                            const movieTitle = titleMatch ? titleMatch[1] : film.title;
-                            const movieYear = titleMatch ? titleMatch[2] : '';
-
-                            // Generate stars for rating
-                            const fullStars = Math.floor(film.rating);
-                            const hasHalfStar = film.rating % 1 >= 0.5;
-                            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-                            return (
-                                <div class="group">
-                                    <a
-                                        href={`https://letterboxd.com/${film.permalink}/`}
-                                        target="_blank"
-                                        rel="noopener"
-                                        class="block"
-                                    >
-                                        <div class="bg-neutral-100 aspect-[2/3] rounded-lg mb-3 flex items-center justify-center group-hover:bg-neutral-200 transition-colors">
-                                            <div class="text-center text-neutral-500 px-4">
-                                                <div class="text-2xl mb-2">🎬</div>
-                                                <div class="text-xs font-medium leading-tight">
-                                                    {movieTitle}
-                                                </div>
-                                                {movieYear && (
-                                                    <div class="text-xs text-neutral-400 mt-1">
-                                                        {movieYear}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <div class="space-y-1">
-                                        <h3 class="font-medium text-sm leading-tight line-clamp-2">
-                                            <a
-                                                href={`https://letterboxd.com/film/${film.permalink}/`}
-                                                target="_blank"
-                                                rel="noopener"
-                                                class="hover:underline"
-                                            >
-                                                {movieTitle}
-                                            </a>
-                                        </h3>
-
-                                        {movieYear && (
-                                            <p class="text-xs text-neutral-500">{movieYear}</p>
-                                        )}
-
-                                        {film.rating > 0 && (
-                                            <div class="flex items-center gap-1">
-                                                <div class="flex text-yellow-500 text-xs">
-                                                    {Array.from(
-                                                        { length: fullStars },
-                                                        () => '★'
-                                                    ).join('')}
-                                                    {hasHalfStar && '☆'}
-                                                    {Array.from(
-                                                        { length: emptyStars },
-                                                        () => '☆'
-                                                    ).join('')}
-                                                </div>
-                                                <span class="text-xs text-neutral-400">
-                                                    ({film.rating})
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        <div class="flex items-center gap-2 text-xs text-neutral-500">
-                                            <span>{formattedDate}</span>
-                                            {film.rewatched && (
-                                                <span class="bg-neutral-200 px-1.5 py-0.5 rounded text-xs">
-                                                    rewatch
-                                                </span>
-                                            )}
-                                            {film.liked && (
-                                                <span class="bg-red px-1.5 py-0.5 rounded text-xs">
-                                                    liked
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
+                    <div>
+                        {years.map((year) => (
+                            <MovieYearContainer films={filmsByYear[year]} year={year} />
+                        ))}
                     </div>
                 )
             }
@@ -159,8 +96,8 @@ const sortedFilms = recentFilms.sort(
                     </div>
                 )
             }
-        </div>
-    </div>
+        </GridBox>
+    </Grid>
 </Layout>
 
 <style>
@@ -171,3 +108,5 @@ const sortedFilms = recentFilms.sort(
         overflow: hidden;
     }
 </style>
+
+<script src="../scripts/listItemImageHoverEffect.js"></script>
