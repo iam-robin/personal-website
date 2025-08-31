@@ -27,7 +27,7 @@
         "astro-icon": "^1.0.4",
         "astro-remote": "^0.3.3",
         "astro-seo": "^0.8.4",
-        "exifreader": "^4.31.1",
+        "exifreader": "^4.31.2",
         "gray-matter": "^4.0.3",
         "hast-util-to-html": "^9.0.5",
         "isomorphic-dompurify": "^2.25.0",
