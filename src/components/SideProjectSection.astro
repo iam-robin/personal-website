@@ -1,5 +1,4 @@
 ---
-import { Icon } from 'astro-icon/components';
 import { projects } from 'src/content/projects';
 import ProjectItem from './ProjectItem.astro';
 import SectionContent from './SectionContent.astro';
@@ -37,24 +36,5 @@ import NewSlider from './newSlider/NewSlider.astro';
                 </NewSliderItem>
             ))
         }
-        <NewSliderItem>
-            <a
-                href="https://read.cv/iamrobin"
-                class="group flex aspect-square w-full items-end rounded-xl border-2 border-dashed border-black-200 p-6 transition-all duration-300 hover:bg-neutral-100"
-            >
-                <div class="text-sm">
-                    <p>Enough fun side projects –</p>
-                    <p>explore what I do for a living</p>
-                    <div class="mt-2 flex items-center gap-1">
-                        <span>read.cv</span>
-                        <Icon
-                            name="ph:arrow-up-right-bold"
-                            width={16}
-                            class="text-neutral-400 transition-all group-hover:translate-x-0.5 group-hover:text-black"
-                        />
-                    </div>
-                </div>
-            </a>
-        </NewSliderItem>
     </NewSlider>
 </div>
