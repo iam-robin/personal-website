@@ -1,0 +1,119 @@
+---
+import Grid from "./Grid.astro";
+import GridItem from "./GridItem.astro";
+import Link from "./Link.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<div class="hero scrolling-section">
+    <Grid>
+        <GridItem colSpan={12}>
+            <h1 class="hero__title">
+                Hey
+                <Icon class="hero__icon" name="sticker-smiley-50" size="56px" />
+                I am <Link href="/about">Robin Spielmann</Link>.
+                <br />
+                A Design Engineer who enjoys working at the intersection of
+                <br />
+                <Icon class="hero__icon" name="sticker-code-50" size="56px" />
+                code,
+                <Icon class="hero__icon" name="sticker-design-50" size="56px" />
+                design and
+                <Icon class="hero__icon" name="sticker-art-50" size="56px" />
+                art.
+            </h1>
+        </GridItem>
+        <GridItem
+            colStart={{ small: 1, medium: 4, large: 4 }}
+            colEnd={{ small: 13, medium: 13, large: 13 }}
+        >
+            <p class="hero__subtitle">
+                This personal website is my own little space on the internet
+                where I want to share my work, interests and passions with
+                others, without having to please the algorithms of social media
+                platforms or follow any other rules. I hope you enjoy exploring
+                my digital living room as much as I enjoyed creating it.
+            </p>
+        </GridItem>
+    </Grid>
+</div>
+
+<style>
+    .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        opacity: 0;
+    }
+
+    .hero__title {
+        font-size: max(1.7rem, 6cqw);
+        line-height: 1.2;
+    }
+
+    .hero__icon {
+        vertical-align: -0.25em;
+        opacity: 0;
+        width: 0;
+        margin-right: -12px;
+        overflow: hidden;
+        display: inline-block;
+    }
+
+    .hero__subtitle {
+        font-size: var(--text-base);
+        line-height: 1.5;
+        font-family: "Fira Mono", monospace;
+        opacity: 0;
+    }
+
+    @media (max-width: 480px) {
+        .hero__title br {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    import { animate, inView, stagger } from "motion";
+
+    inView(
+        ".scrolling-section",
+        (element) => {
+            // Fade in the hero section first
+            animate(element, { opacity: [0, 1] }, { duration: 1 });
+
+            // Then pop in icons one after another
+            const icons = element.querySelectorAll(".hero__icon");
+            if (icons.length > 0) {
+                animate(
+                    icons,
+                    {
+                        marginRight: [-12, 0],
+                        opacity: [0, 1],
+                        y: [25, 0],
+                        width: ["0px", "56px"],
+                    },
+                    {
+                        type: "spring",
+                        stiffness: 100, // default ~100, higher = snappier
+                        damping: 12, // default ~10, lower = more bounce
+                        mass: 1.5, // default 1, higher = slower/heavier
+                        delay: stagger(0.25, { startDelay: 0.25 }),
+                    }
+                );
+            }
+
+            // Animate subtitle after icons are done
+            const subtitle = element.querySelector(".hero__subtitle");
+            if (subtitle) {
+                animate(
+                    subtitle,
+                    { opacity: [0, 1], y: [20, 0] },
+                    { duration: 0.6, delay: 1.5, ease: [0.39, 0.24, 0.3, 1] }
+                );
+            }
+        },
+        { amount: 0.25 }
+    );
+</script>

@@ -1,0 +1,20 @@
+{
+  "name": "iamrobin-astro-svelte",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/svelte": "^7.2.2",
+    "@blossom-carousel/svelte": "^0.2.0",
+    "astro": "^5.16.0",
+    "astro-icon": "^1.1.5",
+    "motion": "^12.23.24",
+    "svelte": "^5.43.14",
+    "typescript": "^5.9.3"
+  }
+}

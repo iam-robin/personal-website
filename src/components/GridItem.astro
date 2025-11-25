@@ -1,0 +1,143 @@
+---
+interface BreakpointValue {
+    small?: number;
+    medium?: number;
+    large?: number;
+}
+
+interface Props {
+    colStart?: number | BreakpointValue;
+    colEnd?: number | BreakpointValue;
+    colSpan?: number | BreakpointValue;
+    rowStart?: number | BreakpointValue;
+    rowEnd?: number | BreakpointValue;
+    rowSpan?: number | BreakpointValue;
+}
+
+const { colStart, colEnd, colSpan, rowStart, rowEnd, rowSpan } = Astro.props;
+
+// Helper to check if value is a breakpoint object
+const isBreakpointValue = (
+    val: number | BreakpointValue | undefined
+): val is BreakpointValue => {
+    return val !== undefined && typeof val === "object";
+};
+
+// Helper to get value for a specific breakpoint or raw number
+const getValue = (
+    val: number | BreakpointValue | undefined,
+    breakpoint: "small" | "medium" | "large"
+): number | undefined => {
+    if (val === undefined) return undefined;
+    if (typeof val === "number") return val;
+    return val[breakpoint];
+};
+
+// Build grid-column value for a breakpoint
+const buildGridColumn = (
+    breakpoint: "small" | "medium" | "large"
+): string | undefined => {
+    const span = getValue(colSpan, breakpoint);
+    const start = getValue(colStart, breakpoint);
+    const end = getValue(colEnd, breakpoint);
+
+    if (span) return `span ${span}`;
+    if (start && end) return `${start} / ${end}`;
+    if (start) return `${start}`;
+    if (end) return `auto / ${end}`;
+    return undefined;
+};
+
+// Build grid-row value for a breakpoint
+const buildGridRow = (
+    breakpoint: "small" | "medium" | "large"
+): string | undefined => {
+    const span = getValue(rowSpan, breakpoint);
+    const start = getValue(rowStart, breakpoint);
+    const end = getValue(rowEnd, breakpoint);
+
+    if (span) return `span ${span}`;
+    if (start && end) return `${start} / ${end}`;
+    if (start) return `${start}`;
+    if (end) return `auto / ${end}`;
+    return undefined;
+};
+
+// Check if any prop uses breakpoint values
+const hasResponsiveProps = [
+    colStart,
+    colEnd,
+    colSpan,
+    rowStart,
+    rowEnd,
+    rowSpan,
+].some(isBreakpointValue);
+
+// For non-responsive usage, compute static values
+const staticGridColumn = !hasResponsiveProps
+    ? buildGridColumn("large")
+    : undefined;
+const staticGridRow = !hasResponsiveProps ? buildGridRow("large") : undefined;
+
+const staticStyle = !hasResponsiveProps
+    ? [
+          staticGridColumn && `grid-column: ${staticGridColumn}`,
+          staticGridRow && `grid-row: ${staticGridRow}`,
+      ]
+          .filter(Boolean)
+          .join("; ")
+    : undefined;
+
+// For responsive usage, compute CSS variable values
+const smallCol = buildGridColumn("small");
+const mediumCol = buildGridColumn("medium");
+const largeCol = buildGridColumn("large");
+const smallRow = buildGridRow("small");
+const mediumRow = buildGridRow("medium");
+const largeRow = buildGridRow("large");
+
+const responsiveStyle = hasResponsiveProps
+    ? [
+          smallCol && `--small-col: ${smallCol}`,
+          mediumCol && `--medium-col: ${mediumCol}`,
+          largeCol && `--large-col: ${largeCol}`,
+          smallRow && `--small-row: ${smallRow}`,
+          mediumRow && `--medium-row: ${mediumRow}`,
+          largeRow && `--large-row: ${largeRow}`,
+      ]
+          .filter(Boolean)
+          .join("; ")
+    : undefined;
+---
+
+<div
+    class:list={["grid-item", { responsive: hasResponsiveProps }]}
+    style={staticStyle || responsiveStyle || undefined}
+>
+    <slot />
+</div>
+
+<style>
+    .grid-item {
+        min-width: 0;
+    }
+
+    .grid-item.responsive {
+        grid-column: var(--large-col);
+        grid-row: var(--large-row);
+    }
+
+    @media (max-width: 800px) {
+        .grid-item.responsive {
+            grid-column: var(--medium-col, var(--large-col));
+            grid-row: var(--medium-row, var(--large-row));
+        }
+    }
+
+    @media (max-width: 480px) {
+        .grid-item.responsive {
+            grid-column: var(--small-col, var(--medium-col, var(--large-col)));
+            grid-row: var(--small-row, var(--medium-row, var(--large-row)));
+        }
+    }
+</style>

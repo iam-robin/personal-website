@@ -1,0 +1,29 @@
+---
+interface Props {
+    columns?: number;
+    gap?: string;
+}
+
+const { columns, gap } = Astro.props;
+---
+
+<div
+    class="grid"
+    style={[columns && `--columns: ${columns}`, gap && `--gap: ${gap}`]
+        .filter(Boolean)
+        .join("; ")}
+>
+    <slot />
+</div>
+
+<style>
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(var(--columns), 1fr);
+        gap: var(--gap);
+        width: 100%;
+        max-width: var(--max-width);
+        margin: 0 auto;
+        container-type: inline-size;
+    }
+</style>

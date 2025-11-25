@@ -1,0 +1,49 @@
+---
+interface Props {
+    href: string;
+    external?: boolean;
+    standalone?: boolean;
+    class?: string;
+}
+
+const {
+    href,
+    external = false,
+    standalone = false,
+    class: className,
+} = Astro.props;
+const externalProps = external
+    ? { target: "_blank", rel: "noopener noreferrer" }
+    : {};
+---
+
+<a
+    href={href}
+    class:list={["link", { "link--standalone": standalone }, className]}
+    {...externalProps}><slot /></a
+>
+
+<style>
+    .link {
+        font: inherit;
+        color: currentColor;
+        text-decoration: underline;
+        text-decoration-color: #dbdbdb;
+        text-decoration-thickness: 4px;
+        text-underline-offset: 0.15em;
+    }
+
+    .link:hover {
+        font-style: italic;
+    }
+
+    .link--standalone {
+        font-size: var(--text-base);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .link--standalone:hover {
+        text-decoration: underline;
+    }
+</style>
