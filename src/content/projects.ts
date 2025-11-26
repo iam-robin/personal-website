@@ -8,21 +8,21 @@ import CvLogo from '../assets/projects/cv.png';
 import ProcrastisaurusLogo from '../assets/projects/procrastisaurus.png';
 import MeaningfulAnimationLogo from '../assets/projects/meaningful-animation.svg';
 import MediacampLogo from '../assets/projects/mediacamp.svg';
-import PatentStudioLogo from '../assets/projects/patent-studio.svg';
+// import PatentStudioLogo from '../assets/projects/patent-studio.svg';
 
 export const projects: Props[] = [
-    {
-        bgColor: '#3662e3',
-        href: 'https://www.patent-studio.com/',
-        title: 'Patent Studio',
-        description:
-            'A landingpage for a software solution streamlining patent workflows for law firms.',
-        labels: ['Website', 'Landing page', 'Astro'],
-        logo: PatentStudioLogo,
-        logoWidth: '4rem',
-        customOpenString: 'Open Website',
-        year: '2024'
-    },
+    // {
+    //     bgColor: '#3662e3',
+    //     href: 'https://www.patent-studio.com/',
+    //     title: 'Patent Studio',
+    //     description:
+    //         'A landingpage for a software solution streamlining patent workflows for law firms.',
+    //     labels: ['Website', 'Landing page', 'Astro'],
+    //     logo: PatentStudioLogo,
+    //     logoWidth: '4rem',
+    //     customOpenString: 'Open Website',
+    //     year: '2024'
+    // },
     {
         bgColor: '#64b89d',
         title: 'Procrastisaurus',
