@@ -11,7 +11,9 @@ import db from '@astrojs/db';
 export default defineConfig({
     site: 'https://iamrob.in',
     output: 'static',
-    adapter: vercel(),
+    adapter: vercel({
+        runtime: 'nodejs20.x'
+    }),
     integrations: [tailwind(), icon(), react(), db()],
     markdown: {
         remarkPlugins: [remarkGfm]
