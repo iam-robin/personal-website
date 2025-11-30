@@ -4,12 +4,13 @@
     "version": "0.0.1",
     "scripts": {
         "dev": "astro dev",
-        "build": "astro build",
+        "build": "astro build --remote",
         "preview": "astro preview",
         "astro": "astro"
     },
     "dependencies": {
         "@astrojs/db": "^0.18.3",
+        "@astrojs/netlify": "^6.6.3",
         "@astrojs/svelte": "^7.2.2",
         "@blossom-carousel/svelte": "^0.2.0",
         "@tailwindcss/vite": "^4.1.17",

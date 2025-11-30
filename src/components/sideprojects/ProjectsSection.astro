@@ -1,0 +1,17 @@
+---
+import { getCollection } from "astro:content";
+import ProjectsCarousel from "./ProjectsCarousel.svelte";
+
+const projectsCollection = await getCollection("projects");
+
+const projects = projectsCollection.map((project) => ({
+    slug: project.slug,
+    title: project.data.title,
+    description: project.data.description,
+    thumbnail: project.data.thumbnail,
+    tags: project.data.tags,
+    year: project.data.year,
+}));
+---
+
+<ProjectsCarousel client:only="svelte" projects={projects} />

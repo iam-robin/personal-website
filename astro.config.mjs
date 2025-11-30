@@ -5,11 +5,15 @@ import icon from "astro-icon";
 import db from "@astrojs/db";
 import tailwindcss from "@tailwindcss/vite";
 
+import netlify from "@astrojs/netlify";
+
 // https://astro.build/config
 export default defineConfig({
-    integrations: [svelte(), icon(), db()],
+  integrations: [svelte(), icon(), db()],
 
-    vite: {
-        plugins: [tailwindcss()],
-    },
+  vite: {
+      plugins: [tailwindcss()],
+  },
+
+  adapter: netlify(),
 });

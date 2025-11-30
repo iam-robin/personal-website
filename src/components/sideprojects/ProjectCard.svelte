@@ -1,16 +1,25 @@
 <script>
-  let { title, description = '' } = $props();
+  let { title, description = '', slug } = $props();
 </script>
 
-<div class="project-card">
-  <h3>{title}</h3>
-  {#if description}
-    <p>{description}</p>
-  {/if}
-</div>
+<a href="/projects/{slug}" class="project-card block h-full">
+  <div class="card-content">
+    <h3>{title}</h3>
+    {#if description}
+      <p>{description}</p>
+    {/if}
+  </div>
+</a>
 
 <style>
   .project-card {
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .card-content {
     height: 100%;
     padding: 1rem;
     background-color: tomato;

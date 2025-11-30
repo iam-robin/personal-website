@@ -59,45 +59,60 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
-    import { animate, inView, stagger } from "motion";
+    import { animate, stagger } from "motion";
 
-    inView(
-        "[data-hero]",
-        (element) => {
-            // Fade in the hero section first
-            animate(element, { opacity: [0, 1] }, { duration: 1 });
+    function animateHero() {
+        const hero = document.querySelector("[data-hero]");
+        if (!hero) return;
 
-            // Then pop in icons one after another
-            const icons = element.querySelectorAll("[data-hero-icon]");
-            if (icons.length > 0) {
-                animate(
-                    icons,
-                    {
-                        marginRight: [-12, 0],
-                        opacity: [0, 1],
-                        y: [25, 0],
-                        width: ["0px", "56px"],
-                    },
-                    {
-                        type: "spring",
-                        stiffness: 100, // default ~100, higher = snappier
-                        damping: 12, // default ~10, lower = more bounce
-                        mass: 1.5, // default 1, higher = slower/heavier
-                        delay: stagger(0.25, { startDelay: 0.25 }),
-                    }
-                );
-            }
+        // Reset to initial state before animating
+        (hero as HTMLElement).style.opacity = "0";
+        const icons = hero.querySelectorAll("[data-hero-icon]");
+        icons.forEach((icon) => {
+            (icon as HTMLElement).style.opacity = "0";
+            (icon as HTMLElement).style.width = "0px";
+        });
+        const subtitle = hero.querySelector("[data-hero-subtitle]");
+        if (subtitle) {
+            (subtitle as HTMLElement).style.opacity = "0";
+        }
 
-            // Animate subtitle after icons are done
-            const subtitle = element.querySelector("[data-hero-subtitle]");
-            if (subtitle) {
-                animate(
-                    subtitle,
-                    { opacity: [0, 1], y: [20, 0] },
-                    { duration: 0.6, delay: 1.5, ease: [0.39, 0.24, 0.3, 1] }
-                );
-            }
-        },
-        { amount: 0.25 }
-    );
+        // Fade in the hero section first
+        animate(hero, { opacity: [0, 1] }, { duration: 1 });
+
+        // Then pop in icons one after another
+        if (icons.length > 0) {
+            animate(
+                icons,
+                {
+                    marginRight: [-12, 0],
+                    opacity: [0, 1],
+                    y: [25, 0],
+                    width: ["0px", "56px"],
+                },
+                {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 12,
+                    mass: 1.5,
+                    delay: stagger(0.25, { startDelay: 0.25 }),
+                }
+            );
+        }
+
+        // Animate subtitle after icons are done
+        if (subtitle) {
+            animate(
+                subtitle,
+                { opacity: [0, 1], y: [20, 0] },
+                { duration: 0.6, delay: 1.5, ease: [0.39, 0.24, 0.3, 1] }
+            );
+        }
+    }
+
+    // Run on initial page load
+    animateHero();
+
+    // Re-run when navigating back via View Transitions
+    document.addEventListener("astro:page-load", animateHero);
 </script>
