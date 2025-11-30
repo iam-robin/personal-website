@@ -12,9 +12,18 @@ interface Props {
     rowStart?: number | BreakpointValue;
     rowEnd?: number | BreakpointValue;
     rowSpan?: number | BreakpointValue;
+    class?: string;
 }
 
-const { colStart, colEnd, colSpan, rowStart, rowEnd, rowSpan } = Astro.props;
+const {
+    colStart,
+    colEnd,
+    colSpan,
+    rowStart,
+    rowEnd,
+    rowSpan,
+    class: className,
+} = Astro.props;
 
 // Helper to check if value is a breakpoint object
 const isBreakpointValue = (
@@ -111,7 +120,7 @@ const responsiveStyle = hasResponsiveProps
 ---
 
 <div
-    class:list={["grid-item", { responsive: hasResponsiveProps }]}
+    class:list={["grid-item", { responsive: hasResponsiveProps }, className]}
     style={staticStyle || responsiveStyle || undefined}
 >
     <slot />

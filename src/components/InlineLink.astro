@@ -1,0 +1,27 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+    href: string;
+    external?: boolean;
+}
+
+const { href, external } = Astro.props as Props;
+---
+
+<span class="group inline-flex items-center">
+    <a
+        href={href}
+        class="relative inline-flex cursor-pointer items-center underline decoration-blue decoration-dotted decoration-2 underline-offset-[6px] hover:text-blue"
+        ><slot /></a
+    >
+    {
+        external && (
+            <Icon
+                name="ph:arrow-up-right-bold"
+                width={14}
+                class="ml-0.5 text-neutral-600 transition-all group-hover:translate-x-0.5 group-hover:text-blue"
+            />
+        )
+    }
+</span>

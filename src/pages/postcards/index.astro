@@ -1,0 +1,56 @@
+---
+import { db, Postcard, desc, eq } from "astro:db";
+import {
+    isValidCountry,
+    getStandardCountryName,
+    getCountryFlag,
+} from "@utils/countries";
+import PostcardsSection from "@components/PostcardsSection.astro";
+import WorldMapDetail from "@components/WorldMapDetail.astro";
+import Layout from "@layouts/Layout.astro";
+import TagCloud from "@components/TagCloud.astro";
+
+// Fetch all published postcards once
+const allPostcards = await db
+    .select()
+    .from(Postcard)
+    .where(eq(Postcard.isPublished, true))
+    .orderBy(desc(Postcard.date));
+
+// Extract unique countries and count them for the tag cloud
+const allCountries = allPostcards
+    .map((postcard) => postcard.country)
+    .filter((country) => country !== null && country !== undefined);
+
+// Process countries: normalize case, validate, and standardize names
+const countryCounts = allCountries.reduce(
+    (acc, country) => {
+        if (isValidCountry(country!)) {
+            const standardName = getStandardCountryName(country!);
+            acc[standardName] = (acc[standardName] || 0) + 1;
+        }
+        return acc;
+    },
+    {} as Record<string, number>
+);
+
+const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({
+    name,
+    count,
+    flag: getCountryFlag(name),
+}));
+
+const visitedCountries = countryCloudData.map((country) => country.name);
+---
+
+<Layout>
+    <TagCloud
+        tags={countryCloudData}
+        basePath="/postcards"
+        filterPath="country"
+        filterLabel="country"
+        total={allPostcards.length}
+    />
+    <PostcardsSection postcards={allPostcards} />
+    <WorldMapDetail visitedCountries={visitedCountries} />
+</Layout>

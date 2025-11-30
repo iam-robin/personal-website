@@ -1,0 +1,119 @@
+---
+import { Icon } from "astro-icon/components";
+import ContactItem from "./ContactItem.astro";
+import Grid from "./Grid.astro";
+import GridItem from "./GridItem.astro";
+---
+
+<Grid
+    class="rounded-xl p-10 bg-neutral-300 text-neutral-800 hover:scale-103 hover:-rotate-1 transition-all relative"
+    id="contact-container"
+>
+    <GridItem
+        class="flex justify-between flex-col"
+        colSpan={{ small: 12, medium: 12, large: 3 }}
+    >
+        <h2 class="text-lg font-bold">Contact</h2>
+        <Icon
+            id="icon-for-default"
+            class="icon-for-service absolute -top-10 right-10 text-[64px] transition-transform sm:right-auto sm:top-32"
+            name="sticker-wave-50"
+        />
+        <Icon
+            id="icon-for-email"
+            class="icon-for-service absolute -top-10 right-10 -rotate-12 scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
+            name="sticker-mail-50-2"
+        />
+        <Icon
+            id="icon-for-mastodon"
+            class="icon-for-service absolute -top-10 right-10 rotate-12 scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
+            name="sticker-mastodon-50"
+        />
+        <Icon
+            id="icon-for-glass"
+            class="icon-for-service absolute -top-10 right-10 -rotate-[8deg] scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
+            name="sticker-glass-50"
+        />
+        <Icon
+            id="icon-for-github"
+            class="icon-for-service absolute -top-10 right-10 -rotate-[8deg] scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
+            name="sticker-design-50"
+        />
+    </GridItem>
+    <GridItem colSpan={{ small: 12, medium: 12, large: 9 }}>
+        <ul>
+            <ContactItem
+                id="email-contact-item"
+                hoverBgColor="bg-blue-300"
+                hoverTextColor="text-blue-800"
+                service="Email"
+                handle="hey@iamrob.in"
+                url="mailto:hey@iamrob.in"
+            />
+            <ContactItem
+                id="mastodon-contact-item"
+                hoverBgColor="bg-green-300"
+                hoverTextColor="text-green-800"
+                service="Mastodon"
+                handle="@iamrobin@mastodon.social"
+                url="https://mastodon.social/@iamrobin"
+            />
+            <ContactItem
+                id="glass-contact-item"
+                hoverBgColor="bg-yellow-300"
+                hoverTextColor="text-yellow-800"
+                service="Glass"
+                handle="@iamrobin"
+                url="https://glass.photo/iamrobin"
+            />
+            <ContactItem
+                id="github-contact-item"
+                hoverBgColor="bg-neutral-800"
+                hoverTextColor="text-neutral-300"
+                service="GitHub"
+                handle="@iamrobin"
+                url="https://glass.photo/iamrobin"
+            />
+        </ul>
+    </GridItem>
+</Grid>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if (window.innerWidth < 640) return;
+        const contactItems = document.querySelectorAll(".contact-item");
+        const container = document.getElementById("contact-container");
+        const icons = document.querySelectorAll(".icon-for-service");
+
+        contactItems.forEach((item) => {
+            const bgColor = (item as HTMLElement).dataset.bgcolor as string;
+            const textColor = (item as HTMLElement).dataset.textcolor as string;
+            item.addEventListener("mouseover", () => {
+                const service = item.getAttribute("id")?.split("-")[0];
+                icons.forEach((icon) => {
+                    if (icon.id === `icon-for-${service}`) {
+                        icon.classList.remove("scale-0");
+                    } else {
+                        icon.classList.add("scale-0");
+                    }
+                });
+
+                container?.classList.remove(
+                    "bg-neutral-300",
+                    "text-neutral-800"
+                );
+                container?.classList.add(bgColor, textColor);
+            });
+            item.addEventListener("mouseout", () => {
+                icons.forEach((icon) => {
+                    icon.classList.add("scale-0");
+                    if (icon.id === "icon-for-default") {
+                        icon.classList.remove("scale-0");
+                    }
+                });
+                container?.classList.remove(bgColor, textColor);
+                container?.classList.add("bg-neutral-300", "text-neutral-800");
+            });
+        });
+    });
+</script>

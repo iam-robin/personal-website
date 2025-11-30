@@ -13,17 +13,18 @@
 </script>
 
 <section
-  class="carousel-section"
+  class="flex flex-col"
   style:--columns={columns}
   style:--gap={gap}
+  style:gap="var(--gap)"
 >
   {#if headline || description}
-    <hgroup class="carousel-header">
+    <hgroup class="max-w-(--max-width) mx-auto w-full grid grid-cols-12 gap-4 pb-6">
       {#if headline}
-        <h2 class="carousel-headline">{headline}</h2>
+        <h2 class="col-start-1 col-end-5">{headline}</h2>
       {/if}
       {#if description}
-        <p class="carousel-description">{description}</p>
+        <p class="col-start-6 col-end-13">{description}</p>
       {/if}
     </hgroup>
   {/if}
@@ -35,39 +36,13 @@
   </div>
 
   {#if link}
-    <div class="carousel-link-container">
-      <a href={link.href} class="carousel-link">{link.text}</a>
+    <div class="max-w-(--max-width) mx-auto w-full flex justify-end">
+      <a href={link.href} class="text-inherit">{link.text}</a>
     </div>
   {/if}
 </section>
 
 <style>
-    .carousel-section {
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap);
-    }
-
-    .carousel-header {
-        max-width: var(--max-width);
-        margin: 0 auto;
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        gap: 16px;
-        padding-bottom: 24px;
-
-        h2 {
-            grid-column-start: 1;
-            grid-column-end: 5;
-        }
-
-        p {
-            grid-column-start: 6;
-            grid-column-end: 13;
-        }
-    }
-
     .carousel-wrapper :global(.carousel) {
         display: grid;
         grid-auto-flow: column;
@@ -83,17 +58,5 @@
             padding-inline: unset;
             scroll-padding-inline-start: unset;
         }
-    }
-
-    .carousel-link-container {
-        max-width: var(--max-width);
-        margin: 0 auto;
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .carousel-link {
-        color: inherit;
     }
 </style>

@@ -2,13 +2,16 @@
 interface Props {
     columns?: number;
     gap?: string;
+    class?: string;
+    id?: string;
 }
 
-const { columns, gap } = Astro.props;
+const { columns, gap, class: className, id } = Astro.props;
 ---
 
 <div
-    class="grid"
+    id={id}
+    class:list={["grid", className]}
     style={[columns && `--columns: ${columns}`, gap && `--gap: ${gap}`]
         .filter(Boolean)
         .join("; ")}

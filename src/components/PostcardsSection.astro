@@ -1,0 +1,50 @@
+---
+import { db, Postcard, desc, eq } from "astro:db";
+import Link from "./Link.astro";
+import PostcardsCarousel from "./PostcardsCarousel.svelte";
+import Container from "./Container.astro";
+
+export interface Props {
+    limit?: number | null;
+    postcards?: (typeof Postcard.$inferSelect)[];
+}
+
+const { limit = null, postcards } = Astro.props;
+
+let recentPostcards;
+
+// If postcards are provided as prop, use them (with optional limit)
+if (postcards) {
+    recentPostcards = limit ? postcards.slice(0, limit) : postcards;
+} else {
+    // Otherwise, fetch from database (backward compatibility)
+    let query = db
+        .select()
+        .from(Postcard)
+        .where(eq(Postcard.isPublished, true))
+        .orderBy(desc(Postcard.date));
+
+    recentPostcards = limit ? await query.limit(limit) : await query;
+}
+---
+
+{
+    recentPostcards.length > 0 && (
+        <div>
+            <PostcardsCarousel
+                client:only="svelte"
+                postcards={recentPostcards}
+            />
+            <Container>
+                {limit && (
+                    <Link href="/postcards" standalone>
+                        View All →
+                    </Link>
+                )}
+                <Link href="/postcards/new" standalone>
+                    Send a Postcard
+                </Link>
+            </Container>
+        </div>
+    )
+}

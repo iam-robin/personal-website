@@ -1,0 +1,126 @@
+---
+import { Icon } from "astro-icon/components";
+
+export type Bookmark = {
+    link: string;
+    title: string;
+    cover: string;
+    tags: string[];
+    type: string;
+    created: string;
+};
+
+interface Props {
+    bookmark: Bookmark;
+}
+
+const { bookmark } = Astro.props as Props;
+const date = new Date(bookmark.created);
+const day = String(date.getDate()).padStart(2, "0");
+const month = String(date.getMonth() + 1).padStart(2, "0");
+const year = date.getFullYear();
+const formattedDate = `${day}-${month}-${year}`;
+const url = new URL(bookmark.link);
+const domain = url.hostname;
+---
+
+<!-- DESKTOP VERSION -->
+<li class="list-item-image-hover-effect group relative hidden md:block">
+    <a
+        href={bookmark.link}
+        class="flex items-center justify-between gap-4 py-2"
+    >
+        <img
+            class="cover-image max-w-64 pointer-events-none absolute z-10 hidden max-h-40 shadow-lg md:group-hover:block"
+            src={bookmark.cover}
+        />
+        <div class="flex max-w-[80%] shrink-0 items-center gap-2">
+            <div
+                class={`h-2 w-2 rounded-full ${
+                    bookmark.type === "article"
+                        ? "bg-green"
+                        : bookmark.type === "video"
+                          ? "bg-blue"
+                          : bookmark.type === "link"
+                            ? "bg-lilac"
+                            : "bg-red"
+                }`}
+            >
+            </div>
+            <p class="mr-2 truncate font-mono text-sm">{bookmark.title}</p>
+            <div>
+                {
+                    bookmark.tags.length > 0 && (
+                        <div class="flex gap-1 ">
+                            {bookmark.tags.map((tag) => (
+                                <span class="shrink-0 rounded-full bg-black-30 px-2 py-0.5 font-mono text-2xs text-black-600">
+                                    #{tag}
+                                </span>
+                            ))}
+                        </div>
+                    )
+                }
+            </div>
+        </div>
+        <div class="hidden h-[1px] w-full grow bg-neutral-200 md:block"></div>
+        <p
+            class="shrink-0 text-right font-mono text-xs text-neutral-500 group-hover:hidden"
+        >
+            {formattedDate}
+        </p>
+        <div class="hidden shrink-0 items-center gap-2 group-hover:flex">
+            <p class="text-sm">{domain}</p>
+            <Icon name="ph:arrow-up-right-bold" width={16} />
+        </div>
+    </a>
+</li>
+
+<!-- MOBILE VERSION -->
+<li class="md:hidden">
+    <a
+        href={bookmark.link}
+        class="mt-5 flex flex-col gap-2 border-b border-neutral-200 pb-5"
+    >
+        <div class="flex items-center justify-between gap-1">
+            <div class="flex shrink items-center gap-2 overflow-x-auto">
+                <div
+                    class={`h-2 w-2 shrink-0 rounded-full ${
+                        bookmark.type === "article"
+                            ? "bg-green"
+                            : bookmark.type === "video"
+                              ? "bg-blue"
+                              : bookmark.type === "link"
+                                ? "bg-lilac"
+                                : "bg-red"
+                    }`}
+                >
+                </div>
+                <p class="mr-2 truncate font-mono text-xs md:text-sm">
+                    {bookmark.title}
+                </p>
+            </div>
+            <p class="shrink-0 text-right font-mono text-xs text-neutral-500">
+                {formattedDate}
+            </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <div>
+                {
+                    bookmark.tags.length > 0 && (
+                        <div class="flex gap-1 ">
+                            {bookmark.tags.map((tag) => (
+                                <span class="shrink-0 rounded-full bg-black-30 px-2 py-0.5 font-mono text-2xs text-black-600">
+                                    #{tag}
+                                </span>
+                            ))}
+                        </div>
+                    )
+                }
+            </div>
+            <div class="flex shrink-0 items-center gap-2 text-neutral-400">
+                <p class="text-2xs">{domain}</p>
+                <Icon name="ph:arrow-up-right-bold" width={12} />
+            </div>
+        </div>
+    </a>
+</li>

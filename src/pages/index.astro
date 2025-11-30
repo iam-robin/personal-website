@@ -1,29 +1,25 @@
 ---
+import Layout from "@layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import Hero from "../components/Hero.astro";
 import ProjectsCarousel from "../components/ProjectsCarousel.svelte";
-import "../styles/global.css";
+import PostcardsSection from "@components/PostcardsSection.astro";
+import LatestBookmarks from "@components/bookmarks/LatestBookmarks.astro";
+import PhotographySection from "@components/PhotographySection.astro";
 ---
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="viewport" content="width=device-width" />
-        <meta name="generator" content={Astro.generator} />
-        <title>iamrobin</title>
-    </head>
-    <body>
-        <Hero />
-        <div class="stack">
-            <ProjectsCarousel client:only="svelte" />
-            <ProjectsCarousel client:only="svelte" />
-            <ProjectsCarousel client:only="svelte" />
-            <div class="placeholder">placeholder</div>
-            <Footer />
-        </div>
-    </body>
-</html>
+<Layout>
+    <Hero />
+    <div class="stack">
+        <PhotographySection />
+        <PostcardsSection limit={6} />
+        <LatestBookmarks />
+        <ProjectsCarousel client:only="svelte" />
+        <ProjectsCarousel client:only="svelte" />
+        <ProjectsCarousel client:only="svelte" />
+        <Footer />
+    </div>
+</Layout>
 
 <style>
     .stack {
@@ -31,9 +27,5 @@ import "../styles/global.css";
         flex-direction: column;
         gap: 8rem;
         margin-top: 40px;
-    }
-
-    .placeholder {
-        height: 100vh;
     }
 </style>

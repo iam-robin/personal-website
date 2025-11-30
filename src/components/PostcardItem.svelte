@@ -1,0 +1,270 @@
+<script>
+import DOMPurify from "isomorphic-dompurify";
+
+let {
+    author,
+    body,
+    date,
+    distorted = true,
+    marginBottom = Math.floor(Math.random() * 8),
+    marginRight = Math.floor(Math.random() * 8),
+    rotation = Math.floor(Math.random() * 4 - 2),
+    penColor = "#000000",
+    paperColor = "#FAF9F6",
+    fontSizeFactor = 0.9 + Math.random() * 0.2,
+    lineHeight = 1.1 + Math.random() * 0.4,
+    authorLeftOffset = Math.floor(Math.random() * 10) - 5,
+    authorTopOffset = Math.floor(Math.random() * 6) - 3,
+    authorRotation = Math.floor(Math.random() * 6) - 3,
+    dateLeftOffset = Math.floor(Math.random() * 10) - 5,
+    dateTopOffset = Math.floor(Math.random() * 6) - 3,
+    dateRotation = Math.floor(Math.random() * 6) - 3,
+    bodyLeftOffset = Math.floor(Math.random() * 8) - 4,
+    bodyTopOffset = Math.floor(Math.random() * 8) - 4,
+    bodyRotation = Math.floor(Math.random() * 4) - 2,
+    stampSvg = "",
+    country = null,
+    websiteUrl = null,
+    postOfficeStampTop = Math.floor(Math.random() * 93) - 12,
+    postOfficeStampRight = Math.floor(Math.random() * 133) - 12,
+    postOfficeStampRotation = Math.floor(Math.random() * 31) - 15,
+    wavyStampTop = Math.floor(Math.random() * 69) - 4,
+    wavyStampRight = Math.floor(Math.random() * 97) - 24,
+    wavyStampRotation = Math.floor(Math.random() * 21) - 10
+} = $props();
+
+const sanitizedStampSvg = DOMPurify.sanitize(stampSvg);
+
+const fontSize = `${fontSizeFactor}em`;
+const lineHeightValue = lineHeight.toFixed(2);
+
+const bodyCharCount = body.length;
+const bodyLineBreaks = body.split("\n").length - 1;
+
+let bodyFontSizeFactor = fontSizeFactor;
+
+if (bodyCharCount > 180) {
+    bodyFontSizeFactor *= 0.95;
+}
+
+if (bodyLineBreaks > 2) {
+    bodyFontSizeFactor *= 0.8;
+}
+
+if (bodyCharCount > 180 && bodyLineBreaks > 2) {
+    bodyFontSizeFactor *= 0.9;
+}
+
+const bodyFontSize = `${bodyFontSizeFactor}em`;
+
+const formattedDate = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+});
+
+const transformStyles = distorted
+    ? `transform: translateY(${marginBottom}px) translateX(${marginRight}px) rotate(${rotation}deg);`
+    : `transform: rotate(${rotation}deg);`;
+
+const authorStyles = `transform: translateX(${authorLeftOffset}px) translateY(${authorTopOffset}px) rotate(${authorRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
+const dateStyles = `transform: translateX(${dateLeftOffset}px) translateY(${dateTopOffset}px) rotate(${dateRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
+const bodyStyles = `transform: translateX(${bodyLeftOffset}px) translateY(${bodyTopOffset}px) rotate(${bodyRotation}deg); font-size: ${bodyFontSize}; line-height: ${lineHeightValue}; color: ${penColor}; filter: url(#distort-xl); white-space: pre-wrap;`;
+
+const stampCountryText = (country ? country : "WORLD WIDE WEB").toUpperCase();
+const stampDateDay = date.toLocaleDateString("en-GB", { day: "2-digit" });
+const stampDateMonth = date
+    .toLocaleDateString("en-GB", { month: "short" })
+    .toUpperCase();
+const stampDateYear = date.toLocaleDateString("en-GB", { year: "numeric" });
+const uniqueStampPathId = `stampPath-${author.replace(/\W/g, "")}${date.getTime()}`;
+
+const postOfficeStampContainerStyles = `
+    position: absolute;
+    top: ${postOfficeStampTop}px;
+    right: ${postOfficeStampRight}px;
+    transform: rotate(${postOfficeStampRotation}deg);
+    z-index: 10;
+    opacity: 0.4;
+    filter: url(#distort-xl);
+`;
+
+const wavyLinesStampContainerStyles = `
+    position: absolute;
+    top: ${wavyStampTop}px;
+    right: ${wavyStampRight}px;
+    transform: rotate(${wavyStampRotation}deg);
+    z-index: 9;
+    opacity: 0.4;
+    filter: url(#distort-xl);
+`;
+</script>
+
+<div class="w-full max-w-2xl sm:aspect-3/2" style={transformStyles}>
+    <div
+        class="flex flex-col sm:flex-row justify-between h-full w-full border border-black/10"
+        style="background-color: {paperColor};"
+    >
+        <div class="relative w-full sm:w-1/2 max-h-[330px] sm:max-h-none p-6 px-4 sm:px-8 font-decorative text-base overflow-hidden">
+            <span class="block sm:absolute" style={bodyStyles}>{body}</span>
+        </div>
+        <div class="hidden sm:block w-px h-3/4 self-center bg-black/20"></div>
+        <div class="relative flex flex-col justify-between w-full sm:w-1/2 sm:overflow-hidden p-6 px-8">
+            <div class="h-1/2 flex justify-end">
+                <div
+                    class="inline-block w-[66px] h-[66px] p-[3px] bg-white relative drop-shadow-[0_0_1px_rgba(0,0,0,0.3)]"
+                    style="background: radial-gradient(transparent 0px, transparent 2px, white 2px, white); background-size: 6px 6px; background-position: -9px -9px;"
+                >
+                    <div class="h-full w-full p-0.5 bg-white">
+                        {#if stampSvg}
+                            <div class="h-full w-full flex items-center justify-center">
+                                {@html sanitizedStampSvg}
+                            </div>
+                        {:else}
+                            <div class="h-full w-full" />
+                        {/if}
+                    </div>
+                </div>
+            </div>
+
+            <div style={postOfficeStampContainerStyles}>
+                <svg
+                    width="72"
+                    height="72"
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <defs>
+                        <path
+                            id={uniqueStampPathId}
+                            d="M 12,58 A 38,38 0 1 1 88,58"
+                            fill="none"></path>
+                    </defs>
+
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="47"
+                        stroke="#4A4A4A"
+                        stroke-width="2.5"
+                        fill="none"></circle>
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="42"
+                        stroke="#6C6C6C"
+                        stroke-width="1.5"
+                        fill="none"></circle>
+
+                    <text
+                        font-family="'Helvetica Neue', Arial, sans-serif"
+                        font-size="10"
+                        letter-spacing="0.5"
+                        fill="#333333"
+                        font-weight="600"
+                    >
+                        <textPath
+                            href="#{uniqueStampPathId}"
+                            startOffset="50%"
+                            text-anchor="middle"
+                        >
+                            {stampCountryText}
+                        </textPath>
+                    </text>
+
+                    <text
+                        x="50"
+                        y="45"
+                        font-family="'Courier New', Courier, monospace"
+                        font-weight="bold"
+                        font-size="12"
+                        text-anchor="middle"
+                        fill="#333333"
+                    >
+                        {stampDateDay}
+                    </text>
+                    <text
+                        x="50"
+                        y="58"
+                        font-family="'Courier New', Courier, monospace"
+                        font-weight="bold"
+                        font-size="12"
+                        text-anchor="middle"
+                        fill="#333333"
+                    >
+                        {stampDateMonth}
+                    </text>
+                    <text
+                        x="50"
+                        y="71"
+                        font-family="'Courier New', Courier, monospace"
+                        font-weight="bold"
+                        font-size="12"
+                        text-anchor="middle"
+                        fill="#333333"
+                    >
+                        {stampDateYear}
+                    </text>
+                </svg>
+            </div>
+
+            <div style={wavyLinesStampContainerStyles}>
+                <svg
+                    width="80"
+                    height="40"
+                    viewBox="0 0 50 40"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <g
+                        stroke="#333333"
+                        stroke-width="1.8"
+                        fill="none"
+                        stroke-linecap="round"
+                    >
+                        <path d="M 2 6 Q 10 2, 18 6 T 34 6 T 50 6"></path>
+                        <path d="M 2 12 Q 10 8, 18 12 T 34 12 T 50 12"></path>
+                        <path d="M 2 18 Q 10 14, 18 18 T 34 18 T 50 18"></path>
+                        <path d="M 2 24 Q 10 20, 18 24 T 34 24 T 50 24"></path>
+                        <path d="M 2 30 Q 10 26, 18 30 T 34 30 T 50 30"></path>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="h-1/2 flex items-end">
+                <ul class="w-full flex flex-col gap-3">
+                    <li class="flex flex-col gap-1">
+                        <span class="font-mono text-xs -mb-1 text-black/60">From:</span>
+                        <div class="text-base font-decorative h-8 border-b border-dotted border-black/60">
+                            {#if websiteUrl}
+                                <a
+                                    href={websiteUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="absolute hover:underline"
+                                    style={authorStyles}
+                                >
+                                    {author} ↗
+                                </a>
+                            {:else}
+                                <span
+                                    class="absolute"
+                                    style={authorStyles}
+                                >
+                                    {author}
+                                </span>
+                            {/if}
+                        </div>
+                    </li>
+                    <li class="flex flex-col gap-1">
+                        <span class="font-mono text-xs -mb-1 text-black/60">Date:</span>
+                        <div class="text-base font-decorative h-8 border-b border-dotted border-black/60">
+                            <span class="absolute" style={dateStyles}
+                                >{formattedDate}</span
+                            >
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

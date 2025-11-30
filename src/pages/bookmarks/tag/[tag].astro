@@ -1,0 +1,83 @@
+---
+import Layout from "@layouts/Layout.astro";
+import BookmarkItem from "@components/bookmarks/BookmarkItem.astro";
+import TagCloud from "@components/TagCloud.astro";
+import { fetchBookmarks } from "../../../api/raindrop";
+import type { Bookmark } from "@components/bookmarks/BookmarkItem.astro";
+
+export async function getStaticPaths() {
+    // Fetch all bookmarks using your existing API
+    const allBookmarks: Bookmark[] = await fetchBookmarks(0);
+
+    // Extract all unique tags
+    const allTags = allBookmarks.flatMap((bookmark) => bookmark.tags);
+    const uniqueTags = [...new Set(allTags)];
+
+    // Generate a path for each tag
+    return uniqueTags.map((tag) => {
+        const filteredBookmarks = allBookmarks.filter(
+            (bookmark) => bookmark.tags && bookmark.tags.includes(tag)
+        );
+
+        return {
+            params: { tag },
+            props: {
+                tag,
+                bookmarks: filteredBookmarks,
+                allBookmarks,
+            },
+        };
+    });
+}
+
+const { tag, bookmarks, allBookmarks } = Astro.props;
+
+// Generate tag counts for the tag cloud
+const allTags = allBookmarks.flatMap((bookmark) => bookmark.tags);
+const tagCounts = allTags.reduce(
+    (acc, tag) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+        return acc;
+    },
+    {} as Record<string, number>
+);
+
+const tagCloudData = Object.entries(tagCounts).map(([name, count]) => ({
+    name,
+    count,
+}));
+
+const pageTitle = `Bookmarks: ${tag}`;
+---
+
+<Layout title={pageTitle}>
+    <TagCloud
+        tags={tagCloudData}
+        selectedTag={tag}
+        basePath="/bookmarks"
+        filterPath="tag"
+        filterLabel="tag"
+        total={allBookmarks.length}
+    />
+    <ul class="mb-40">
+        {
+            bookmarks.map((bookmark: Bookmark) => (
+                <BookmarkItem bookmark={bookmark} />
+            ))
+        }
+    </ul>
+
+    <style>
+        a {
+            color: #635c7f;
+        }
+
+        a:hover {
+            color: #4c4666;
+            text-decoration: underline;
+            text-underline-offset: 0.2em;
+        }
+    </style>
+
+    <script src="../../../scripts/listItemImageHoverEffect.ts"></script>
+</Layout>

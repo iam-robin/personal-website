@@ -1,0 +1,38 @@
+---
+import Container from "@components/Container.astro";
+import { fetchBookmarks } from "../../api/raindrop";
+import BookmarkItem from "./BookmarkItem.astro";
+
+const bookmarks = await fetchBookmarks(0);
+const firstTenBookmarks = bookmarks.slice(0, 10);
+---
+
+<Container>
+    <ul>
+        {
+            firstTenBookmarks.map((bookmark) => (
+                <BookmarkItem bookmark={bookmark} />
+            ))
+        }
+    </ul>
+    <ul class="flex flex-wrap gap-x-4 gap-y-1 font-mono text-2xs">
+        <li>
+            <span class="mr-1 inline-block h-2 w-2 rounded-full bg-green"
+            ></span>Article
+        </li>
+        <li>
+            <span class="mr-1 inline-block h-2 w-2 rounded-full bg-lilac"
+            ></span>Website
+        </li>
+        <li>
+            <span class="mr-1 inline-block h-2 w-2 rounded-full bg-blue"
+            ></span>Video
+        </li>
+        <li>
+            <span class="mr-1 inline-block h-2 w-2 rounded-full bg-red"
+            ></span>Misc
+        </li>
+    </ul>
+</Container>
+
+<script src="../../scripts/listItemImageHoverEffect.ts"></script>

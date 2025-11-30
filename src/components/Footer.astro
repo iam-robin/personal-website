@@ -1,8 +1,32 @@
-<footer>footer</footer>
+---
+import Contact from "./Contact.astro";
+import Container from "./Container.astro";
+---
 
-<style>
-    footer {
-        height: 100vh;
-        background-color: tomato;
-    }
-</style>
+<Container>
+    <Contact />
+    <footer class="flex justify-between mb-4 mt-12">
+        <p>
+            © <span id="copyright-year"></span>, <span class="block sm:inline"
+                >Robin Spielmann</span
+            >
+        </p>
+        <ul class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
+            <li><a href="/legal">Legal notice</a></li>
+            <li><a href="/changelog">Changelog</a></li>
+            <li>
+                <a href="https://github.com/iam-robin/personal-website"
+                    >Source code</a
+                >
+            </li>
+        </ul>
+    </footer>
+</Container>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const copyrightYear = document.getElementById("copyright-year");
+        if (copyrightYear)
+            copyrightYear.textContent = new Date().getFullYear().toString();
+    });
+</script>

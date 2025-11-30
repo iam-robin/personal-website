@@ -1,0 +1,57 @@
+---
+import Layout from "@layouts/Layout.astro";
+import BookmarkItem from "@components/bookmarks/BookmarkItem.astro";
+import TagCloud from "@components/TagCloud.astro";
+import { fetchBookmarks } from "../../api/raindrop";
+import type { Bookmark } from "@components/bookmarks/BookmarkItem.astro";
+
+const bookmarks: Bookmark[] = await fetchBookmarks(0);
+
+// Get tag counts
+const allTags = bookmarks.flatMap((bookmark) => bookmark.tags);
+const tagCounts = allTags.reduce(
+    (acc, tag) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+        return acc;
+    },
+    {} as Record<string, number>
+);
+
+const tags = Object.entries(tagCounts).map(([name, count]) => ({
+    name,
+    count,
+}));
+// Sort by count (most frequent first)
+tags.sort((a, b) => b.count - a.count);
+---
+
+<Layout title="Bookmarks">
+    <TagCloud
+        tags={tags}
+        basePath="/bookmarks"
+        filterPath="tag"
+        filterLabel="tag"
+        total={bookmarks.length}
+    />
+    <ul class="mb-40">
+        {
+            bookmarks.map((bookmark: Bookmark) => (
+                <BookmarkItem bookmark={bookmark} />
+            ))
+        }
+    </ul>
+</Layout>
+
+<style>
+    a {
+        color: #635c7f;
+    }
+
+    a:hover {
+        color: #4c4666;
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
+</style>
+
+<script src="../../scripts/listItemImageHoverEffect.ts"></script>

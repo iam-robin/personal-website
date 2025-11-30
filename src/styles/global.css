@@ -1,3 +1,7 @@
+@import "tailwindcss";
+
+@import "./theme/typography.css";
+
 /*
  * Breakpoints:
  * - small: < 480px
@@ -6,52 +10,11 @@
  */
 
 :root {
-    --max-width: 800px;
+    --max-width: 896px;
     --gap: 16px;
     --columns: 12;
 
-    /* Type scale (fluid) */
-    --text-sm: clamp(0.875rem, 0.5vw + 0.75rem, 1rem);
-    --text-base: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
-    --text-lg: clamp(1.125rem, 1vw + 1rem, 1.25rem);
-    --text-xl: clamp(1.5rem, 1.5vw + 1rem, 2rem);
-    --text-2xl: clamp(2rem, 2vw + 1.25rem, 2.5rem);
-    --text-3xl: clamp(2.5rem, 3vw + 1.5rem, 3.5rem);
-}
-
-@font-face {
-    font-family: "apercu";
-    src: url("/fonts/apercu-regular-pro.woff2") format("woff2"),
-        url("/fonts/apercu-regular-pro.woff") format("woff");
-    font-weight: normal;
-    font-style: normal;
-    font-display: auto;
-}
-
-@font-face {
-    font-family: "apercu";
-    src: url("/fonts/apercu-bold-pro.woff2") format("woff2"),
-        url("/fonts/apercu-bold-pro.woff") format("woff");
-    font-weight: bold;
-    font-style: normal;
-    font-display: auto;
-}
-
-/* fira-mono-regular - latin */
-@font-face {
-    font-display: swap;
-    font-family: "Fira Mono";
-    font-style: normal;
-    font-weight: 400;
-    src: url("/fonts/fira-mono-v14-latin-regular.woff2") format("woff2");
-}
-/* fira-mono-700 - latin */
-@font-face {
-    font-display: swap;
-    font-family: "Fira Mono";
-    font-style: normal;
-    font-weight: 700;
-    src: url("/fonts/fira-mono-v14-latin-700.woff2") format("woff2");
+    --font-script: "LiebeHeide";
 }
 
 body {
