@@ -1,6 +1,6 @@
 <script>
-  import Carousel from './Carousel.svelte';
-  import CarouselItem from './CarouselItem.svelte';
+  import Carousel from '../carousel/Carousel.svelte';
+  import CarouselItem from '../carousel/CarouselItem.svelte';
   import ProjectCard from './ProjectCard.svelte';
 
   const smallSpan = 10;

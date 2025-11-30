@@ -1,6 +1,6 @@
 <script>
-import Carousel from "./Carousel.svelte";
-import CarouselItem from "./CarouselItem.svelte";
+import Carousel from "../carousel/Carousel.svelte";
+import CarouselItem from "../carousel/CarouselItem.svelte";
 
 import Photo01 from "@assets/landingpage-photos/01.jpg";
 import Photo02 from "@assets/landingpage-photos/02.jpg";

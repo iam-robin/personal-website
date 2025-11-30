@@ -1,0 +1,20 @@
+---
+import Grid from "./Grid.astro";
+import GridItem from "./GridItem.astro";
+
+interface Props {
+    isBlack?: boolean;
+    class?: string;
+}
+
+const { isBlack, class: className } = Astro.props;
+---
+
+<Grid>
+    <GridItem
+        colSpan={12}
+        class=`font-mono truncate text-base text-clip tracking-widest ${isBlack ? 'text-black' : 'text-black/20'} ${className}`
+    >
+        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    </GridItem>
+</Grid>

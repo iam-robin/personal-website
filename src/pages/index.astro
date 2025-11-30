@@ -2,30 +2,23 @@
 import Layout from "@layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import Hero from "../components/Hero.astro";
-import ProjectsCarousel from "../components/ProjectsCarousel.svelte";
-import PostcardsSection from "@components/PostcardsSection.astro";
+import ProjectsCarousel from "@components/sideprojects/ProjectsCarousel.svelte";
+import PostcardsSection from "@components/postcards/PostcardsSection.astro";
 import LatestBookmarks from "@components/bookmarks/LatestBookmarks.astro";
-import PhotographySection from "@components/PhotographySection.astro";
+import PhotographyCarousel from "@components/photography/PhotographyCarousel.svelte";
+import Divider from "@components/Divider.astro";
 ---
 
 <Layout>
     <Hero />
-    <div class="stack">
-        <PhotographySection />
+    <div class="flex gap-32 mt-10 flex-col">
+        <ProjectsCarousel client:only="svelte" />
+        <Divider />
+        <PhotographyCarousel client:only="svelte" />
+        <Divider />
         <PostcardsSection limit={6} />
+        <Divider />
         <LatestBookmarks />
-        <ProjectsCarousel client:only="svelte" />
-        <ProjectsCarousel client:only="svelte" />
-        <ProjectsCarousel client:only="svelte" />
         <Footer />
     </div>
 </Layout>
-
-<style>
-    .stack {
-        display: flex;
-        flex-direction: column;
-        gap: 8rem;
-        margin-top: 40px;
-    }
-</style>
