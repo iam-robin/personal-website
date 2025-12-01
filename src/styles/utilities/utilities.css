@@ -1,0 +1,25 @@
+.flex-start {
+    @apply flex justify-start items-center;
+}
+.flex-center {
+    @apply flex justify-center items-center;
+}
+.flex-between {
+    @apply flex justify-between items-center;
+}
+.flex-end {
+    @apply flex justify-end items-center;
+}
+
+.inline-flex-start {
+    @apply inline-flex justify-start items-center;
+}
+.inline-flex-center {
+    @apply inline-flex justify-center items-center;
+}
+.inline-flex-between {
+    @apply inline-flex justify-between items-center;
+}
+.inline-flex-end {
+    @apply inline-flex justify-end items-center;
+}

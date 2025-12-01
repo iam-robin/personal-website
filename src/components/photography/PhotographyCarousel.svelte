@@ -44,7 +44,7 @@ const photos = [
 
     const link = {
     href: "#",
-    text: 'test',
+    text: 'More Photos',
     }
 
     const description = "Ipsum deserunt sunt eu. Tempor id commodo ex dolore labore. Anim cupidatat veniam commodo reprehenderit minim commodo nostrud anim cupidatat. Magna cupidatat sit quis mollit aute esse et veniam cillum do incididunt."

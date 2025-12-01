@@ -11,21 +11,19 @@
 
   const headline = "Projects";
 
-  const link = {
-    href: "/projects",
-    text: 'View all projects',
-  }
-
   const description = "A selection of side projects and experiments I've been working on."
 </script>
 
-<Carousel {headline} {description} {link}>
+<Carousel {headline} {description}>
   {#each projects as project}
     <CarouselItem {smallSpan} {mediumSpan} {largeSpan}>
       <ProjectCard
         slug={project.slug}
         title={project.title}
         description={project.description}
+        year={project.year}
+        bgColor={project.bgColor}
+        thumbnail={project.thumbnail}
       />
     </CarouselItem>
   {/each}

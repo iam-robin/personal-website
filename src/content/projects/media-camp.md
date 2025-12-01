@@ -1,10 +1,10 @@
 ---
-title: "Example Project"
-description: "A brief description of this amazing project"
-thumbnail: "/src/assets/projects/geeenerated.svg"
+title: "media.camp"
+description: "Barcamp run by students"
+thumbnail: "/src/assets/projects/mediacamp.svg"
 tags: ["design", "development", "svelte"]
-year: "2024"
-bgColor: "#6366f1"
+year: "2015-2017"
+bgColor: "#ec4899"
 ---
 
 ## Overview

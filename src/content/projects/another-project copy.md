@@ -1,10 +1,10 @@
 ---
 title: "Another Project"
 description: "This is another sample project to demonstrate the carousel"
-thumbnail: "/src/assets/projects/lumon.png"
+thumbnail: "/src/assets/projects/ohmy.svg"
 tags: ["ui", "animation"]
 year: "2023"
-bgColor: "#f59e0b"
+bgColor: "#8b5cf6"
 ---
 
 ## About This Project

@@ -1,16 +1,11 @@
 @import "tailwindcss";
 
+@import "./utilities/utilities.css";
 @import "./theme/typography.css";
-
-/*
- * Breakpoints:
- * - small: < 480px
- * - medium: 480px - 800px
- * - large: > 800px
- */
+@import "./view-transition.css";
 
 :root {
-    --max-width: 896px;
+    --max-width: 1024px;
     --gap: 16px;
     --columns: 12;
 

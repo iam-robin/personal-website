@@ -4,9 +4,19 @@ import CarouselItem from "../carousel/CarouselItem.svelte";
 import PostcardItem from "./PostcardItem.svelte";
 
 let { postcards } = $props();
+
+    const headline = "headline";
+
+    const link = {
+    href: "#",
+    text: 'All Postcards',
+    }
+
+    const description = "Ipsum deserunt sunt eu. Tempor id commodo ex dolore labore. Anim cupidatat veniam commodo reprehenderit minim commodo nostrud anim cupidatat. Magna cupidatat sit quis mollit aute esse et veniam cillum do incididunt."
 </script>
 
-<Carousel>
+<Carousel {headline} {description} {link}>
+
     {#each postcards as postcard}
         <CarouselItem largeSpan={6} paddingBottom={24} paddingTop={24}>
             <PostcardItem

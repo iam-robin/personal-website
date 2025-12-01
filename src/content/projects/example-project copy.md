@@ -1,10 +1,10 @@
 ---
 title: "Example Project"
 description: "A brief description of this amazing project"
-thumbnail: "/src/assets/projects/geeenerated.svg"
+thumbnail: "/src/assets/projects/cv.png"
 tags: ["design", "development", "svelte"]
 year: "2024"
-bgColor: "#6366f1"
+bgColor: "#10b981"
 ---
 
 ## Overview

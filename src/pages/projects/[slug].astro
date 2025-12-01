@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
-import ProjectOverlayLayout from "@layouts/ProjectOverlayLayout.astro";
+import Layout from "@layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -14,16 +15,26 @@ const { project } = Astro.props;
 const { Content } = await project.render();
 ---
 
-<ProjectOverlayLayout title={project.data.title}>
-    <article class="p-8 md:p-12 relative">
+<Layout>
+    <div transition:name="project-backdrop" class="bg-black/80 fixed inset-0">
+    </div>
+    <article
+        transition:name="project-card"
+        class="p-8 w-full max-w-5xl relative bg-white rounded-4xl my-20 z-20 mx-auto min-h-[3000px]"
+    >
+        <button
+            class="absolute top-8 right-8 rounded-full h-12 w-12 bg-red-300 flex-center cursor-pointer"
+            onclick="history.back()"
+        >
+            <Icon name="ph:x-bold" size={24} />
+        </button>
         <header class="mb-8">
-            <button class="absolute top-0 right-0" onclick="history.back()"
-                >Go back</button
-            >
             <h1 class="text-3xl md:text-4xl font-bold mb-4">
                 {project.data.title}
             </h1>
-            <p class="text-lg text-neutral-600">{project.data.description}</p>
+            <p class="text-lg text-neutral-600">
+                {project.data.description}
+            </p>
             {
                 project.data.tags && (
                     <div class="flex flex-wrap gap-2 mt-4">
@@ -47,4 +58,4 @@ const { Content } = await project.render();
             <Content />
         </div>
     </article>
-</ProjectOverlayLayout>
+</Layout>
