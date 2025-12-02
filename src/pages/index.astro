@@ -7,11 +7,13 @@ import PostcardsSection from "@components/postcards/PostcardsSection.astro";
 import LatestBookmarks from "@components/bookmarks/LatestBookmarks.astro";
 import PhotographyCarousel from "@components/photography/PhotographyCarousel.svelte";
 import Divider from "@components/Divider.astro";
+import CarouselWeb from "@components/carousel/CarouselWeb.astro";
 ---
 
 <Layout>
     <Hero />
-    <div class="flex gap-40 mt-10 flex-col">
+    <div class="flex gap-24 mt-32 flex-col">
+        <CarouselWeb />
         <ProjectsSection />
         <Divider />
         <PhotographyCarousel client:only="svelte" />

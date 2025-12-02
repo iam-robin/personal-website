@@ -1,15 +1,15 @@
 @import "tailwindcss";
+@plugin '@tailwindcss/typography';
 
 @import "./utilities/utilities.css";
 @import "./theme/typography.css";
+@import "./theme/transitions.css";
 @import "./view-transition.css";
 
 :root {
     --max-width: 1024px;
     --gap: 16px;
     --columns: 12;
-
-    --font-script: "LiebeHeide";
 }
 
 body {
@@ -17,7 +17,7 @@ body {
     overflow-x: hidden;
     margin: 0;
     padding: 0;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 @media (max-width: calc(800px + 32px)) {

@@ -21,10 +21,10 @@
   {#if headline || description}
     <hgroup class="max-w-(--max-width) mx-auto w-full grid grid-cols-12 gap-4 pb-6">
       {#if headline}
-        <h2 class="col-start-1 col-end-5">{headline}</h2>
+        <h2 class="text-xl font-bold col-start-1 col-end-4">{headline}</h2>
       {/if}
       {#if description}
-        <p class="col-start-6 col-end-13">{description}</p>
+        <p class="text-base font-mono col-start-5 col-end-12">{description}</p>
       {/if}
     </hgroup>
   {/if}

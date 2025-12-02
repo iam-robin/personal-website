@@ -100,7 +100,7 @@ const wavyLinesStampContainerStyles = `
 `;
 </script>
 
-<div class="w-full max-w-2xl sm:aspect-3/2" style={transformStyles}>
+<div class="w-full max-w-2xl sm:aspect-3/2 hover-lift" style={transformStyles}>
     <div
         class="flex flex-col sm:flex-row justify-between h-full w-full border border-black/10"
         style="background-color: {paperColor};"

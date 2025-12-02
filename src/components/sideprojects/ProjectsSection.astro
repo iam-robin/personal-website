@@ -9,9 +9,11 @@ const projects = projectsCollection.map((project) => ({
     title: project.data.title,
     description: project.data.description,
     thumbnail: project.data.thumbnail,
+    thumbnailWidth: project.data.thumbnailWidth,
     tags: project.data.tags,
     year: project.data.year,
     bgColor: project.data.bgColor,
+    externalUrl: project.data.externalUrl,
 }));
 ---
 

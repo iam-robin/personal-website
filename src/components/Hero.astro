@@ -5,16 +5,17 @@ import Link from "./Link.astro";
 import { Icon } from "astro-icon/components";
 ---
 
-<div data-hero class="min-h-screen flex items-center opacity-0">
+<div data-hero class="min-h-dvh flex items-center opacity-0">
     <Grid>
+        <!-- text-[max(1.7rem,6cqw)] -->
         <GridItem colSpan={12}>
-            <h1 class="text-[max(1.7rem,6cqw)] leading-tight font-bold">
+            <h1 class="text-2xl lg:text-4xl leading-tight font-bold">
                 Hey
                 <Icon
                     data-hero-icon
                     class="inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
                     name="sticker-smiley-50"
-                    size="56px"
+                    size="72px"
                 />
                 I am <Link href="/about">Robin Spielmann</Link>.
                 <br class="hidden sm:block" />
@@ -24,30 +25,30 @@ import { Icon } from "astro-icon/components";
                     data-hero-icon
                     class="inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
                     name="sticker-code-50"
-                    size="56px"
+                    size="72px"
                 />
                 code,
                 <Icon
                     data-hero-icon
                     class="inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
                     name="sticker-design-50"
-                    size="56px"
+                    size="72px"
                 />
                 design and
                 <Icon
                     data-hero-icon
                     class="inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
                     name="sticker-art-50"
-                    size="56px"
+                    size="72px"
                 />
                 art.
             </h1>
         </GridItem>
         <GridItem
-            colStart={{ small: 1, medium: 4, large: 4 }}
+            colStart={{ small: 1, medium: 1, large: 5 }}
             colEnd={{ small: 13, medium: 13, large: 13 }}
         >
-            <p data-hero-subtitle class="text-sm font-mono opacity-0 mt-6">
+            <p data-hero-subtitle class="text-md font-mono opacity-0 mt-6">
                 This personal website is my own little space on the internet
                 where I want to share my work, interests and passions with
                 others, without having to please the algorithms of social media
@@ -85,10 +86,10 @@ import { Icon } from "astro-icon/components";
             animate(
                 icons,
                 {
-                    marginRight: [-12, 0],
+                    marginRight: [-12, -4],
                     opacity: [0, 1],
                     y: [25, 0],
-                    width: ["0px", "56px"],
+                    width: ["0px", "72px"],
                 },
                 {
                     type: "spring",
@@ -109,9 +110,6 @@ import { Icon } from "astro-icon/components";
             );
         }
     }
-
-    // Run on initial page load
-    animateHero();
 
     // Re-run when navigating back via View Transitions
     document.addEventListener("astro:page-load", animateHero);

@@ -40,14 +40,14 @@ const photos = [
     Photo16,
 ];
 
-    const headline = "headline";
+    const headline = "Photography";
 
     const link = {
     href: "#",
     text: 'More Photos',
     }
 
-    const description = "Ipsum deserunt sunt eu. Tempor id commodo ex dolore labore. Anim cupidatat veniam commodo reprehenderit minim commodo nostrud anim cupidatat. Magna cupidatat sit quis mollit aute esse et veniam cillum do incididunt."
+    const description = "I have been enjoying using a camera to capture visually appealing moments for over a decade now."
 </script>
 
 <Carousel {headline} {description} {link}>

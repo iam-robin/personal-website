@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import { Icon } from "astro-icon/components";
+import Prose from "@components/Prose.astro";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -16,30 +17,36 @@ const { Content } = await project.render();
 ---
 
 <Layout>
-    <div transition:name="project-backdrop" class="bg-black/80 fixed inset-0">
+    <div
+        transition:name="project-backdrop"
+        class="fixed inset-0 bg-neutral-100"
+    >
     </div>
     <article
         transition:name="project-card"
-        class="p-8 w-full max-w-5xl relative bg-white rounded-4xl my-20 z-20 mx-auto min-h-[3000px]"
+        class="p-8 w-full max-w-5xl relative bg-white rounded-4xl my-12 z-20 mx-auto shadow-[0px_20px_40px_rgba(0,0,0,.025)]"
     >
         <button
-            class="absolute top-8 right-8 rounded-full h-12 w-12 bg-red-300 flex-center cursor-pointer"
+            class="absolute top-8 right-8 rounded-full h-12 w-12 bg-white/20 flex-center cursor-pointer"
             onclick="history.back()"
         >
-            <Icon name="ph:x-bold" size={24} />
+            <Icon name="ph:x-bold" class="text-white" size={24} />
         </button>
-        <header class="mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold mb-4">
+        <header
+            class="mb-8 p-8 -mx-8 -mt-8 rounded-t-4xl"
+            style={`background-color: ${project.data.bgColor}`}
+        >
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 text-white">
                 {project.data.title}
             </h1>
-            <p class="text-lg text-neutral-600">
+            <p class="text-lg text-white/70">
                 {project.data.description}
             </p>
             {
                 project.data.tags && (
                     <div class="flex flex-wrap gap-2 mt-4">
                         {project.data.tags.map((tag) => (
-                            <span class="px-3 py-1 bg-neutral-100 text-neutral-600 text-sm rounded-full">
+                            <span class="px-3 py-1 bg-white/20 text-white text-sm rounded-full">
                                 {tag}
                             </span>
                         ))}
@@ -48,14 +55,14 @@ const { Content } = await project.render();
             }
             {
                 project.data.year && (
-                    <p class="text-sm text-neutral-400 mt-4">
+                    <p class="text-sm text-white/50 mt-4">
                         {project.data.year}
                     </p>
                 )
             }
         </header>
-        <div class="prose prose-neutral max-w-none">
+        <Prose>
             <Content />
-        </div>
+        </Prose>
     </article>
 </Layout>

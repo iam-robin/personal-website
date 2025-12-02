@@ -5,20 +5,20 @@ import PostcardItem from "./PostcardItem.svelte";
 
 let { postcards } = $props();
 
-    const headline = "headline";
+    const headline = "Postcards";
 
     const link = {
-    href: "#",
+    href: "/postcards",
     text: 'All Postcards',
     }
 
-    const description = "Ipsum deserunt sunt eu. Tempor id commodo ex dolore labore. Anim cupidatat veniam commodo reprehenderit minim commodo nostrud anim cupidatat. Magna cupidatat sit quis mollit aute esse et veniam cillum do incididunt."
+    const description = "This website is mostly me talking. This postcard gives you a chance to talk back — even just a line. Drop me a postcard. Tell me what you’re thinking, where you’re visiting from, or simply that you stopped by. I’d love to hear from you."
 </script>
 
 <Carousel {headline} {description} {link}>
 
     {#each postcards as postcard}
-        <CarouselItem largeSpan={6} paddingBottom={24} paddingTop={24}>
+        <CarouselItem largeSpan={6} paddingBottom={64} paddingTop={24}>
             <PostcardItem
                 author={postcard.author}
                 body={postcard.body}

@@ -75,26 +75,18 @@
     --leading-loose: 2;
 
     /*
-   https://www.fluid-type-scale.com/calculate?minFontSize=19&minWidth=320&minRatio=1.125&maxFontSize=23&maxWidth=1536&maxRatio=1.333&steps=2xs,xs,sm,base,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,8xl,9xl,10xl,11xl&baseStep=base&prefix=text&useContainerWidth=false&includeFallbacks=false&useRems=true&remValue=16&decimals=2&previewFont=Inter&previewText=Almost+before+we+knew+it,+we+had+left+the+ground&previewWidth=487
+   https://www.fluid-type-scale.com/calculate?minFontSize=16&minWidth=400&minRatio=1.2&maxFontSize=18&maxWidth=1024&maxRatio=1.25&steps=sm%2Cbase%2Cmd%2Clg%2Cxl%2C2xl%2C3xl%2C4xl&baseStep=base&prefix=text&useContainerWidth=false&includeFallbacks=false&useRems=true&remValue=16&decimals=2&previewFont=Fira+Mono&previewText=Almost+before+we+knew+it%2C+we+had+left+the+ground&previewWidth=1024
   */
 
     /* Font Size */
-    --text-2xs: clamp(0.7rem, -0.27vi + 0.76rem, 0.61rem);
-    --text-xs: clamp(0.79rem, 0.05vi + 0.78rem, 0.81rem);
-    --text-sm: clamp(0.89rem, 0.53vi + 0.78rem, 1.08rem);
-    --text-base: clamp(1rem, 1.22vi + 0.76rem, 1.44rem);
-    --text-lg: clamp(1.13rem, 2.2vi + 0.69rem, 1.92rem);
-    --text-xl: clamp(1.27rem, 3.58vi + 0.55rem, 2.55rem);
-    --text-2xl: clamp(1.42rem, 5.5vi + 0.32rem, 3.4rem);
-    --text-3xl: clamp(1.6rem, 8.16vi + -0.03rem, 4.54rem);
-    --text-4xl: clamp(1.8rem, 11.8vi + -0.56rem, 6.05rem);
-    --text-5xl: clamp(2.03rem, 16.77vi + -1.33rem, 8.06rem);
-    --text-6xl: clamp(2.28rem, 23.53vi + -2.42rem, 10.75rem);
-    --text-7xl: clamp(2.57rem, 32.68vi + -3.97rem, 14.33rem);
-    --text-8xl: clamp(2.89rem, 45.04vi + -6.12rem, 19.1rem);
-    --text-9xl: clamp(3.25rem, 61.71vi + -9.09rem, 25.46rem);
-    --text-10xl: clamp(3.65rem, 84.14vi + -13.17rem, 33.94rem);
-    --text-11xl: clamp(4.11rem, 114.26vi + -18.74rem, 45.24rem);
+    --text-sm: clamp(0.83rem, 0.17vi + 0.79rem, 0.9rem);
+    --text-base: clamp(1rem, 0.32vi + 0.92rem, 1.13rem);
+    --text-md: clamp(1.2rem, 0.53vi + 1.07rem, 1.41rem);
+    --text-lg: clamp(1.44rem, 0.81vi + 1.24rem, 1.76rem);
+    --text-xl: clamp(1.73rem, 1.2vi + 1.43rem, 2.2rem);
+    --text-2xl: clamp(2.07rem, 1.73vi + 1.64rem, 2.75rem);
+    --text-3xl: clamp(2.49rem, 2.42vi + 1.88rem, 3.43rem);
+    --text-4xl: clamp(2.99rem, 3.35vi + 2.15rem, 4.29rem);
 
     /* Line Height */
     --text-2xs--line-height: var(--leading-relaxed);
@@ -106,11 +98,4 @@
     --text-2xl--line-height: var(--leading-tight);
     --text-3xl--line-height: var(--leading-tight);
     --text-4xl--line-height: var(--leading-none);
-    --text-5xl--line-height: var(--leading-none);
-    --text-6xl--line-height: var(--leading-none);
-    --text-7xl--line-height: var(--leading-sm);
-    --text-8xl--line-height: var(--leading-sm);
-    --text-9xl--line-height: var(--leading-sm);
-    --text-10xl--line-height: var(--leading-xs);
-    --text-11xl--line-height: var(--leading-xs);
 }

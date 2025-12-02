@@ -50,23 +50,23 @@
 }
 
 /* ===== PROJECT CARD ===== */
-/* Forward: new card slides up from bottom */
+/* Forward: new card slides up from bottom with subtle bounce */
 ::view-transition-new(project-card) {
-    animation: slide-up 0.4s ease-out both;
+    animation: slide-up 0.8s var(--ease-spring-subtle) both;
 }
 
 /* Backward: old card slides down and stays hidden */
 ::view-transition-old(project-card) {
-    animation: slide-down 0.4s ease-in forwards;
+    animation: slide-down 0.6s ease-in forwards;
 }
 
 /* ===== PROJECT BACKDROP ===== */
 /* Forward: new backdrop fades in */
 ::view-transition-new(project-backdrop) {
-    animation: fade-in 0.3s ease-in;
+    animation: fade-in 0.6s ease-in;
 }
 
 /* Backward: old backdrop fades out and stays hidden */
 ::view-transition-old(project-backdrop) {
-    animation: fade-out 0.3s ease-out forwards;
+    animation: fade-out 0.4s ease-out forwards;
 }

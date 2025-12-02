@@ -5,6 +5,7 @@ thumbnail: "/src/assets/projects/geeenerated.svg"
 tags: ["design", "development", "svelte"]
 year: "2024"
 bgColor: "#6366f1"
+externalUrl: "#"
 ---
 
 ## Overview

@@ -7,8 +7,10 @@ const projects = defineCollection({
         description: z.string(),
         year: z.string(),
         thumbnail: z.string().optional(),
+        thumbnailWidth: z.string().optional(),
         tags: z.array(z.string()).optional(),
         bgColor: z.string().optional(),
+        externalUrl: z.string().optional(),
     }),
 });
 
