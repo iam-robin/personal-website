@@ -2,25 +2,23 @@
 import Layout from "@layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import Hero from "../components/Hero.astro";
-import ProjectsSection from "@components/sideprojects/ProjectsSection.astro";
 import PostcardsSection from "@components/postcards/PostcardsSection.astro";
 import LatestBookmarks from "@components/bookmarks/LatestBookmarks.astro";
 import PhotographyCarousel from "@components/photography/PhotographyCarousel.svelte";
 import Divider from "@components/Divider.astro";
-import CarouselWeb from "@components/carousel/CarouselWeb.astro";
+import ProjectsCarousel from "@components/sideprojects/ProjectsCarousel.astro";
 ---
 
 <Layout>
     <Hero />
     <div class="flex gap-24 mt-32 flex-col">
-        <CarouselWeb />
-        <ProjectsSection />
+        <ProjectsCarousel />
         <Divider />
         <PhotographyCarousel client:only="svelte" />
         <Divider />
         <PostcardsSection limit={6} />
         <Divider />
-        <LatestBookmarks />
+        <!-- <LatestBookmarks /> -->
         <Footer />
     </div>
 </Layout>

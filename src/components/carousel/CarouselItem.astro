@@ -1,0 +1,24 @@
+---
+interface Props {
+    smallSpan?: number;
+    mediumSpan?: number;
+    largeSpan?: number;
+    paddingTop?: number;
+    paddingBottom?: number;
+}
+
+const {
+    smallSpan = 10,
+    mediumSpan = 5,
+    largeSpan = 4,
+    paddingTop = 0,
+    paddingBottom = 0,
+} = Astro.props;
+---
+
+<div
+    class="col-span-(--small-span) min-[480px]:col-span-(--medium-span) min-[800px]:col-span-(--large-span) pt-(--padding-top) pb-(--padding-bottom)"
+    style={`--small-span: ${smallSpan}; --medium-span: ${mediumSpan}; --large-span: ${largeSpan}; --padding-top: ${paddingTop}px; --padding-bottom: ${paddingBottom}px;`}
+>
+    <slot />
+</div>

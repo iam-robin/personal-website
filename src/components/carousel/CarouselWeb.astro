@@ -1,0 +1,81 @@
+---
+import "@blossom-carousel/core/style.css";
+
+interface Props {
+    columns?: number;
+    gap?: string;
+    headline?: string;
+    description?: string;
+    link?: { href: string; text: string };
+}
+
+const { columns = 12, gap = "16px", headline, description, link } = Astro.props;
+---
+
+<section
+    class="carousel-section flex flex-col"
+    style={`--columns: ${columns}; --gap: ${gap}; gap: var(--gap);`}
+>
+    {
+        (headline || description) && (
+            <hgroup class="max-w-(--max-width) mx-auto w-full grid grid-cols-12 gap-4 pb-6">
+                {headline && (
+                    <h2 class="text-xl font-bold col-start-1 col-end-4">
+                        {headline}
+                    </h2>
+                )}
+                {description && (
+                    <p class="text-base font-mono col-start-5 col-end-12">
+                        {description}
+                    </p>
+                )}
+            </hgroup>
+        )
+    }
+
+    <blossom-carousel class="carousel">
+        <slot />
+    </blossom-carousel>
+
+    {
+        link && (
+            <div class="max-w-(--max-width) mx-auto w-full flex justify-end">
+                <a href={link.href} class="text-inherit">
+                    {link.text}
+                </a>
+            </div>
+        )
+    }
+</section>
+
+<script>
+    import { BlossomCarousel } from "@blossom-carousel/web";
+</script>
+
+<style>
+    .carousel-section :global(.carousel) {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: calc(
+            (var(--max-width) - (var(--columns) - 1) * var(--gap)) /
+                var(--columns)
+        );
+        gap: var(--gap);
+        padding-inline: max(0px, calc((100vw - var(--max-width)) / 2));
+        scroll-padding-inline-start: max(
+            0px,
+            calc((100vw - var(--max-width)) / 2)
+        );
+    }
+
+    @media (max-width: 800px) {
+        .carousel-section :global(.carousel) {
+            grid-auto-columns: calc(
+                (100vw - (var(--columns) - 1) * var(--gap) - 2 * var(--gap)) /
+                    var(--columns)
+            );
+            padding-inline: unset;
+            scroll-padding-inline-start: unset;
+        }
+    }
+</style>
