@@ -1,7 +1,7 @@
 ---
 import { db, Postcard, desc, eq } from "astro:db";
 import Link from "../Link.astro";
-import PostcardsCarousel from "./PostcardsCarousel.svelte";
+import PostcardsCarousel from "./PostcardsCarousel.astro";
 import Container from "../Container.astro";
 
 export interface Props {
@@ -31,10 +31,7 @@ if (postcards) {
 {
     recentPostcards.length > 0 && (
         <div>
-            <PostcardsCarousel
-                client:only="svelte"
-                postcards={recentPostcards}
-            />
+            <PostcardsCarousel postcards={recentPostcards} />
             <Container>
                 <Link href="/postcards/new" standalone>
                     Send a Postcard

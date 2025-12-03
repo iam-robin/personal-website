@@ -1,7 +1,39 @@
-<script>
+---
 import DOMPurify from "isomorphic-dompurify";
 
-let {
+interface Props {
+    author: string;
+    body: string;
+    date: Date;
+    distorted?: boolean;
+    marginBottom?: number;
+    marginRight?: number;
+    rotation?: number;
+    penColor?: string;
+    paperColor?: string;
+    fontSizeFactor?: number;
+    lineHeight?: number;
+    authorLeftOffset?: number;
+    authorTopOffset?: number;
+    authorRotation?: number;
+    dateLeftOffset?: number;
+    dateTopOffset?: number;
+    dateRotation?: number;
+    bodyLeftOffset?: number;
+    bodyTopOffset?: number;
+    bodyRotation?: number;
+    stampSvg?: string;
+    country?: string | null;
+    websiteUrl?: string | null;
+    postOfficeStampTop?: number;
+    postOfficeStampRight?: number;
+    postOfficeStampRotation?: number;
+    wavyStampTop?: number;
+    wavyStampRight?: number;
+    wavyStampRotation?: number;
+}
+
+const {
     author,
     body,
     date,
@@ -30,8 +62,8 @@ let {
     postOfficeStampRotation = Math.floor(Math.random() * 31) - 15,
     wavyStampTop = Math.floor(Math.random() * 69) - 4,
     wavyStampRight = Math.floor(Math.random() * 97) - 24,
-    wavyStampRotation = Math.floor(Math.random() * 21) - 10
-} = $props();
+    wavyStampRotation = Math.floor(Math.random() * 21) - 10,
+} = Astro.props;
 
 const sanitizedStampSvg = DOMPurify.sanitize(stampSvg);
 
@@ -98,31 +130,38 @@ const wavyLinesStampContainerStyles = `
     opacity: 0.4;
     filter: url(#distort-xl);
 `;
-</script>
+---
 
 <div class="w-full max-w-2xl sm:aspect-3/2 hover-lift" style={transformStyles}>
     <div
         class="flex flex-col sm:flex-row justify-between h-full w-full border border-black/10"
-        style="background-color: {paperColor};"
+        style={`background-color: ${paperColor};`}
     >
-        <div class="relative w-full sm:w-1/2 max-h-[330px] sm:max-h-none p-6 px-4 sm:px-8 font-decorative text-base overflow-hidden">
+        <div
+            class="relative w-full sm:w-1/2 max-h-[330px] sm:max-h-none p-6 px-4 sm:px-8 font-decorative text-base overflow-hidden"
+        >
             <span class="block sm:absolute" style={bodyStyles}>{body}</span>
         </div>
         <div class="hidden sm:block w-px h-3/4 self-center bg-black/20"></div>
-        <div class="relative flex flex-col justify-between w-full sm:w-1/2 sm:overflow-hidden p-6 px-8">
+        <div
+            class="relative flex flex-col justify-between w-full sm:w-1/2 sm:overflow-hidden p-6 px-8"
+        >
             <div class="h-1/2 flex justify-end">
                 <div
                     class="inline-block w-[66px] h-[66px] p-[3px] bg-white relative drop-shadow-[0_0_1px_rgba(0,0,0,0.3)]"
                     style="background: radial-gradient(transparent 0px, transparent 2px, white 2px, white); background-size: 6px 6px; background-position: -9px -9px;"
                 >
                     <div class="h-full w-full p-0.5 bg-white">
-                        {#if stampSvg}
-                            <div class="h-full w-full flex items-center justify-center">
-                                {@html sanitizedStampSvg}
-                            </div>
-                        {:else}
-                            <div class="h-full w-full" />
-                        {/if}
+                        {
+                            stampSvg ? (
+                                <div
+                                    class="h-full w-full flex items-center justify-center"
+                                    set:html={sanitizedStampSvg}
+                                />
+                            ) : (
+                                <div class="h-full w-full" />
+                            )
+                        }
                     </div>
                 </div>
             </div>
@@ -164,7 +203,7 @@ const wavyLinesStampContainerStyles = `
                         font-weight="600"
                     >
                         <textPath
-                            href="#{uniqueStampPathId}"
+                            href={`#${uniqueStampPathId}`}
                             startOffset="50%"
                             text-anchor="middle"
                         >
@@ -233,31 +272,38 @@ const wavyLinesStampContainerStyles = `
             <div class="h-1/2 flex items-end">
                 <ul class="w-full flex flex-col gap-3">
                     <li class="flex flex-col gap-1">
-                        <span class="font-mono text-xs -mb-1 text-black/60">From:</span>
-                        <div class="text-base font-decorative h-8 border-b border-dotted border-black/60">
-                            {#if websiteUrl}
-                                <a
-                                    href={websiteUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="absolute hover:underline"
-                                    style={authorStyles}
-                                >
-                                    {author} ↗
-                                </a>
-                            {:else}
-                                <span
-                                    class="absolute"
-                                    style={authorStyles}
-                                >
-                                    {author}
-                                </span>
-                            {/if}
+                        <span class="font-mono text-xs -mb-1 text-black/60"
+                            >From:</span
+                        >
+                        <div
+                            class="text-base font-decorative h-8 border-b border-dotted border-black/60"
+                        >
+                            {
+                                websiteUrl ? (
+                                    <a
+                                        href={websiteUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="absolute hover:underline"
+                                        style={authorStyles}
+                                    >
+                                        {author} ↗
+                                    </a>
+                                ) : (
+                                    <span class="absolute" style={authorStyles}>
+                                        {author}
+                                    </span>
+                                )
+                            }
                         </div>
                     </li>
                     <li class="flex flex-col gap-1">
-                        <span class="font-mono text-xs -mb-1 text-black/60">Date:</span>
-                        <div class="text-base font-decorative h-8 border-b border-dotted border-black/60">
+                        <span class="font-mono text-xs -mb-1 text-black/60"
+                            >Date:</span
+                        >
+                        <div
+                            class="text-base font-decorative h-8 border-b border-dotted border-black/60"
+                        >
                             <span class="absolute" style={dateStyles}
                                 >{formattedDate}</span
                             >
