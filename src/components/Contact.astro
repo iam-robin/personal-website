@@ -79,7 +79,7 @@ import GridItem from "./GridItem.astro";
 </Grid>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("astro:page-load", () => {
         if (window.innerWidth < 640) return;
         const contactItems = document.querySelectorAll(".contact-item");
         const container = document.getElementById("contact-container");

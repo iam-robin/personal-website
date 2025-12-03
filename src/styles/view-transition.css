@@ -13,11 +13,9 @@
 @keyframes slide-down {
     from {
         transform: translateY(0);
-        opacity: 1;
     }
     to {
         transform: translateY(100%);
-        opacity: 0;
     }
 }
 
@@ -68,5 +66,5 @@
 
 /* Backward: old backdrop fades out and stays hidden */
 ::view-transition-old(project-backdrop) {
-    animation: fade-out 0.4s ease-out forwards;
+    animation: fade-out 0.6s ease-out 0.4s forwards;
 }

@@ -1,5 +1,5 @@
 const coverDistance = 32;
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("astro:page-load", () => {
     const listItem = document.querySelectorAll(".list-item-image-hover-effect");
 
     listItem.forEach((item: Element) => {

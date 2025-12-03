@@ -25,6 +25,7 @@ const { Content } = await project.render();
     <article
         transition:name="project-card"
         class="p-8 w-full max-w-5xl relative bg-white rounded-4xl my-12 z-20 mx-auto shadow-[0px_20px_40px_rgba(0,0,0,.025)]"
+        style={`background-color: ${project.data.bgColor}`}
     >
         <button
             class="absolute top-8 right-8 rounded-full h-12 w-12 bg-white/20 flex-center cursor-pointer"
@@ -32,10 +33,7 @@ const { Content } = await project.render();
         >
             <Icon name="ph:x-bold" class="text-white" size={24} />
         </button>
-        <header
-            class="mb-8 p-8 -mx-8 -mt-8 rounded-t-4xl"
-            style={`background-color: ${project.data.bgColor}`}
-        >
+        <header class="mb-8 p-8 -mx-8 -mt-8 rounded-t-4xl">
             <h1 class="text-3xl md:text-4xl font-bold mb-4 text-white">
                 {project.data.title}
             </h1>

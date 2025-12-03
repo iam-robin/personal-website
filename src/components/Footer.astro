@@ -24,7 +24,7 @@ import Container from "./Container.astro";
 </Container>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("astro:page-load", function () {
         const copyrightYear = document.getElementById("copyright-year");
         if (copyrightYear)
             copyrightYear.textContent = new Date().getFullYear().toString();
