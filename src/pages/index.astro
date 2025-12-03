@@ -4,7 +4,7 @@ import Footer from "../components/Footer.astro";
 import Hero from "../components/Hero.astro";
 import PostcardsSection from "@components/postcards/PostcardsSection.astro";
 import LatestBookmarks from "@components/bookmarks/LatestBookmarks.astro";
-import PhotographyCarousel from "@components/photography/PhotographyCarousel.svelte";
+import PhotographyCarousel from "@components/photography/PhotographyCarousel.astro";
 import Divider from "@components/Divider.astro";
 import ProjectsCarousel from "@components/sideprojects/ProjectsCarousel.astro";
 ---
@@ -14,7 +14,7 @@ import ProjectsCarousel from "@components/sideprojects/ProjectsCarousel.astro";
     <div class="flex gap-24 mt-32 flex-col">
         <ProjectsCarousel />
         <Divider />
-        <PhotographyCarousel client:only="svelte" />
+        <PhotographyCarousel />
         <Divider />
         <PostcardsSection limit={6} />
         <Divider />

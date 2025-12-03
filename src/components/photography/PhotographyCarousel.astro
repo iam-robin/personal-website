@@ -1,6 +1,7 @@
-<script>
-import Carousel from "../carousel/Carousel.svelte";
-import CarouselItem from "../carousel/CarouselItem.svelte";
+---
+import { Image } from "astro:assets";
+import CarouselWeb from "../carousel/CarouselWeb.astro";
+import CarouselItem from "../carousel/CarouselItem.astro";
 
 import Photo01 from "@assets/landingpage-photos/01.jpg";
 import Photo02 from "@assets/landingpage-photos/02.jpg";
@@ -40,27 +41,28 @@ const photos = [
     Photo16,
 ];
 
-    const headline = "Photography";
+const headline = "Photography";
 
-    const link = {
-    href: "#",
-    text: 'More Photos',
+const link = {
+    href: "https://robins.photos",
+    text: "More Photos",
+};
+
+const description =
+    "I have been enjoying using a camera to capture visually appealing moments for over a decade now.";
+---
+
+<CarouselWeb headline={headline} description={description} link={link}>
+    {
+        photos.map((photo) => (
+            <CarouselItem largeSpan={4} paddingBottom={24} paddingTop={24}>
+                <Image
+                    src={photo}
+                    alt="Photography"
+                    class="bg-neutral-100"
+                    loading="lazy"
+                />
+            </CarouselItem>
+        ))
     }
-
-    const description = "I have been enjoying using a camera to capture visually appealing moments for over a decade now."
-</script>
-
-<Carousel {headline} {description} {link}>
-    {#each photos as photo}
-        <CarouselItem largeSpan={4} paddingBottom={24} paddingTop={24}>
-            <img
-                src={photo.src}
-                alt="Photography"
-                width={photo.width}
-                height={photo.height}
-                class="bg-neutral-100"
-                loading="lazy"
-            />
-        </CarouselItem>
-    {/each}
-</Carousel>
+</CarouselWeb>
