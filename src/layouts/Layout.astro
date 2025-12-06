@@ -1,10 +1,17 @@
 ---
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
+import Header from "../components/navigation/Header.astro";
+
+interface Props {
+    hasHeader?: boolean;
+}
+
+const { hasHeader = true } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
     <head>
         <meta charset="utf-8" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -13,7 +20,8 @@ import { ClientRouter } from "astro:transitions";
         <title>iamrobin</title>
         <ClientRouter />
     </head>
-    <body class="bg-white">
+    <body class="bg-background text-foreground">
+        {hasHeader && <Header />}
         <slot />
     </body>
 </html>

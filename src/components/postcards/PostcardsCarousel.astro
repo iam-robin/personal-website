@@ -1,5 +1,5 @@
 ---
-import CarouselWeb from "../carousel/CarouselWeb.astro";
+import Carousel from "../carousel/Carousel.astro";
 import CarouselItem from "../carousel/CarouselItem.astro";
 import PostcardItem from "./PostcardItem.astro";
 
@@ -51,7 +51,7 @@ const description =
     "This website is mostly me talking. This postcard gives you a chance to talk back — even just a line. Drop me a postcard. Tell me what you're thinking, where you're visiting from, or simply that you stopped by. I'd love to hear from you.";
 ---
 
-<CarouselWeb headline={headline} description={description} link={link}>
+<Carousel headline={headline} description={description} link={link}>
     {
         postcards.map((postcard) => (
             <CarouselItem largeSpan={6} paddingBottom={64} paddingTop={24}>
@@ -78,9 +78,15 @@ const description =
                     bodyRotation={postcard.bodyRotation ?? undefined}
                     stampSvg={postcard.stampSvg ?? undefined}
                     country={postcard.country ?? undefined}
-                    postOfficeStampTop={postcard.postOfficeStampTop ?? undefined}
-                    postOfficeStampRight={postcard.postOfficeStampRight ?? undefined}
-                    postOfficeStampRotation={postcard.postOfficeStampRotation ?? undefined}
+                    postOfficeStampTop={
+                        postcard.postOfficeStampTop ?? undefined
+                    }
+                    postOfficeStampRight={
+                        postcard.postOfficeStampRight ?? undefined
+                    }
+                    postOfficeStampRotation={
+                        postcard.postOfficeStampRotation ?? undefined
+                    }
                     wavyStampTop={postcard.wavyStampTop ?? undefined}
                     wavyStampRight={postcard.wavyStampRight ?? undefined}
                     wavyStampRotation={postcard.wavyStampRotation ?? undefined}
@@ -88,4 +94,4 @@ const description =
             </CarouselItem>
         ))
     }
-</CarouselWeb>
+</Carousel>

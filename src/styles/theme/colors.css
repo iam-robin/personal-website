@@ -1,0 +1,124 @@
+@theme {
+    /* --background: #f4efca;
+    --foreground: #171717; */
+    --color-background: var(--color-neutral-100);
+    --color-foreground: var(--color-neutral-900);
+    /* --color-dark-cocoa: #321b1f;
+    --color-bright-orange-red: #f66435;
+    --color-light-cream: #f4efca; */
+
+    /* --color-*: initial;
+
+    --color-black: #000;
+    --color-white: #fff;
+    --color-inherit: inherit;
+    --color-current: currentColor;
+    --color-transparent: transparent; */
+
+    /* Neutral */
+    --color-neutral-50: oklch(0.985 0.001 106.423);
+    --color-neutral-100: oklch(0.97 0.001 106.424);
+    --color-neutral-200: oklch(0.923 0.003 48.717);
+    --color-neutral-300: oklch(0.869 0.005 56.366);
+    --color-neutral-400: oklch(0.709 0.01 56.259);
+    --color-neutral-500: oklch(0.553 0.013 58.071);
+    --color-neutral-600: oklch(0.444 0.011 73.639);
+    --color-neutral-700: oklch(0.374 0.01 67.558);
+    --color-neutral-800: oklch(0.268 0.007 34.298);
+    --color-neutral-900: oklch(0.216 0.006 56.043);
+    --color-neutral-950: oklch(0.147 0.004 49.25);
+
+    /* Sticker */
+    --color-sticker-yellow: #ffc704;
+    --color-sticker-yellow-dark: #997800;
+
+    --color-sticker-blue: #689bf7;
+    --color-sticker-blue-dark: #354e7b;
+
+    --color-sticker-red: #ff8577;
+    --color-sticker-red-dark: #7f423c;
+
+    --color-sticker-lilac: #c6baff;
+    --color-sticker-lilac-dark: #635c80;
+}
+
+@layer base {
+    [data-theme="red"] {
+        --color-background: darkred;
+        --color-foreground: red;
+    }
+
+    [data-theme="dark"] {
+        --color-background: var(--color-neutral-900);
+        --color-foreground: var(--color-neutral-100);
+    }
+}
+
+/* --color-sticker-sky: #6ae5fd;
+--color-sticker-sky-dark: #2a8fa3;
+
+--color-sticker-teal: #13dccd;
+--color-sticker-teal-dark: #0a7a72;
+
+--color-sticker-lime: #e6fd2e;
+--color-sticker-lime-dark: #7a8a0a;
+
+--color-sticker-yellow: #fee02e;
+--color-sticker-yellow-dark: #9a8a1a;
+
+--color-sticker-orange: #fe8516;
+--color-sticker-orange-dark: #a3520a;
+
+--color-sticker-coral: #ff5d4b;
+--color-sticker-coral-dark: #a32a1f;
+
+--color-sticker-pink: #ff7dbb;
+--color-sticker-pink-dark: #a34a72;
+
+--color-sticker-magenta: #ff94ff;
+--color-sticker-magenta-dark: #a35aa3;
+
+--color-sticker-lavender: #9ab9f4;
+--color-sticker-lavender-dark: #5a6a9a;
+
+--color-sticker-blue: #4a90ff;
+--color-sticker-blue-dark: #2a5099;
+
+--color-sticker-lilac: #c4b5fd;
+--color-sticker-lilac-dark: #7a5abf;
+
+--color-sticker-green: #4ade80;
+--color-sticker-green-dark: #22804a; */
+
+/* --color-sticker-blue: #0f8dff;
+--color-sticker-blue-dark: #0a5199;
+
+--color-sticker-green: #35c791;
+--color-sticker-green-dark: #1e7a5a;
+
+--color-sticker-red: #f06040;
+--color-sticker-red-dark: #9a3518;
+
+--color-sticker-pink: #fcb8fa;
+--color-sticker-pink-dark: #b84eb5;
+
+--color-sticker-yellow: #ffc233;
+--color-sticker-yellow-dark: #99721f;
+
+--color-sticker-purple: #a855f7;
+--color-sticker-purple-dark: #6b2d99;
+
+--color-sticker-orange: #ff9f43;
+--color-sticker-orange-dark: #995f28;
+
+--color-sticker-cyan: #22d3ee;
+--color-sticker-cyan-dark: #157a8a;
+
+--color-sticker-indigo: #6366f1;
+--color-sticker-indigo-dark: #3d3f99;
+
+--color-sticker-lime: #84cc16;
+--color-sticker-lime-dark: #4f7a0e;
+
+--color-sticker-lilac: #c4b5fd;
+--color-sticker-lilac-dark: #7a3dbf; */

@@ -1,5 +1,5 @@
 ---
-import CarouselWeb from "../carousel/CarouselWeb.astro";
+import Carousel from "../carousel/Carousel.astro";
 import CarouselItem from "../carousel/CarouselItem.astro";
 import ProjectCard from "./ProjectCard.astro";
 import { getCollection } from "astro:content";
@@ -27,7 +27,7 @@ const projects = projectsCollection.map((project) => ({
 }));
 ---
 
-<CarouselWeb headline={headline} description={description}>
+<Carousel headline={headline} description={description}>
     {
         projects.map((project) => (
             <CarouselItem
@@ -50,4 +50,4 @@ const projects = projectsCollection.map((project) => ({
             </CarouselItem>
         ))
     }
-</CarouselWeb>
+</Carousel>

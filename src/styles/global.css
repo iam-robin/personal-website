@@ -2,8 +2,9 @@
 @plugin '@tailwindcss/typography';
 
 @import "./utilities/utilities.css";
-@import "./theme/typography.css";
+@import "./theme/colors.css";
 @import "./theme/transitions.css";
+@import "./theme/typography.css";
 @import "./view-transition.css";
 
 :root {

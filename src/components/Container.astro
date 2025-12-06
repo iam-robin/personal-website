@@ -1,3 +1,11 @@
-<div class="max-w-5xl mx-auto w-full">
+---
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["max-w-5xl mx-auto w-full", className]}>
     <slot />
 </div>

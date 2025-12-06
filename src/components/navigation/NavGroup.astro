@@ -1,0 +1,99 @@
+---
+import { Icon } from "astro-icon/components";
+import BooksSticker from "@components/stickers/BooksSticker.astro";
+import MovieSticker from "@components/stickers/MovieSticker.astro";
+import TvSeriesSticker from "@components/stickers/TvSeriesSticker.astro";
+
+interface NavItem {
+    label: string;
+    href: string;
+    sticker?: string;
+    icon?: string;
+    external?: boolean;
+}
+
+interface Props {
+    label: string;
+    items: NavItem[];
+}
+
+const { label, items } = Astro.props;
+
+const stickerColors = {
+    books: {
+        iconColor: "--color-sticker-blue-dark",
+        bgColor: "--color-sticker-blue",
+    },
+    movie: {
+        iconColor: "--color-sticker-yellow-dark",
+        bgColor: "--color-sticker-yellow",
+    },
+    "tv-series": {
+        iconColor: "--color-sticker-lilac-dark",
+        bgColor: "--color-sticker-lilac",
+    },
+};
+---
+
+<div class="group relative">
+    <button
+        class="flex items-center gap-1 py-2 hover:text-neutral-500 transition-colors cursor-pointer text-sm uppercase tracking-wide"
+    >
+        {label}
+        <Icon
+            name="ph:caret-down-bold"
+            class="transition-transform group-hover:rotate-180"
+            size={16}
+        />
+    </button>
+
+    <div
+        class="invisible opacity-0 group-hover:visible group-hover:opacity-100 absolute z-50 top-full left-1/2 -translate-x-1/2 pt-2 transition-all duration-200"
+    >
+        <div
+            class="bg-white rounded-xl shadow-lg border border-neutral-100 p-2 min-w-48"
+        >
+            {
+                items.map((item) => (
+                    <a
+                        href={item.href}
+                        target={item.external ? "_blank" : undefined}
+                        rel={item.external ? "noopener noreferrer" : undefined}
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-50 transition-colors"
+                    >
+                        {item.sticker === "books" && (
+                            <BooksSticker
+                                size={24}
+                                iconColor={stickerColors.books.iconColor}
+                                bgColor={stickerColors.books.bgColor}
+                            />
+                        )}
+                        {item.sticker === "movie" && (
+                            <MovieSticker
+                                size={24}
+                                iconColor={stickerColors.movie.iconColor}
+                                bgColor={stickerColors.movie.bgColor}
+                            />
+                        )}
+                        {item.sticker === "tv-series" && (
+                            <TvSeriesSticker
+                                size={24}
+                                iconColor={stickerColors["tv-series"].iconColor}
+                                bgColor={stickerColors["tv-series"].bgColor}
+                            />
+                        )}
+                        {item.icon && <Icon name={item.icon} size={32} />}
+                        <span>{item.label}</span>
+                        {item.external && (
+                            <Icon
+                                name="ph:arrow-up-right-bold"
+                                size={12}
+                                class="ml-auto text-neutral-400"
+                            />
+                        )}
+                    </a>
+                ))
+            }
+        </div>
+    </div>
+</div>

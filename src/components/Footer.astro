@@ -1,9 +1,15 @@
 ---
 import Contact from "./Contact.astro";
 import Container from "./Container.astro";
+
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
 ---
 
-<Container>
+<Container class={className}>
     <Contact />
     <footer class="flex justify-between mb-4 mt-12">
         <p>

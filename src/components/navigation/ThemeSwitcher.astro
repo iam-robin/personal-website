@@ -1,0 +1,73 @@
+---
+// Simple theme switcher - cycles through light, dark, red themes
+---
+
+<button
+    id="theme-switcher"
+    class="p-2 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer"
+    aria-label="Toggle theme"
+>
+    <span class="theme-icon" data-theme-icon="light">☀️</span>
+    <span class="theme-icon hidden" data-theme-icon="dark">🌙</span>
+    <span class="theme-icon hidden" data-theme-icon="red">🔴</span>
+</button>
+
+<script>
+    function initThemeSwitcher() {
+        const button = document.getElementById("theme-switcher");
+        if (!button) return;
+
+        const themes = [null, "dark", "red"] as const;
+        type Theme = (typeof themes)[number];
+
+        function getStoredTheme(): Theme {
+            const stored = localStorage.getItem("theme");
+            if (stored === "dark" || stored === "red") return stored;
+            return null;
+        }
+
+        function setTheme(theme: Theme) {
+            if (theme) {
+                document.documentElement.dataset.theme = theme;
+                localStorage.setItem("theme", theme);
+            } else {
+                delete document.documentElement.dataset.theme;
+                localStorage.removeItem("theme");
+            }
+            updateIcon(theme);
+        }
+
+        function updateIcon(theme: Theme) {
+            const icons = button!.querySelectorAll(".theme-icon");
+            icons.forEach((icon) => {
+                const iconTheme = (icon as HTMLElement).dataset.themeIcon;
+                if (
+                    (theme === null && iconTheme === "light") ||
+                    iconTheme === theme
+                ) {
+                    icon.classList.remove("hidden");
+                } else {
+                    icon.classList.add("hidden");
+                }
+            });
+        }
+
+        function cycleTheme() {
+            const current = getStoredTheme();
+            const currentIndex = themes.indexOf(current);
+            const nextIndex = (currentIndex + 1) % themes.length;
+            setTheme(themes[nextIndex]);
+        }
+
+        // Initialize with stored theme
+        const storedTheme = getStoredTheme();
+        setTheme(storedTheme);
+
+        // Handle click
+        button.addEventListener("click", cycleTheme);
+    }
+
+    // Run on initial load and after Astro page transitions
+    initThemeSwitcher();
+    document.addEventListener("astro:page-load", initThemeSwitcher);
+</script>

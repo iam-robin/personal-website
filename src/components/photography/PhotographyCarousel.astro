@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import CarouselWeb from "../carousel/CarouselWeb.astro";
+import Carousel from "../carousel/Carousel.astro";
 import CarouselItem from "../carousel/CarouselItem.astro";
 
 import Photo01 from "@assets/landingpage-photos/01.jpg";
@@ -52,7 +52,7 @@ const description =
     "I have been enjoying using a camera to capture visually appealing moments for over a decade now.";
 ---
 
-<CarouselWeb headline={headline} description={description} link={link}>
+<Carousel headline={headline} description={description} link={link}>
     {
         photos.map((photo) => (
             <CarouselItem largeSpan={4} paddingBottom={24} paddingTop={24}>
@@ -65,4 +65,4 @@ const description =
             </CarouselItem>
         ))
     }
-</CarouselWeb>
+</Carousel>

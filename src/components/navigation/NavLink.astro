@@ -1,0 +1,21 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    label: string;
+    href: string;
+    external?: boolean;
+}
+
+const { label, href, external = false } = Astro.props;
+---
+
+<a
+    href={href}
+    target={external ? "_blank" : undefined}
+    rel={external ? "noopener noreferrer" : undefined}
+    class="flex items-center gap-1 py-2 text-sm uppercase tracking-wide hover:text-neutral-500 transition-colors"
+>
+    {label}
+    {external && <Icon name="ph:arrow-up-right-bold" size={12} />}
+</a>

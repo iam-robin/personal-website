@@ -1,0 +1,152 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface NavLinkItem {
+    label: string;
+    href: string;
+    icon?: string;
+    external?: boolean;
+}
+
+interface NavItem {
+    type: "link" | "group";
+    label: string;
+    href?: string;
+    external?: boolean;
+    items?: NavLinkItem[];
+}
+
+interface Props {
+    navigation: NavItem[];
+}
+
+const { navigation } = Astro.props;
+---
+
+<div
+    id="mobile-menu"
+    class="fixed inset-0 z-50 bg-white transform translate-x-full transition-transform duration-300 md:hidden"
+>
+    <div class="flex flex-col h-full p-6">
+        <div class="flex justify-end mb-8">
+            <button
+                id="mobile-menu-close"
+                class="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+            >
+                <Icon name="ph:x-bold" size={24} />
+            </button>
+        </div>
+
+        <nav class="flex flex-col gap-2">
+            {
+                navigation.map((item) =>
+                    item.type === "link" ? (
+                        <a
+                            href={item.href}
+                            target={item.external ? "_blank" : undefined}
+                            rel={
+                                item.external
+                                    ? "noopener noreferrer"
+                                    : undefined
+                            }
+                            class="mobile-nav-link flex items-center justify-between py-3 px-4 text-lg font-medium hover:bg-neutral-50 rounded-lg transition-colors"
+                        >
+                            {item.label}
+                            {item.external && (
+                                <Icon name="ph:arrow-up-right-bold" size={16} />
+                            )}
+                        </a>
+                    ) : (
+                        <div class="mobile-nav-group">
+                            <button class="mobile-nav-group-toggle flex items-center justify-between w-full py-3 px-4 text-lg font-medium hover:bg-neutral-50 rounded-lg transition-colors">
+                                {item.label}
+                                <Icon
+                                    name="ph:caret-down-bold"
+                                    class="mobile-nav-group-icon transition-transform"
+                                    size={16}
+                                />
+                            </button>
+                            <div class="mobile-nav-group-content hidden pl-4">
+                                {item.items?.map((subItem) => (
+                                    <a
+                                        href={subItem.href}
+                                        target={
+                                            subItem.external
+                                                ? "_blank"
+                                                : undefined
+                                        }
+                                        rel={
+                                            subItem.external
+                                                ? "noopener noreferrer"
+                                                : undefined
+                                        }
+                                        class="mobile-nav-link flex items-center gap-3 py-3 px-4 hover:bg-neutral-50 rounded-lg transition-colors"
+                                    >
+                                        {subItem.icon && (
+                                            <Icon
+                                                name={subItem.icon}
+                                                size={18}
+                                            />
+                                        )}
+                                        <span>{subItem.label}</span>
+                                        {subItem.external && (
+                                            <Icon
+                                                name="ph:arrow-up-right-bold"
+                                                size={12}
+                                                class="ml-auto text-neutral-400"
+                                            />
+                                        )}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    )
+                )
+            }
+        </nav>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        const mobileMenu = document.getElementById("mobile-menu");
+        const mobileMenuOpen = document.getElementById("mobile-menu-open");
+        const mobileMenuClose = document.getElementById("mobile-menu-close");
+        const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+        const mobileNavGroupToggles = document.querySelectorAll(
+            ".mobile-nav-group-toggle"
+        );
+
+        function openMenu() {
+            mobileMenu?.classList.remove("translate-x-full");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeMenu() {
+            mobileMenu?.classList.add("translate-x-full");
+            document.body.style.overflow = "";
+        }
+
+        mobileMenuOpen?.addEventListener("click", openMenu);
+        mobileMenuClose?.addEventListener("click", closeMenu);
+
+        // Close menu when clicking a link
+        mobileNavLinks.forEach((link) => {
+            link.addEventListener("click", closeMenu);
+        });
+
+        // Accordion toggle for groups
+        mobileNavGroupToggles.forEach((toggle) => {
+            toggle.addEventListener("click", () => {
+                const group = toggle.closest(".mobile-nav-group");
+                const content = group?.querySelector(
+                    ".mobile-nav-group-content"
+                );
+                const icon = toggle.querySelector(".mobile-nav-group-icon");
+
+                content?.classList.toggle("hidden");
+                icon?.classList.toggle("rotate-180");
+            });
+        });
+    });
+</script>

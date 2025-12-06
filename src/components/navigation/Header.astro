@@ -1,0 +1,204 @@
+---
+import { Icon } from "astro-icon/components";
+import NavLink from "./NavLink.astro";
+import NavGroup from "./NavGroup.astro";
+import MobileMenu from "./MobileMenu.astro";
+import ThemeSwitcher from "./ThemeSwitcher.astro";
+import Container from "@components/Container.astro";
+import BooksSticker from "@components/stickers/BooksSticker.astro";
+import MovieSticker from "@components/stickers/MovieSticker.astro";
+import TvSeriesSticker from "@components/stickers/TvSeriesSticker.astro";
+
+// Navigation data - easy to modify, add, or remove items
+const navigation = [
+    {
+        type: "group" as const,
+        label: "Media logs",
+        items: [
+            {
+                label: "Books",
+                href: "/books",
+                sticker: "books",
+                external: false,
+            },
+            {
+                label: "Movies",
+                href: "/movies",
+                sticker: "movie",
+                external: false,
+            },
+            {
+                label: "TV shows",
+                href: "/shows",
+                sticker: "tv-series",
+                external: false,
+            },
+            {
+                label: "Music",
+                href: "/music",
+                sticker: "tv-series",
+                external: false,
+            },
+        ],
+    },
+    {
+        type: "link" as const,
+        label: "About",
+        href: "/about",
+    },
+    {
+        type: "link" as const,
+        label: "Postcards",
+        href: "/postcards",
+    },
+    {
+        type: "link" as const,
+        label: "Garden",
+        href: "/garden",
+    },
+    {
+        type: "link" as const,
+        label: "Blog",
+        href: "/blog",
+    },
+    {
+        type: "link" as const,
+        label: "Photos",
+        href: "https://robins.photos",
+        external: true,
+    },
+];
+---
+
+<header
+    id="site-header"
+    class="sticky top-0 z-20 bg-background mt-8 border-neutral-200 opacity-0 -translate-y-full"
+>
+    <Container>
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <a
+                href="/"
+                id="site-logo"
+                class="text-md font-bold hover:text-neutral-500 transition-colors hover:italic"
+            >
+                <p class="leading-none">
+                    i<span class="logo-space w-1 inline-block"></span>am
+                </p>
+                <p class="logo-robin leading-none -mt-1.5 ml-5">robin</p>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center gap-6">
+                {
+                    navigation.map((item) =>
+                        item.type === "link" ? (
+                            <NavLink
+                                label={item.label}
+                                href={item.href!}
+                                external={item.external}
+                            />
+                        ) : (
+                            <NavGroup label={item.label} items={item.items!} />
+                        )
+                    )
+                }
+            </nav>
+
+            <ThemeSwitcher />
+
+            <!-- Mobile Menu Button -->
+            <button
+                id="mobile-menu-open"
+                class="p-2 hover:bg-neutral-100 rounded-lg transition-colors md:hidden"
+            >
+                <Icon name="ph:list-bold" size={24} />
+            </button>
+        </div>
+    </Container>
+</header>
+
+<!-- Mobile Menu -->
+<MobileMenu navigation={navigation} />
+
+<script>
+    import { animate } from "motion";
+
+    document.addEventListener("astro:page-load", () => {
+        const header = document.getElementById("site-header")!;
+        const logo = document.getElementById("site-logo")!;
+        const logoRobin = document.getElementsByClassName("logo-robin");
+        const logoSpace = document.getElementsByClassName("logo-space");
+
+        if (!header || !logo) return;
+
+        // Use the margin-top value (mt-8 = 32px) as the sticky threshold
+        const stickyThreshold = 32;
+        const isSticky = window.scrollY >= stickyThreshold;
+
+        if (isSticky) {
+            // If already scrolled, slide in immediately without delay
+            // First remove CSS classes to avoid conflicts with Motion
+            header.classList.remove("opacity-0", "-translate-y-full");
+            header.style.opacity = "0";
+            header.style.transform = "translateY(-100%)";
+
+            // Use requestAnimationFrame to ensure styles are applied before animation
+            requestAnimationFrame(() => {
+                animate(
+                    header,
+                    {
+                        opacity: [0, 1],
+                        transform: ["translateY(-100%)", "translateY(0%)"],
+                    },
+                    { duration: 0.3, ease: [0.39, 0.24, 0.3, 1] }
+                ).then(() => {
+                    header.style.opacity = "";
+                    header.style.transform = "";
+                });
+            });
+        } else {
+            // Remove CSS classes first to avoid conflicts with Motion
+            header.classList.remove("opacity-0", "-translate-y-full");
+            // Set initial state via inline styles
+            header.style.opacity = "0";
+            header.style.transform = "translateY(-100%)";
+
+            // Slide in from top after hero animation completes
+            animate(
+                header,
+                {
+                    opacity: [0, 1],
+                    transform: ["translateY(-100%)", "translateY(0%)"],
+                },
+                { duration: 0.5, delay: 1.5, ease: [0.39, 0.24, 0.3, 1] }
+            ).then(() => {
+                // Clear inline styles - header stays at final position
+                header.style.opacity = "";
+                header.style.transform = "";
+            });
+        }
+
+        function updateHeaderStyle() {
+            const isSticky = window.scrollY >= stickyThreshold;
+
+            if (isSticky) {
+                header.classList.add("border-b");
+                logo.classList.add("flex");
+                logoRobin[0]?.classList.remove("-mt-1.5", "ml-5");
+                logoSpace[0]?.classList.remove("w-1");
+            } else {
+                header.classList.remove("border-b");
+                logo.classList.remove("flex");
+                logoRobin[0]?.classList.add("-mt-1.5", "ml-5");
+                logoSpace[0]?.classList.add("w-1");
+            }
+        }
+
+        // Initial check
+        updateHeaderStyle();
+
+        // Listen for scroll
+        window.addEventListener("scroll", updateHeaderStyle);
+    });
+</script>

@@ -16,7 +16,7 @@ const { project } = Astro.props;
 const { Content } = await project.render();
 ---
 
-<Layout>
+<Layout hasHeader={false}>
     <div
         transition:name="project-backdrop"
         class="fixed inset-0 bg-neutral-100"
@@ -24,7 +24,7 @@ const { Content } = await project.render();
     </div>
     <article
         transition:name="project-card"
-        class="p-8 w-full max-w-5xl relative bg-white rounded-4xl my-12 z-20 mx-auto shadow-[0px_20px_40px_rgba(0,0,0,.025)]"
+        class="p-8 w-full max-w-5xl relative bg-white rounded-4xl my-12 z-30 mx-auto shadow-[0px_20px_40px_rgba(0,0,0,.025)]"
         style={`background-color: ${project.data.bgColor}`}
     >
         <button
