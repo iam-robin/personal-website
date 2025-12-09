@@ -9,6 +9,7 @@ import PostcardsSection from "@components/postcards/PostcardsSection.astro";
 import WorldMapDetail from "@components/postcards/WorldMapDetail.astro";
 import Layout from "@layouts/Layout.astro";
 import TagCloud from "@components/TagCloud.astro";
+import Container from "@components/Container.astro";
 
 // Fetch all published postcards once
 const allPostcards = await db
@@ -44,13 +45,15 @@ const visitedCountries = countryCloudData.map((country) => country.name);
 ---
 
 <Layout>
-    <TagCloud
-        tags={countryCloudData}
-        basePath="/postcards"
-        filterPath="country"
-        filterLabel="country"
-        total={allPostcards.length}
-    />
-    <PostcardsSection postcards={allPostcards} />
-    <WorldMapDetail visitedCountries={visitedCountries} />
+    <Container>
+        <TagCloud
+            tags={countryCloudData}
+            basePath="/postcards"
+            filterPath="country"
+            filterLabel="country"
+            total={allPostcards.length}
+        />
+        <PostcardsSection postcards={allPostcards} />
+        <WorldMapDetail visitedCountries={visitedCountries} />
+    </Container>
 </Layout>

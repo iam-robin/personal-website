@@ -17,6 +17,7 @@
         "astro-icon": "^1.1.5",
         "isomorphic-dompurify": "^2.33.0",
         "motion": "^12.23.24",
+        "node-html-parser": "^7.0.1",
         "remark": "^15.0.1",
         "tailwindcss": "^4.1.17",
         "typescript": "^5.9.3"
