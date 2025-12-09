@@ -1,5 +1,6 @@
 ---
 import { db, Postcard, desc, eq } from "astro:db";
+import { Icon } from "astro-icon/components";
 import Link from "../Link.astro";
 import PostcardsCarousel from "./PostcardsCarousel.astro";
 import Container from "../Container.astro";
@@ -31,12 +32,15 @@ if (postcards) {
 {
     recentPostcards.length > 0 && (
         <div>
-            <PostcardsCarousel postcards={recentPostcards} />
-            <Container>
-                <Link href="/postcards/new" standalone>
-                    Send a Postcard
-                </Link>
+            <Container class="relative">
+                <a
+                    href="/postcards/new"
+                    class="inline-flex items-center gap-2 absolute right-0 -top-10 hover-lift"
+                >
+                    <Icon name="new-postcard" size={100} />
+                </a>
             </Container>
+            <PostcardsCarousel postcards={recentPostcards} />
         </div>
     )
 }

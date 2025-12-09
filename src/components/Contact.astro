@@ -1,12 +1,19 @@
 ---
-import { Icon } from "astro-icon/components";
 import ContactItem from "./ContactItem.astro";
 import Grid from "./Grid.astro";
 import GridItem from "./GridItem.astro";
+import WaveSticker from "./stickers/WaveSticker.astro";
+import MailSticker from "./stickers/MailSticker.astro";
+import MastodonSticker from "./stickers/MastodonSticker.astro";
+import GlassSticker from "./stickers/GlassSticker.astro";
+import DesignSticker from "./stickers/DesignSticker.astro";
+
+const stickerClass =
+    "icon-for-service absolute -top-10 right-10 transition-transform sm:right-auto sm:top-32";
 ---
 
 <Grid
-    class="rounded-xl p-10 bg-neutral-300 text-neutral-800 hover-lift relative"
+    class="rounded-xl p-10 bg-surface text-text-primary hover-lift relative"
     id="contact-container"
 >
     <GridItem
@@ -14,80 +21,92 @@ import GridItem from "./GridItem.astro";
         colSpan={{ small: 12, medium: 12, large: 3 }}
     >
         <h2 class="text-lg font-bold">Contact</h2>
-        <Icon
+        <WaveSticker
             id="icon-for-default"
-            class="icon-for-service absolute -top-10 right-10 text-[64px] transition-transform sm:right-auto sm:top-32"
-            name="sticker-wave-50"
+            class={stickerClass}
+            size={64}
+            iconColor="--color-sticker-yellow-dark"
+            bgColor="--color-sticker-yellow-light"
         />
-        <Icon
+        <MailSticker
             id="icon-for-email"
-            class="icon-for-service absolute -top-10 right-10 -rotate-12 scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
-            name="sticker-mail-50-2"
+            class={`${stickerClass} -rotate-12 scale-0`}
+            size={64}
+            iconColor="--color-sticker-blue-dark"
+            bgColor="--color-sticker-blue-light"
         />
-        <Icon
+        <MastodonSticker
             id="icon-for-mastodon"
-            class="icon-for-service absolute -top-10 right-10 rotate-12 scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
-            name="sticker-mastodon-50"
+            class={`${stickerClass} rotate-12 scale-0`}
+            size={64}
+            iconColor="--color-sticker-lilac-dark"
+            bgColor="--color-sticker-lilac-light"
         />
-        <Icon
+        <GlassSticker
             id="icon-for-glass"
-            class="icon-for-service absolute -top-10 right-10 -rotate-[8deg] scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
-            name="sticker-glass-50"
+            class={`${stickerClass} -rotate-[8deg] scale-0`}
+            size={64}
+            iconColor="--color-sticker-yellow-dark"
+            bgColor="--color-sticker-yellow-light"
         />
-        <Icon
+        <DesignSticker
             id="icon-for-github"
-            class="icon-for-service absolute -top-10 right-10 -rotate-[8deg] scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
-            name="sticker-design-50"
+            class={`${stickerClass} -rotate-[8deg] scale-0`}
+            size={64}
+            iconColor="--color-sticker-red-dark"
+            bgColor="--color-sticker-red-light"
         />
     </GridItem>
     <GridItem colSpan={{ small: 12, medium: 12, large: 9 }}>
         <ul>
             <ContactItem
                 id="email-contact-item"
-                hoverBgColor="bg-blue-300"
-                hoverTextColor="text-blue-800"
+                stickerColor="blue"
                 service="Email"
                 handle="hey@iamrob.in"
                 url="mailto:hey@iamrob.in"
             />
             <ContactItem
                 id="mastodon-contact-item"
-                hoverBgColor="bg-green-300"
-                hoverTextColor="text-green-800"
+                stickerColor="lilac"
                 service="Mastodon"
                 handle="@iamrobin@mastodon.social"
                 url="https://mastodon.social/@iamrobin"
             />
             <ContactItem
                 id="glass-contact-item"
-                hoverBgColor="bg-yellow-300"
-                hoverTextColor="text-yellow-800"
+                stickerColor="yellow"
                 service="Glass"
                 handle="@iamrobin"
                 url="https://glass.photo/iamrobin"
             />
             <ContactItem
                 id="github-contact-item"
-                hoverBgColor="bg-neutral-800"
-                hoverTextColor="text-neutral-300"
+                stickerColor="red"
                 service="GitHub"
                 handle="@iamrobin"
-                url="https://glass.photo/iamrobin"
+                url="https://github.com/iamrobin"
             />
         </ul>
     </GridItem>
 </Grid>
 
-<!-- <script>
+<script>
     document.addEventListener("astro:page-load", () => {
         if (window.innerWidth < 640) return;
         const contactItems = document.querySelectorAll(".contact-item");
-        const container = document.getElementById("contact-container");
+        const container = document.getElementById(
+            "contact-container"
+        ) as HTMLElement;
         const icons = document.querySelectorAll(".icon-for-service");
+        const contactItemBorders = document.querySelectorAll(
+            ".contact-item a"
+        ) as NodeListOf<HTMLElement>;
 
         contactItems.forEach((item) => {
-            const bgColor = (item as HTMLElement).dataset.bgcolor as string;
-            const textColor = (item as HTMLElement).dataset.textcolor as string;
+            const stickerColor = (item as HTMLElement).dataset
+                .stickerColor as string;
+
             item.addEventListener("mouseover", () => {
                 const service = item.getAttribute("id")?.split("-")[0];
                 icons.forEach((icon) => {
@@ -98,12 +117,18 @@ import GridItem from "./GridItem.astro";
                     }
                 });
 
-                container?.classList.remove(
-                    "bg-neutral-300",
-                    "text-neutral-800"
-                );
-                container?.classList.add(bgColor, textColor);
+                // Use CSS variables for sticker colors
+                if (container) {
+                    container.style.backgroundColor = `var(--color-sticker-${stickerColor})`;
+                    container.style.color = `var(--color-sticker-${stickerColor}-dark)`;
+                }
+
+                // Set border color on all contact items
+                contactItemBorders.forEach((border) => {
+                    border.style.borderColor = `var(--color-sticker-${stickerColor}-dark)`;
+                });
             });
+
             item.addEventListener("mouseout", () => {
                 icons.forEach((icon) => {
                     icon.classList.add("scale-0");
@@ -111,9 +136,18 @@ import GridItem from "./GridItem.astro";
                         icon.classList.remove("scale-0");
                     }
                 });
-                container?.classList.remove(bgColor, textColor);
-                container?.classList.add("bg-neutral-300", "text-neutral-800");
+
+                // Reset to semantic theme colors
+                if (container) {
+                    container.style.backgroundColor = "";
+                    container.style.color = "";
+                }
+
+                // Reset border color
+                contactItemBorders.forEach((border) => {
+                    border.style.borderColor = "";
+                });
             });
         });
     });
-</script> -->
+</script>

@@ -1,0 +1,27 @@
+---
+import { timeSince } from "src/utils/timeSince";
+import GridItem from "./GridItem.astro";
+
+interface Props {
+    date: Date;
+    version: string;
+    title: string;
+}
+
+const { date, version, title } = Astro.props as Props;
+---
+
+<GridItem colStart={3} colEnd={4} class="mt-2 mb-3 lg:mb-0">
+    <span
+        class={`rounded-full px-3 py-1 font-mono text-xs ${
+            version.endsWith("0.0")
+                ? "text-lilac-dark bg-lilac-light"
+                : "text-neutral-500 bg-neutral-100"
+        }`}>v {version}</span
+    >
+</GridItem>
+<GridItem colStart={5} colEnd={10} class="mb-16 lg:mb-20">
+    <h3 class="mb-1">{title}</h3>
+    <div class="mb-3 text-neutral-400">{timeSince(date)}</div>
+    <slot />
+</GridItem>

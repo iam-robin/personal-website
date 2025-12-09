@@ -1,4 +1,6 @@
 ---
+import { Icon } from "astro-icon/components";
+
 interface Props {
     href: string;
     external?: boolean;
@@ -15,35 +17,26 @@ const {
 const externalProps = external
     ? { target: "_blank", rel: "noopener noreferrer" }
     : {};
+
+const baseClasses =
+    "font-inherit text-current underline decoration-border decoration-4 underline-offset-8 hover:italic";
+const standaloneClasses =
+    "group text-base font-mono flex gap-2 items-center underline underline-offset-8 hover:italic";
 ---
 
 <a
     href={href}
-    class:list={["link", { "link--standalone": standalone }, className]}
-    {...externalProps}><slot /></a
+    class:list={[standalone ? standaloneClasses : baseClasses, className]}
+    {...externalProps}
 >
-
-<style>
-    .link {
-        font: inherit;
-        color: currentColor;
-        text-decoration: underline;
-        text-decoration-color: #dbdbdb;
-        text-decoration-thickness: 4px;
-        text-underline-offset: 0.15em;
+    <slot />
+    {
+        standalone && (
+            <Icon
+                name="ph:arrow-right-bold"
+                width={16}
+                class="text-text-secondary group-hover:translate-x-1 group-hover:text-text-primary transition"
+            />
+        )
     }
-
-    .link:hover {
-        font-style: italic;
-    }
-
-    .link--standalone {
-        font-size: var(--text-base);
-        font-weight: 700;
-        text-decoration: none;
-    }
-
-    .link--standalone:hover {
-        text-decoration: underline;
-    }
-</style>
+</a>

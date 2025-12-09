@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import BookmarkTag from "./BookmarkTag.astro";
 
 export type Bookmark = {
     link: string;
@@ -48,21 +49,17 @@ const domain = url.hostname;
             >
             </div>
             <p class="mr-2 truncate font-mono text-sm">{bookmark.title}</p>
-            <div>
-                {
-                    bookmark.tags.length > 0 && (
-                        <div class="flex gap-1 ">
-                            {bookmark.tags.map((tag) => (
-                                <span class="shrink-0 rounded-full bg-black-30 px-2 py-0.5 font-mono text-2xs text-black-600">
-                                    #{tag}
-                                </span>
-                            ))}
-                        </div>
-                    )
-                }
-            </div>
+            {
+                bookmark.tags.length > 0 && (
+                    <div class="flex gap-1">
+                        {bookmark.tags.map((tag) => (
+                            <BookmarkTag tag={tag} />
+                        ))}
+                    </div>
+                )
+            }
         </div>
-        <div class="hidden h-[1px] w-full grow bg-neutral-200 md:block"></div>
+        <div class="hidden h-px w-full grow bg-border-dark md:block"></div>
         <p
             class="shrink-0 text-right font-mono text-xs text-neutral-500 group-hover:hidden"
         >
@@ -104,19 +101,15 @@ const domain = url.hostname;
             </p>
         </div>
         <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <div>
-                {
-                    bookmark.tags.length > 0 && (
-                        <div class="flex gap-1 ">
-                            {bookmark.tags.map((tag) => (
-                                <span class="shrink-0 rounded-full bg-black-30 px-2 py-0.5 font-mono text-2xs text-black-600">
-                                    #{tag}
-                                </span>
-                            ))}
-                        </div>
-                    )
-                }
-            </div>
+            {
+                bookmark.tags.length > 0 && (
+                    <div class="flex gap-1">
+                        {bookmark.tags.map((tag) => (
+                            <BookmarkTag tag={tag} />
+                        ))}
+                    </div>
+                )
+            }
             <div class="flex shrink-0 items-center gap-2 text-neutral-400">
                 <p class="text-2xs">{domain}</p>
                 <Icon name="ph:arrow-up-right-bold" width={12} />

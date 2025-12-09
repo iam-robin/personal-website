@@ -1,0 +1,172 @@
+.markdown {
+    --tw-prose-body: rgba(0, 0, 0, 0.9);
+    --tw-prose-headings: rgba(0, 0, 0, 0.9);
+    --tw-prose-counters: rgba(0, 0, 0, 0.4);
+    --tw-prose-bullets: rgba(0, 0, 0, 0.3);
+    --tw-prose-bold: rgba(0, 0, 0, 1);
+    --tw-prose-links: rgba(0, 0, 0, 0.7);
+    --tw-prose-quote-borders: rgba(0, 0, 0, 0.2);
+    --tw-prose-td-borders: rgba(0, 0, 0, 0.1);
+    --tw-prose-th-borders: rgba(0, 0, 0, 0.3);
+}
+
+.markdown.prose {
+    max-width: 65ch;
+    margin: 0 auto;
+    font-size: 1.2rem;
+}
+
+.markdown hr {
+    display: block;
+    margin: 3rem 0;
+    border: none;
+}
+
+.markdown hr:after {
+    content: '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
+    display: block;
+    color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    margin: 0 32px;
+    left: 0;
+    right: 0;
+    font-family: 'Fira Mono', monospace;
+    letter-spacing: 0.1em;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    text-overflow: clip;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.markdown img {
+    filter: grayscale(100%) contrast(110%) brightness(110%);
+    mix-blend-mode: multiply;
+}
+
+.markdown img:hover {
+    filter: grayscale(0%) contrast(100%) brightness(100%);
+    mix-blend-mode: normal;
+}
+
+.markdown p img {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    display: none;
+}
+
+.markdown .image-gallery {
+    display: flex;
+    gap: 16px;
+}
+
+.markdown .image-gallery img {
+    display: block;
+}
+
+.markdown a {
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.3);
+    padding-bottom: 3px;
+    position: relative;
+    margin-right: 20px;
+    font-style: italic;
+}
+
+.markdown a::after {
+    content: '↗'; /* Unicode arrow character */
+    position: absolute;
+    font-style: normal;
+    top: 0;
+    line-height: 1.2em;
+    right: -18px; /* Adjust the position as needed */
+    font-size: 1.2em; /* Adjust the size as needed */
+    color: rgba(0, 0, 0, 0.4); /* Match the color of the link */
+}
+
+.markdown input[type='checkbox'] {
+    appearance: none;
+    width: 1.5em;
+    height: 1.5em;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 0.25em;
+    margin-right: 0.5em;
+    vertical-align: middle;
+    position: relative;
+    top: -0.1em;
+}
+
+.markdown input[type='checkbox']:checked::after {
+    content: '✓';
+    display: block;
+    position: absolute;
+    top: 0.05em;
+    left: 0.15em;
+    font-size: 1.2em;
+    line-height: 1em;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.markdown ul:has(> li > input[type='checkbox']) {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.markdown ul:has(> li > input[type='checkbox']) li {
+    display: flex;
+    font-size: 0.9em;
+    line-height: 1.4em;
+    margin-bottom: 16px;
+}
+
+.markdown ul:has(> li > input[type='checkbox']) li input[type='checkbox'] {
+    margin-right: 0.5em;
+    flex-shrink: 0;
+}
+
+.markdown .footnotes {
+    display: none;
+}
+
+.markdown sup > a {
+    border: none;
+    margin-right: 0px;
+}
+
+.markdown sup > a::after {
+    display: none;
+}
+
+.markdown .columns {
+    display: grid;
+    grid-template-columns: var(--column-widths, 1fr 1fr);
+    grid-template-columns: 1fr;
+    gap: 32px;
+}
+
+.markdown .columns img {
+    max-width: 120px;
+    margin: 0;
+    margin-top: 8px;
+}
+
+.markdown .columns p,
+.markdown .columns ul {
+    margin: 0;
+}
+
+.markdown .columns.vertically-centered {
+    align-items: center;
+}
+
+@media (min-width: 640px) {
+    .markdown .columns {
+        grid-template-columns: var(--column-widths, 1fr 1fr);
+        gap: 64px;
+    }
+    .markdown .columns img {
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,123 @@
+---
+import type { CollectionEntry } from "astro:content";
+// import {
+//     ArrowRight,
+//     AppWindow,
+//     Camera,
+//     Cube,
+//     Note,
+//     PaintBrush,
+//     Brain,
+//     PersonArmsSpread,
+//     Rss,
+//     CircleDashed
+// } from '@phosphor-icons/react';
+import { Image } from "astro:assets";
+
+interface Props {
+    post: CollectionEntry<"blog">;
+    currentCategory?: string;
+}
+
+const { post, currentCategory } = Astro.props;
+
+const formatDate = (date: Date) => {
+    return date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+    });
+};
+
+// const getCategoryIcon = (category: string) => {
+//     const categoryLower = category.toLowerCase();
+
+//     switch (categoryLower) {
+//         case "software":
+//             return AppWindow;
+//         case "photography":
+//             return Camera;
+//         case "obsidian":
+//             return Note;
+//         case "generative art":
+//             return PaintBrush;
+//         case "accessibility":
+//             return PersonArmsSpread;
+//         case "ai":
+//             return Brain;
+//         case "rss":
+//             return Rss;
+//         case "digital minimalism":
+//             return CircleDashed;
+//         default:
+//             return Cube;
+//     }
+// };
+---
+
+<div
+    class="list-item-image-hover-effect group relative flex flex-col justify-between gap-4 border-b border-neutral-300 py-4 md:flex-row md:gap-12 md:py-10"
+>
+    {
+        post.data.image && (
+            <Image
+                class="cover-image pointer-events-none absolute z-10 hidden max-w-[260px] shadow-lg md:group-hover:block"
+                src={post.data.image as ImageMetadata}
+                alt={post.data.title}
+                widths={[640]}
+                sizes={`320px`}
+            />
+        )
+    }
+    <div class="flex items-start justify-between gap-10 md:items-center">
+        <div class="hidden font-mono md:block shrink-0">
+            {formatDate(post.data.date)}
+        </div>
+        <p class="text-base flex flex-col">
+            <span class="font-bold">{post.data.title}</span>
+            {
+                post.data.subtitle && (
+                    <span class="text-neutral-400 text-sm">
+                        {post.data.subtitle}
+                    </span>
+                )
+            }
+        </p>
+        <div class="mt-1 md:hidden">
+            <!-- <ArrowRight weight="bold" size={20} /> -->
+        </div>
+    </div>
+    <div class="flex items-center gap-3 md:gap-10">
+        <div class="font-mono text-neutral-400 md:hidden">
+            {formatDate(post.data.date)}
+        </div>
+        <div class="font-mono text-neutral-400 md:hidden">|</div>
+        <div class="text-neutral-400">
+            {
+                post.data.category && (
+                    <div class="flex items-center gap-2">
+                        {(() => {
+                            // const IconComponent = getCategoryIcon(
+                            //     post.data.category
+                            // );
+                            // return <IconComponent weight="regular" size={20} />;
+                        })()}
+                        <span>
+                            {post.data.category &&
+                                post.data.category.charAt(0).toUpperCase() +
+                                    post.data.category.slice(1)}
+                        </span>
+                    </div>
+                )
+            }
+        </div>
+        <div class="hidden md:block">
+            <!-- <ArrowRight weight="bold" size={20} /> -->
+        </div>
+    </div>
+    <a
+        href={`/blog/${post.slug}`}
+        class="absolute bottom-0 left-0 right-0 top-0 h-full w-full"
+    >
+        <span class="sr-only">Read post</span>
+    </a>
+</div>

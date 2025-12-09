@@ -1,0 +1,242 @@
+---
+import Grid from "@components/Grid.astro";
+import Layout from "../layouts/Layout.astro";
+import ChangelogItem from "@components/ChangelogItem.astro";
+import { Icon } from "astro-icon/components";
+import Link from "@components/Link.astro";
+---
+
+<Layout>
+    <Grid class="mt-32 md:mt-40 md:mb-8 lg:mt-40 lg:mb-20">
+        <ChangelogItem
+            version="3.4.0"
+            title="💌 Postcards"
+            date={new Date("2025-06-25T10:00")}
+        >
+            <p>
+                Launched a fun little postcard feature! I wanted to create a
+                simple, personal way for visitors to say hello and leave a small
+                trace on the site. It’s like a digital guestbook — but a bit
+                more playful and meaningful. Every postcard gets a quick review
+                before being displayed to keep things friendly and spam-free.
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
+            version="3.3.0"
+            title="✍️ Blog"
+            date={new Date("2025-04-10T22:00")}
+        >
+            <p>
+                Excited to finally launch my blog! I've created a dedicated
+                space where I can share longer-form and insights about topics
+                I'm passionate about. Unlike my Digital Garden which contains
+                evolving notes, the blog features more polished, complete
+                articles that I've spent time refining.
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
+            version="3.2.0"
+            title="📷 365 project"
+            date={new Date("2025-01-21T16:00")}
+        >
+            <p>
+                Another Section! I’m capturing and sharing one photo each day
+                for a year. And share them on a new subpage on this website.
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
+            version="3.1.0"
+            title="🌿 Digital Garden"
+            date={new Date("2025-01-01T10:00")}
+        >
+            <p>
+                New Section! My Digital Garden is an evolving collection of
+                thoughts, ideas, and knowledge, dynamically synced straight from
+                my <Link href="https://obsidian.md/" external> Obsidian </Link> vault.
+                It's a space for curiosity and exploration—a living archive of topics
+                I’m passionate about. This seamless integration ensures the notes
+                stay up-to-date, reflecting my ever-changing interests. Dive in and
+                see what’s growing!
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
+            version="3.0.0"
+            title="🧑‍🚀 Astro and new layout"
+            date={new Date("2024-07-04T18:00")}
+        >
+            <p>
+                Rebuilt with <Link href="https://astro.build/" external
+                    >Astro.js</Link
+                >
+                - and you know what? I really enjoyed the development experience!
+                This update brings a fresh layout, new content-focused structure,
+                and cute little interactions that make the site uniquely personal.
+                It's now easier for me to add new content, ensuring a more dynamic
+                and engaging experience for visitors. Explore and enjoy the revamped
+                site!
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
+            version="2.2.0"
+            title="🌈 Themes"
+            date={new Date("2023-04-23T12:00")}
+        >
+            <p>
+                I couldn&apos;t decide if I prefer a blue or gray background for
+                my personal website. The solution: a theme switcher!
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
+            version="2.1.0"
+            title="🔖 Bookmark page"
+            date={new Date("2023-02-24T11:00")}
+        >
+            <p>
+                I have added a new page to the website, where all the articles,
+                websites, videos, and other things I have bookmarked are listed.
+                The data is automatically updated from my Raindrop.io account.
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
+            version="2.0.0"
+            title="💅 New layout"
+            date={new Date("2023-01-31T13:30")}
+        >
+            <p>
+                New layout! The navigation has moved from the top to the right
+                side of the website and was supplemented with a collidable
+                sidebar. There is also a dark-mode, so you don&apos;t have to
+                wear sunglasses at night anymore.
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
+            version="1.2.0"
+            title="📚 Literal integration"
+            date={new Date("2022-12-19T17:30")}
+        >
+            <p>
+                The data for my reading list is now coming directly from the
+                wonderful platform literal.club, as I was clearly too lazy to
+                maintain my reading stats on Notion.
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
+            version="1.1.0"
+            title="🎸 Add music overview"
+            date={new Date("2022-06-26T17:06")}
+        >
+            <p>
+                In addition to an overview of the books I&apos;ve read, there is
+                now also an overview of my favorite music under the media tab.
+                The data comes directly from my Spotify account and updates
+                automatically when I add a new favorite album.
+            </p>
+        </ChangelogItem>
+        <ChangelogItem
+            version="1.0.0"
+            title="🚀 Hello world"
+            date={new Date("2022-06-19T19:30")}
+        >
+            <p>
+                This website went live! It contains all the basic functions that
+                I have planned for the first release: an overview of my side
+                projects, a reading list and a gallery of my photos. The Data
+                for the reading list and photo gallery is based on Notion. The
+                page can be navigated via a command bar and contains a dark
+                theme.
+            </p>
+            <div class="mt-4 space-y-6 sm:flex sm:space-x-20 sm:space-y-[0]">
+                <div>
+                    <p class="mt-2 text-sm font-medium">Used tools</p>
+                    <ul class="mt-1 list-inside list-disc text-sm">
+                        <li class="flex items-center gap-2">
+                            <Icon
+                                class="text-neutral-400"
+                                name="ph:arrow-right"
+                                size={16}
+                            />
+                            VS Code
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <Icon
+                                class="text-neutral-400"
+                                name="ph:arrow-right"
+                                size={16}
+                            />
+                            Figma
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <Icon
+                                class="text-neutral-400"
+                                name="ph:arrow-right"
+                                size={16}
+                            />
+                            Notion
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="mt-2 text-sm font-medium">Tech stack</p>
+                    <ul class="mt-1 list-inside list-disc text-sm">
+                        <li class="flex items-center gap-2">
+                            <Icon
+                                class="text-neutral-400"
+                                name="ph:arrow-right"
+                                size={16}
+                            />
+                            Next.js
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <Icon
+                                class="text-neutral-400"
+                                name="ph:arrow-right"
+                                size={16}
+                            />
+                            Typescript
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <Icon
+                                class="text-neutral-400"
+                                name="ph:arrow-right"
+                                size={16}
+                            />
+                            Tailwind
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="mt-2 text-sm font-medium">Hosting</p>
+                    <ul class="mt-1 list-inside list-disc text-sm">
+                        <li class="flex items-center gap-2">
+                            <Icon
+                                class="text-neutral-400"
+                                name="ph:arrow-right"
+                                size={16}
+                            />
+                            Github
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <Icon
+                                class="text-neutral-400"
+                                name="ph:arrow-right"
+                                size={16}
+                            />
+                            Netlify
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </ChangelogItem>
+        <ChangelogItem
+            version="0.0.0"
+            title="👨🏼‍💻 Initial commit"
+            date={new Date("2022-03-17T18:30")}
+        >
+            <p>
+                The idea to build a website with a larger personal reference is
+                born and the rough project structure based on next.js,
+                typescript and tailwind is set up.
+            </p>
+        </ChangelogItem>
+    </Grid>
+</Layout>

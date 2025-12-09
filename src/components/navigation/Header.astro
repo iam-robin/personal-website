@@ -5,11 +5,7 @@ import NavGroup from "./NavGroup.astro";
 import MobileMenu from "./MobileMenu.astro";
 import ThemeSwitcher from "./ThemeSwitcher.astro";
 import Container from "@components/Container.astro";
-import BooksSticker from "@components/stickers/BooksSticker.astro";
-import MovieSticker from "@components/stickers/MovieSticker.astro";
-import TvSeriesSticker from "@components/stickers/TvSeriesSticker.astro";
 
-// Navigation data - easy to modify, add, or remove items
 const navigation = [
     {
         type: "group" as const,
@@ -36,7 +32,7 @@ const navigation = [
             {
                 label: "Music",
                 href: "/music",
-                sticker: "tv-series",
+                sticker: "music",
                 external: false,
             },
         ],
@@ -72,7 +68,7 @@ const navigation = [
 
 <header
     id="site-header"
-    class="sticky top-0 z-20 bg-background mt-8 border-neutral-200 opacity-0 -translate-y-full"
+    class="sticky top-0 z-20 bg-background mt-8 border-border opacity-0 -translate-y-full"
 >
     <Container>
         <div class="flex items-center justify-between h-16">
@@ -80,7 +76,7 @@ const navigation = [
             <a
                 href="/"
                 id="site-logo"
-                class="text-md font-bold hover:text-neutral-500 transition-colors hover:italic"
+                class="text-md font-bold hover:text-neutral-500 transition-colors hover:italic min-w-24"
             >
                 <p class="leading-none">
                     i<span class="logo-space w-1 inline-block"></span>am

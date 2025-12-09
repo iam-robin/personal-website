@@ -6,26 +6,20 @@ interface Props {
     handle: string;
     url?: string;
     noBorder?: boolean;
-    hoverBgColor: string;
-    hoverTextColor: string;
+    stickerColor: "yellow" | "blue" | "red" | "lilac";
     id: string;
 }
 
-const { service, handle, url, noBorder, hoverBgColor, hoverTextColor, id } =
+const { service, handle, url, noBorder, stickerColor, id } =
     Astro.props as Props;
 ---
 
-<li
-    id={id}
-    class="contact-item group"
-    data-bgcolor={hoverBgColor}
-    data-textcolor={hoverTextColor}
->
+<li id={id} class="contact-item group" data-sticker-color={stickerColor}>
     <a
         href={url}
         target="_blank"
         class={`grid grid-cols-4 items-center py-4 sm:grid-cols-6 lg:grid-cols-9 ${
-            !noBorder && "border-b border-black-200 border-inherit"
+            !noBorder && "border-b border-border-dark"
         }`}
     >
         <span

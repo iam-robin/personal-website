@@ -1,5 +1,6 @@
 ---
 import "@blossom-carousel/core/style.css";
+import Link from "@components/Link.astro";
 
 interface Props {
     columns?: number;
@@ -40,9 +41,9 @@ const { columns = 12, gap = "16px", headline, description, link } = Astro.props;
     {
         link && (
             <div class="max-w-(--max-width) mx-auto w-full flex justify-end">
-                <a href={link.href} class="text-inherit">
+                <Link href={link.href} standalone>
                     {link.text}
-                </a>
+                </Link>
             </div>
         )
     }

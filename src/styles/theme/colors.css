@@ -1,21 +1,5 @@
 @theme {
-    /* --background: #f4efca;
-    --foreground: #171717; */
-    --color-background: var(--color-neutral-100);
-    --color-foreground: var(--color-neutral-900);
-    /* --color-dark-cocoa: #321b1f;
-    --color-bright-orange-red: #f66435;
-    --color-light-cream: #f4efca; */
-
-    /* --color-*: initial;
-
-    --color-black: #000;
-    --color-white: #fff;
-    --color-inherit: inherit;
-    --color-current: currentColor;
-    --color-transparent: transparent; */
-
-    /* Neutral */
+    /* Neutral palette */
     --color-neutral-50: oklch(0.985 0.001 106.423);
     --color-neutral-100: oklch(0.97 0.001 106.424);
     --color-neutral-200: oklch(0.923 0.003 48.717);
@@ -28,29 +12,138 @@
     --color-neutral-900: oklch(0.216 0.006 56.043);
     --color-neutral-950: oklch(0.147 0.004 49.25);
 
-    /* Sticker */
-    --color-sticker-yellow: #ffc704;
-    --color-sticker-yellow-dark: #997800;
+    /* Base semantic colors */
+    --color-background: var(--color-neutral-100);
+    --color-foreground: var(--color-neutral-900);
 
-    --color-sticker-blue: #689bf7;
-    --color-sticker-blue-dark: #354e7b;
+    /* Surfaces (cards, containers, elevated elements) */
+    --color-surface: var(--color-neutral-50);
+    --color-surface-raised: var(--color-neutral-200);
+    --color-surface-inverse: var(--color-neutral-800);
 
-    --color-sticker-red: #ff8577;
-    --color-sticker-red-dark: #7f423c;
+    /* Text hierarchy */
+    --color-text-primary: var(--color-neutral-900);
+    --color-text-secondary: var(--color-neutral-500);
+    --color-text-muted: var(--color-neutral-400);
+    --color-text-inverse: var(--color-neutral-200);
 
-    --color-sticker-lilac: #c6baff;
-    --color-sticker-lilac-dark: #635c80;
+    /* Interactive states */
+    --color-hover-bg: var(--color-neutral-100);
+    --color-hover-text: var(--color-neutral-500);
+
+    /* Borders */
+    --color-border: var(--color-neutral-200);
+    --color-border-light: var(--color-neutral-100);
+    --color-border-dark: var(--color-neutral-300);
+
+    /* Accent color palette */
+    --color-yellow: oklch(0.85 0.18 85.65);
+    --color-yellow-dark: oklch(0.55 0.12 85.65);
+    --color-yellow-light: oklch(0.91 0.13 92.5);
+
+    --color-blue: oklch(0.7 0.13 255.5);
+    --color-blue-dark: oklch(0.4 0.08 255.5);
+    --color-blue-light: oklch(0.82 0.08 255.5);
+
+    --color-red: oklch(0.73 0.14 22.5);
+    --color-red-dark: oklch(0.43 0.09 22.5);
+    --color-red-light: oklch(0.82 0.1 22.5);
+
+    --color-lilac: oklch(0.81 0.11 295);
+    --color-lilac-dark: oklch(0.47 0.05 295);
+    --color-lilac-light: oklch(0.9 0.06 295);
+
+    --color-green: oklch(0.75 0.16 155);
+    --color-green-dark: oklch(0.45 0.1 155);
+    --color-green-light: oklch(0.85 0.1 155);
+
+    /* Sticker colors (using accent palette) */
+    --color-sticker-yellow: var(--color-yellow);
+    --color-sticker-yellow-dark: var(--color-yellow-dark);
+    --color-sticker-yellow-light: var(--color-yellow-light);
+
+    --color-sticker-blue: var(--color-blue);
+    --color-sticker-blue-dark: var(--color-blue-dark);
+    --color-sticker-blue-light: var(--color-blue-light);
+
+    --color-sticker-red: var(--color-red);
+    --color-sticker-red-dark: var(--color-red-dark);
+    --color-sticker-red-light: var(--color-red-light);
+
+    --color-sticker-lilac: var(--color-lilac);
+    --color-sticker-lilac-dark: var(--color-lilac-dark);
+    --color-sticker-lilac-light: var(--color-lilac-light);
+
+    --color-sticker-green: var(--color-green);
+    --color-sticker-green-dark: var(--color-green-dark);
+    --color-sticker-green-light: var(--color-green-light);
 }
 
 @layer base {
-    [data-theme="red"] {
-        --color-background: darkred;
-        --color-foreground: red;
+    [data-theme="pink"] {
+        /* Base: background #41374f, foreground #f8a6d3 */
+        --color-background: oklch(0.32 0.05 310);
+        --color-foreground: oklch(0.8 0.1 350);
+
+        /* Accent colors use pink tones */
+        --color-yellow: oklch(0.8 0.1 350);
+        --color-yellow-dark: oklch(0.32 0.05 310);
+        --color-yellow-light: oklch(0.87 0.08 350);
+
+        --color-blue: oklch(0.8 0.1 350);
+        --color-blue-dark: oklch(0.32 0.05 310);
+        --color-blue-light: oklch(0.87 0.08 350);
+
+        --color-red: oklch(0.8 0.1 350);
+        --color-red-dark: oklch(0.32 0.05 310);
+        --color-red-light: oklch(0.87 0.08 350);
+
+        --color-lilac: oklch(0.8 0.1 350);
+        --color-lilac-dark: oklch(0.32 0.05 310);
+        --color-lilac-light: oklch(0.87 0.08 350);
+
+        --color-green: oklch(0.8 0.1 350);
+        --color-green-dark: oklch(0.32 0.05 310);
+        --color-green-light: oklch(0.87 0.08 350);
+
+        /* Surfaces - variations of background */
+        --color-surface: oklch(0.28 0.04 310);
+        --color-surface-raised: oklch(0.38 0.05 310);
+        --color-surface-inverse: oklch(0.8 0.1 350);
+
+        /* Text hierarchy - variations of foreground */
+        --color-text-primary: oklch(0.8 0.1 350);
+        --color-text-secondary: oklch(0.65 0.08 350);
+        --color-text-muted: oklch(0.52 0.06 350);
+
+        /* Interactive states */
+        --color-hover-bg: oklch(0.38 0.05 310);
+        --color-hover-text: oklch(0.65 0.08 350);
+
+        /* Borders */
+        --color-border: oklch(0.42 0.05 310);
+        --color-border-light: oklch(0.38 0.05 310);
+        --color-border-dark: oklch(0.32 0.05 310);
     }
 
     [data-theme="dark"] {
         --color-background: var(--color-neutral-900);
         --color-foreground: var(--color-neutral-100);
+
+        --color-surface: var(--color-neutral-800);
+        --color-surface-raised: var(--color-neutral-700);
+        --color-surface-inverse: var(--color-neutral-200);
+
+        --color-text-primary: var(--color-neutral-100);
+        --color-text-secondary: var(--color-neutral-400);
+        --color-text-muted: var(--color-neutral-500);
+
+        --color-hover-bg: var(--color-neutral-800);
+        --color-hover-text: var(--color-neutral-400);
+
+        --color-border: var(--color-neutral-700);
+        --color-border-light: var(--color-neutral-800);
+        --color-border-dark: var(--color-neutral-600);
     }
 }
 

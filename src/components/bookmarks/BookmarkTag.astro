@@ -1,0 +1,13 @@
+---
+interface Props {
+    tag: string;
+}
+
+const { tag } = Astro.props;
+---
+
+<span
+    class="shrink-0 rounded-full bg-surface-raised text-text-secondary px-2 py-0.5 font-mono text-xs"
+>
+    #{tag}
+</span>

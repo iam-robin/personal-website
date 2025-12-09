@@ -2,11 +2,12 @@
 interface Props {
     size?: number;
     class?: string;
+    id?: string;
     iconColor: string;
     bgColor: string;
 }
 
-const { size = 74, class: className, iconColor, bgColor } = Astro.props;
+const { size = 74, class: className, id, iconColor, bgColor } = Astro.props;
 
 const aspectRatio = 66 / 74;
 const height = size * aspectRatio;

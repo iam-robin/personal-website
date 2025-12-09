@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import Header from "../components/navigation/Header.astro";
+import Footer from "@components/Footer.astro";
 
 interface Props {
     hasHeader?: boolean;
@@ -11,7 +12,7 @@ const { hasHeader = true } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
     <head>
         <meta charset="utf-8" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -23,5 +24,6 @@ const { hasHeader = true } = Astro.props;
     <body class="bg-background text-foreground">
         {hasHeader && <Header />}
         <slot />
+        <Footer class="mt-32" />
     </body>
 </html>

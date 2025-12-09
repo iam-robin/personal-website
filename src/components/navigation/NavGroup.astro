@@ -3,6 +3,7 @@ import { Icon } from "astro-icon/components";
 import BooksSticker from "@components/stickers/BooksSticker.astro";
 import MovieSticker from "@components/stickers/MovieSticker.astro";
 import TvSeriesSticker from "@components/stickers/TvSeriesSticker.astro";
+import MusicSticker from "@components/stickers/MusicSticker.astro";
 
 interface NavItem {
     label: string;
@@ -32,6 +33,10 @@ const stickerColors = {
         iconColor: "--color-sticker-lilac-dark",
         bgColor: "--color-sticker-lilac",
     },
+    music: {
+        iconColor: "--color-sticker-red-dark",
+        bgColor: "--color-sticker-red",
+    },
 };
 ---
 
@@ -51,7 +56,7 @@ const stickerColors = {
         class="invisible opacity-0 group-hover:visible group-hover:opacity-100 absolute z-50 top-full left-1/2 -translate-x-1/2 pt-2 transition-all duration-200"
     >
         <div
-            class="bg-white rounded-xl shadow-lg border border-neutral-100 p-2 min-w-48"
+            class="bg-surface rounded-xl shadow-lg border border-border p-2 min-w-48"
         >
             {
                 items.map((item) => (
@@ -59,7 +64,7 @@ const stickerColors = {
                         href={item.href}
                         target={item.external ? "_blank" : undefined}
                         rel={item.external ? "noopener noreferrer" : undefined}
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-50 transition-colors"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-raised transition-colors"
                     >
                         {item.sticker === "books" && (
                             <BooksSticker
@@ -82,8 +87,17 @@ const stickerColors = {
                                 bgColor={stickerColors["tv-series"].bgColor}
                             />
                         )}
+                        {item.sticker === "music" && (
+                            <MusicSticker
+                                size={24}
+                                iconColor={stickerColors.music.iconColor}
+                                bgColor={stickerColors.music.bgColor}
+                            />
+                        )}
                         {item.icon && <Icon name={item.icon} size={32} />}
-                        <span>{item.label}</span>
+                        <span class="text-sm uppercase tracking-wide">
+                            {item.label}
+                        </span>
                         {item.external && (
                             <Icon
                                 name="ph:arrow-up-right-bold"
