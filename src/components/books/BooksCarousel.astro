@@ -1,0 +1,38 @@
+---
+import Carousel from "@components/carousel/Carousel.astro";
+import CarouselItem from "@components/carousel/CarouselItem.astro";
+import BookCarouselItem from "./BookCarouselItem.astro";
+import type { Book } from "@api/github-books";
+
+interface Props {
+    title: string;
+    books: Book[];
+    currentlyReadingBooks?: Book[];
+}
+
+const { title, books, currentlyReadingBooks = [] } = Astro.props;
+
+// Combine currently reading books (first) with regular books
+const allBooks = [...currentlyReadingBooks, ...books];
+---
+
+{
+    allBooks.length > 0 && (
+        <Carousel headline={title}>
+            {allBooks.map((book, index) => (
+                <CarouselItem
+                    smallSpan={5}
+                    mediumSpan={3}
+                    largeSpan={2}
+                    paddingBottom={24}
+                    paddingTop={24}
+                >
+                    <BookCarouselItem
+                        book={book}
+                        isCurrentlyReading={index < currentlyReadingBooks.length}
+                    />
+                </CarouselItem>
+            ))}
+        </Carousel>
+    )
+}

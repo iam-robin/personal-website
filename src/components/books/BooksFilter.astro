@@ -1,0 +1,71 @@
+---
+interface Props {
+    years: string[];
+    selectedYear: string;
+    hasMerkliste: boolean;
+    bookCounts: Record<string, number>;
+}
+
+const { years, selectedYear, hasMerkliste, bookCounts } = Astro.props;
+
+// Sort years descending (newest first)
+const sortedYears = [...years].sort((a, b) => Number(b) - Number(a));
+---
+
+<div class="mb-12 rounded-lg border border-foreground/50 bg-surface p-4">
+    <div class="font-mono text-xs uppercase tracking-widest mb-4">
+        Filter by year
+    </div>
+    <div class="flex flex-wrap gap-2">
+        {
+            sortedYears.map((year) => (
+                <a
+                    href={`/books/year/${year}`}
+                    class:list={[
+                        "flex items-center px-3 py-1 font-mono text-xs rounded-full border transition-all duration-200 no-underline",
+                        selectedYear === year
+                            ? "border-blue bg-blue text-surface hover:border-blue hover:text-surface"
+                            : "border-border bg-surface text-current hover:border-blue hover:text-blue",
+                    ]}
+                >
+                    {year}
+                    <span
+                        class:list={[
+                            "ml-1",
+                            selectedYear === year
+                                ? "text-surface/70"
+                                : "text-text-muted",
+                        ]}
+                    >
+                        ({bookCounts[year] || 0})
+                    </span>
+                </a>
+            ))
+        }
+        {
+            hasMerkliste && (
+                <a
+                    href="/books/year/want-to-read"
+                    class:list={[
+                        "flex items-center px-3 py-1 font-mono text-xs rounded-full border transition-all duration-200 no-underline",
+                        selectedYear === "want-to-read"
+                            ? "border-blue bg-blue text-surface hover:border-blue hover:text-surface"
+                            : "border-border bg-surface text-current hover:border-blue hover:text-blue",
+                    ]}
+                >
+                    want to read
+                    <span
+                        class:list={[
+                            "ml-1",
+                            selectedYear === "want-to-read"
+                                ? "text-surface/70"
+                                : "text-text-muted",
+                        ]}
+                    >
+                        ({bookCounts["want-to-read"] || 0})
+                    </span>
+                </a>
+            )
+        }
+    </div>
+</div>

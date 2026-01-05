@@ -1,0 +1,174 @@
+---
+import Layout from "@layouts/Layout.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import Container from "@components/Container.astro";
+import BooksFilter from "./BooksFilter.astro";
+import BooksCarousel from "./BooksCarousel.astro";
+import type { Book, BooksData } from "@api/github-books";
+
+interface Props {
+    booksData: BooksData;
+    selectedYear?: string;
+}
+
+const { booksData, selectedYear } = Astro.props;
+
+const { aktiv, merkliste, abgeschlossen } = booksData;
+
+// Get current year
+const currentYear = new Date().getFullYear().toString();
+
+// Get years from abgeschlossen and add current year if it has aktiv books
+const abgeschlossenYears = Object.keys(abgeschlossen);
+const hasCurrentYearBooks = abgeschlossenYears.includes(currentYear);
+const years =
+    hasCurrentYearBooks || aktiv.length === 0
+        ? abgeschlossenYears.sort((a, b) => Number(b) - Number(a))
+        : [currentYear, ...abgeschlossenYears].sort(
+              (a, b) => Number(b) - Number(a)
+          );
+
+// Default to current year if no selection
+const activeYear = selectedYear || currentYear;
+
+// Sort books within each year by finished date (newest first)
+const sortBooksByDate = (books: Book[]) => {
+    return [...books].sort((a, b) => {
+        const dateA = a.finished ? new Date(a.finished).getTime() : 0;
+        const dateB = b.finished ? new Date(b.finished).getTime() : 0;
+        return dateB - dateA;
+    });
+};
+
+// Build book counts for filter
+const bookCounts: Record<string, number> = {};
+years.forEach((year) => {
+    const completedCount = abgeschlossen[year]?.length || 0;
+    const aktivCount = year === currentYear ? aktiv.length : 0;
+    bookCounts[year] = completedCount + aktivCount;
+});
+bookCounts["want-to-read"] = merkliste.length;
+
+// Determine what to display
+const isWantToRead = activeYear === "want-to-read";
+const isCurrentYear = activeYear === currentYear;
+
+// Helper to check if a book is a graphic novel
+const isGraphicNovel = (book: Book) => {
+    return (
+        book.genre?.some((g) => g.toLowerCase().includes("graphic novel")) ??
+        false
+    );
+};
+
+// Helper to check if a book is non-fiction
+const isNonFiction = (book: Book) => {
+    return (
+        book.genre?.some(
+            (g) =>
+                g.toLowerCase().includes("nonfiction") ||
+                g.toLowerCase().includes("non-fiction")
+        ) ?? false
+    );
+};
+
+// Helper to check if a book is a regular fiction book (not graphic novel or non-fiction)
+const isFiction = (book: Book) => !isGraphicNovel(book) && !isNonFiction(book);
+
+// Split books into categories for the active year
+const yearBooks = abgeschlossen[activeYear] || [];
+const fictionBooks = yearBooks.filter(isFiction);
+const graphicNovels = yearBooks.filter(isGraphicNovel);
+const nonFictionBooks = yearBooks.filter(isNonFiction);
+
+// Also split aktiv books if current year
+const aktivFiction = aktiv.filter(isFiction);
+const aktivGraphicNovels = aktiv.filter(isGraphicNovel);
+const aktivNonFiction = aktiv.filter(isNonFiction);
+
+// Split merkliste for want-to-read view
+const merklisteFiction = merkliste.filter(isFiction);
+const merklisteGraphicNovels = merkliste.filter(isGraphicNovel);
+const merklisteNonFiction = merkliste.filter(isNonFiction);
+---
+
+<Layout>
+    <HeadlineParagraphSection title="Books" class="py-32">
+        I keep track of the books I read in Obsidian, where I log and organize
+        everything I've finished. To make this collection easier to browse, the
+        data is automatically updated and displayed here on my website. It
+        serves as a personal archive and a way to look back at my reading over
+        time.
+    </HeadlineParagraphSection>
+    <Container>
+        <BooksFilter
+            years={years}
+            selectedYear={activeYear}
+            hasMerkliste={merkliste.length > 0}
+            bookCounts={bookCounts}
+        />
+    </Container>
+
+    <div class="flex flex-col gap-8">
+        {
+            !isWantToRead &&
+                (fictionBooks.length > 0 ||
+                    (isCurrentYear && aktivFiction.length > 0)) && (
+                    <BooksCarousel
+                        title={activeYear}
+                        books={sortBooksByDate(fictionBooks)}
+                        currentlyReadingBooks={
+                            isCurrentYear ? aktivFiction : []
+                        }
+                    />
+                )
+        }
+        {
+            !isWantToRead &&
+                (nonFictionBooks.length > 0 ||
+                    (isCurrentYear && aktivNonFiction.length > 0)) && (
+                    <BooksCarousel
+                        title="Non-Fiction"
+                        books={sortBooksByDate(nonFictionBooks)}
+                        currentlyReadingBooks={
+                            isCurrentYear ? aktivNonFiction : []
+                        }
+                    />
+                )
+        }
+        {
+            !isWantToRead &&
+                (graphicNovels.length > 0 ||
+                    (isCurrentYear && aktivGraphicNovels.length > 0)) && (
+                    <BooksCarousel
+                        title="Graphic Novels"
+                        books={sortBooksByDate(graphicNovels)}
+                        currentlyReadingBooks={
+                            isCurrentYear ? aktivGraphicNovels : []
+                        }
+                    />
+                )
+        }
+        {
+            isWantToRead && merklisteFiction.length > 0 && (
+                <BooksCarousel title="Want to Read" books={merklisteFiction} />
+            )
+        }
+        {
+            isWantToRead && merklisteNonFiction.length > 0 && (
+                <BooksCarousel
+                    title="Non-Fiction"
+                    books={merklisteNonFiction}
+                />
+            )
+        }
+        {
+            isWantToRead && merklisteGraphicNovels.length > 0 && (
+                <BooksCarousel
+                    title="Graphic Novels"
+                    books={merklisteGraphicNovels}
+                />
+            )
+        }
+    </div>
+</Layout>

@@ -1,0 +1,67 @@
+---
+import { Icon } from "astro-icon/components";
+import type { Book } from "@api/github-books";
+
+interface Props {
+    book: Book;
+    isCurrentlyReading?: boolean;
+}
+
+const { book, isCurrentlyReading = false } = Astro.props;
+
+// Generate stars for rating
+const rating = book.rating ?? 0;
+const fullStars = Math.floor(rating);
+const hasHalfStar = rating % 1 >= 0.5;
+const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+// Format authors
+const authors = book.author.join(", ");
+---
+
+<div class="flex flex-col gap-3">
+    <div class="relative aspect-[2/3] overflow-hidden rounded-sm bg-neutral-100">
+        {
+            book.cover ? (
+                <img
+                    src={book.cover}
+                    alt={`${book.title} cover`}
+                    class="h-full w-full object-cover"
+                    loading="lazy"
+                />
+            ) : (
+                <div class="flex h-full w-full items-center justify-center text-neutral-400">
+                    <Icon name="ph:book" width={48} />
+                </div>
+            )
+        }
+        {
+            isCurrentlyReading && (
+                <div class="absolute left-2 top-2 rounded bg-black/70 px-2 py-1 text-xs text-white">
+                    Reading
+                </div>
+            )
+        }
+    </div>
+    <div class="flex flex-col gap-1">
+        <p class="line-clamp-2 text-sm font-bold leading-tight">{book.title}</p>
+        <p class="line-clamp-1 text-xs text-neutral-500">{authors}</p>
+        {
+            rating > 0 && (
+                <div class="flex items-center gap-1 pt-1">
+                    {Array.from({ length: fullStars }, (_, i) => (
+                        <Icon name="ph:star-fill" width={12} />
+                    ))}
+                    {hasHalfStar && <Icon name="ph:star-half-fill" width={12} />}
+                    {Array.from({ length: emptyStars }, (_, i) => (
+                        <Icon
+                            name="ph:star-fill"
+                            width={12}
+                            class="text-neutral-300"
+                        />
+                    ))}
+                </div>
+            )
+        }
+    </div>
+</div>
