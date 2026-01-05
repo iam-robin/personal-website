@@ -55,7 +55,7 @@ const countryFlags = Object.fromEntries(
 </style>
 
 <script define:vars={{ visitedCountries, countryFlags }}>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("astro:page-load", () => {
         const countryPaths = document.querySelectorAll("svg path");
         const tooltip = document.getElementById("tooltip");
 

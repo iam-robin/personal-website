@@ -6,6 +6,8 @@ import MovieYearContainer from "@components/movies/MovieYearContainer.astro";
 // import SectionContent from "@components/SectionContent.astro";
 import { scrapeLetterboxdFilms } from "@utils/letterboxd";
 import { getMockMovieData } from "@utils/mockMovies";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import Container from "@components/Container.astro";
 
 const username = "iamrobin";
 let movieData;
@@ -65,53 +67,49 @@ const years = Object.keys(filmsByYear)
 
 <Layout>
     <!-- <Layout title="Movies" description={`${count} movies watched on Letterboxd`}> -->
-    <Grid class="py-40">
-        <GridItem colSpan={12}>
-            Movies I keep track of the films I watch on Letterboxd, where I log
-            and organize everything I’ve seen. To make this collection easier to
-            browse, the data is automatically updated and displayed here on my
-            website. It serves as a personal archive and a way to look back at
-            my movie watching over time.
-            <!-- <SectionContent title="Movies" classes="!px-0" /> -->
+    <HeadlineParagraphSection title="Movies" class="py-32">
+        I keep track of the films I watch on Letterboxd, where I log and
+        organize everything I’ve seen. To make this collection easier to browse,
+        the data is automatically updated and displayed here on my website. It
+        serves as a personal archive and a way to look back at my movie watching
+        over time.
+    </HeadlineParagraphSection>
+    <Container>
+        {
+            error && (
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                    <p class="text-red-800">
+                        Failed to load movie data: {error}
+                    </p>
+                </div>
+            )
+        }
 
-            {
-                error && (
-                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
-                        <p class="text-red-800">
-                            Failed to load movie data: {error}
-                        </p>
-                    </div>
-                )
-            }
+        {
+            films.length > 0 && (
+                <div>
+                    {years.map((year) => (
+                        <MovieYearContainer
+                            films={filmsByYear[year]}
+                            year={year}
+                        />
+                    ))}
+                </div>
+            )
+        }
 
-            {
-                films.length > 0 && (
-                    <div>
-                        {years.map((year) => (
-                            <MovieYearContainer
-                                films={filmsByYear[year]}
-                                year={year}
-                            />
-                        ))}
-                    </div>
-                )
-            }
-
-            {
-                films.length === 0 && !error && (
-                    <div class="text-center py-20">
-                        <div class="text-6xl mb-4">🎬</div>
-                        <h2 class="text-xl font-medium mb-2">
-                            No movies found
-                        </h2>
-                        <p class="text-neutral-600">
-                            Check back later for movie updates.
-                        </p>
-                    </div>
-                )
-            }
-        </GridItem>
-    </Grid>
+        {
+            films.length === 0 && !error && (
+                <div class="text-center py-20">
+                    <div class="text-6xl mb-4">🎬</div>
+                    <h2 class="text-xl font-medium mb-2">No movies found</h2>
+                    <p class="text-neutral-600">
+                        Check back later for movie updates.
+                    </p>
+                </div>
+            )
+        }
+    </Container>
 
     <style>
         .line-clamp-2 {

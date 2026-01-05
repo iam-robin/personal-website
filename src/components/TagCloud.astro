@@ -1,6 +1,4 @@
 ---
-// import { CaretDown } from '@phosphor-icons/react';
-
 interface Props {
     tags: {
         name: string;
@@ -21,156 +19,77 @@ const { tags, selectedTag, basePath, filterPath, filterLabel, total } =
 const sortedTags = [...tags].sort((a, b) => b.count - a.count);
 ---
 
-<details open class="tag-cloud">
-    <summary class="tag-cloud__summary" aria-label="Toggle tag filter">
-        <div class="tag-cloud__label">
+<details open class="group mb-12 p-4 bg-surface border border-foreground/50 rounded-lg">
+    <summary
+        class="flex items-center justify-between -m-2 p-4 font-medium cursor-pointer select-none focus:outline-none focus-visible:outline-2 focus-visible:outline-blue focus-visible:outline-offset-2"
+        aria-label="Toggle tag filter"
+    >
+        <div class="font-mono text-xs uppercase tracking-widest">
             Filter by {filterLabel}
             {
                 selectedTag && (
-                    <span class="tag-cloud__selected-label">
+                    <span class="inline group-open:hidden">
                         / ({selectedTag})
                     </span>
                 )
             }
         </div>
-        <div class="tag-cloud__icon">
+        <div class="transition-transform duration-300 group-open:rotate-180">
             <!-- <CaretDown weight="bold" size={20} /> -->
         </div>
     </summary>
 
-    <div class="tag-cloud__content">
-        <div class="tag-cloud__tags">
+    <div class="mt-4 pt-2">
+        <div class="flex flex-wrap gap-2">
             <a
                 href={`${basePath}`}
-                class={`tag-cloud__tag ${!selectedTag ? "tag-cloud__tag--selected" : ""}`}
+                class:list={[
+                    "flex items-center px-3 py-1 font-mono text-xs rounded-full border transition-all duration-200 no-underline",
+                    !selectedTag
+                        ? "border-blue bg-blue text-surface hover:border-blue hover:text-surface"
+                        : "border-border bg-surface text-current hover:border-blue hover:text-blue",
+                ]}
             >
                 <span>all</span>
-                {total && <span class="tag-cloud__tag-count">({total})</span>}
+                {
+                    total && (
+                        <span
+                            class:list={[
+                                "ml-1",
+                                !selectedTag ? "text-surface/70" : "text-text-muted",
+                            ]}
+                        >
+                            ({total})
+                        </span>
+                    )
+                }
             </a>
             {
                 sortedTags.map((tag) => (
                     <a
                         href={`${basePath}/${filterPath}/${tag.name}`}
-                        class={`tag-cloud__tag ${selectedTag === tag.name ? "tag-cloud__tag--selected" : ""}`}
+                        class:list={[
+                            "flex items-center px-3 py-1 font-mono text-xs rounded-full border transition-all duration-200 no-underline",
+                            selectedTag === tag.name
+                                ? "border-blue bg-blue text-surface hover:border-blue hover:text-surface"
+                                : "border-border bg-surface text-current hover:border-blue hover:text-blue",
+                        ]}
                     >
-                        {tag.flag && (
-                            <span class="tag-cloud__tag-flag">{tag.flag}</span>
-                        )}
+                        {tag.flag && <span class="mr-1">{tag.flag}</span>}
                         {tag.name}
-                        <span class="tag-cloud__tag-count">({tag.count})</span>
+                        <span
+                            class:list={[
+                                "ml-1",
+                                selectedTag === tag.name
+                                    ? "text-surface/70"
+                                    : "text-text-muted",
+                            ]}
+                        >
+                            ({tag.count})
+                        </span>
                     </a>
                 ))
             }
         </div>
     </div>
 </details>
-
-<style>
-    .tag-cloud {
-        margin-bottom: 3rem;
-        padding: 1rem;
-        background-color: #fafafa;
-        border: 1px solid rgba(0, 0, 0, 0.5);
-        border-radius: 0.5rem;
-    }
-
-    .tag-cloud__summary {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: -0.5rem;
-        padding: 1rem;
-        font-weight: 500;
-        cursor: pointer;
-        user-select: none;
-    }
-
-    .tag-cloud__summary:focus {
-        outline: none;
-    }
-
-    .tag-cloud__summary:focus-visible {
-        outline: 2px solid var(--color-blue, #3b82f6);
-        outline-offset: 2px;
-    }
-
-    .tag-cloud__label {
-        font-family: monospace;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-    }
-
-    .tag-cloud__selected-label {
-        display: inline;
-    }
-
-    .tag-cloud[open] .tag-cloud__selected-label {
-        display: none;
-    }
-
-    .tag-cloud__icon {
-        transition: transform 0.3s ease;
-    }
-
-    .tag-cloud[open] .tag-cloud__icon {
-        transform: rotate(180deg);
-    }
-
-    .tag-cloud__content {
-        margin-top: 1rem;
-        padding-top: 0.5rem;
-    }
-
-    .tag-cloud__tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-
-    .tag-cloud__tag {
-        display: flex;
-        align-items: center;
-        padding: 0.25rem 0.75rem;
-        font-family: monospace;
-        font-size: 0.75rem;
-        border: 1px solid #e5e5e5;
-        border-radius: 9999px;
-        background-color: white;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .tag-cloud__tag:hover {
-        border-color: var(--color-blue, #3b82f6);
-        color: var(--color-blue, #3b82f6);
-    }
-
-    .tag-cloud__tag--selected {
-        border-color: var(--color-blue, #3b82f6);
-        background-color: var(--color-blue, #3b82f6);
-        color: white;
-    }
-
-    .tag-cloud__tag--selected:hover {
-        border-color: var(--color-blue, #3b82f6);
-        color: white;
-    }
-
-    .tag-cloud__tag-flag {
-        margin-right: 0.25rem;
-    }
-
-    .tag-cloud__tag-count {
-        margin-left: 0.25rem;
-    }
-
-    .tag-cloud__tag--selected .tag-cloud__tag-count {
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    .tag-cloud__tag:not(.tag-cloud__tag--selected) .tag-cloud__tag-count {
-        color: #a3a3a3;
-    }
-</style>

@@ -1,0 +1,91 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Grid from "@components/Grid.astro";
+import GridItem from "@components/GridItem.astro";
+import TagCloud from "@components/TagCloud.astro";
+import YearContainer from "./YearContainer.astro";
+import Container from "@components/Container.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+
+interface Props {
+    posts: CollectionEntry<"blog">[];
+    allPosts: CollectionEntry<"blog">[];
+    selectedCategory?: string;
+}
+
+const { posts, allPosts, selectedCategory } = Astro.props;
+
+// Sort posts by date
+const sortedPosts = [...posts].sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+// Group by year
+const postsByYear = sortedPosts.reduce(
+    (acc, post) => {
+        const year = post.data.date.getFullYear();
+        if (!acc[year]) acc[year] = [];
+        acc[year].push(post);
+        return acc;
+    },
+    {} as Record<number, typeof sortedPosts>
+);
+
+const years = Object.keys(postsByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
+
+// Generate category counts for the tag cloud
+const allCategories = allPosts.flatMap((post) => post.data.category || []);
+const categoryCounts = allCategories.reduce(
+    (acc, cat) => {
+        acc[cat] = (acc[cat] || 0) + 1;
+        return acc;
+    },
+    {} as Record<string, number>
+);
+
+const categoryCloudData = Object.entries(categoryCounts).map(
+    ([name, count]) => ({ name, count })
+);
+---
+
+<Layout>
+    <Container>
+        <Grid class="py-40">
+            <GridItem colSpan={12}>
+                <HeadlineParagraphSection title="Blog">
+                    After years of wanting to have a blog, I am finally putting
+                    pen to paper (or fingers to keyboard). It took me some time
+                    to build the courage, but now I'm excited to dive into a
+                    variety of topics that interest me. Your feedback and
+                    perspectives are always welcome and I'm looking forward to
+                    the conversations that will come from these posts.
+                </HeadlineParagraphSection>
+
+                <TagCloud
+                    tags={categoryCloudData}
+                    selectedTag={selectedCategory}
+                    basePath="/blog"
+                    filterPath="category"
+                    filterLabel="category"
+                    total={allPosts.length}
+                />
+
+                <div>
+                    {
+                        years.map((year) => (
+                            <YearContainer
+                                posts={postsByYear[year]}
+                                year={year}
+                            />
+                        ))
+                    }
+                </div>
+            </GridItem>
+        </Grid>
+    </Container>
+</Layout>
+
+<script src="../../scripts/listItemImageHoverEffect.js"></script>

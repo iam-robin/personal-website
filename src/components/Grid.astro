@@ -4,14 +4,15 @@ interface Props {
     gap?: string;
     class?: string;
     id?: string;
+    hasMaxWidth?: boolean;
 }
 
-const { columns, gap, class: className, id } = Astro.props;
+const { columns, gap, class: className, id, hasMaxWidth = true } = Astro.props;
 ---
 
 <div
     id={id}
-    class:list={["grid", className]}
+    class:list={["grid", hasMaxWidth && "grid--max-width", className]}
     style={[columns && `--columns: ${columns}`, gap && `--gap: ${gap}`]
         .filter(Boolean)
         .join("; ")}
@@ -25,8 +26,11 @@ const { columns, gap, class: className, id } = Astro.props;
         grid-template-columns: repeat(var(--columns), 1fr);
         gap: var(--gap);
         width: 100%;
+        container-type: inline-size;
+    }
+
+    .grid--max-width {
         max-width: var(--max-width);
         margin: 0 auto;
-        container-type: inline-size;
     }
 </style>

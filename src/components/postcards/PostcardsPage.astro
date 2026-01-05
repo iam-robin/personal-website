@@ -1,0 +1,75 @@
+---
+import { db, Postcard, desc, eq } from "astro:db";
+import {
+    isValidCountry,
+    getStandardCountryName,
+    getCountryFlag,
+} from "@utils/countries";
+import PostcardsSection from "./PostcardsSection.astro";
+import WorldMapDetail from "./WorldMapDetail.astro";
+import Layout from "@layouts/Layout.astro";
+import TagCloud from "@components/TagCloud.astro";
+import Container from "@components/Container.astro";
+
+interface Props {
+    selectedCountry?: string;
+}
+
+const { selectedCountry } = Astro.props;
+
+// Fetch all postcards
+const allPostcards = await db
+    .select()
+    .from(Postcard)
+    .where(eq(Postcard.isPublished, true))
+    .orderBy(desc(Postcard.date));
+
+// Filter postcards based on selectedCountry
+const displayedPostcards = selectedCountry
+    ? allPostcards.filter(
+          (p) =>
+              p.country && getStandardCountryName(p.country) === selectedCountry
+      )
+    : allPostcards;
+
+// Process countries from ALL postcards for TagCloud
+const allCountries = allPostcards
+    .map((postcard) => postcard.country)
+    .filter((country) => country !== null && country !== undefined);
+
+const countryCounts = allCountries.reduce(
+    (acc, country) => {
+        if (isValidCountry(country!)) {
+            const standardName = getStandardCountryName(country!);
+            acc[standardName] = (acc[standardName] || 0) + 1;
+        }
+        return acc;
+    },
+    {} as Record<string, number>
+);
+
+const countryCloudData = Object.entries(countryCounts).map(([name, count]) => ({
+    name,
+    count,
+    flag: getCountryFlag(name),
+}));
+
+const visitedCountries = countryCloudData.map((country) => country.name);
+---
+
+<Layout>
+    <Container>
+        <TagCloud
+            tags={countryCloudData}
+            selectedTag={selectedCountry}
+            basePath="/postcards"
+            filterPath="country"
+            filterLabel="country"
+            total={allPostcards.length}
+        />
+    </Container>
+    <PostcardsSection postcards={displayedPostcards} />
+    <Container>
+        <WorldMapDetail visitedCountries={visitedCountries} />
+    </Container>
+</Layout>

@@ -44,6 +44,11 @@ const navigation = [
     },
     {
         type: "link" as const,
+        label: "Bookmarks",
+        href: "/bookmarks",
+    },
+    {
+        type: "link" as const,
         label: "Postcards",
         href: "/postcards",
     },
@@ -120,6 +125,9 @@ const navigation = [
 <script>
     import { animate } from "motion";
 
+    // Module-level flag - persists across view transitions, resets on full page load
+    let hasAnimated = false;
+
     document.addEventListener("astro:page-load", () => {
         const header = document.getElementById("site-header")!;
         const logo = document.getElementById("site-logo")!;
@@ -132,47 +140,34 @@ const navigation = [
         const stickyThreshold = 32;
         const isSticky = window.scrollY >= stickyThreshold;
 
-        if (isSticky) {
-            // If already scrolled, slide in immediately without delay
-            // First remove CSS classes to avoid conflicts with Motion
+        if (hasAnimated) {
+            // Already animated this session - just show header immediately
             header.classList.remove("opacity-0", "-translate-y-full");
-            header.style.opacity = "0";
-            header.style.transform = "translateY(-100%)";
+        } else {
+            hasAnimated = true;
+            const isIndexPage = window.location.pathname === "/";
 
-            // Use requestAnimationFrame to ensure styles are applied before animation
-            requestAnimationFrame(() => {
+            if (isIndexPage && !isSticky) {
+                // Index page, not scrolled - play delayed animation
+                header.classList.remove("opacity-0", "-translate-y-full");
+                header.style.opacity = "0";
+                header.style.transform = "translateY(-100%)";
+
                 animate(
                     header,
                     {
                         opacity: [0, 1],
                         transform: ["translateY(-100%)", "translateY(0%)"],
                     },
-                    { duration: 0.3, ease: [0.39, 0.24, 0.3, 1] }
+                    { duration: 0.5, delay: 1.5, ease: [0.39, 0.24, 0.3, 1] }
                 ).then(() => {
                     header.style.opacity = "";
                     header.style.transform = "";
                 });
-            });
-        } else {
-            // Remove CSS classes first to avoid conflicts with Motion
-            header.classList.remove("opacity-0", "-translate-y-full");
-            // Set initial state via inline styles
-            header.style.opacity = "0";
-            header.style.transform = "translateY(-100%)";
-
-            // Slide in from top after hero animation completes
-            animate(
-                header,
-                {
-                    opacity: [0, 1],
-                    transform: ["translateY(-100%)", "translateY(0%)"],
-                },
-                { duration: 0.5, delay: 1.5, ease: [0.39, 0.24, 0.3, 1] }
-            ).then(() => {
-                // Clear inline styles - header stays at final position
-                header.style.opacity = "";
-                header.style.transform = "";
-            });
+            } else {
+                // Other pages or scrolled - show immediately
+                header.classList.remove("opacity-0", "-translate-y-full");
+            }
         }
 
         function updateHeaderStyle() {

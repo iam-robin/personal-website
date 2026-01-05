@@ -1,13 +1,31 @@
 ---
-export const prerender = false;
+import { db, Postcard, desc, eq } from "astro:db";
+import { isValidCountry, getStandardCountryName } from "@utils/countries";
+import PostcardsPage from "@components/postcards/PostcardsPage.astro";
 
-// TODO: Implement country-specific postcards page
+export async function getStaticPaths() {
+    const allPostcards = await db
+        .select()
+        .from(Postcard)
+        .where(eq(Postcard.isPublished, true))
+        .orderBy(desc(Postcard.date));
+
+    // Get unique standardized countries
+    const countries = [
+        ...new Set(
+            allPostcards
+                .map((p) => p.country)
+                .filter((c) => c && isValidCountry(c))
+                .map((c) => getStandardCountryName(c!))
+        ),
+    ];
+
+    return countries.map((country) => ({
+        params: { country },
+    }));
+}
+
 const { country } = Astro.params;
 ---
 
-<html>
-    <body>
-        <h1>Postcards from {country}</h1>
-        <p>Coming soon...</p>
-    </body>
-</html>
+<PostcardsPage selectedCountry={country} />

@@ -1,0 +1,91 @@
+---
+import Layout from "@layouts/Layout.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import Container from "@components/Container.astro";
+import BookYearContainer from "@components/books/BookYearContainer.astro";
+import BookStatusContainer from "@components/books/BookStatusContainer.astro";
+import { fetchBooks } from "@api/github-books";
+
+let booksData;
+let error = null;
+
+try {
+    booksData = await fetchBooks();
+} catch (e) {
+    console.error("Failed to fetch books data:", e);
+    error = e instanceof Error ? e.message : "Unknown error occurred";
+    booksData = {
+        aktiv: [],
+        merkliste: [],
+        abgeschlossen: {},
+        count: 0,
+        lastUpdated: "",
+    };
+}
+
+const { aktiv, merkliste, abgeschlossen } = booksData;
+
+// Sort years in descending order (newest first)
+const years = Object.keys(abgeschlossen).sort((a, b) => Number(b) - Number(a));
+const completedBooks = years.reduce(
+    (sum, year) => sum + abgeschlossen[year].length,
+    0
+);
+const totalBooks = aktiv.length + merkliste.length + completedBooks;
+---
+
+<Layout>
+    <HeadlineParagraphSection title="Books" class="py-32">
+        I keep track of the books I read in Obsidian, where I log and organize
+        everything I've finished. To make this collection easier to browse, the
+        data is automatically updated and displayed here on my website. It
+        serves as a personal archive and a way to look back at my reading over
+        time.
+    </HeadlineParagraphSection>
+    <Container>
+        {
+            error && (
+                <div class="mb-8 rounded-lg border border-red-200 bg-red-50 p-4">
+                    <p class="text-red-800">
+                        Failed to load book data: {error}
+                    </p>
+                </div>
+            )
+        }
+
+        {
+            totalBooks > 0 && (
+                <div>
+                    <BookStatusContainer
+                        title="Currently Reading"
+                        books={aktiv}
+                    />
+                    {years.map((year) => (
+                        <BookYearContainer
+                            books={abgeschlossen[year]}
+                            year={year}
+                        />
+                    ))}
+                    <BookStatusContainer
+                        title="Want to Read"
+                        books={merkliste}
+                    />
+                </div>
+            )
+        }
+
+        {
+            totalBooks === 0 && !error && (
+                <div class="py-20 text-center">
+                    <div class="mb-4 text-6xl">📚</div>
+                    <h2 class="mb-2 text-xl font-medium">No books found</h2>
+                    <p class="text-neutral-600">
+                        Check back later for book updates.
+                    </p>
+                </div>
+            )
+        }
+    </Container>
+
+    <script src="../scripts/listItemImageHoverEffect.js"></script>
+</Layout>

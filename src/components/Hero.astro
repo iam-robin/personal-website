@@ -2,67 +2,66 @@
 import Grid from "./Grid.astro";
 import GridItem from "./GridItem.astro";
 import Link from "./Link.astro";
-import { Icon } from "astro-icon/components";
 import SmileySticker from "./stickers/SmileySticker.astro";
 import CodeSticker from "./stickers/CodeSticker.astro";
 import DesignSticker from "./stickers/DesignSticker.astro";
 import ArtSticker from "./stickers/ArtSticker.astro";
+import Container from "./Container.astro";
 ---
 
 <div data-hero class="min-h-[calc(100vh-96px)] flex items-center opacity-0">
-    <Grid class="mb-16!">
-        <!-- text-[max(1.7rem,6cqw)] -->
-        <GridItem colSpan={11}>
-            <h1 class="text-2xl lg:text-3xl leading-tight font-bold">
-                Hey
-                <!-- <Icon
-                    data-hero-icon
-                    class="inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
-                    name="sticker-smiley-50"
-                    size="72px"
-                /> -->
-                <SmileySticker
-                    class="hero-icon inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
-                    iconColor="--color-sticker-yellow-dark"
-                    bgColor="--color-sticker-yellow"
-                />
-                I am <Link href="/about">Robin Spielmann</Link>.
-                <br class="hidden sm:block" />
-                A Design Engineer who enjoys working at the intersection of
-                <br class="hidden sm:block" />
-                <CodeSticker
-                    class="hero-icon inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
-                    iconColor="--color-sticker-blue-dark"
-                    bgColor="--color-sticker-blue"
-                />
-                code,
-                <DesignSticker
-                    class="hero-icon inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
-                    iconColor="--color-sticker-red-dark"
-                    bgColor="--color-sticker-red"
-                />
-                design and
-                <ArtSticker
-                    class="hero-icon inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
-                    iconColor="--color-sticker-lilac-dark"
-                    bgColor="--color-sticker-lilac"
-                />
-                art.
-            </h1>
-        </GridItem>
-        <GridItem
-            colStart={{ small: 1, medium: 1, large: 5 }}
-            colEnd={{ small: 13, medium: 13, large: 12 }}
-        >
-            <p data-hero-subtitle class="text-base font-mono opacity-0 mt-6">
-                This personal website is my own little space on the internet
-                where I want to share my work, interests and passions with
-                others, without having to please the algorithms of social media
-                platforms or follow any other rules. I hope you enjoy exploring
-                my digital living room as much as I enjoyed creating it.
-            </p>
-        </GridItem>
-    </Grid>
+    <Container>
+        <Grid class="mb-16!">
+            <GridItem colSpan={11}>
+                <h1 class="text-2xl lg:text-3xl leading-tight font-bold">
+                    Hey
+                    <SmileySticker
+                        class="hero-icon inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
+                        iconColor="--color-sticker-yellow-dark"
+                        bgColor="--color-sticker-yellow"
+                    />
+                    I am <Link href="/about">Robin Spielmann</Link>.
+                    <br class="hidden sm:block" />
+                    A Design Engineer who enjoys working at the intersection of
+                    <br class="hidden sm:block" />
+                    <CodeSticker
+                        class="hero-icon inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
+                        iconColor="--color-sticker-blue-dark"
+                        bgColor="--color-sticker-blue"
+                    />
+                    code,
+                    <DesignSticker
+                        class="hero-icon inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
+                        iconColor="--color-sticker-red-dark"
+                        bgColor="--color-sticker-red"
+                    />
+                    design and
+                    <ArtSticker
+                        class="hero-icon inline-block align-[-0.25em] opacity-0 w-0 -mr-3 overflow-hidden"
+                        iconColor="--color-sticker-lilac-dark"
+                        bgColor="--color-sticker-lilac"
+                    />
+                    art.
+                </h1>
+            </GridItem>
+            <GridItem
+                colStart={{ small: 1, medium: 1, large: 5 }}
+                colEnd={{ small: 13, medium: 13, large: 12 }}
+            >
+                <p
+                    data-hero-subtitle
+                    class="text-base font-mono opacity-0 mt-6"
+                >
+                    This personal website is my own little space on the internet
+                    where I want to share my work, interests and passions with
+                    others, without having to please the algorithms of social
+                    media platforms or follow any other rules. I hope you enjoy
+                    exploring my digital living room as much as I enjoyed
+                    creating it.
+                </p>
+            </GridItem>
+        </Grid>
+    </Container>
 </div>
 
 <script>

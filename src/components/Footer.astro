@@ -12,12 +12,14 @@ const { class: className } = Astro.props;
 <Container class={className}>
     <Contact />
     <footer class="flex justify-between mb-4 mt-12">
-        <p>
+        <p class="text-sm text-text-secondary">
             © <span id="copyright-year"></span>, <span class="block sm:inline"
                 >Robin Spielmann</span
             >
         </p>
-        <ul class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
+        <ul
+            class="flex flex-col gap-0.5 sm:flex-row sm:gap-4 text-sm text-text-secondary"
+        >
             <li><a href="/legal">Legal notice</a></li>
             <li><a href="/changelog">Changelog</a></li>
             <li>

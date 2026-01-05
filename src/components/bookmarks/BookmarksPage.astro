@@ -1,0 +1,64 @@
+---
+import Layout from "@layouts/Layout.astro";
+import BookmarkItem from "./BookmarkItem.astro";
+import TagCloud from "@components/TagCloud.astro";
+import Container from "@components/Container.astro";
+import type { Bookmark } from "./BookmarkItem.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import Link from "@components/Link.astro";
+
+interface Props {
+    bookmarks: Bookmark[];
+    allBookmarks: Bookmark[];
+    selectedTag?: string;
+}
+
+const { bookmarks, allBookmarks, selectedTag } = Astro.props;
+
+// Generate tag counts for the tag cloud
+const allTags = allBookmarks.flatMap((bookmark) => bookmark.tags);
+const tagCounts = allTags.reduce(
+    (acc, tag) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+        return acc;
+    },
+    {} as Record<string, number>
+);
+
+const tags = Object.entries(tagCounts).map(([name, count]) => ({
+    name,
+    count,
+}));
+tags.sort((a, b) => b.count - a.count);
+---
+
+<Layout>
+    <Container class="mt-20">
+        <HeadlineParagraphSection title="Bookmarks">
+            Daily I receive new articles, videos, essays, etc. in the RSS reader
+            of my choice: <Link
+                href="https://www.goldenhillsoftware.com/unread/">Unread</Link
+            >. I categorize and tag items I have read and found interesting in <Link
+                href="https://raindrop.io">Raindrop.io</Link
+            >. Thanks to their fantastic API, I can also share that list here on
+            my personal website.
+        </HeadlineParagraphSection>
+        <TagCloud
+            tags={tags}
+            selectedTag={selectedTag}
+            basePath="/bookmarks"
+            filterPath="tag"
+            filterLabel="tag"
+            total={allBookmarks.length}
+        />
+        <ul class="mb-40">
+            {
+                bookmarks.map((bookmark: Bookmark) => (
+                    <BookmarkItem bookmark={bookmark} />
+                ))
+            }
+        </ul>
+    </Container>
+</Layout>
+
+<script src="../../scripts/listItemImageHoverEffect.ts"></script>

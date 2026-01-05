@@ -1,0 +1,63 @@
+---
+import Grid from "./Grid.astro";
+import GridItem, { type BreakpointValue } from "./GridItem.astro";
+import Link from "./Link.astro";
+
+interface Props {
+    class?: string;
+    title?: string;
+    linkText?: string;
+    linkUrl?: string;
+    contentStart?: number | BreakpointValue;
+    buttonStyle?: boolean;
+    buttonIcon?: any;
+}
+
+const {
+    title,
+    linkText,
+    linkUrl,
+    class: classes,
+    contentStart = 5,
+    buttonStyle,
+} = Astro.props;
+---
+
+<hgroup>
+    <Grid class={`mb-6 sm:mb-8 lg:mb-16 ${classes}`}>
+        <GridItem colStart={1} colEnd={4}>
+            <h3 class="text-xl font-bold">
+                {title ? title : <slot name="title" />}
+            </h3>
+        </GridItem>
+        <GridItem
+            colStart={contentStart}
+            colEnd={linkText && linkUrl ? 9 : 12}
+            class="text-base font-mono mt-3 sm:mt-0"
+        >
+            <slot />
+        </GridItem>
+        {
+            linkText && linkUrl && (
+                <GridItem
+                    colStart={10}
+                    colEnd={12}
+                    class="flex lg:justify-end items-start mt-6 sm:mt-3 lg:mt-0"
+                >
+                    {buttonStyle ? (
+                        <a
+                            href={linkUrl}
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors"
+                        >
+                            {linkText}
+                        </a>
+                    ) : (
+                        <Link href={linkUrl} external>
+                            {linkText}
+                        </Link>
+                    )}
+                </GridItem>
+            )
+        }
+    </Grid>
+</hgroup>

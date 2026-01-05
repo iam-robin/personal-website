@@ -1,5 +1,5 @@
 ---
-// Simple theme switcher - cycles through light, dark, red themes
+
 ---
 
 <button
@@ -9,7 +9,6 @@
 >
     <span class="theme-icon" data-theme-icon="light">☀️</span>
     <span class="theme-icon hidden" data-theme-icon="dark">🌙</span>
-    <span class="theme-icon hidden" data-theme-icon="pink">🍉</span>
 </button>
 
 <script>
@@ -17,12 +16,12 @@
         const button = document.getElementById("theme-switcher");
         if (!button) return;
 
-        const themes = [null, "dark", "pink"] as const;
+        const themes = [null, "dark"] as const;
         type Theme = (typeof themes)[number];
 
         function getStoredTheme(): Theme {
             const stored = localStorage.getItem("theme");
-            if (stored === "dark" || stored === "pink") return stored;
+            if (stored === "dark") return stored;
             return null;
         }
 
@@ -56,6 +55,13 @@
             const current = getStoredTheme();
             const currentIndex = themes.indexOf(current);
             const nextIndex = (currentIndex + 1) % themes.length;
+            console.log(
+                "cycle theme",
+                current,
+                currentIndex,
+                nextIndex,
+                themes[nextIndex]
+            );
             setTheme(themes[nextIndex]);
         }
 
@@ -63,11 +69,13 @@
         const storedTheme = getStoredTheme();
         setTheme(storedTheme);
 
-        // Handle click
-        button.addEventListener("click", cycleTheme);
+        // Handle click - only add listener once per button instance
+        if (!button.dataset.initialized) {
+            button.dataset.initialized = "true";
+            button.addEventListener("click", cycleTheme);
+        }
     }
 
-    // Run on initial load and after Astro page transitions
-    initThemeSwitcher();
+    // Run on initial load AND after Astro page transitions
     document.addEventListener("astro:page-load", initThemeSwitcher);
 </script>

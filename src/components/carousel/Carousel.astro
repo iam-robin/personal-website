@@ -1,6 +1,7 @@
 ---
 import "@blossom-carousel/core/style.css";
 import Link from "@components/Link.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
 
 interface Props {
     columns?: number;
@@ -19,18 +20,9 @@ const { columns = 12, gap = "16px", headline, description, link } = Astro.props;
 >
     {
         (headline || description) && (
-            <hgroup class="max-w-(--max-width) mx-auto w-full grid grid-cols-12 gap-4 pb-6">
-                {headline && (
-                    <h2 class="text-xl font-bold col-start-1 col-end-4">
-                        {headline}
-                    </h2>
-                )}
-                {description && (
-                    <p class="text-base font-mono col-start-5 col-end-12">
-                        {description}
-                    </p>
-                )}
-            </hgroup>
+            <HeadlineParagraphSection title={headline}>
+                {description}
+            </HeadlineParagraphSection>
         )
     }
 
