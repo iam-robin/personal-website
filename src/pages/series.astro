@@ -1,0 +1,132 @@
+---
+import Layout from "@layouts/Layout.astro";
+import SeriesYearContainer from "@components/series/SeriesYearContainer.astro";
+import SeriesItem from "@components/series/SeriesItem.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import Container from "@components/Container.astro";
+import { fetchSeries } from "@api/github-series";
+
+let seriesData;
+let error = null;
+
+try {
+    seriesData = await fetchSeries();
+} catch (e) {
+    console.error("Failed to fetch series data:", e);
+    error = e instanceof Error ? e.message : "Unknown error occurred";
+    seriesData = {
+        lastUpdated: new Date().toISOString(),
+        count: 0,
+        aktiv: [],
+        merkliste: [],
+        pausiert: [],
+        abgeschlossen: {},
+    };
+}
+
+const { aktiv, merkliste, pausiert, abgeschlossen } = seriesData;
+
+// Get current year
+const currentYear = new Date().getFullYear();
+
+// Sort series within each year by finished date (newest first)
+const sortSeriesByDate = (seriesList: typeof aktiv) => {
+    return [...seriesList].sort((a, b) => {
+        const dateA = a.finished ? new Date(a.finished).getTime() : 0;
+        const dateB = b.finished ? new Date(b.finished).getTime() : 0;
+        return dateB - dateA;
+    });
+};
+
+// Get years from abgeschlossen and sort (newest first)
+const years = Object.keys(abgeschlossen)
+    .map(Number)
+    .sort((a, b) => b - a);
+
+// Check if current year exists in completed
+const hasCurrentYear = years.includes(currentYear);
+---
+
+<Layout>
+    <HeadlineParagraphSection title="Series" class="py-32">
+        I keep track of the series I watch in Obsidian, where I log and organize
+        everything I've seen. To make this collection easier to browse, the data
+        is automatically updated and displayed here on my website. It serves as
+        a personal archive and a way to look back at my watching over time.
+    </HeadlineParagraphSection>
+    <Container>
+        {
+            error && (
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                    <p class="text-red-800">
+                        Failed to load series data: {error}
+                    </p>
+                </div>
+            )
+        }
+
+        {
+            (aktiv.length > 0 ||
+                Object.keys(abgeschlossen).length > 0 ||
+                merkliste.length > 0) && (
+                <div>
+                    {/* Current year with aktiv series */}
+                    {(hasCurrentYear || aktiv.length > 0) && (
+                        <SeriesYearContainer
+                            year={currentYear}
+                            series={sortSeriesByDate(
+                                abgeschlossen[currentYear.toString()] || []
+                            )}
+                            aktivSeries={aktiv}
+                        />
+                    )}
+
+                    {/* Previous years */}
+                    {years
+                        .filter((year) => year !== currentYear)
+                        .map((year) => (
+                            <SeriesYearContainer
+                                year={year}
+                                series={sortSeriesByDate(
+                                    abgeschlossen[year.toString()]
+                                )}
+                            />
+                        ))}
+
+                    {/* Want to Watch section */}
+                    {merkliste.length > 0 && (
+                        <div class="relative grid grid-cols-12 gap-4">
+                            <h2 class="col-start-1 col-end-13 h-fit pb-2 pt-10 font-mono md:sticky md:top-12 md:col-end-3 md:mb-8 md:pb-2">
+                                Want to Watch
+                            </h2>
+                            <div class="col-start-1 col-end-13 md:col-start-4">
+                                {merkliste.map((s) => (
+                                    <SeriesItem series={s} />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )
+        }
+
+        {
+            aktiv.length === 0 &&
+                Object.keys(abgeschlossen).length === 0 &&
+                merkliste.length === 0 &&
+                !error && (
+                    <div class="text-center py-20">
+                        <div class="text-6xl mb-4">📺</div>
+                        <h2 class="text-xl font-medium mb-2">
+                            No series found
+                        </h2>
+                        <p class="text-neutral-600">
+                            Check back later for series updates.
+                        </p>
+                    </div>
+                )
+        }
+    </Container>
+
+    <script src="../scripts/listItemImageHoverEffect.js"></script>
+</Layout>
