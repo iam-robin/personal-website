@@ -1,0 +1,107 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Prose from "@components/Prose.astro";
+import { Icon } from "astro-icon/components";
+import { fetchNotes, getCategories, type Note } from "@api/github-notes";
+import { colors } from "@components/garden/utils/colors";
+import { marked } from "marked";
+
+export async function getStaticPaths() {
+    const notesData = await fetchNotes();
+    const categories = getCategories(notesData);
+
+    // Build category info sorted by count for consistent color assignment
+    const categoryInfoList = categories
+        .map((cat) => ({
+            name: cat,
+            count: (notesData[cat] as Note[])?.length || 0,
+        }))
+        .sort((a, b) => b.count - a.count);
+
+    // Create category to index map
+    const categoryIndexMap: Record<string, number> = {};
+    categoryInfoList.forEach((cat, index) => {
+        categoryIndexMap[cat.name] = index;
+    });
+
+    const paths: {
+        params: { category: string; slug: string };
+        props: { note: Note; htmlContent: string; categoryIndex: number };
+    }[] = [];
+
+    for (const category of categories) {
+        const notes = notesData[category] as Note[];
+        for (const note of notes) {
+            // Parse markdown content to HTML
+            const htmlContent = await marked.parse(note.content || "");
+
+            paths.push({
+                params: {
+                    category: category.toLowerCase(),
+                    slug: note.slug,
+                },
+                props: {
+                    note,
+                    htmlContent,
+                    categoryIndex: categoryIndexMap[category],
+                },
+            });
+        }
+    }
+
+    return paths;
+}
+
+const { note, htmlContent, categoryIndex } = Astro.props;
+
+// Get background color based on category
+const bgColor = colors[categoryIndex % colors.length];
+
+// Format date
+const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+};
+---
+
+<Layout hasHeader={false}>
+    <div transition:name="garden-backdrop" class="fixed inset-0 bg-surface">
+    </div>
+    <article
+        transition:name="garden-card"
+        class="p-8 w-full max-w-5xl relative bg-white my-12 z-30 mx-auto shadow-[0px_20px_40px_rgba(0,0,0,.025)]"
+        style={`background-color: ${bgColor}`}
+    >
+        <button
+            class="absolute top-8 right-8 rounded-full h-12 w-12 bg-black/10 flex-center cursor-pointer hover:bg-black/20 transition-colors"
+            onclick="history.back()"
+        >
+            <Icon name="ph:x-bold" class="text-black/70" size={24} />
+        </button>
+        <header class="mb-8 p-8 -mx-8 -mt-8 rounded-t-4xl">
+            <a
+                href={`/garden/category/${note.thema.toLowerCase()}`}
+                class="inline-block px-3 py-1 bg-black/10 text-black/70 text-sm rounded-full mb-4 no-underline hover:bg-black/20 transition-colors"
+            >
+                {note.thema}
+            </a>
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 text-black">
+                {note.title}
+            </h1>
+            <p class="text-lg text-black/70">
+                {note.description}
+            </p>
+            <div class="flex gap-4 text-sm text-black/50 mt-4">
+                <span>Created: {formatDate(note.created)}</span>
+                <span>Updated: {formatDate(note.edited)}</span>
+            </div>
+        </header>
+        <Prose>
+            <Fragment set:html={htmlContent} />
+        </Prose>
+    </article>
+</Layout>

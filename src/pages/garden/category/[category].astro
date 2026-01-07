@@ -1,0 +1,51 @@
+---
+import GardenPage from "@components/garden/GardenPage.astro";
+import { fetchNotes, getCategories, type Note } from "@api/github-notes";
+
+export async function getStaticPaths() {
+    const notesData = await fetchNotes();
+    const categories = getCategories(notesData);
+
+    // Build category info with counts, sorted by count for consistent color assignment
+    const categoryInfoList = categories
+        .map((cat) => ({
+            name: cat,
+            count: (notesData[cat] as Note[])?.length || 0,
+        }))
+        .sort((a, b) => b.count - a.count);
+
+    // Create a map of category to index based on sorted order for consistent coloring
+    const categoryIndexMap: Record<string, number> = {};
+    categoryInfoList.forEach((cat, index) => {
+        categoryIndexMap[cat.name] = index;
+    });
+
+    return categories.map((category) => {
+        const categoryNotes = (notesData[category] as Note[]) || [];
+        // Sort notes by edited date (most recent first)
+        const sortedNotes = [...categoryNotes].sort(
+            (a, b) =>
+                new Date(b.edited).getTime() - new Date(a.edited).getTime()
+        );
+
+        return {
+            params: { category: category.toLowerCase() },
+            props: {
+                category,
+                notes: sortedNotes,
+                allCategories: categoryInfoList,
+                categoryIndexMap,
+            },
+        };
+    });
+}
+
+const { category, notes, allCategories, categoryIndexMap } = Astro.props;
+---
+
+<GardenPage
+    notes={notes}
+    allCategories={allCategories}
+    categoryIndexMap={categoryIndexMap}
+    selectedCategory={category}
+/>

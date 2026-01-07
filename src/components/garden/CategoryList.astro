@@ -1,0 +1,42 @@
+---
+import FilterChip from "@components/FilterChip.astro";
+import { colors } from "./utils/colors";
+
+interface CategoryInfo {
+    name: string;
+    count: number;
+}
+
+interface Props {
+    categories: CategoryInfo[];
+    selectedCategory?: string;
+}
+
+const { categories, selectedCategory } = Astro.props;
+
+// Calculate total notes count
+const totalNotes = categories.reduce((sum, cat) => sum + cat.count, 0);
+---
+
+<div class="mb-12">
+    <ul class="flex flex-row gap-1">
+        <FilterChip
+            color="black"
+            title="All"
+            href="/garden"
+            isActive={!selectedCategory}
+            count={totalNotes}
+        />
+        {
+            categories.map((category, index) => (
+                <FilterChip
+                    color={colors[index % colors.length]}
+                    title={category.name}
+                    href={`/garden/category/${category.name.toLowerCase()}`}
+                    isActive={selectedCategory === category.name}
+                    count={category.count}
+                />
+            ))
+        }
+    </ul>
+</div>

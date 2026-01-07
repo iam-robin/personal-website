@@ -1,0 +1,91 @@
+---
+import Layout from "@layouts/Layout.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import Container from "@components/Container.astro";
+import NoteCard from "./NoteCard.astro";
+import CategoryList from "./CategoryList.astro";
+import type { Note } from "@api/github-notes";
+
+interface CategoryInfo {
+    name: string;
+    count: number;
+}
+
+interface Props {
+    notes: Note[];
+    allCategories: CategoryInfo[];
+    categoryIndexMap: Record<string, number>;
+    selectedCategory?: string;
+    error?: string | null;
+}
+
+const { notes, allCategories, categoryIndexMap, selectedCategory, error } =
+    Astro.props;
+---
+
+<Layout>
+    <HeadlineParagraphSection title="Digital Garden" class="py-32">
+        A collection of notes, ideas, and thoughts that I cultivate over time.
+        Unlike blog posts, these notes are living documents that grow and evolve
+        as I learn and explore new topics.
+    </HeadlineParagraphSection>
+    <Container>
+        {
+            error && (
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                    <p class="text-red-800">Failed to load notes: {error}</p>
+                </div>
+            )
+        }
+
+        {
+            allCategories.length > 0 && (
+                <CategoryList
+                    categories={allCategories}
+                    selectedCategory={selectedCategory}
+                />
+            )
+        }
+
+        {
+            notes.length > 0 && (
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {notes.map((note) => (
+                        <NoteCard
+                            note={note}
+                            categoryIndex={categoryIndexMap[note.thema]}
+                            distorted
+                        />
+                    ))}
+                </div>
+            )
+        }
+
+        {
+            notes.length === 0 && !error && (
+                <div class="text-center py-20">
+                    <div class="text-6xl mb-4">🌱</div>
+                    <h2 class="text-xl font-medium mb-2">No notes yet</h2>
+                    <p class="text-neutral-600">
+                        Check back later for new notes.
+                    </p>
+                </div>
+            )
+        }
+    </Container>
+</Layout>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        const effectElements = document.querySelectorAll(
+            ".corner-shadow-effect"
+        );
+        effectElements.forEach((effectElement) => {
+            const rotation = parseFloat(
+                (effectElement as HTMLElement).dataset.rotation || "0"
+            );
+            const className = rotation >= 0 ? "hide-after" : "hide-before";
+            effectElement.classList.add(className);
+        });
+    });
+</script>
