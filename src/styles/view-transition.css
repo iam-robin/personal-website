@@ -1,7 +1,7 @@
 /* Project card slide animations */
 @keyframes slide-up {
     from {
-        transform: translateY(100%);
+        transform: translateY(100vh);
         opacity: 0;
     }
     to {
@@ -15,7 +15,7 @@
         transform: translateY(0);
     }
     to {
-        transform: translateY(100%);
+        transform: translateY(100vh);
     }
 }
 

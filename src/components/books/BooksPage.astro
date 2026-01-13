@@ -61,46 +61,32 @@ const isGraphicNovel = (book: Book) => {
     );
 };
 
-// Helper to check if a book is non-fiction
-const isNonFiction = (book: Book) => {
-    return (
-        book.genre?.some(
-            (g) =>
-                g.toLowerCase().includes("nonfiction") ||
-                g.toLowerCase().includes("non-fiction")
-        ) ?? false
-    );
-};
-
-// Helper to check if a book is a regular fiction book (not graphic novel or non-fiction)
-const isFiction = (book: Book) => !isGraphicNovel(book) && !isNonFiction(book);
+// Helper to check if a book is a regular book (not graphic novel)
+const isRegularBook = (book: Book) => !isGraphicNovel(book);
 
 // Split books into categories for the active year
 const yearBooks = abgeschlossen[activeYear] || [];
-const fictionBooks = yearBooks.filter(isFiction);
+const regularBooks = yearBooks.filter(isRegularBook);
 const graphicNovels = yearBooks.filter(isGraphicNovel);
-const nonFictionBooks = yearBooks.filter(isNonFiction);
 
 // Also split aktiv books if current year
-const aktivFiction = aktiv.filter(isFiction);
+const aktivRegular = aktiv.filter(isRegularBook);
 const aktivGraphicNovels = aktiv.filter(isGraphicNovel);
-const aktivNonFiction = aktiv.filter(isNonFiction);
 
 // Split merkliste for want-to-read view
-const merklisteFiction = merkliste.filter(isFiction);
+const merklisteRegular = merkliste.filter(isRegularBook);
 const merklisteGraphicNovels = merkliste.filter(isGraphicNovel);
-const merklisteNonFiction = merkliste.filter(isNonFiction);
 ---
 
 <Layout>
-    <HeadlineParagraphSection title="Books" class="py-32">
+    <HeadlineParagraphSection title="Books" class="pt-32 pb-16">
         I keep track of the books I read in Obsidian, where I log and organize
         everything I've finished. To make this collection easier to browse, the
         data is automatically updated and displayed here on my website. It
         serves as a personal archive and a way to look back at my reading over
         time.
     </HeadlineParagraphSection>
-    <Container>
+    <Container class="mb-16">
         <BooksFilter
             years={years}
             selectedYear={activeYear}
@@ -112,26 +98,13 @@ const merklisteNonFiction = merkliste.filter(isNonFiction);
     <div class="flex flex-col gap-8">
         {
             !isWantToRead &&
-                (fictionBooks.length > 0 ||
-                    (isCurrentYear && aktivFiction.length > 0)) && (
+                (regularBooks.length > 0 ||
+                    (isCurrentYear && aktivRegular.length > 0)) && (
                     <BooksCarousel
-                        title={activeYear}
-                        books={sortBooksByDate(fictionBooks)}
+                        title="Books"
+                        books={sortBooksByDate(regularBooks)}
                         currentlyReadingBooks={
-                            isCurrentYear ? aktivFiction : []
-                        }
-                    />
-                )
-        }
-        {
-            !isWantToRead &&
-                (nonFictionBooks.length > 0 ||
-                    (isCurrentYear && aktivNonFiction.length > 0)) && (
-                    <BooksCarousel
-                        title="Non-Fiction"
-                        books={sortBooksByDate(nonFictionBooks)}
-                        currentlyReadingBooks={
-                            isCurrentYear ? aktivNonFiction : []
+                            isCurrentYear ? aktivRegular : []
                         }
                     />
                 )
@@ -150,16 +123,8 @@ const merklisteNonFiction = merkliste.filter(isNonFiction);
                 )
         }
         {
-            isWantToRead && merklisteFiction.length > 0 && (
-                <BooksCarousel title="Want to Read" books={merklisteFiction} />
-            )
-        }
-        {
-            isWantToRead && merklisteNonFiction.length > 0 && (
-                <BooksCarousel
-                    title="Non-Fiction"
-                    books={merklisteNonFiction}
-                />
+            isWantToRead && merklisteRegular.length > 0 && (
+                <BooksCarousel title="Want to Read" books={merklisteRegular} />
             )
         }
         {

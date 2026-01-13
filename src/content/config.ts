@@ -10,6 +10,7 @@ const projectCollection = defineCollection({
         thumbnailWidth: z.string().optional(),
         tags: z.array(z.string()).optional(),
         bgColor: z.string().optional(),
+        bgColorDark: z.string().optional(),
         externalUrl: z.string().optional(),
     }),
 });

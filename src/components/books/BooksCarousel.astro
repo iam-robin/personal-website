@@ -12,24 +12,28 @@ interface Props {
 
 const { title, books, currentlyReadingBooks = [] } = Astro.props;
 
+const smallSpan = 10;
+const mediumSpan = 5;
+const largeSpan = 4;
+
 // Combine currently reading books (first) with regular books
 const allBooks = [...currentlyReadingBooks, ...books];
 ---
 
 {
     allBooks.length > 0 && (
-        <Carousel headline={title}>
+        <Carousel headline={title} headlineSize="base">
             {allBooks.map((book, index) => (
                 <CarouselItem
-                    smallSpan={5}
-                    mediumSpan={3}
-                    largeSpan={2}
-                    paddingBottom={24}
-                    paddingTop={24}
+                    smallSpan={smallSpan}
+                    mediumSpan={mediumSpan}
+                    largeSpan={largeSpan}
                 >
                     <BookCarouselItem
                         book={book}
-                        isCurrentlyReading={index < currentlyReadingBooks.length}
+                        isCurrentlyReading={
+                            index < currentlyReadingBooks.length
+                        }
                     />
                 </CarouselItem>
             ))}

@@ -19,7 +19,10 @@ const { tags, selectedTag, basePath, filterPath, filterLabel, total } =
 const sortedTags = [...tags].sort((a, b) => b.count - a.count);
 ---
 
-<details open class="group mb-12 p-4 bg-surface border border-foreground/50 rounded-lg">
+<details
+    open
+    class="group mb-12 p-4 bg-surface border border-foreground/50 rounded-lg"
+>
     <summary
         class="flex items-center justify-between -m-2 p-4 font-medium cursor-pointer select-none focus:outline-none focus-visible:outline-2 focus-visible:outline-blue focus-visible:outline-offset-2"
         aria-label="Toggle tag filter"
@@ -56,7 +59,9 @@ const sortedTags = [...tags].sort((a, b) => b.count - a.count);
                         <span
                             class:list={[
                                 "ml-1",
-                                !selectedTag ? "text-surface/70" : "text-text-muted",
+                                !selectedTag
+                                    ? "text-surface/70"
+                                    : "text-text-muted",
                             ]}
                         >
                             ({total})

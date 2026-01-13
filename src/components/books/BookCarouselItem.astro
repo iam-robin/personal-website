@@ -19,49 +19,166 @@ const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 const authors = book.author.join(", ");
 ---
 
-<div class="flex flex-col gap-3">
-    <div class="relative aspect-[2/3] overflow-hidden rounded-sm bg-neutral-100">
-        {
-            book.cover ? (
-                <img
-                    src={book.cover}
-                    alt={`${book.title} cover`}
-                    class="h-full w-full object-cover"
-                    loading="lazy"
-                />
-            ) : (
-                <div class="flex h-full w-full items-center justify-center text-neutral-400">
-                    <Icon name="ph:book" width={48} />
-                </div>
-            )
-        }
-        {
-            isCurrentlyReading && (
-                <div class="absolute left-2 top-2 rounded bg-black/70 px-2 py-1 text-xs text-white">
-                    Reading
-                </div>
-            )
-        }
+<a href="#" class="flex flex-col gap-3 h-full justify-between">
+    <div class="h-full">
+        <div
+            class="relative bg-surface-raised rounded-lg flex-center py-20 px-4 h-full book-item"
+        >
+            {
+                book.cover ? (
+                    <div class="book self-center">
+                        <div
+                            class="book-cover"
+                            style={{ backgroundImage: `url(${book.cover})` }}
+                        >
+                            <div class="effect" />
+                            <div class="light" />
+                        </div>
+                        <div class="book-inside" />
+                    </div>
+                ) : (
+                    <div class="flex h-full w-full items-center justify-center text-neutral-400">
+                        <Icon name="ph:book" width={48} />
+                    </div>
+                )
+            }
+            {
+                isCurrentlyReading && (
+                    <div class="absolute right-2 top-2 rounded bg-sticker-lilac px-2 py-1 text-xs text-sticker-lilac-dark">
+                        Reading
+                    </div>
+                )
+            }
+        </div>
     </div>
-    <div class="flex flex-col gap-1">
-        <p class="line-clamp-2 text-sm font-bold leading-tight">{book.title}</p>
-        <p class="line-clamp-1 text-xs text-neutral-500">{authors}</p>
+    <div class="flex flex-col gap-.5 min-h-[100px]">
+        <p class="text-text-primary text-sm leading-tight font-bold">
+            {book.title}
+        </p>
+        <p class="text-text-secondary text-sm">{authors}</p>
         {
             rating > 0 && (
-                <div class="flex items-center gap-1 pt-1">
+                <div class="flex items-center gap-1 mt-.5">
                     {Array.from({ length: fullStars }, (_, i) => (
-                        <Icon name="ph:star-fill" width={12} />
-                    ))}
-                    {hasHalfStar && <Icon name="ph:star-half-fill" width={12} />}
-                    {Array.from({ length: emptyStars }, (_, i) => (
                         <Icon
                             name="ph:star-fill"
+                            class="text-surface-inverse"
                             width={12}
-                            class="text-neutral-300"
+                        />
+                    ))}
+                    {hasHalfStar && (
+                        <Icon
+                            name="ph:star-half-fill"
+                            class="text-surface-inverse"
+                            width={12}
+                        />
+                    )}
+                    {Array.from({ length: emptyStars }, (_, i) => (
+                        <Icon
+                            name="ph:star"
+                            width={12}
+                            class="text-surface-inverse"
                         />
                     ))}
                 </div>
             )
         }
     </div>
-</div>
+</a>
+
+<style>
+    .book {
+        width: 140px;
+        height: 200px;
+        position: relative;
+        text-align: center;
+    }
+
+    .book-cover {
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        transform-origin: 0 50%;
+        -webkit-transform-origin: 0 50%;
+        background: #cbd5e1;
+        border-radius: 3px;
+        box-shadow:
+            inset 4px 1px 3px #ffffff60,
+            inset 0 -1px 2px #00000080;
+        transition: all 0.5s ease-in-out;
+        -webkit-transition: all 0.5s ease-in-out;
+        background-size: 100% 100%;
+    }
+
+    .effect {
+        width: 20px;
+        height: 100%;
+        margin-left: 10px;
+        border-left: 2px solid #00000010;
+        background-image: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transition: all 0.5s ease;
+        -webkit-transition: all 0.5s ease;
+    }
+
+    .light {
+        width: 90%;
+        height: 100%;
+        position: absolute;
+        border-radius: 3px;
+        background-image: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.2) 100%
+        );
+        top: 0;
+        right: 0;
+        opacity: 0.1;
+        transition: all 0.5s ease;
+        -webkit-transition: all 0.5s ease;
+    }
+
+    .book-item:hover .book-cover {
+        transform: perspective(2000px) rotateY(-30deg);
+        -webkit-transform: perspective(2000px) rotateY(-30deg);
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+        box-shadow:
+            inset 4px 1px 3px #ffffff60,
+            inset 0 -1px 2px #00000080,
+            10px 0px 10px -5px #00000030;
+    }
+
+    .book-item:hover .effect {
+        width: 40px;
+    }
+
+    .book-item:hover .light {
+        opacity: 1;
+        width: 70%;
+    }
+
+    .book-inside {
+        width: calc(100% - 2px);
+        height: 96%;
+        position: relative;
+        top: 2%;
+        border: 1px solid grey;
+        border-radius: 3px;
+        background: white;
+        box-shadow:
+            10px 40px 40px -10px #00000030,
+            inset -2px 0 0 grey,
+            inset -3px 0 0 #dbdbdb,
+            inset -4px 0 0 white,
+            inset -5px 0 0 #dbdbdb,
+            inset -6px 0 0 white,
+            inset -7px 0 0 #dbdbdb,
+            inset -8px 0 0 white,
+            inset -9px 0 0 #dbdbdb;
+    }
+</style>

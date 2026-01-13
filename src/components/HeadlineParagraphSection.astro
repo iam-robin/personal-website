@@ -9,8 +9,11 @@ interface Props {
     linkText?: string;
     linkUrl?: string;
     contentStart?: number | BreakpointValue;
+    contentEnd?: number | BreakpointValue;
     buttonStyle?: boolean;
     buttonIcon?: any;
+    headlineSize?: "base" | "md" | "lg" | "xl";
+    isFirstElement?: boolean;
 }
 
 const {
@@ -19,20 +22,25 @@ const {
     linkUrl,
     class: classes,
     contentStart = 5,
+    contentEnd,
     buttonStyle,
+    headlineSize = "xl",
+    isFirstElement = false,
 } = Astro.props;
 ---
 
 <hgroup>
-    <Grid class={`mb-6 sm:mb-8 lg:mb-16 ${classes}`}>
+    <Grid
+        class={`mb-6 sm:mb-8 lg:mb-16 ${isFirstElement ? "pt-32 pb-24" : ""} ${classes}`}
+    >
         <GridItem colStart={1} colEnd={4}>
-            <h3 class="text-xl font-bold">
+            <h3 class={`text-${headlineSize} font-bold`}>
                 {title ? title : <slot name="title" />}
             </h3>
         </GridItem>
         <GridItem
             colStart={contentStart}
-            colEnd={linkText && linkUrl ? 9 : 12}
+            colEnd={contentEnd ?? (linkText && linkUrl ? 10 : 12)}
             class="text-base font-mono mt-3 sm:mt-0"
         >
             <slot />
@@ -41,7 +49,7 @@ const {
             linkText && linkUrl && (
                 <GridItem
                     colStart={10}
-                    colEnd={12}
+                    colEnd={13}
                     class="flex lg:justify-end items-start mt-6 sm:mt-3 lg:mt-0"
                 >
                     {buttonStyle ? (

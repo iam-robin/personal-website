@@ -1,16 +1,17 @@
 ---
 import { db, Postcard, desc, eq } from "astro:db";
 import { Icon } from "astro-icon/components";
-import Link from "../Link.astro";
 import PostcardsCarousel from "./PostcardsCarousel.astro";
 import Container from "../Container.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
 
 export interface Props {
     limit?: number | null;
     postcards?: (typeof Postcard.$inferSelect)[];
+    hasDescription?: boolean;
 }
 
-const { limit = null, postcards } = Astro.props;
+const { limit = null, postcards, hasDescription = true } = Astro.props;
 
 let recentPostcards;
 
@@ -27,20 +28,36 @@ if (postcards) {
 
     recentPostcards = limit ? await query.limit(limit) : await query;
 }
+
+const headline = "Postcards";
+const description =
+    "This website is mostly me talking. This postcard gives you a chance to talk back — even just a line. Drop me a postcard. Tell me what you're thinking, where you're visiting from, or simply that you stopped by. I'd love to hear from you.";
 ---
 
 {
     recentPostcards.length > 0 && (
         <div>
-            <Container class="relative">
-                <a
-                    href="/postcards/new"
-                    class="inline-flex items-center gap-2 absolute right-0 -top-10 hover-lift"
-                >
-                    <Icon name="new-postcard" size={100} />
-                </a>
-            </Container>
-            <PostcardsCarousel postcards={recentPostcards} />
+            {hasDescription && (
+                <>
+                    <Container class="relative">
+                        <a
+                            href="/postcards/new"
+                            class="inline-flex items-center gap-2 absolute right-0 -top-10 hover-lift"
+                        >
+                            <Icon name="new-postcard" size={100} />
+                        </a>
+                    </Container>
+
+                    <HeadlineParagraphSection
+                        title={headline}
+                        contentEnd={11}
+                        class="mb-16!"
+                    >
+                        {description}
+                    </HeadlineParagraphSection>
+                </>
+            )}
+            <PostcardsCarousel postcards={recentPostcards} hasLink={!!limit} />
         </div>
     )
 }

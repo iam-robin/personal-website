@@ -4,6 +4,8 @@ import { fetchBooks } from "@api/github-books";
 
 export async function getStaticPaths() {
     const booksData = await fetchBooks();
+    console.log("booksData", booksData);
+
     const { abgeschlossen, merkliste, aktiv } = booksData;
 
     // Get all years from completed books
@@ -12,9 +14,10 @@ export async function getStaticPaths() {
     // Add current year if there are aktiv books but no completed books for this year
     const currentYear = new Date().getFullYear().toString();
     const hasCurrentYearBooks = abgeschlossenYears.includes(currentYear);
-    const years = hasCurrentYearBooks || aktiv.length === 0
-        ? abgeschlossenYears
-        : [currentYear, ...abgeschlossenYears];
+    const years =
+        hasCurrentYearBooks || aktiv.length === 0
+            ? abgeschlossenYears
+            : [currentYear, ...abgeschlossenYears];
 
     // Create paths for each year + want-to-read
     const paths = [

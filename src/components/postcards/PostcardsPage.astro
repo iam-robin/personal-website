@@ -10,6 +10,7 @@ import WorldMapDetail from "./WorldMapDetail.astro";
 import Layout from "@layouts/Layout.astro";
 import TagCloud from "@components/TagCloud.astro";
 import Container from "@components/Container.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
 
 interface Props {
     selectedCountry?: string;
@@ -58,6 +59,17 @@ const visitedCountries = countryCloudData.map((country) => country.name);
 ---
 
 <Layout>
+    <HeadlineParagraphSection
+        title="Postcards"
+        class="py-32"
+        linkText="Send Postcard"
+        linkUrl="#"
+        buttonStyle={true}
+    >
+        I love the idea of people stopping by and leaving a trace — something
+        small that makes this website feel a little more alive. It's like a
+        guestbook, just a bit more personal.
+    </HeadlineParagraphSection>
     <Container>
         <TagCloud
             tags={countryCloudData}
@@ -68,8 +80,8 @@ const visitedCountries = countryCloudData.map((country) => country.name);
             total={allPostcards.length}
         />
     </Container>
-    <PostcardsSection postcards={displayedPostcards} />
-    <Container>
+    <PostcardsSection postcards={displayedPostcards} hasDescription={false} />
+    <Container class="mt-24">
         <WorldMapDetail visitedCountries={visitedCountries} />
     </Container>
 </Layout>

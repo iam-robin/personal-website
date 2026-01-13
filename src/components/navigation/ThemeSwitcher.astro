@@ -4,11 +4,19 @@
 
 <button
     id="theme-switcher"
-    class="p-2 hover:bg-surface rounded-lg cursor-pointer"
+    class="p-2 cursor-pointer"
     aria-label="Toggle theme"
 >
-    <span class="theme-icon" data-theme-icon="light">☀️</span>
-    <span class="theme-icon hidden" data-theme-icon="dark">🌙</span>
+    <div
+        class="theme-icon h-4 w-4 bg-foreground rounded-full"
+        data-theme-icon="light"
+    >
+    </div>
+    <div
+        class="theme-icon h-4 w-4 bg-foreground rounded-full hidden"
+        data-theme-icon="dark"
+    >
+    </div>
 </button>
 
 <script>

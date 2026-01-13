@@ -1,17 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-// import {
-//     ArrowRight,
-//     AppWindow,
-//     Camera,
-//     Cube,
-//     Note,
-//     PaintBrush,
-//     Brain,
-//     PersonArmsSpread,
-//     Rss,
-//     CircleDashed
-// } from '@phosphor-icons/react';
+import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 
 interface Props {
@@ -28,30 +17,30 @@ const formatDate = (date: Date) => {
     });
 };
 
-// const getCategoryIcon = (category: string) => {
-//     const categoryLower = category.toLowerCase();
+const getCategoryIcon = (category: string): string => {
+    const categoryLower = category.toLowerCase();
 
-//     switch (categoryLower) {
-//         case "software":
-//             return AppWindow;
-//         case "photography":
-//             return Camera;
-//         case "obsidian":
-//             return Note;
-//         case "generative art":
-//             return PaintBrush;
-//         case "accessibility":
-//             return PersonArmsSpread;
-//         case "ai":
-//             return Brain;
-//         case "rss":
-//             return Rss;
-//         case "digital minimalism":
-//             return CircleDashed;
-//         default:
-//             return Cube;
-//     }
-// };
+    switch (categoryLower) {
+        case "software":
+            return "ph:app-window";
+        case "photography":
+            return "ph:camera";
+        case "obsidian":
+            return "ph:note";
+        case "generative art":
+            return "ph:paint-brush";
+        case "accessibility":
+            return "ph:person-arms-spread";
+        case "ai":
+            return "ph:brain";
+        case "rss":
+            return "ph:rss";
+        case "digital minimalism":
+            return "ph:circle-dashed";
+        default:
+            return "ph:cube";
+    }
+};
 ---
 
 <div
@@ -83,7 +72,7 @@ const formatDate = (date: Date) => {
             }
         </p>
         <div class="mt-1 md:hidden">
-            <!-- <ArrowRight weight="bold" size={20} /> -->
+            <Icon name="ph:arrow-right-bold" width={20} />
         </div>
     </div>
     <div class="flex items-center gap-3 md:gap-10">
@@ -95,23 +84,20 @@ const formatDate = (date: Date) => {
             {
                 post.data.category && (
                     <div class="flex items-center gap-2">
-                        {(() => {
-                            // const IconComponent = getCategoryIcon(
-                            //     post.data.category
-                            // );
-                            // return <IconComponent weight="regular" size={20} />;
-                        })()}
+                        <Icon
+                            name={getCategoryIcon(post.data.category)}
+                            width={20}
+                        />
                         <span>
-                            {post.data.category &&
-                                post.data.category.charAt(0).toUpperCase() +
-                                    post.data.category.slice(1)}
+                            {post.data.category.charAt(0).toUpperCase() +
+                                post.data.category.slice(1)}
                         </span>
                     </div>
                 )
             }
         </div>
         <div class="hidden md:block">
-            <!-- <ArrowRight weight="bold" size={20} /> -->
+            <Icon name="ph:arrow-right-bold" width={20} />
         </div>
     </div>
     <a

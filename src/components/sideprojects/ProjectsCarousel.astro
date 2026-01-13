@@ -14,17 +14,27 @@ const description =
 
 const projectsCollection = await getCollection("projects");
 
-const projects = projectsCollection.map((project) => ({
-    slug: project.slug,
-    title: project.data.title,
-    description: project.data.description,
-    thumbnail: project.data.thumbnail,
-    thumbnailWidth: project.data.thumbnailWidth,
-    tags: project.data.tags,
-    year: project.data.year,
-    bgColor: project.data.bgColor,
-    externalUrl: project.data.externalUrl,
-}));
+// Extract the last year from a year string (e.g., "2015-2017" → 2017, "2025" → 2025)
+const getLastYear = (year: string | undefined): number => {
+    if (!year) return 0;
+    const parts = year.split("-");
+    return parseInt(parts[parts.length - 1], 10) || 0;
+};
+
+const projects = projectsCollection
+    .sort((a, b) => getLastYear(b.data.year) - getLastYear(a.data.year))
+    .map((project) => ({
+        slug: project.slug,
+        title: project.data.title,
+        description: project.data.description,
+        thumbnail: project.data.thumbnail,
+        thumbnailWidth: project.data.thumbnailWidth,
+        tags: project.data.tags,
+        year: project.data.year,
+        bgColor: project.data.bgColor,
+        bgColorDark: project.data.bgColorDark,
+        externalUrl: project.data.externalUrl,
+    }));
 ---
 
 <Carousel headline={headline} description={description}>
@@ -43,6 +53,7 @@ const projects = projectsCollection.map((project) => ({
                     description={project.description}
                     year={project.year}
                     bgColor={project.bgColor}
+                    bgColorDark={project.bgColorDark}
                     thumbnail={project.thumbnail}
                     thumbnailWidth={project.thumbnailWidth}
                     externalUrl={project.externalUrl}

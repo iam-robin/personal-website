@@ -1,7 +1,24 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import Grid from "@components/Grid.astro";
+import GridItem from "@components/GridItem.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import Contact from "@components/Contact.astro";
 ---
 
 <Layout>
-    <h1>about</h1>
+    <Container>
+        <Grid class="py-40">
+            <GridItem colSpan={12}>
+                <HeadlineParagraphSection title="About">
+                    I'm Robin Spielmann, a Design Engineer based in Germany. I
+                    enjoy building things that live at the intersection of code,
+                    design and art. When I'm not pushing pixels or writing code,
+                    you'll find me taking photos, reading, or exploring new
+                    places.
+                </HeadlineParagraphSection>
+            </GridItem>
+        </Grid>
+    </Container>
 </Layout>

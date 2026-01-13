@@ -12,37 +12,51 @@ const { years, selectedYear, hasMerkliste, bookCounts } = Astro.props;
 const sortedYears = [...years].sort((a, b) => Number(b) - Number(a));
 ---
 
-<div class="mb-12 rounded-lg border border-foreground/50 bg-surface p-4">
-    <div class="font-mono text-xs uppercase tracking-widest mb-4">
-        Filter by year
-    </div>
-    <div class="flex flex-wrap gap-2">
+<div class="flex gap-4">
+    <!-- <div
+        class="mb-2 lg:mb-8 flex flex-col md:flex-row md:items-center gap-3 pt-4"
+    >
+        <span class="font-bold">Books read in</span>
+        <ul class="flex flex-wrap gap-2">
+            {
+                shelfs?.map((shelf: Shelf, index: number) => (
+                    <li
+                        key={index}
+                        onClick={() => setActiveShelf(index)}
+                        className={`cursor-pointer rounded px-2 py-1 ${
+                            activeShelf === index
+                                ? "bg-neutral-100 text-neutral-800"
+                                : "text-neutral-400"
+                        }`}
+                    >
+                        {shelf.title}
+                        <sup> {shelf.books.length}</sup>
+                    </li>
+                ))
+            }
+        </ul>
+    </div> -->
+    <p class="font-bold">Books read in</p>
+    <ul class="flex gap-1">
         {
             sortedYears.map((year) => (
-                <a
-                    href={`/books/year/${year}`}
-                    class:list={[
-                        "flex items-center px-3 py-1 font-mono text-xs rounded-full border transition-all duration-200 no-underline",
-                        selectedYear === year
-                            ? "border-blue bg-blue text-surface hover:border-blue hover:text-surface"
-                            : "border-border bg-surface text-current hover:border-blue hover:text-blue",
-                    ]}
-                >
-                    {year}
-                    <span
+                <li>
+                    <a
+                        href={`/books/year/${year}`}
                         class:list={[
-                            "ml-1",
+                            "pl-2 py-1 pr-1 rounded",
                             selectedYear === year
-                                ? "text-surface/70"
+                                ? "bg-surface-raised text-text-primary"
                                 : "text-text-muted",
                         ]}
                     >
-                        ({bookCounts[year] || 0})
-                    </span>
-                </a>
+                        {year}
+                        <sup>{bookCounts[year] || 0}</sup>
+                    </a>
+                </li>
             ))
         }
-        {
+        <!-- {
             hasMerkliste && (
                 <a
                     href="/books/year/want-to-read"
@@ -66,6 +80,6 @@ const sortedYears = [...years].sort((a, b) => Number(b) - Number(a));
                     </span>
                 </a>
             )
-        }
-    </div>
+        } -->
+    </ul>
 </div>

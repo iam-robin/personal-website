@@ -9,9 +9,17 @@ interface Props {
     headline?: string;
     description?: string;
     link?: { href: string; text: string };
+    headlineSize?: "base" | "md" | "lg" | "xl";
 }
 
-const { columns = 12, gap = "16px", headline, description, link } = Astro.props;
+const {
+    columns = 12,
+    gap = "16px",
+    headline,
+    description,
+    link,
+    headlineSize,
+} = Astro.props;
 ---
 
 <section
@@ -20,7 +28,10 @@ const { columns = 12, gap = "16px", headline, description, link } = Astro.props;
 >
     {
         (headline || description) && (
-            <HeadlineParagraphSection title={headline}>
+            <HeadlineParagraphSection
+                title={headline}
+                headlineSize={headlineSize}
+            >
                 {description}
             </HeadlineParagraphSection>
         )

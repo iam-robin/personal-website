@@ -1,4 +1,5 @@
 ---
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
 import Carousel from "../carousel/Carousel.astro";
 import CarouselItem from "../carousel/CarouselItem.astro";
 import PostcardItem from "./PostcardItem.astro";
@@ -36,22 +37,18 @@ interface Postcard {
 
 interface Props {
     postcards: Postcard[];
+    hasLink?: boolean;
 }
 
-const { postcards } = Astro.props;
-
-const headline = "Postcards";
+const { postcards, hasLink } = Astro.props;
 
 const link = {
     href: "/postcards",
     text: "All Postcards",
 };
-
-const description =
-    "This website is mostly me talking. This postcard gives you a chance to talk back — even just a line. Drop me a postcard. Tell me what you're thinking, where you're visiting from, or simply that you stopped by. I'd love to hear from you.";
 ---
 
-<Carousel headline={headline} description={description} link={link}>
+<Carousel link={hasLink ? link : undefined}>
     {
         postcards.map((postcard) => (
             <CarouselItem largeSpan={6} paddingBottom={64} paddingTop={24}>
