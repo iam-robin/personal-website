@@ -31,10 +31,15 @@ const domain = url.hostname;
         href={bookmark.link}
         class="flex items-center justify-between gap-4 py-2"
     >
-        <img
-            class="cover-image max-w-64 pointer-events-none absolute z-10 hidden max-h-40 shadow-lg md:group-hover:block"
-            src={bookmark.cover}
-        />
+        {
+            bookmark.cover && (
+                <img
+                    class="cover-image max-w-64 pointer-events-none absolute z-10 hidden max-h-40 shadow-lg md:group-hover:block"
+                    src={bookmark.cover}
+                    onerror="this.style.display='none'"
+                />
+            )
+        }
         <div class="flex max-w-[80%] shrink-0 items-center gap-2">
             <div
                 class={`h-2 w-2 rounded-full ${

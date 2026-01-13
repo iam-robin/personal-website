@@ -128,9 +128,9 @@ const navigation = [
     // Module-level flag - persists across view transitions, resets on full page load
     let hasAnimated = false;
 
-    document.addEventListener("astro:page-load", () => {
-        const header = document.getElementById("site-header")!;
-        const logo = document.getElementById("site-logo")!;
+    function initHeader() {
+        const header = document.getElementById("site-header");
+        const logo = document.getElementById("site-logo");
         const logoRobin = document.getElementsByClassName("logo-robin");
         const logoSpace = document.getElementsByClassName("logo-space");
 
@@ -191,5 +191,13 @@ const navigation = [
 
         // Listen for scroll
         window.addEventListener("scroll", updateHeaderStyle);
-    });
+    }
+
+    // For view transitions (navigation between pages)
+    document.addEventListener("astro:page-load", initHeader);
+
+    // For direct page loads - run immediately if DOM is ready
+    if (document.readyState !== "loading") {
+        initHeader();
+    }
 </script>

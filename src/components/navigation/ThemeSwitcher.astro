@@ -84,6 +84,11 @@
         }
     }
 
-    // Run on initial load AND after Astro page transitions
+    // For view transitions (navigation between pages)
     document.addEventListener("astro:page-load", initThemeSwitcher);
+
+    // For direct page loads - run immediately if DOM is ready
+    if (document.readyState !== "loading") {
+        initThemeSwitcher();
+    }
 </script>

@@ -108,7 +108,7 @@ const { navigation } = Astro.props;
 </div>
 
 <script>
-    document.addEventListener("astro:page-load", () => {
+    function initMobileMenu() {
         const mobileMenu = document.getElementById("mobile-menu");
         const mobileMenuOpen = document.getElementById("mobile-menu-open");
         const mobileMenuClose = document.getElementById("mobile-menu-close");
@@ -116,6 +116,12 @@ const { navigation } = Astro.props;
         const mobileNavGroupToggles = document.querySelectorAll(
             ".mobile-nav-group-toggle"
         );
+
+        if (!mobileMenu) return;
+
+        // Prevent duplicate event listeners
+        if (mobileMenu.dataset.initialized) return;
+        mobileMenu.dataset.initialized = "true";
 
         function openMenu() {
             mobileMenu?.classList.remove("translate-x-full");
@@ -148,5 +154,13 @@ const { navigation } = Astro.props;
                 icon?.classList.toggle("rotate-180");
             });
         });
-    });
+    }
+
+    // For view transitions (navigation between pages)
+    document.addEventListener("astro:page-load", initMobileMenu);
+
+    // For direct page loads - run immediately if DOM is ready
+    if (document.readyState !== "loading") {
+        initMobileMenu();
+    }
 </script>
