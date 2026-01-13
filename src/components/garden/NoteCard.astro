@@ -1,4 +1,5 @@
 ---
+import Divider from "@components/Divider.astro";
 import { colors } from "./utils/colors";
 import type { Note } from "@api/github-notes";
 
@@ -21,36 +22,104 @@ const randomRotation = Math.floor(Math.random() * 4 - 2);
 const transformStyles = distorted
     ? `transform: translateY(${randomMarginBottom}px) translateX(${randomMarginRight}px) rotate(${randomRotation}deg);`
     : `transform: rotate(${randomRotation}deg);`;
+
+const shadowClass = randomRotation >= 0 ? "hide-after" : "hide-before";
+
+// Random vertical alignment
+const alignOptions = ["self-start", "self-center", "self-end"];
+const randomAlign = alignOptions[Math.floor(Math.random() * alignOptions.length)];
+
+// Random styling for description text
+const randomTypeRotation = Math.floor(Math.random() * 4 - 2);
+const randomTypeMarginBottom = Math.floor(Math.random() * 12 - 6);
+const randomTypeMarginRight = Math.floor(Math.random() * 12 - 6);
+
+const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+};
+
+const createdDay = formatDate(note.created);
+const editedDay = formatDate(note.edited);
 ---
 
 <div
-    class:list={["group block h-full min-h-[280px] items-center", classes]}
+    class:list={["group block min-h-[280px]", randomAlign, classes]}
     style={transformStyles}
     data-rotation={randomRotation}
 >
     <div
-        class="corner-shadow-effect hover:before:opacity-0 before:transition-all before:duration-300"
+        class={`corner-shadow-effect hover:before:opacity-0 before:transition-all before:duration-300 ${shadowClass}`}
     >
         <a
             href={`/garden/${note.thema.toLowerCase()}/${note.slug}`}
             class="hover-lift relative block p-2 no-underline"
             style={backgroundColorStyle}
         >
+            <div class="texture"></div>
             <div
-                class="flex h-full flex-col justify-between border p-3 font-mono gap-2"
+                class="flex h-full flex-col justify-between border border-black/60 p-3 font-mono"
             >
-                <span
-                    class="text-xs font-mono uppercase tracking-wide opacity-70"
-                >
-                    {note.thema}
-                </span>
-                <h3 class="text-base font-bold leading-tight text-black">
-                    {note.title}
-                </h3>
-                <p class="text-md text-black/70 line-clamp-3 font-decorative">
-                    {note.description}
-                </p>
+                <div>
+                    <ul class="flex gap-2">
+                        <li
+                            class="mb-2 inline-block rounded-full border border-black/60 px-2 py-[2px] text-[11px]"
+                        >
+                            {note.thema}
+                        </li>
+                    </ul>
+                    <h3 class="mt-3 text-base font-bold">{note.title}</h3>
+                </div>
+                {
+                    note.description && (
+                        <>
+                            <Divider isBlack />
+                            <div style="filter: url(#distort);">
+                                <p
+                                    class="line-clamp-3 py-1 font-decorative text-md leading-[1.1]"
+                                    style={`transform: translateY(${randomTypeMarginBottom}px) translateX(${randomTypeMarginRight}px) rotate(${randomTypeRotation}deg); opacity: 0.9;`}
+                                >
+                                    {note.description}
+                                </p>
+                            </div>
+                        </>
+                    )
+                }
+                <Divider isBlack />
+                <div class="text-[12px]">
+                    <p>
+                        <span class="inline-block min-w-[72px]">created:</span>
+                        {createdDay}
+                    </p>
+                    {
+                        createdDay !== editedDay && (
+                            <p>
+                                <span class="inline-block min-w-[72px]">
+                                    edited:
+                                </span>
+                                {editedDay}
+                            </p>
+                        )
+                    }
+                </div>
             </div>
         </a>
     </div>
 </div>
+
+<style>
+    .texture {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.5;
+        mix-blend-mode: soft-light;
+        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 369 369' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+</style>
