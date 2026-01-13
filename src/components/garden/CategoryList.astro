@@ -10,20 +10,34 @@ interface CategoryInfo {
 interface Props {
     categories: CategoryInfo[];
     selectedCategory?: string;
+    selectedSort?: "newest" | "last-edited";
 }
 
-const { categories, selectedCategory } = Astro.props;
+const { categories, selectedCategory, selectedSort = "last-edited" } =
+    Astro.props;
 
 // Calculate total notes count
 const totalNotes = categories.reduce((sum, cat) => sum + cat.count, 0);
+
+// Build URLs that preserve the current sort
+const getSortSuffix = () => {
+    if (selectedSort === "newest") {
+        return "/newest";
+    }
+    return ""; // default sort doesn't need suffix
+};
+
+const sortSuffix = getSortSuffix();
+const allHref =
+    selectedSort === "newest" ? "/garden/sort/newest" : "/garden";
 ---
 
-<div class="mb-12">
-    <ul class="flex flex-row gap-1">
+<div>
+    <ul class="flex flex-row flex-wrap gap-1">
         <FilterChip
             color="black"
             title="All"
-            href="/garden"
+            href={allHref}
             isActive={!selectedCategory}
             count={totalNotes}
         />
@@ -32,7 +46,7 @@ const totalNotes = categories.reduce((sum, cat) => sum + cat.count, 0);
                 <FilterChip
                     color={colors[index % colors.length]}
                     title={category.name}
-                    href={`/garden/category/${category.name.toLowerCase()}`}
+                    href={`/garden/${category.name.toLowerCase()}${sortSuffix}`}
                     isActive={selectedCategory === category.name}
                     count={category.count}
                 />

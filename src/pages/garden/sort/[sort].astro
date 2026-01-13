@@ -1,0 +1,67 @@
+---
+import GardenPage from "@components/garden/GardenPage.astro";
+import { fetchNotes, getCategories, type Note } from "@api/github-notes";
+
+export async function getStaticPaths() {
+    const notesData = await fetchNotes();
+    const categories = getCategories(notesData);
+
+    // Build category info with counts, sorted by count for consistent color assignment
+    const categoryInfoList = categories
+        .map((cat) => ({
+            name: cat,
+            count: (notesData[cat] as Note[])?.length || 0,
+        }))
+        .sort((a, b) => b.count - a.count);
+
+    // Create a map of category to index based on sorted order for consistent coloring
+    const categoryIndexMap: Record<string, number> = {};
+    categoryInfoList.forEach((cat, index) => {
+        categoryIndexMap[cat.name] = index;
+    });
+
+    // Flatten all notes from all categories
+    const allNotes: Note[] = [];
+    for (const category of categories) {
+        const categoryNotes = notesData[category] as Note[];
+        allNotes.push(...categoryNotes);
+    }
+
+    // Generate paths for both sort options
+    const sortOptions = ["newest", "last-edited"] as const;
+
+    return sortOptions.map((sort) => {
+        // Sort notes based on the sort option
+        const sortedNotes = [...allNotes].sort((a, b) => {
+            if (sort === "newest") {
+                return (
+                    new Date(b.created).getTime() -
+                    new Date(a.created).getTime()
+                );
+            }
+            return (
+                new Date(b.edited).getTime() - new Date(a.edited).getTime()
+            );
+        });
+
+        return {
+            params: { sort },
+            props: {
+                notes: sortedNotes,
+                allCategories: categoryInfoList,
+                categoryIndexMap,
+                selectedSort: sort,
+            },
+        };
+    });
+}
+
+const { notes, allCategories, categoryIndexMap, selectedSort } = Astro.props;
+---
+
+<GardenPage
+    notes={notes}
+    allCategories={allCategories}
+    categoryIndexMap={categoryIndexMap}
+    selectedSort={selectedSort}
+/>

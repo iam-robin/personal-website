@@ -5,6 +5,7 @@ import { Icon } from "astro-icon/components";
 import { fetchNotes, getCategories, type Note } from "@api/github-notes";
 import { colors } from "@components/garden/utils/colors";
 import { marked } from "marked";
+import Divider from "@components/Divider.astro";
 
 export async function getStaticPaths() {
     const notesData = await fetchNotes();
@@ -57,51 +58,138 @@ const { note, htmlContent, categoryIndex } = Astro.props;
 // Get background color based on category
 const bgColor = colors[categoryIndex % colors.length];
 
-// Format date
+// Format date (DD / MM / YYYY)
 const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day} / ${month} / ${year}`;
 };
 ---
 
 <Layout hasHeader={false}>
+    <!-- SVG distortion filter -->
+    <svg class="hidden" aria-hidden="true">
+        <defs>
+            <filter id="distort-xl">
+                <feTurbulence baseFrequency="1 1" numOctaves="1"></feTurbulence>
+                <feDisplacementMap in="SourceGraphic" scale="1.3"
+                ></feDisplacementMap>
+            </filter>
+        </defs>
+    </svg>
+
     <div transition:name="garden-backdrop" class="fixed inset-0 bg-surface">
     </div>
+
     <article
         transition:name="garden-card"
-        class="p-8 w-full max-w-5xl relative bg-white my-12 z-30 mx-auto shadow-[0px_20px_40px_rgba(0,0,0,.025)]"
-        style={`background-color: ${bgColor}`}
+        class="effect relative w-full max-w-5xl my-12 z-30 mx-auto"
     >
+        <!-- Close button -->
         <button
-            class="absolute top-8 right-8 rounded-full h-12 w-12 bg-black/10 flex-center cursor-pointer hover:bg-black/20 transition-colors"
+            class="absolute top-4 right-4 z-50 rounded-full h-12 w-12 bg-black/10 flex-center cursor-pointer hover:bg-black/20 transition-colors"
             onclick="history.back()"
         >
             <Icon name="ph:x-bold" class="text-black/70" size={24} />
         </button>
-        <header class="mb-8 p-8 -mx-8 -mt-8 rounded-t-4xl">
-            <a
-                href={`/garden/category/${note.thema.toLowerCase()}`}
-                class="inline-block px-3 py-1 bg-black/10 text-black/70 text-sm rounded-full mb-4 no-underline hover:bg-black/20 transition-colors"
+
+        <!-- Main card with background color -->
+        <div
+            class="relative w-full p-2 md:p-4"
+            style={`background-color: ${bgColor}`}
+        >
+            <div class="texture"></div>
+
+            <!-- Content border -->
+            <div
+                class="border border-black/60 px-4 pb-24 pt-4 md:px-10 md:pt-6"
             >
-                {note.thema}
-            </a>
-            <h1 class="text-3xl md:text-4xl font-bold mb-4 text-black">
-                {note.title}
-            </h1>
-            <p class="text-lg text-black/70">
-                {note.description}
-            </p>
-            <div class="flex gap-4 text-sm text-black/50 mt-4">
-                <span>Created: {formatDate(note.created)}</span>
-                <span>Updated: {formatDate(note.edited)}</span>
+                <div class="mx-auto mt-20 max-w-[65ch] text-[1.2rem]">
+                    <h1
+                        class="font-sans text-[3rem] font-black leading-[1.15] md:text-[4.5rem]"
+                    >
+                        {note.title}
+                    </h1>
+                    <Divider isBlack />
+                </div>
+
+                <!-- Markdown content -->
+                <div class="markdown prose prose-sm md:prose-base">
+                    <Prose>
+                        <Fragment set:html={htmlContent} />
+                    </Prose>
+                </div>
             </div>
-        </header>
-        <Prose>
-            <Fragment set:html={htmlContent} />
-        </Prose>
+
+            <!-- Metadata footer -->
+            <div class="border-b border-l border-r border-black/60">
+                <div class="flex">
+                    <span
+                        class="flex w-1/3 flex-col items-center gap-2 border-r border-black/60 p-3 md:flex-row"
+                    >
+                        <span>Created:</span>
+                        <span
+                            class="font-decorative text-[20px] sm:text-[24px]"
+                            style="filter: url(#distort-xl);"
+                        >
+                            {formatDate(note.created)}
+                        </span>
+                    </span>
+                    <span
+                        class="flex w-1/3 flex-col items-center gap-2 border-r border-black/60 p-3 md:flex-row"
+                    >
+                        <span>Edited:</span>
+                        <span
+                            class="font-decorative text-[20px] sm:text-[24px]"
+                            style="filter: url(#distort-xl);"
+                        >
+                            {formatDate(note.edited)}
+                        </span>
+                    </span>
+                    <div
+                        class="flex w-1/3 flex-col items-center gap-2 p-3 md:flex-row"
+                    >
+                        <span>Topic:</span>
+                        <span
+                            class="font-decorative text-[20px] sm:text-[24px]"
+                            style="filter: url(#distort-xl);"
+                        >
+                            {note.thema}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </article>
 </Layout>
+
+<style>
+    .texture {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        mix-blend-mode: soft-light;
+        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 369 369' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        pointer-events: none;
+    }
+
+    .effect {
+        position: relative;
+    }
+
+    .effect:after {
+        z-index: -1;
+        position: absolute;
+        content: "";
+        width: 50%;
+        top: 80%;
+        box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.1);
+        transform: rotate(3deg);
+        bottom: 16px;
+        right: 0.5em;
+    }
+</style>

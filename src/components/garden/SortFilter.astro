@@ -1,0 +1,47 @@
+---
+interface Props {
+    selectedSort: "newest" | "last-edited";
+    selectedCategory?: string;
+}
+
+const { selectedSort, selectedCategory } = Astro.props;
+
+// Build URLs based on whether a category is selected
+const newestUrl = selectedCategory
+    ? `/garden/${selectedCategory.toLowerCase()}/newest`
+    : "/garden/sort/newest";
+
+const lastEditedUrl = selectedCategory
+    ? `/garden/${selectedCategory.toLowerCase()}/last-edited`
+    : "/garden/sort/last-edited";
+---
+
+<div class="flex items-center gap-3 mb-8">
+    <span class="font-bold">Sort by:</span>
+    <ul class="flex gap-2">
+        <li>
+            <a
+                href={newestUrl}
+                class={`cursor-pointer rounded px-2 py-1 transition-colors ${
+                    selectedSort === "newest"
+                        ? "bg-neutral-200 text-neutral-800"
+                        : "text-neutral-400 hover:text-neutral-600"
+                }`}
+            >
+                newest
+            </a>
+        </li>
+        <li>
+            <a
+                href={lastEditedUrl}
+                class={`cursor-pointer rounded px-2 py-1 transition-colors ${
+                    selectedSort === "last-edited"
+                        ? "bg-neutral-200 text-neutral-800"
+                        : "text-neutral-400 hover:text-neutral-600"
+                }`}
+            >
+                last edited
+            </a>
+        </li>
+    </ul>
+</div>

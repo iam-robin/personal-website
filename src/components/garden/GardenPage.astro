@@ -4,6 +4,7 @@ import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro
 import Container from "@components/Container.astro";
 import NoteCard from "./NoteCard.astro";
 import CategoryList from "./CategoryList.astro";
+import SortFilter from "./SortFilter.astro";
 import type { Note } from "@api/github-notes";
 
 interface CategoryInfo {
@@ -16,11 +17,18 @@ interface Props {
     allCategories: CategoryInfo[];
     categoryIndexMap: Record<string, number>;
     selectedCategory?: string;
+    selectedSort?: "newest" | "last-edited";
     error?: string | null;
 }
 
-const { notes, allCategories, categoryIndexMap, selectedCategory, error } =
-    Astro.props;
+const {
+    notes,
+    allCategories,
+    categoryIndexMap,
+    selectedCategory,
+    selectedSort = "last-edited",
+    error,
+} = Astro.props;
 ---
 
 <Layout>
@@ -38,18 +46,25 @@ const { notes, allCategories, categoryIndexMap, selectedCategory, error } =
             )
         }
 
-        {
-            allCategories.length > 0 && (
-                <CategoryList
-                    categories={allCategories}
-                    selectedCategory={selectedCategory}
-                />
-            )
-        }
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+            {
+                allCategories.length > 0 && (
+                    <CategoryList
+                        categories={allCategories}
+                        selectedCategory={selectedCategory}
+                        selectedSort={selectedSort}
+                    />
+                )
+            }
+            <SortFilter
+                selectedSort={selectedSort}
+                selectedCategory={selectedCategory}
+            />
+        </div>
 
         {
             notes.length > 0 && (
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-center">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10 items-center">
                     {notes.map((note) => (
                         <NoteCard
                             note={note}
