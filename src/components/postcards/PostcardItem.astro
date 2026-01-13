@@ -99,6 +99,8 @@ const transformStyles = distorted
     ? `transform: translateY(${marginBottom}px) translateX(${marginRight}px) rotate(${rotation}deg);`
     : `transform: rotate(${rotation}deg);`;
 
+const shadowClass = rotation >= 0 ? "hide-after" : "hide-before";
+
 const authorStyles = `transform: translateX(${authorLeftOffset}px) translateY(${authorTopOffset}px) rotate(${authorRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
 const dateStyles = `transform: translateX(${dateLeftOffset}px) translateY(${dateTopOffset}px) rotate(${dateRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
 const bodyStyles = `transform: translateX(${bodyLeftOffset}px) translateY(${bodyTopOffset}px) rotate(${bodyRotation}deg); font-size: ${bodyFontSize}; line-height: ${lineHeightValue}; color: ${penColor}; filter: url(#distort-xl); white-space: pre-wrap;`;
@@ -132,7 +134,7 @@ const wavyLinesStampContainerStyles = `
 `;
 ---
 
-<div class="w-full max-w-2xl sm:aspect-3/2 hover-lift" style={transformStyles}>
+<div class={`corner-shadow-effect w-full max-w-2xl sm:aspect-3/2 hover-lift ${shadowClass}`} style={transformStyles}>
     <div
         class="flex flex-col sm:flex-row justify-between h-full w-full border border-black/10"
         style={`background-color: ${paperColor};`}
