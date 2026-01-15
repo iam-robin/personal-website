@@ -11,7 +11,7 @@ const spineColorMap: Record<string, SpineColors> = {
         background: "#00AEAD",
         text: "#FFFFFF",
     },
-    "The Glass Castle": {
+    "The Glass Castle: A Memoir": {
         background: "#021C37",
         text: "#fff",
     },

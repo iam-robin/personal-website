@@ -17,6 +17,12 @@ if (book.cover) {
     coverColor = spineColors.background;
 }
 
+// Calculate book thickness based on pages
+const thicknessPerPage = 0.1;
+const defaultPageCount = 250;
+const pageCount = book.pages || defaultPageCount;
+const bookThickness = Math.max(15, Math.min(pageCount * thicknessPerPage, 40));
+
 // Generate stars for rating
 const rating = book.rating ?? 0;
 const fullStars = Math.floor(rating);
@@ -34,7 +40,7 @@ const authors = book.author.join(", ");
         >
             {
                 book.cover ? (
-                    <div class="book-3d" style={`--cover-color: ${coverColor}`}>
+                    <div class="book-3d" style={`--cover-color: ${coverColor}; --book-thickness: ${bookThickness}px`}>
                         <div class="book-3d__inner">
                             <img
                                 class="book-3d__cover"
@@ -95,7 +101,6 @@ const authors = book.author.join(", ");
 
 <style>
     .book-3d {
-        --book-thickness: 20px;
         perspective: 1000px;
         max-width: 50%;
     }
@@ -107,7 +112,7 @@ const authors = book.author.join(", ");
         transition: all 0.3s;
     }
 
-    .book-3d__inner:hover {
+    a:hover .book-3d__inner {
         transform: rotateY(0deg);
     }
     /* Book Pages */
