@@ -15,6 +15,7 @@
         "@tailwindcss/vite": "^4.1.17",
         "astro": "^5.16.0",
         "astro-icon": "^1.1.5",
+        "color-thief-node": "^1.0.4",
         "isomorphic-dompurify": "^2.33.0",
         "marked": "^17.0.1",
         "motion": "^12.23.24",

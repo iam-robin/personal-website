@@ -4,7 +4,6 @@ import { fetchBooks } from "@api/github-books";
 
 export async function getStaticPaths() {
     const booksData = await fetchBooks();
-    console.log("booksData", booksData);
 
     const { abgeschlossen, merkliste, aktiv } = booksData;
 
