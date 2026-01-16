@@ -28,9 +28,15 @@ const standaloneClasses =
     href={href}
     class:list={[standalone ? standaloneClasses : baseClasses, className]}
     {...externalProps}
->
-    <slot />
-    {
+    ><slot />{
+        external && !standalone && (
+            <Icon
+                name="ph:arrow-up-right-bold"
+                width={12}
+                class="inline-block ml-1 mb-2"
+            />
+        )
+    }{
         standalone && (
             <Icon
                 name="ph:arrow-right-bold"
@@ -38,5 +44,5 @@ const standaloneClasses =
                 class="text-text-secondary group-hover:translate-x-1 group-hover:text-text-primary transition"
             />
         )
-    }
-</a>
+    }</a
+>

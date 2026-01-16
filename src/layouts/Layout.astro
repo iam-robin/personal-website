@@ -20,6 +20,23 @@ const { hasHeader = true } = Astro.props;
         <meta name="generator" content={Astro.generator} />
         <title>iamrobin</title>
         <ClientRouter />
+        <script is:inline>
+            // Apply theme immediately to prevent flash on initial load
+            (function() {
+                const theme = localStorage.getItem("theme");
+                if (theme === "dark") {
+                    document.documentElement.dataset.theme = theme;
+                }
+            })();
+
+            // Preserve theme during View Transitions
+            document.addEventListener("astro:before-swap", (e) => {
+                const theme = localStorage.getItem("theme");
+                if (theme === "dark") {
+                    e.newDocument.documentElement.dataset.theme = theme;
+                }
+            });
+        </script>
     </head>
     <body class="bg-background text-foreground">
         {hasHeader && <Header />}

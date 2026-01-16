@@ -16,31 +16,33 @@ const lastEditedUrl = selectedCategory
     : "/garden/sort/last-edited";
 ---
 
-<div class="flex items-center gap-3 mb-8">
-    <span class="font-bold">Sort by:</span>
-    <ul class="flex gap-2">
+<div class="flex gap-4 items-center">
+    <p class="font-bold">Sort by</p>
+    <ul class="flex gap-1">
         <li>
             <a
                 href={newestUrl}
-                class={`cursor-pointer rounded px-2 py-1 transition-colors ${
+                class:list={[
+                    "px-2 py-1 rounded no-underline",
                     selectedSort === "newest"
-                        ? "bg-neutral-200 text-neutral-800"
-                        : "text-neutral-400 hover:text-neutral-600"
-                }`}
+                        ? "bg-surface-raised text-text-primary"
+                        : "text-text-muted hover:text-text-primary",
+                ]}
             >
-                newest
+                Newest
             </a>
         </li>
         <li>
             <a
                 href={lastEditedUrl}
-                class={`cursor-pointer rounded px-2 py-1 transition-colors ${
+                class:list={[
+                    "px-2 py-1 rounded no-underline",
                     selectedSort === "last-edited"
-                        ? "bg-neutral-200 text-neutral-800"
-                        : "text-neutral-400 hover:text-neutral-600"
-                }`}
+                        ? "bg-surface-raised text-text-primary"
+                        : "text-text-muted hover:text-text-primary",
+                ]}
             >
-                last edited
+                Last edited
             </a>
         </li>
     </ul>

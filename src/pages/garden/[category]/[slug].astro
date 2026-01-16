@@ -1,6 +1,5 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import Prose from "@components/Prose.astro";
 import { Icon } from "astro-icon/components";
 import { fetchNotes, getCategories, type Note } from "@api/github-notes";
 import { colors } from "@components/garden/utils/colors";
@@ -97,7 +96,7 @@ const formatDate = (dateString: string) => {
 
         <!-- Main card with background color -->
         <div
-            class="relative w-full p-2 md:p-4"
+            class="relative w-full p-2 md:p-4 text-black"
             style={`background-color: ${bgColor}`}
         >
             <div class="texture"></div>
@@ -116,10 +115,8 @@ const formatDate = (dateString: string) => {
                 </div>
 
                 <!-- Markdown content -->
-                <div class="markdown prose prose-sm md:prose-base">
-                    <Prose>
-                        <Fragment set:html={htmlContent} />
-                    </Prose>
+                <div class="markdown prose">
+                    <Fragment set:html={htmlContent} />
                 </div>
             </div>
 
@@ -192,4 +189,195 @@ const formatDate = (dateString: string) => {
         bottom: 16px;
         right: 0.5em;
     }
+
+    /* Markdown prose styling */
+    .markdown {
+        --tw-prose-body: rgba(0, 0, 0, 0.9);
+        --tw-prose-headings: rgba(0, 0, 0, 0.9);
+        --tw-prose-counters: rgba(0, 0, 0, 0.4);
+        --tw-prose-bullets: rgba(0, 0, 0, 0.3);
+        --tw-prose-bold: rgba(0, 0, 0, 1);
+        --tw-prose-links: rgba(0, 0, 0, 0.7);
+        --tw-prose-quote-borders: rgba(0, 0, 0, 0.2);
+        --tw-prose-td-borders: rgba(0, 0, 0, 0.1);
+        --tw-prose-th-borders: rgba(0, 0, 0, 0.3);
+        max-width: 65ch;
+        margin: 0 auto;
+        font-size: 1.2rem;
+    }
+
+    .markdown :global(hr) {
+        display: block;
+        margin: 3rem 0;
+        border: none;
+    }
+
+    .markdown :global(hr)::after {
+        content: "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+        display: block;
+        color: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        margin: 0 32px;
+        left: 0;
+        right: 0;
+        font-family: "Fira Mono", monospace;
+        letter-spacing: 0.1em;
+        font-size: 1.125rem;
+        line-height: 1.5;
+        text-overflow: clip;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .markdown :global(img) {
+        filter: grayscale(100%) contrast(110%) brightness(110%);
+        mix-blend-mode: multiply;
+    }
+
+    .markdown :global(img:hover) {
+        filter: grayscale(0%) contrast(100%) brightness(100%);
+        mix-blend-mode: normal;
+    }
+
+    /* Hide images in paragraphs by default */
+    .markdown :global(p) :global(img) {
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        display: none;
+    }
+
+    /* Image gallery - flex row layout for paragraphs with only images */
+    .markdown :global(.image-gallery) {
+        display: flex;
+        gap: 16px;
+    }
+
+    .markdown :global(.image-gallery) :global(img) {
+        display: block;
+    }
+
+    .markdown :global(a) {
+        text-decoration: none;
+        border-bottom: 1px dashed rgba(0, 0, 0, 0.3);
+        padding-bottom: 3px;
+        position: relative;
+        margin-right: 20px;
+        font-style: italic;
+    }
+
+    .markdown :global(a)::after {
+        content: "↗";
+        position: absolute;
+        font-style: normal;
+        top: 0;
+        line-height: 1.2em;
+        right: -18px;
+        font-size: 1.2em;
+        color: rgba(0, 0, 0, 0.4);
+    }
+
+    .markdown :global(input[type="checkbox"]) {
+        appearance: none;
+        width: 1.5em;
+        height: 1.5em;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 0.25em;
+        margin-right: 0.5em;
+        vertical-align: middle;
+        position: relative;
+        top: -0.1em;
+    }
+
+    .markdown :global(input[type="checkbox"]:checked)::after {
+        content: "✓";
+        display: block;
+        position: absolute;
+        top: 0.05em;
+        left: 0.15em;
+        font-size: 1.2em;
+        line-height: 1em;
+        color: rgba(0, 0, 0, 0.7);
+    }
+
+    .markdown :global(ul:has(> li > input[type="checkbox"])) {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .markdown :global(ul:has(> li > input[type="checkbox"]) li) {
+        display: flex;
+        font-size: 0.9em;
+        line-height: 1.4em;
+        margin-bottom: 16px;
+    }
+
+    .markdown :global(.footnotes) {
+        display: none;
+    }
+
+    .markdown :global(sup > a) {
+        border: none;
+        margin-right: 0px;
+    }
+
+    .markdown :global(sup > a)::after {
+        display: none;
+    }
+
+    /* Columns layout for side-by-side content */
+    .markdown :global(.columns) {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .markdown :global(.columns) :global(img) {
+        max-width: 120px;
+        margin: 0;
+        margin-top: 8px;
+        display: block;
+    }
+
+    .markdown :global(.columns) :global(p),
+    .markdown :global(.columns) :global(ul) {
+        margin: 0;
+    }
+
+    .markdown :global(.columns.vertically-centered) {
+        align-items: center;
+    }
+
+    @media (min-width: 640px) {
+        .markdown :global(.columns) {
+            grid-template-columns: var(--column-widths, 1fr 1fr);
+            gap: 64px;
+        }
+        .markdown :global(.columns) :global(img) {
+            max-width: 100%;
+        }
+    }
 </style>
+
+<script>
+    function initImageGallery() {
+        const markdownDiv = document.querySelector(".markdown");
+        const paragraphs = markdownDiv?.querySelectorAll("p");
+
+        paragraphs?.forEach((p) => {
+            const images = p.querySelectorAll("img");
+            const elementNodes = Array.from(p.childNodes).filter(
+                (node) => node.nodeType === Node.ELEMENT_NODE
+            );
+            if (images.length > 0 && images.length === elementNodes.length) {
+                p.classList.add("image-gallery");
+            }
+        });
+    }
+
+    // Run on initial load
+    document.addEventListener("DOMContentLoaded", initImageGallery);
+    // Run after View Transitions
+    document.addEventListener("astro:page-load", initImageGallery);
+</script>

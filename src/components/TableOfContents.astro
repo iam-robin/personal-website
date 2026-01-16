@@ -1,6 +1,7 @@
 ---
-import type { Heading } from '../utils/markdown';
-import TableOfContentsItem from './TableOfContentsItem.astro';
+import type { Heading } from "../utils/markdown";
+import Collapsible from "./Collapsible.astro";
+import TableOfContentsItem from "./TableOfContentsItem.astro";
 
 interface Props {
     headings: Heading[];
@@ -14,19 +15,19 @@ const showTOC = headings.length > 0;
 
 {
     showTOC && (
-        <details open class="mb-8 rounded-lg border border-black-50 bg-neutral-100 p-4">
-            <summary class="-m-4 cursor-pointer select-none p-4 font-medium focus:outline-none">
-                <span>Table of Contents</span>
-            </summary>
-            <div class="mt-4 text-sm">
-                <nav id="TableOfContents" class="toc-nav">
-                    <ul class="m-0 list-none p-0">
-                        {headings.map((heading) => (
-                            <TableOfContentsItem heading={heading} />
-                        ))}
-                    </ul>
-                </nav>
-            </div>
-        </details>
+        <Collapsible
+            title="Table of Contents"
+            class="mb-8"
+            contentClass="text-sm"
+            uppercase={false}
+        >
+            <nav id="TableOfContents" class="toc-nav">
+                <ul class="m-0 list-none p-0">
+                    {headings.map((heading) => (
+                        <TableOfContentsItem heading={heading} />
+                    ))}
+                </ul>
+            </nav>
+        </Collapsible>
     )
 }

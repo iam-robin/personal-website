@@ -1,0 +1,106 @@
+---
+import { Icon } from "astro-icon/components";
+import StarRating from "@components/StarRating.astro";
+import StatusBadge from "@components/StatusBadge.astro";
+
+interface Props {
+    title: string;
+    subtitle?: string;
+    date: string | null;
+    coverUrl?: string;
+    rating: number | null;
+    status?: "watching" | "paused";
+    isRewatch?: boolean;
+    isLiked?: boolean;
+    externalUrl?: string;
+}
+
+const {
+    title,
+    subtitle,
+    date,
+    coverUrl,
+    rating,
+    status,
+    isRewatch,
+    isLiked,
+    externalUrl,
+} = Astro.props;
+
+const formatDate = (dateString: string | null) => {
+    if (!dateString) return "";
+    const d = new Date(dateString);
+    return d.toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+    });
+};
+
+const formattedDate = formatDate(date);
+---
+
+<div
+    class="list-item-image-hover-effect group relative flex flex-col justify-between gap-4 border-b border-neutral-300 py-4 md:flex-row md:gap-12 md:py-10"
+>
+    {
+        coverUrl && (
+            <img
+                class="cover-image pointer-events-none absolute z-10 hidden max-w-40 shadow-lg md:group-hover:block"
+                src={coverUrl}
+                alt={`${title} poster`}
+                width="160"
+                height="240"
+                loading="lazy"
+            />
+        )
+    }
+    <div class="flex items-start justify-between gap-10 md:items-center">
+        <div class="hidden md:block shrink-0 min-w-[4.5rem]">
+            {formattedDate ? (
+                <span class="font-mono">{formattedDate}</span>
+            ) : status ? (
+                <StatusBadge status={status} />
+            ) : null}
+        </div>
+        <div class="flex items-center gap-2">
+            <p class="text-base font-bold">
+                {title}
+            </p>
+            {subtitle && (
+                <span class="border border-neutral-300 text-text-secondary px-1.5 py-0.5 rounded text-xs">
+                    Season {subtitle}
+                </span>
+            )}
+        </div>
+    </div>
+    <div class="flex items-center gap-3">
+        <div class="font-mono text-neutral-400 md:hidden">
+            {formattedDate}
+        </div>
+        {
+            (formattedDate || externalUrl) && (
+                <div class="font-mono text-neutral-400 md:hidden">|</div>
+            )
+        }
+        <div class="flex items-center gap-2">
+            {status && <StatusBadge status={status} class="md:hidden" />}
+            {isRewatch && <StatusBadge status="rewatch" />}
+            {isLiked && <Icon name="ph:heart-fill" width={16} class="text-red" />}
+        </div>
+        <div class="flex items-center gap-3">
+            {rating && rating > 0 && <StarRating rating={rating} showValue size={16} />}
+        </div>
+    </div>
+    {
+        externalUrl && (
+            <a
+                href={externalUrl}
+                target="_blank"
+                rel="noopener"
+                class="absolute bottom-0 left-0 right-0 top-0 h-full w-full"
+            >
+                <span class="sr-only">View external link</span>
+            </a>
+        )
+    }
+</div>

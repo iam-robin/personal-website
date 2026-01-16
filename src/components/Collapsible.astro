@@ -1,0 +1,46 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    title: string;
+    open?: boolean;
+    class?: string;
+    contentClass?: string;
+    uppercase?: boolean;
+}
+
+const {
+    title,
+    open = true,
+    class: className,
+    contentClass,
+    uppercase = true,
+} = Astro.props;
+---
+
+<details
+    open={open}
+    class:list={[
+        "group rounded-lg border border-border bg-surface p-4",
+        className,
+    ]}
+>
+    <summary
+        class="flex items-center justify-between -m-2 p-4 cursor-pointer select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+    >
+        <div
+            class:list={[
+                uppercase && "font-mono text-xs uppercase tracking-widest",
+            ]}
+        >
+            {title}
+            <slot name="title-suffix" />
+        </div>
+        <div class="transition-transform duration-300 group-open:rotate-180">
+            <Icon name="ph:caret-down-bold" width={16} />
+        </div>
+    </summary>
+    <div class:list={["mt-4", contentClass]}>
+        <slot />
+    </div>
+</details>

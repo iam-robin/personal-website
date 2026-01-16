@@ -2,6 +2,8 @@
 import { Icon } from "astro-icon/components";
 import type { Book } from "@api/github-books";
 import { getSpineColors } from "@utils/spineColors";
+import StarRating from "@components/StarRating.astro";
+import StatusBadge from "@components/StatusBadge.astro";
 
 interface Props {
     book: Book;
@@ -23,12 +25,6 @@ const defaultPageCount = 250;
 const pageCount = book.pages || defaultPageCount;
 const bookThickness = Math.max(15, Math.min(pageCount * thicknessPerPage, 40));
 
-// Generate stars for rating
-const rating = book.rating ?? 0;
-const fullStars = Math.floor(rating);
-const hasHalfStar = rating % 1 >= 0.5;
-const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
 // Format authors
 const authors = book.author.join(", ");
 ---
@@ -40,13 +36,18 @@ const authors = book.author.join(", ");
         >
             {
                 book.cover ? (
-                    <div class="book-3d" style={`--cover-color: ${coverColor}; --book-thickness: ${bookThickness}px`}>
+                    <div
+                        class="book-3d"
+                        style={`--cover-color: ${coverColor}; --book-thickness: ${bookThickness}px`}
+                    >
                         <div class="book-3d__inner">
                             <img
                                 class="book-3d__cover"
                                 src={book.cover}
                                 alt={book.title}
                             />
+                            <div class="effect" />
+                            <div class="light" />
                         </div>
                     </div>
                 ) : (
@@ -55,13 +56,9 @@ const authors = book.author.join(", ");
                     </div>
                 )
             }
-            {
-                isCurrentlyReading && (
-                    <div class="absolute right-2 top-2 rounded bg-sticker-lilac px-2 py-1 text-xs text-sticker-lilac-dark">
-                        Reading
-                    </div>
-                )
-            }
+            {isCurrentlyReading && (
+                <StatusBadge status="reading" class="absolute right-2 top-2" />
+            )}
         </div>
     </div>
     <div class="flex flex-col gap-.5 min-h-[100px]">
@@ -69,40 +66,14 @@ const authors = book.author.join(", ");
             {book.title}
         </p>
         <p class="text-text-secondary text-sm">{authors}</p>
-        {
-            rating > 0 && (
-                <div class="flex items-center gap-1 mt-.5">
-                    {Array.from({ length: fullStars }, (_, i) => (
-                        <Icon
-                            name="ph:star-fill"
-                            class="text-surface-inverse"
-                            width={12}
-                        />
-                    ))}
-                    {hasHalfStar && (
-                        <Icon
-                            name="ph:star-half-fill"
-                            class="text-surface-inverse"
-                            width={12}
-                        />
-                    )}
-                    {Array.from({ length: emptyStars }, (_, i) => (
-                        <Icon
-                            name="ph:star"
-                            width={12}
-                            class="text-surface-inverse"
-                        />
-                    ))}
-                </div>
-            )
-        }
+        <StarRating rating={book.rating ?? 0} size={12} />
     </div>
 </a>
 
 <style>
     .book-3d {
         perspective: 1000px;
-        max-width: 50%;
+        max-width: 45%;
     }
 
     .book-3d__inner {
@@ -171,5 +142,50 @@ const authors = book.author.join(", ");
         border-radius: 0 2px 2px 0;
         transform: translateZ(var(--book-thickness));
         box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .effect {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 100%;
+        margin-left: 10px;
+        border-left: 2px solid rgba(0, 0, 0, 0.06);
+        background-image: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: translateZ(var(--book-thickness));
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+
+    .light {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 90%;
+        height: 100%;
+        border-radius: 0 2px 2px 0;
+        background-image: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.2) 100%
+        );
+        opacity: 0.1;
+        transform: translateZ(var(--book-thickness));
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+
+    a:hover .effect {
+        width: 40px;
+    }
+
+    a:hover .light {
+        opacity: 1;
+        width: 70%;
     }
 </style>

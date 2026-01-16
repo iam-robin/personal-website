@@ -1,4 +1,5 @@
 ---
+import YearSection from "@components/YearSection.astro";
 import SeriesItem from "./SeriesItem.astro";
 import type { Series } from "@api/github-series";
 
@@ -9,23 +10,9 @@ interface Props {
 }
 
 const { year, series = [], aktivSeries = [] } = Astro.props;
-
-// Combine aktiv series (first) with completed series
-const allSeries = [...aktivSeries, ...series];
 ---
 
-<div class="relative grid grid-cols-12 gap-4">
-    <h2
-        class="col-start-1 col-end-13 h-fit pb-2 pt-10 font-mono md:sticky md:top-12 md:col-end-3 md:mb-8 md:pb-2"
-    >
-        {year}
-    </h2>
-    <div class="col-start-1 col-end-13 md:col-start-4">
-        {
-            aktivSeries.map((s) => (
-                <SeriesItem series={s} status="watching" />
-            ))
-        }
-        {series.map((s) => <SeriesItem series={s} />)}
-    </div>
-</div>
+<YearSection year={year}>
+    {aktivSeries.map((s) => <SeriesItem series={s} status="watching" />)}
+    {series.map((s) => <SeriesItem series={s} />)}
+</YearSection>

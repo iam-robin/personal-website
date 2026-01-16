@@ -27,16 +27,19 @@ THE SOFTWARE.
 
 -->
 <style>
+    .world-map {
+        fill: var(--color-surface-raised);
+        stroke: var(--color-surface);
+    }
     .active {
         fill: #689bf7;
-        stroke: #344d7b;
+        stroke: var(--color-surface);
     }
 </style>
 
 <svg
-    fill="#fff"
+    class="world-map"
     height="auto"
-    stroke="#808080"
     stroke-linecap="round"
     stroke-linejoin="round"
     stroke-width="1"

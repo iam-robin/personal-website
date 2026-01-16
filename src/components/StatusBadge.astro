@@ -1,0 +1,19 @@
+---
+interface Props {
+    status: "watching" | "paused" | "reading" | "rewatch";
+    class?: string;
+}
+
+const { status, class: className } = Astro.props;
+
+const styles: Record<string, string> = {
+    watching: "bg-green-100 text-green-700",
+    paused: "bg-yellow-100 text-yellow-700",
+    reading: "bg-sticker-lilac text-sticker-lilac-dark",
+    rewatch: "bg-neutral-200 text-neutral-500",
+};
+---
+
+<span class:list={["px-1.5 py-0.5 rounded text-xs", styles[status], className]}>
+    {status}
+</span>

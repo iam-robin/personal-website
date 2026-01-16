@@ -1,5 +1,5 @@
 ---
-// import { CaretDown } from "@phosphor-icons/react";
+import Collapsible from "@components/Collapsible.astro";
 import { COUNTRIES } from "../../utils/countries";
 import WorldMapSvg from "./WorldMapSvg.astro";
 
@@ -18,26 +18,14 @@ const countryFlags = Object.fromEntries(
 );
 ---
 
-<details
-    open
-    class="group mb-12 rounded-lg border border-black-50 bg-neutral-50 p-4"
+<Collapsible
+    title="From where I received Postcards"
+    class="mb-12"
+    contentClass="relative py-12 -ml-24 px-4 -mt-4"
 >
-    <summary
-        class="-m-2 flex cursor-pointer select-none items-center justify-between p-4 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue"
-        aria-label="Toggle tag filter"
-    >
-        <div class="font-mono text-xs uppercase tracking-widest">
-            From where I received Postcards
-        </div>
-        <div class="transition-transform duration-300 group-open:rotate-180">
-            <!-- <CaretDown weight="bold" size={20} /> -->
-        </div>
-    </summary>
-    <div class="relative py-12 -ml-24 px-4">
-        <WorldMapSvg />
-        <div id="tooltip" class="hidden"></div>
-    </div>
-</details>
+    <WorldMapSvg />
+    <div id="tooltip" class="hidden"></div>
+</Collapsible>
 
 <style>
     #tooltip {

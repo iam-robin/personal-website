@@ -1,0 +1,40 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    rating: number;
+    showValue?: boolean;
+    size?: number;
+}
+
+const { rating, showValue = false, size = 16 } = Astro.props;
+
+const fullStars = Math.floor(rating);
+const hasHalfStar = rating % 1 >= 0.5;
+const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+---
+
+{
+    rating > 0 && (
+        <div class="flex items-center gap-2">
+            {showValue && (
+                <span class="text-2xs font-mono text-text-secondary md:min-w-11 text-right mt-1">
+                    ({rating})
+                </span>
+            )}
+            <div class="flex items-center">
+                {Array.from({ length: fullStars }).map(() => (
+                    <Icon name="ph:star-fill" width={size} />
+                ))}
+                {hasHalfStar && <Icon name="ph:star-half-fill" width={size} />}
+                {Array.from({ length: emptyStars }).map(() => (
+                    <Icon
+                        name="ph:star-fill"
+                        width={size}
+                        class="text-neutral-300"
+                    />
+                ))}
+            </div>
+        </div>
+    )
+}

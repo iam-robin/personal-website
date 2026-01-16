@@ -10,20 +10,18 @@ interface Props {
 const { color, href, title, count, isActive } = Astro.props;
 ---
 
-<li class="border">
+<li>
     <a
         href={href}
         class:list={[
-            "text-base no-underline hover:underline flex items-center gap-2",
-            isActive ? "font-bold" : "",
+            "flex cursor-pointer items-center gap-2 rounded-full border border-border px-3 py-1 text-sm no-underline hover:bg-surface-raised",
+            isActive ? "bg-neutral-200 font-bold text-black" : "",
         ]}
     >
         <span
-            class="inline-block w-3 h-3 rounded-full shrink-0"
-            style=`background-color: ${color}`
-        >
-        </span>
+            class="inline-block w-2 h-2 rounded-full shrink-0"
+            style={`background-color: ${color}`}></span>
         {title}
-        <span class="text-text-muted">({count})</span>
+        <span class:list={["text-text-muted", isActive && "text-neutral-500"]}>({count})</span>
     </a>
 </li>
