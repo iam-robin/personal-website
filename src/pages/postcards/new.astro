@@ -1,6 +1,7 @@
 ---
 import { db, Postcard } from "astro:db";
 import Layout from "@layouts/Layout.astro";
+import Button from "@components/Button.astro";
 // import { sendPostcardNotification } from "@utils/email";
 
 export const prerender = false;
@@ -235,12 +236,7 @@ if (Astro.request.method === "POST") {
                 <input type="hidden" id="stamp-svg" name="stamp-svg" value="" />
             </div>
 
-            <button
-                type="submit"
-                class="bg-black text-white py-2 px-4 rounded hover:bg-black-700 transition"
-            >
-                Send Postcard
-            </button>
+            <Button type="submit">Send Postcard</Button>
             <p class="text-xs text-neutral-400 mt-4 text-center">
                 Only the information you provide above is stored in a database.<br
                 />No IP addresses or any other personal data is collected.

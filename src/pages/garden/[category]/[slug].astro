@@ -26,14 +26,45 @@ export async function getStaticPaths() {
 
     const paths: {
         params: { category: string; slug: string };
-        props: { note: Note; htmlContent: string; categoryIndex: number };
+        props: {
+            note: Note;
+            htmlContent: string;
+            categoryIndex: number;
+            previousNote: Note | null;
+            nextNote: Note | null;
+            footnotes: { id: string; content: string }[];
+        };
     }[] = [];
 
     for (const category of categories) {
         const notes = notesData[category] as Note[];
-        for (const note of notes) {
+        // Sort notes by created date for consistent ordering
+        const sortedNotes = [...notes].sort(
+            (a, b) =>
+                new Date(b.created).getTime() - new Date(a.created).getTime()
+        );
+
+        for (let i = 0; i < sortedNotes.length; i++) {
+            const note = sortedNotes[i];
+
+            // Extract footnotes from content
+            const footnoteRegex = /\[\^(\d+)\]:\s(.+)/g;
+            const footnotes: { id: string; content: string }[] = [];
+            let contentWithoutFootnotes = (note.content || "").replace(
+                footnoteRegex,
+                (_match: string, id: string, content: string) => {
+                    footnotes.push({ id, content });
+                    return "";
+                }
+            );
+
             // Parse markdown content to HTML
-            const htmlContent = await marked.parse(note.content || "");
+            const htmlContent = await marked.parse(contentWithoutFootnotes);
+
+            // Find previous and next notes
+            const previousNote = i > 0 ? sortedNotes[i - 1] : null;
+            const nextNote =
+                i < sortedNotes.length - 1 ? sortedNotes[i + 1] : null;
 
             paths.push({
                 params: {
@@ -44,6 +75,9 @@ export async function getStaticPaths() {
                     note,
                     htmlContent,
                     categoryIndex: categoryIndexMap[category],
+                    previousNote,
+                    nextNote,
+                    footnotes,
                 },
             });
         }
@@ -52,7 +86,8 @@ export async function getStaticPaths() {
     return paths;
 }
 
-const { note, htmlContent, categoryIndex } = Astro.props;
+const { note, htmlContent, categoryIndex, previousNote, nextNote, footnotes } =
+    Astro.props;
 
 // Get background color based on category
 const bgColor = colors[categoryIndex % colors.length];
@@ -157,6 +192,48 @@ const formatDate = (dateString: string) => {
                         </span>
                     </div>
                 </div>
+                {
+                    footnotes.length > 0 && (
+                        <div class="flex flex-col border-t border-black/60 px-3 py-6 md:flex-row">
+                            <div class="mb-2 w-1/3">Footnotes:</div>
+                            <ul class="text-xs md:w-2/3">
+                                {footnotes.map((fn) => (
+                                    <li
+                                        class="flex gap-2"
+                                        id={`footnote-${fn.id}`}
+                                    >
+                                        <span class="font-decorative text-sm">
+                                            {fn.id}
+                                        </span>
+                                        <a href={fn.content}>{fn.content}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )
+                }
+                {
+                    (previousNote || nextNote) && (
+                        <div class="flex border-t border-black/60">
+                            {previousNote && (
+                                <a
+                                    href={`/garden/${note.thema.toLowerCase()}/${previousNote.slug}`}
+                                    class={`${nextNote ? "w-1/2 border-r border-black/60" : "w-full"} cursor-pointer px-3 py-9 text-center hover:bg-black/5 transition-colors`}
+                                >
+                                    ← Previous note
+                                </a>
+                            )}
+                            {nextNote && (
+                                <a
+                                    href={`/garden/${note.thema.toLowerCase()}/${nextNote.slug}`}
+                                    class={`${previousNote ? "w-1/2" : "w-full"} cursor-pointer px-3 py-9 text-center hover:bg-black/5 transition-colors`}
+                                >
+                                    Next note →
+                                </a>
+                            )}
+                        </div>
+                    )
+                }
             </div>
         </div>
     </article>

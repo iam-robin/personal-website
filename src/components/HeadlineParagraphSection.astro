@@ -2,6 +2,7 @@
 import Grid from "./Grid.astro";
 import GridItem, { type BreakpointValue } from "./GridItem.astro";
 import Link from "./Link.astro";
+import Button from "./Button.astro";
 
 interface Props {
     class?: string;
@@ -53,12 +54,7 @@ const {
                     class="flex lg:justify-end items-start mt-6 sm:mt-3 lg:mt-0"
                 >
                     {buttonStyle ? (
-                        <a
-                            href={linkUrl}
-                            class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors"
-                        >
-                            {linkText}
-                        </a>
+                        <Button href={linkUrl}>{linkText}</Button>
                     ) : (
                         <Link href={linkUrl} external>
                             {linkText}

@@ -23,99 +23,118 @@ interface Props {
 const { navigation } = Astro.props;
 ---
 
-<div
-    id="mobile-menu"
-    class="fixed inset-0 z-50 bg-white transform translate-x-full transition-transform duration-300 md:hidden"
->
-    <div class="flex flex-col h-full p-6">
-        <div class="flex justify-end mb-8">
-            <button
-                id="mobile-menu-close"
-                class="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
-            >
-                <Icon name="ph:x-bold" size={24} />
-            </button>
-        </div>
+<nav class="fixed bottom-5 left-4 right-4 z-50 pointer-events-none md:hidden">
+    <details id="mobile-menu" class="pointer-events-auto">
+        <summary
+            class="flex h-14 cursor-pointer items-center justify-center gap-2 rounded-3xl bg-neutral-800 text-white font-mono"
+        >
+            <Icon name="ph:list" class="menu-icon" width={24} />
+            <Icon name="ph:x" class="close-icon hidden" width={24} />
+            <span>Menu</span>
+        </summary>
 
-        <nav class="flex flex-col gap-2">
+        <ul
+            class="absolute bottom-16 left-0 right-0 rounded-3xl bg-neutral-800 text-white p-2 flex flex-col"
+        >
             {
                 navigation.map((item) =>
-                    item.type === "link" ? (
-                        <a
-                            href={item.href}
-                            target={item.external ? "_blank" : undefined}
-                            rel={
-                                item.external
-                                    ? "noopener noreferrer"
-                                    : undefined
-                            }
-                            class="mobile-nav-link flex items-center justify-between py-3 px-4 text-lg font-medium hover:bg-neutral-50 rounded-lg transition-colors"
-                        >
-                            {item.label}
-                            {item.external && (
-                                <Icon name="ph:arrow-up-right-bold" size={16} />
-                            )}
-                        </a>
+                    item.type === "group" ? (
+                        <li>
+                            <details class="submenu-group">
+                                <summary class="flex items-center justify-between px-4 py-3 cursor-pointer rounded-xl hover:bg-white/10 transition-colors">
+                                    <span>{item.label}</span>
+                                    <Icon
+                                        name="ph:caret-down"
+                                        class="submenu-icon transition-transform"
+                                        width={16}
+                                    />
+                                </summary>
+                                <ul>
+                                    {item.items?.map((subItem) => (
+                                        <li>
+                                            <a
+                                                href={subItem.href}
+                                                class="mobile-nav-link flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-white/10 transition-colors"
+                                                target={
+                                                    subItem.external
+                                                        ? "_blank"
+                                                        : undefined
+                                                }
+                                                rel={
+                                                    subItem.external
+                                                        ? "noopener"
+                                                        : undefined
+                                                }
+                                            >
+                                                <Icon
+                                                    name="ph:arrow-right"
+                                                    class="text-white/40"
+                                                    width={16}
+                                                />
+                                                {subItem.label}
+                                                {subItem.external && (
+                                                    <Icon
+                                                        name="ph:arrow-up-right"
+                                                        width={14}
+                                                    />
+                                                )}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </details>
+                        </li>
                     ) : (
-                        <div class="mobile-nav-group">
-                            <button class="mobile-nav-group-toggle flex items-center justify-between w-full py-3 px-4 text-lg font-medium hover:bg-neutral-50 rounded-lg transition-colors">
+                        <li>
+                            <a
+                                href={item.href}
+                                class="mobile-nav-link flex items-center gap-2 px-4 py-3 rounded-xl hover:bg-white/10 transition-colors"
+                                target={item.external ? "_blank" : undefined}
+                                rel={item.external ? "noopener" : undefined}
+                            >
                                 {item.label}
-                                <Icon
-                                    name="ph:caret-down-bold"
-                                    class="mobile-nav-group-icon transition-transform"
-                                    size={16}
-                                />
-                            </button>
-                            <div class="mobile-nav-group-content hidden pl-4">
-                                {item.items?.map((subItem) => (
-                                    <a
-                                        href={subItem.href}
-                                        target={
-                                            subItem.external
-                                                ? "_blank"
-                                                : undefined
-                                        }
-                                        rel={
-                                            subItem.external
-                                                ? "noopener noreferrer"
-                                                : undefined
-                                        }
-                                        class="mobile-nav-link flex items-center gap-3 py-3 px-4 hover:bg-neutral-50 rounded-lg transition-colors"
-                                    >
-                                        {subItem.icon && (
-                                            <Icon
-                                                name={subItem.icon}
-                                                size={18}
-                                            />
-                                        )}
-                                        <span>{subItem.label}</span>
-                                        {subItem.external && (
-                                            <Icon
-                                                name="ph:arrow-up-right-bold"
-                                                size={12}
-                                                class="ml-auto text-neutral-400"
-                                            />
-                                        )}
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-                    )
+                                {item.external && (
+                                    <Icon name="ph:arrow-up-right" width={14} />
+                                )}
+                            </a>
+                        </li>
+                    ),
                 )
             }
-        </nav>
-    </div>
-</div>
+        </ul>
+    </details>
+</nav>
+
+<style>
+    /* Toggle icons when menu is open */
+    details[open] .menu-icon {
+        display: none;
+    }
+    details[open] .close-icon {
+        display: block;
+    }
+
+    /* Rotate submenu icon when open */
+    details.submenu-group[open] .submenu-icon {
+        transform: rotate(180deg);
+    }
+
+    /* Remove default marker from summary elements */
+    summary {
+        list-style: none;
+    }
+    summary::marker,
+    summary::-webkit-details-marker {
+        display: none;
+    }
+</style>
 
 <script>
     function initMobileMenu() {
-        const mobileMenu = document.getElementById("mobile-menu");
-        const mobileMenuOpen = document.getElementById("mobile-menu-open");
-        const mobileMenuClose = document.getElementById("mobile-menu-close");
+        const mobileMenu = document.getElementById(
+            "mobile-menu",
+        ) as HTMLDetailsElement;
         const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
-        const mobileNavGroupToggles = document.querySelectorAll(
-            ".mobile-nav-group-toggle"
-        );
 
         if (!mobileMenu) return;
 
@@ -123,36 +142,18 @@ const { navigation } = Astro.props;
         if (mobileMenu.dataset.initialized) return;
         mobileMenu.dataset.initialized = "true";
 
-        function openMenu() {
-            mobileMenu?.classList.remove("translate-x-full");
-            document.body.style.overflow = "hidden";
-        }
-
-        function closeMenu() {
-            mobileMenu?.classList.add("translate-x-full");
-            document.body.style.overflow = "";
-        }
-
-        mobileMenuOpen?.addEventListener("click", openMenu);
-        mobileMenuClose?.addEventListener("click", closeMenu);
-
         // Close menu when clicking a link
         mobileNavLinks.forEach((link) => {
-            link.addEventListener("click", closeMenu);
+            link.addEventListener("click", () => {
+                mobileMenu.open = false;
+            });
         });
 
-        // Accordion toggle for groups
-        mobileNavGroupToggles.forEach((toggle) => {
-            toggle.addEventListener("click", () => {
-                const group = toggle.closest(".mobile-nav-group");
-                const content = group?.querySelector(
-                    ".mobile-nav-group-content"
-                );
-                const icon = toggle.querySelector(".mobile-nav-group-icon");
-
-                content?.classList.toggle("hidden");
-                icon?.classList.toggle("rotate-180");
-            });
+        // Close menu when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!mobileMenu.contains(e.target as Node)) {
+                mobileMenu.open = false;
+            }
         });
     }
 
