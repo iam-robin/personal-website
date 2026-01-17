@@ -34,24 +34,27 @@ const {
     <Grid
         class={`mb-6 sm:mb-8 lg:mb-16 ${isFirstElement ? "pt-32 pb-24" : ""} ${classes}`}
     >
-        <GridItem colStart={1} colEnd={4}>
+        <GridItem
+            colStart={{ small: 1, medium: 1, large: 1 }}
+            colEnd={{ small: 13, medium: 13, large: 4 }}
+        >
             <h3 class={`text-${headlineSize} font-bold`}>
                 {title ? title : <slot name="title" />}
             </h3>
         </GridItem>
         <GridItem
-            colStart={contentStart}
-            colEnd={contentEnd ?? (linkText && linkUrl ? 10 : 12)}
-            class="text-base font-mono mt-3 sm:mt-0"
+            colStart={{ small: 1, medium: 1, large: 5 }}
+            colEnd={{ small: 13, medium: 13, large: linkText && linkUrl ? 10 : 13 }}
+            class="text-base font-mono mt-4 lg:mt-0"
         >
             <slot />
         </GridItem>
         {
             linkText && linkUrl && (
                 <GridItem
-                    colStart={10}
-                    colEnd={13}
-                    class="flex lg:justify-end items-start mt-6 sm:mt-3 lg:mt-0"
+                    colStart={{ small: 1, medium: 1, large: 10 }}
+                    colEnd={{ small: 13, medium: 13, large: 13 }}
+                    class="flex lg:justify-end items-start mt-6 lg:mt-0"
                 >
                     {buttonStyle ? (
                         <Button href={linkUrl}>{linkText}</Button>

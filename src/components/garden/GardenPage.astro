@@ -29,6 +29,8 @@ const {
     selectedSort = "last-edited",
     error,
 } = Astro.props;
+
+console.log("notes", notes);
 ---
 
 <Layout>
@@ -93,11 +95,11 @@ const {
 <script>
     document.addEventListener("astro:page-load", () => {
         const effectElements = document.querySelectorAll(
-            ".corner-shadow-effect"
+            ".corner-shadow-effect",
         );
         effectElements.forEach((effectElement) => {
             const rotation = parseFloat(
-                (effectElement as HTMLElement).dataset.rotation || "0"
+                (effectElement as HTMLElement).dataset.rotation || "0",
             );
             const className = rotation >= 0 ? "hide-after" : "hide-before";
             effectElement.classList.add(className);

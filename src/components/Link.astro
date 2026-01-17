@@ -19,7 +19,7 @@ const externalProps = external
     : {};
 
 const baseClasses =
-    "font-inherit text-current underline decoration-border decoration-4 underline-offset-8 hover:italic";
+    "group font-inherit text-current underline decoration-border decoration-4 underline-offset-8 hover:italic";
 const standaloneClasses =
     "group text-base font-mono flex gap-2 items-center underline underline-offset-8 hover:italic";
 ---
@@ -32,8 +32,8 @@ const standaloneClasses =
         external && !standalone && (
             <Icon
                 name="ph:arrow-up-right-bold"
-                width={12}
-                class="inline-block ml-1 mb-2"
+                width={14}
+                class="inline-block ml-0.5 mb-1 group-hover:translate-x-0.5 transition-transform"
             />
         )
     }{

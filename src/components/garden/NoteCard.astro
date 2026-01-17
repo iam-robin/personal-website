@@ -44,7 +44,7 @@ const formatDate = (dateStr: string) => {
 };
 
 const createdDay = formatDate(note.created);
-const editedDay = formatDate(note.edited);
+const editedDay = note.edited ? formatDate(note.edited) : null;
 ---
 
 <div
@@ -96,7 +96,7 @@ const editedDay = formatDate(note.edited);
                         {createdDay}
                     </p>
                     {
-                        createdDay !== editedDay && (
+                        editedDay && createdDay !== editedDay && (
                             <p>
                                 <span class="inline-block min-w-[72px]">
                                     edited:
