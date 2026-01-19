@@ -26,7 +26,7 @@ const stickerClass =
             class={stickerClass}
             size={64}
             iconColor="--color-sticker-yellow-dark"
-            bgColor="--color-sticker-yellow-light"
+            bgColor="--color-sticker-yellow"
         />
         <MailSticker
             id="icon-for-email"
@@ -96,11 +96,11 @@ const stickerClass =
         if (window.innerWidth < 640) return;
         const contactItems = document.querySelectorAll(".contact-item");
         const container = document.getElementById(
-            "contact-container"
+            "contact-container",
         ) as HTMLElement;
         const icons = document.querySelectorAll(".icon-for-service");
         const contactItemBorders = document.querySelectorAll(
-            ".contact-item a"
+            ".contact-item a",
         ) as NodeListOf<HTMLElement>;
 
         contactItems.forEach((item) => {

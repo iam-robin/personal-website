@@ -39,7 +39,9 @@ const standaloneClasses =
     }{
         standalone && (
             <Icon
-                name="ph:arrow-right-bold"
+                name={
+                    external ? "ph:arrow-up-right-bold" : "ph:arrow-right-bold"
+                }
                 width={16}
                 class="text-text-secondary group-hover:translate-x-1 group-hover:text-text-primary transition"
             />

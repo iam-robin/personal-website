@@ -32,7 +32,7 @@ const {
 
 <hgroup>
     <Grid
-        class={`mb-6 sm:mb-8 lg:mb-16 ${isFirstElement ? "pt-32 pb-24" : ""} ${classes}`}
+        class={`mb-6 sm:mb-8 lg:mb-16 ${isFirstElement ? "pt-16 md:pt-32 pb-8 md:pb-24" : ""} ${classes}`}
     >
         <GridItem
             colStart={{ small: 1, medium: 1, large: 1 }}
@@ -44,7 +44,11 @@ const {
         </GridItem>
         <GridItem
             colStart={{ small: 1, medium: 1, large: 5 }}
-            colEnd={{ small: 13, medium: 13, large: linkText && linkUrl ? 10 : 13 }}
+            colEnd={{
+                small: 13,
+                medium: 13,
+                large: linkText && linkUrl ? 10 : 13,
+            }}
             class="text-base font-mono mt-4 lg:mt-0"
         >
             <slot />

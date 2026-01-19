@@ -8,7 +8,7 @@ interface Props {
     gap?: string;
     headline?: string;
     description?: string;
-    link?: { href: string; text: string };
+    link?: { href: string; text: string; external?: boolean };
     headlineSize?: "base" | "md" | "lg" | "xl";
 }
 
@@ -44,7 +44,7 @@ const {
     {
         link && (
             <div class="max-w-(--max-width) mx-auto w-full flex justify-end">
-                <Link href={link.href} standalone>
+                <Link href={link.href} standalone external={link.external}>
                     {link.text}
                 </Link>
             </div>

@@ -56,9 +56,14 @@ const authors = book.author.join(", ");
                     </div>
                 )
             }
-            {isCurrentlyReading && (
-                <StatusBadge status="reading" class="absolute right-2 top-2" />
-            )}
+            {
+                isCurrentlyReading && (
+                    <StatusBadge
+                        status="reading"
+                        class="absolute right-2 top-2"
+                    />
+                )
+            }
         </div>
     </div>
     <div class="flex flex-col gap-.5 min-h-[100px]">
@@ -73,7 +78,13 @@ const authors = book.author.join(", ");
 <style>
     .book-3d {
         perspective: 1000px;
-        max-width: 45%;
+        max-width: 60%;
+    }
+
+    @media (min-width: 640px) {
+        .book-3d {
+            max-width: 45%;
+        }
     }
 
     .book-3d__inner {

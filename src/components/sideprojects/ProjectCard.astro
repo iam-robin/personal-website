@@ -11,6 +11,7 @@ interface Props {
     thumbnail?: string;
     thumbnailWidth?: string;
     externalUrl?: string;
+    tags?: string[];
 }
 
 const {
@@ -23,6 +24,7 @@ const {
     thumbnail,
     thumbnailWidth,
     externalUrl,
+    tags,
 } = Astro.props;
 
 const href = externalUrl || `/projects/${slug}`;
@@ -33,10 +35,10 @@ const isExternal = !!externalUrl;
     href={href}
     target={isExternal ? "_blank" : undefined}
     rel={isExternal ? "noopener noreferrer" : undefined}
-    class="project-card hover-lift h-full relative aspect-4/5 rounded-2xl p-3 flex flex-col justify-between"
+    class="project-card group hover-lift h-full relative aspect-4/5 rounded-2xl p-3 flex flex-col overflow-hidden"
     style={`--bg-color: ${bgColor}; --bg-color-dark: ${bgColorDark || bgColor};`}
 >
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center shrink-0">
         <span class="rounded-full bg-neutral-100/10 px-3 py-1 text-white"
             >{year}</span
         >
@@ -50,7 +52,7 @@ const isExternal = !!externalUrl;
             }
         </span>
     </div>
-    <div class="h-full flex-center">
+    <div class="thumbnail-container h-full flex-center">
         {
             thumbnail ? (
                 <img
@@ -70,7 +72,16 @@ const isExternal = !!externalUrl;
     </div>
     <div class="shrink-0 text-white">
         <h3>{title}</h3>
-        <p class="opacity-70">{description}</p>
+        {tags && tags.length > 0 && (
+            <div class="flex flex-wrap gap-1 mt-2">
+                {tags.map((tag) => (
+                    <span class="text-xs bg-neutral-100/10 px-2 py-0.5 rounded-full opacity-70">
+                        {tag}
+                    </span>
+                ))}
+            </div>
+        )}
+        <p class="opacity-70 mt-2">{description}</p>
     </div>
 </a>
 

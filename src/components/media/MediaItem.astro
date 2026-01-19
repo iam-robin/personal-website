@@ -40,7 +40,7 @@ const formattedDate = formatDate(date);
 ---
 
 <div
-    class="list-item-image-hover-effect group relative flex flex-col justify-between gap-4 border-b border-neutral-300 py-4 md:flex-row md:gap-12 md:py-10"
+    class="list-item-image-hover-effect group relative border-b border-neutral-300 py-4 md:py-10"
 >
     {
         coverUrl && (
@@ -54,69 +54,87 @@ const formattedDate = formatDate(date);
             />
         )
     }
-    <div class="flex items-start justify-between gap-10 md:items-center">
-        <div class="hidden md:block shrink-0 min-w-[4.5rem]">
-            {
-                formattedDate ? (
-                    <span class="font-mono">{formattedDate}</span>
-                ) : status ? (
-                    <StatusBadge status={status} />
-                ) : null
-            }
-        </div>
-        <div class="flex items-center gap-3">
-            {
-                coverUrl && (
-                    <img
-                        class="w-8 h-12 object-cover shrink-0"
-                        src={coverUrl}
-                        alt=""
-                        width="32"
-                        height="48"
-                        loading="lazy"
-                    />
-                )
-            }
+
+    <!-- Mobile layout -->
+    <div class="flex gap-3 md:hidden">
+        {
+            coverUrl && (
+                <img
+                    class="w-12 object-cover shrink-0 rounded-sm"
+                    src={coverUrl}
+                    alt=""
+                    width="48"
+                    height="72"
+                    loading="lazy"
+                />
+            )
+        }
+        <div class="flex flex-col justify-center gap-1 flex-1 min-w-0">
             <div class="flex items-center gap-2">
-                <p class="text-base font-bold">
-                    {title}
-                </p>
+                <p class="text-base font-bold truncate">{title}</p>
                 {
                     subtitle && (
-                        <span class="border border-neutral-300 text-text-secondary px-1.5 py-0.5 rounded text-xs">
-                            Season {subtitle}
+                        <span class="border border-neutral-300 text-text-secondary px-1.5 py-0.5 rounded text-xs shrink-0">
+                            <span class="hidden sm:inline">Season </span>{subtitle}
                         </span>
                     )
                 }
             </div>
+            <div class="flex items-center gap-2 text-sm">
+                {formattedDate && <span class="font-mono text-neutral-400">{formattedDate}</span>}
+                {formattedDate && (rating || status) && <span class="text-neutral-400">|</span>}
+                {status && <StatusBadge status={status} />}
+                {isRewatch && <StatusBadge status="rewatch" />}
+                {isLiked && <Icon name="ph:heart-fill" width={14} class="text-red" />}
+                {rating && rating > 0 && <StarRating rating={rating} showValue size={14} />}
+            </div>
         </div>
     </div>
-    <div class="flex items-center gap-3">
-        <div class="font-mono text-neutral-400 md:hidden">
-            {formattedDate}
-        </div>
-        {
-            (formattedDate || externalUrl) && (
-                <div class="font-mono text-neutral-400 md:hidden">|</div>
-            )
-        }
-        <div class="flex items-center gap-2">
-            {status && <StatusBadge status={status} class="md:hidden" />}
-            {isRewatch && <StatusBadge status="rewatch" />}
-            {
-                isLiked && (
-                    <Icon name="ph:heart-fill" width={16} class="text-red" />
-                )
-            }
+
+    <!-- Desktop layout -->
+    <div class="hidden md:flex md:flex-row md:justify-between md:gap-12">
+        <div class="flex items-center gap-10">
+            <div class="shrink-0 min-w-[4.5rem]">
+                {
+                    formattedDate ? (
+                        <span class="font-mono">{formattedDate}</span>
+                    ) : status ? (
+                        <StatusBadge status={status} />
+                    ) : null
+                }
+            </div>
+            <div class="flex items-center gap-3">
+                {
+                    coverUrl && (
+                        <img
+                            class="w-8 h-12 object-cover shrink-0"
+                            src={coverUrl}
+                            alt=""
+                            width="32"
+                            height="48"
+                            loading="lazy"
+                        />
+                    )
+                }
+                <div class="flex items-center gap-2">
+                    <p class="text-base font-bold">{title}</p>
+                    {
+                        subtitle && (
+                            <span class="border border-neutral-300 text-text-secondary px-1.5 py-0.5 rounded text-xs">
+                                Season {subtitle}
+                            </span>
+                        )
+                    }
+                </div>
+            </div>
         </div>
         <div class="flex items-center gap-3">
-            {
-                rating && rating > 0 && (
-                    <StarRating rating={rating} showValue size={16} />
-                )
-            }
+            {isRewatch && <StatusBadge status="rewatch" />}
+            {isLiked && <Icon name="ph:heart-fill" width={16} class="text-red" />}
+            {rating && rating > 0 && <StarRating rating={rating} showValue size={16} />}
         </div>
     </div>
+
     {
         externalUrl && (
             <a
