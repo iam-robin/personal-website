@@ -44,7 +44,7 @@ const recentFilms = films.filter((film) => {
 // Sort films by watch date (most recent first)
 const sortedFilms = recentFilms.sort(
     (a, b) =>
-        new Date(b.watched_on).getTime() - new Date(a.watched_on).getTime()
+        new Date(b.watched_on).getTime() - new Date(a.watched_on).getTime(),
 );
 
 // Group films by year they were watched
@@ -57,7 +57,7 @@ const filmsByYear = sortedFilms.reduce(
         acc[year].push(film);
         return acc;
     },
-    {} as Record<number, typeof sortedFilms>
+    {} as Record<number, typeof sortedFilms>,
 );
 
 const years = Object.keys(filmsByYear)

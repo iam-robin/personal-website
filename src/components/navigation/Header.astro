@@ -29,19 +29,19 @@ const navigation = [
                 sticker: "tv-series",
                 external: false,
             },
-            {
-                label: "Music",
-                href: "/music",
-                sticker: "music",
-                external: false,
-            },
+            // {
+            //     label: "Music",
+            //     href: "/music",
+            //     sticker: "music",
+            //     external: false,
+            // },
         ],
     },
-    {
-        type: "link" as const,
-        label: "About",
-        href: "/about",
-    },
+    // {
+    //     type: "link" as const,
+    //     label: "About",
+    //     href: "/about",
+    // },
     {
         type: "link" as const,
         label: "Bookmarks",
@@ -101,7 +101,7 @@ const navigation = [
                             />
                         ) : (
                             <NavGroup label={item.label} items={item.items!} />
-                        )
+                        ),
                     )
                 }
             </nav>
@@ -138,9 +138,10 @@ const navigation = [
         } else {
             hasAnimated = true;
             const isIndexPage = window.location.pathname === "/";
+            const isDesktop = window.matchMedia("(min-width: 768px)").matches;
 
-            if (isIndexPage && !isSticky) {
-                // Index page, not scrolled - play delayed animation
+            if (isIndexPage && !isSticky && isDesktop) {
+                // Index page, not scrolled, desktop - play delayed animation
                 header.classList.remove("opacity-0", "-translate-y-full");
                 header.style.opacity = "0";
                 header.style.transform = "translateY(-100%)";
@@ -151,13 +152,13 @@ const navigation = [
                         opacity: [0, 1],
                         transform: ["translateY(-100%)", "translateY(0%)"],
                     },
-                    { duration: 0.5, delay: 1.5, ease: [0.39, 0.24, 0.3, 1] }
+                    { duration: 0.5, delay: 1.5, ease: [0.39, 0.24, 0.3, 1] },
                 ).then(() => {
                     header.style.opacity = "";
                     header.style.transform = "";
                 });
             } else {
-                // Other pages or scrolled - show immediately
+                // Other pages, scrolled, or mobile - show immediately
                 header.classList.remove("opacity-0", "-translate-y-full");
             }
         }

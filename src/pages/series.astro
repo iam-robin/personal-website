@@ -30,17 +30,23 @@ const { aktiv, merkliste, pausiert, abgeschlossen } = seriesData;
 const currentYear = new Date().getFullYear();
 
 // Sort series within each year by finished date (newest first)
+// Only include series that have a valid finished date
 const sortSeriesByDate = (seriesList: typeof aktiv) => {
-    return [...seriesList].sort((a, b) => {
-        const dateA = a.finished ? new Date(a.finished).getTime() : 0;
-        const dateB = b.finished ? new Date(b.finished).getTime() : 0;
-        return dateB - dateA;
-    });
+    if (!Array.isArray(seriesList)) return [];
+    return [...seriesList]
+        .filter((s) => s.finished)
+        .sort((a, b) => {
+            const dateA = new Date(a.finished!).getTime();
+            const dateB = new Date(b.finished!).getTime();
+            return dateB - dateA;
+        });
 };
 
 // Get years from abgeschlossen and sort (newest first)
+// Filter out invalid keys (NaN from empty/null dates)
 const years = Object.keys(abgeschlossen)
     .map(Number)
+    .filter((year) => !isNaN(year))
     .sort((a, b) => b - a);
 
 // Check if current year exists in completed
@@ -75,7 +81,7 @@ const hasCurrentYear = years.includes(currentYear);
                         <SeriesYearContainer
                             year={currentYear}
                             series={sortSeriesByDate(
-                                abgeschlossen[currentYear.toString()] || []
+                                abgeschlossen[currentYear.toString()] || [],
                             )}
                             aktivSeries={aktiv}
                         />
@@ -88,7 +94,7 @@ const hasCurrentYear = years.includes(currentYear);
                             <SeriesYearContainer
                                 year={year}
                                 series={sortSeriesByDate(
-                                    abgeschlossen[year.toString()]
+                                    abgeschlossen[year.toString()],
                                 )}
                             />
                         ))}

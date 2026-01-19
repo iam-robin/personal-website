@@ -8,7 +8,7 @@ interface Props {
 const { href, type = "button", class: className } = Astro.props;
 
 const baseClasses =
-    "inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer bg-surface-inverse text-background hover:opacity-80";
+    "inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium rounded-md cursor-pointer bg-surface-inverse text-background shadow-[0_3px_3px_rgba(0,0,0,.25),0_3px_0_rgba(255,255,255,0.4)_inset,0_-3px_0_rgba(0,0,0,0.8)_inset] active:shadow-none active:translate-y-[1px] transition-all";
 ---
 
 {

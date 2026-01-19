@@ -12,7 +12,7 @@ interface Props {
 const { year, series = [], aktivSeries = [] } = Astro.props;
 ---
 
-<YearSection year={year}>
+<YearSection year={year} count={series.length > 0 ? series.length : undefined}>
     {aktivSeries.map((s) => <SeriesItem series={s} status="watching" />)}
     {series.map((s) => <SeriesItem series={s} />)}
 </YearSection>

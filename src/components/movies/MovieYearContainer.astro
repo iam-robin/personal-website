@@ -17,6 +17,6 @@ interface Props {
 const { year, films = [] } = Astro.props;
 ---
 
-<YearSection year={year}>
+<YearSection year={year} count={films.length}>
     {films.map((film) => <MovieItem film={film} />)}
 </YearSection>

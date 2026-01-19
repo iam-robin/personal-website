@@ -1,10 +1,11 @@
 ---
 interface Props {
     year: string | number;
+    count?: number;
     class?: string;
 }
 
-const { year, class: className } = Astro.props;
+const { year, count, class: className } = Astro.props;
 ---
 
 <div class:list={["relative grid grid-cols-12 gap-4", className]}>
@@ -12,6 +13,9 @@ const { year, class: className } = Astro.props;
         class="col-start-1 col-end-13 h-fit pb-2 pt-10 font-mono md:sticky md:top-12 md:col-end-3 md:mb-8 md:pb-2"
     >
         {year}
+        {count !== undefined && (
+            <span class="text-text-secondary font-normal ml-2">({count})</span>
+        )}
     </h2>
     <div class="col-start-1 col-end-13 md:col-start-4">
         <slot />

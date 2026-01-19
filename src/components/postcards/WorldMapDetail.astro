@@ -10,11 +10,11 @@ const countryFlags = Object.fromEntries(
         const entries = [[country.name, country.flag]];
         if (country.aliases) {
             country.aliases.forEach((alias) =>
-                entries.push([alias, country.flag])
+                entries.push([alias, country.flag]),
             );
         }
         return entries;
-    })
+    }),
 );
 ---
 

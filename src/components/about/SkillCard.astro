@@ -1,0 +1,21 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    title: string;
+    description: string;
+    icon: string;
+}
+
+const { title, description, icon } = Astro.props;
+---
+
+<div
+    class="flex flex-col justify-between bg-surface-inverse text-background rounded-xl p-5 min-h-[280px]"
+>
+    <h4 class="text-lg font-bold">{title}</h4>
+    <div class="flex-1 flex items-center justify-center py-6">
+        <Icon name={icon} size={80} class="opacity-90" />
+    </div>
+    <p class="text-sm opacity-80 leading-snug">{description}</p>
+</div>

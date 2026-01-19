@@ -11,6 +11,7 @@ export interface Series {
     finished: string | null;
     added: string;
     status: string;
+    favorite?: boolean;
 }
 
 export interface SeriesData {
@@ -30,7 +31,7 @@ export async function fetchSeries(): Promise<SeriesData> {
                 Authorization: `token ${import.meta.env.GITHUB_TOKEN}`,
                 Accept: "application/vnd.github.v3.raw",
             },
-        }
+        },
     );
 
     if (!response.ok) {

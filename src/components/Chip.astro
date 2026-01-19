@@ -1,0 +1,75 @@
+---
+interface Props {
+    href: string;
+    title: string;
+    count?: number;
+    isActive?: boolean;
+    indicator?: string;
+    indicatorType?: "dot" | "text";
+    variant?: "default" | "mono";
+    activeStyle?: "neutral" | "blue";
+    class?: string;
+}
+
+const {
+    href,
+    title,
+    count,
+    isActive = false,
+    indicator,
+    indicatorType = "dot",
+    variant = "default",
+    activeStyle = "blue",
+    class: className,
+} = Astro.props;
+
+const baseClasses =
+    "inline-flex items-center gap-2 rounded-full border px-3 py-1 no-underline transition-all duration-200 cursor-pointer";
+
+const variantClasses = {
+    default: "text-sm",
+    mono: "font-mono text-xs",
+};
+
+const activeClasses = {
+    neutral: "bg-neutral-200 font-bold text-black border-border",
+    blue: "border-blue bg-blue text-surface",
+};
+
+const inactiveClasses =
+    "border-border bg-surface text-current hover:border-blue hover:text-blue";
+---
+
+<a
+    href={href}
+    class:list={[
+        baseClasses,
+        variantClasses[variant],
+        isActive ? activeClasses[activeStyle] : inactiveClasses,
+        className,
+    ]}
+>
+    {
+        indicator && indicatorType === "dot" && (
+            <span
+                class="inline-block h-2 w-2 shrink-0 rounded-full"
+                style={`background-color: ${indicator}`}
+            />
+        )
+    }
+    {indicator && indicatorType === "text" && <span class="shrink-0">{indicator}</span>}
+    {title}
+    {
+        count !== undefined && (
+            <span
+                class:list={[
+                    isActive && activeStyle === "blue"
+                        ? "text-surface/70"
+                        : "text-text-muted",
+                ]}
+            >
+                ({count})
+            </span>
+        )
+    }
+</a>

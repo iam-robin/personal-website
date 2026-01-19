@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import Carousel from "../carousel/Carousel.astro";
 import CarouselItem from "../carousel/CarouselItem.astro";
 
@@ -55,12 +54,20 @@ const description =
 <Carousel headline={headline} description={description} link={link}>
     {
         photos.map((photo) => (
-            <CarouselItem largeSpan={4} paddingBottom={24} paddingTop={24}>
-                <Image
-                    src={photo}
+            <CarouselItem
+                largeSpan={4}
+                mediumSpan={5}
+                smallSpan={10}
+                paddingBottom={24}
+                paddingTop={24}
+            >
+                <img
+                    src={photo.src}
                     alt="Photography"
                     class="bg-neutral-100"
                     loading="lazy"
+                    width={photo.width}
+                    height={photo.height}
                 />
             </CarouselItem>
         ))

@@ -51,7 +51,13 @@ const link = {
 <Carousel link={hasLink ? link : undefined}>
     {
         postcards.map((postcard) => (
-            <CarouselItem largeSpan={6} paddingBottom={64} paddingTop={24}>
+            <CarouselItem
+                largeSpan={6}
+                mediumSpan={10}
+                smallSpan={10}
+                paddingBottom={64}
+                paddingTop={24}
+            >
                 <PostcardItem
                     author={postcard.author}
                     body={postcard.body}

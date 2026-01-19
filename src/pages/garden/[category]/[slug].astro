@@ -123,6 +123,8 @@ const showEdited = note.edited && formatDate(note.created) !== formatDate(note.e
     <article
         transition:name="garden-card"
         class="effect relative w-full max-w-5xl my-12 z-30 mx-auto"
+        data-prev-note={previousNote ? `/garden/${note.thema.toLowerCase()}/${previousNote.slug}` : undefined}
+        data-next-note={nextNote ? `/garden/${note.thema.toLowerCase()}/${nextNote.slug}` : undefined}
     >
         <!-- Close button -->
         <a
@@ -470,4 +472,26 @@ const showEdited = note.edited && formatDate(note.created) !== formatDate(note.e
     document.addEventListener("DOMContentLoaded", initImageGallery);
     // Run after View Transitions
     document.addEventListener("astro:page-load", initImageGallery);
+
+    // Keyboard navigation for prev/next notes
+    function handleKeyboardNavigation(e: KeyboardEvent) {
+        // Don't trigger if user is typing in an input
+        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+            return;
+        }
+
+        const article = document.querySelector("article[data-prev-note], article[data-next-note]");
+        if (!article) return;
+
+        const prevUrl = article.getAttribute("data-prev-note");
+        const nextUrl = article.getAttribute("data-next-note");
+
+        if (e.key === "ArrowLeft" && prevUrl) {
+            window.location.href = prevUrl;
+        } else if (e.key === "ArrowRight" && nextUrl) {
+            window.location.href = nextUrl;
+        }
+    }
+
+    document.addEventListener("keydown", handleKeyboardNavigation);
 </script>

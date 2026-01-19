@@ -13,11 +13,11 @@
     --color-neutral-950: oklch(0.147 0.004 49.25);
 
     /* Base semantic colors */
-    --color-background: var(--color-neutral-100);
+    --color-background: var(--color-neutral-50);
     --color-foreground: var(--color-neutral-900);
 
     /* Surfaces (cards, containers, elevated elements) */
-    --color-surface: var(--color-neutral-50);
+    --color-surface: var(--color-neutral-100);
     --color-surface-raised: var(--color-neutral-200);
     --color-surface-inverse: var(--color-neutral-800);
 

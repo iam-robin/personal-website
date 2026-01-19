@@ -1,5 +1,5 @@
 ---
-import FilterChip from "@components/FilterChip.astro";
+import Chip from "@components/Chip.astro";
 import { colors } from "./utils/colors";
 
 interface CategoryInfo {
@@ -34,24 +34,28 @@ const allHref =
 
 <div>
     <div class="mb-5 font-bold">Topics</div>
-    <ul class="flex flex-row flex-wrap gap-3">
-        <FilterChip
-            color="black"
+    <div class="flex flex-row flex-wrap gap-3">
+        <Chip
+            indicator="black"
+            indicatorType="dot"
             title="All"
             href={allHref}
             isActive={!selectedCategory}
             count={totalNotes}
+            activeStyle="neutral"
         />
         {
             categories.map((category, index) => (
-                <FilterChip
-                    color={colors[index % colors.length]}
+                <Chip
+                    indicator={colors[index % colors.length]}
+                    indicatorType="dot"
                     title={category.name}
                     href={`/garden/${category.name.toLowerCase()}${sortSuffix}`}
                     isActive={selectedCategory === category.name}
                     count={category.count}
+                    activeStyle="neutral"
                 />
             ))
         }
-    </ul>
+    </div>
 </div>

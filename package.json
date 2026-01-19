@@ -20,12 +20,15 @@
         "marked": "^17.0.1",
         "motion": "^12.23.24",
         "node-html-parser": "^7.0.1",
+        "p5": "^1.11.7",
+        "p5.js-svg": "^1.6.0",
         "remark": "^15.0.1",
         "tailwindcss": "^4.1.17",
         "typescript": "^5.9.3"
     },
     "devDependencies": {
         "@iconify-json/ph": "^1.2.2",
-        "@tailwindcss/typography": "^0.5.19"
+        "@tailwindcss/typography": "^0.5.19",
+        "@types/p5": "^1.7.7"
     }
 }

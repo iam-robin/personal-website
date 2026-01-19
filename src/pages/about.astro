@@ -5,6 +5,38 @@ import Grid from "@components/Grid.astro";
 import GridItem from "@components/GridItem.astro";
 import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
 import Contact from "@components/Contact.astro";
+import SkillCard from "@components/about/SkillCard.astro";
+
+const skills = [
+    {
+        title: "Web Development",
+        description:
+            "Building fast, accessible web applications with modern technologies",
+        icon: "ph:browser-bold",
+    },
+    {
+        title: "UX/UI",
+        description:
+            "Designing intuitive interfaces and seamless user experiences",
+        icon: "ph:cursor-click-bold",
+    },
+    {
+        title: "Design Systems",
+        description: "Creating scalable component libraries and design tokens",
+        icon: "ph:stack-bold",
+    },
+    {
+        title: "Photography",
+        description: "Capturing moments and telling stories through the lens",
+        icon: "ph:camera-bold",
+    },
+    {
+        title: "Creative Coding",
+        description:
+            "Exploring the intersection of code, design and generative art",
+        icon: "ph:sparkle-bold",
+    },
+];
 ---
 
 <Layout>
@@ -18,6 +50,19 @@ import Contact from "@components/Contact.astro";
                     you'll find me taking photos, reading, or exploring new
                     places.
                 </HeadlineParagraphSection>
+            </GridItem>
+        </Grid>
+
+        <Grid class="pb-24">
+            <GridItem colSpan={12}>
+                <h3 class="text-xl font-bold mb-8">Skills</h3>
+            </GridItem>
+            <GridItem colSpan={12}>
+                <div
+                    class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"
+                >
+                    {skills.map((skill) => <SkillCard {...skill} />)}
+                </div>
             </GridItem>
         </Grid>
     </Container>
