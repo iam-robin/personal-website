@@ -93,3 +93,18 @@ input.margin-toggle {
 label.margin-toggle:not(.sidenote-number) {
     display: none;
 }
+
+/* Dark mode overrides */
+[data-theme="dark"] .sidenote {
+    color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .sidenote-number:after {
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 1024px) {
+    [data-theme="dark"] .sidenote-number:after {
+        color: var(--color-text-secondary);
+    }
+}

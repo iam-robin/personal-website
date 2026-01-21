@@ -50,7 +50,7 @@ const formattedDate = entry.data.date.toLocaleDateString("en-US", {
     <Grid>
         <GridItem colSpan={12} class="pt-40 lg:pt-28 pb-32">
             <article
-                class="prose prose-lg prose-figcaption:text-xs prose-figcaption:text-neutral-500 prose-figcaption:mb-16 prose-figcaption:-mt-8 mx-auto w-full max-w-[720px] md:prose-xl lg:mx-0"
+                class="prose prose-lg prose-figcaption:text-xs prose-figcaption:text-text-muted prose-figcaption:mb-16 prose-figcaption:-mt-8 mx-auto w-full max-w-[720px] md:prose-xl lg:mx-0"
             >
                 <a
                     href="/blog"
@@ -69,13 +69,13 @@ const formattedDate = entry.data.date.toLocaleDateString("en-US", {
                     }
                     {entry.data.subtitle && <span>{entry.data.subtitle}</span>}
                 </h1>
-                <div class="mb-8 text-neutral-500">
+                <div class="mb-8 text-text-muted">
                     {formattedDate}
                     {
                         entry.data.category && (
                             <a
                                 href={`/blog/category/${entry.data.category}`}
-                                class="mr-2 inline-block rounded bg-neutral-50 px-2 py-1 text-sm text-neutral-600 hover:bg-blue-light hover:text-blue"
+                                class="mr-2 inline-block rounded bg-surface-raised px-2 py-1 text-sm text-text-muted hover:bg-blue-light hover:text-blue"
                             >
                                 #{entry.data.category}
                             </a>
