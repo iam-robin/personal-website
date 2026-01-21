@@ -1,0 +1,44 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Option {
+    label: string;
+    value: string;
+}
+
+interface Props {
+    options: Option[];
+    selectedValue: string;
+    name?: string;
+    label?: string;
+    class?: string;
+}
+
+const { options, selectedValue, name, label, class: className } = Astro.props;
+---
+
+<div class:list={["select-wrapper", className]}>
+    {label && <div class="mb-3 font-bold">{label}</div>}
+    <div class="relative inline-block">
+        <select
+            name={name}
+            class="appearance-none cursor-pointer rounded-lg border border-border bg-background pl-3 pr-8 py-2 text-text-primary hover:border-text-muted focus:outline-none focus:border-text-muted transition-colors font-mono text-sm"
+        >
+            {
+                options.map((option) => (
+                    <option
+                        value={option.value}
+                        selected={option.value === selectedValue}
+                    >
+                        {option.label}
+                    </option>
+                ))
+            }
+        </select>
+        <Icon
+            name="ph:caret-down-bold"
+            width={14}
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
+        />
+    </div>
+</div>

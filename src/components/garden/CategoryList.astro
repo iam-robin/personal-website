@@ -10,11 +10,14 @@ interface CategoryInfo {
 interface Props {
     categories: CategoryInfo[];
     selectedCategory?: string;
-    selectedSort?: "newest" | "last-edited";
+    selectedSort?: "newest" | "last-edited" | "alphabetical";
 }
 
-const { categories, selectedCategory, selectedSort = "last-edited" } =
-    Astro.props;
+const {
+    categories,
+    selectedCategory,
+    selectedSort = "last-edited",
+} = Astro.props;
 
 // Calculate total notes count
 const totalNotes = categories.reduce((sum, cat) => sum + cat.count, 0);
@@ -24,16 +27,23 @@ const getSortSuffix = () => {
     if (selectedSort === "newest") {
         return "/newest";
     }
+    if (selectedSort === "alphabetical") {
+        return "/alphabetical";
+    }
     return ""; // default sort doesn't need suffix
 };
 
 const sortSuffix = getSortSuffix();
 const allHref =
-    selectedSort === "newest" ? "/garden/sort/newest" : "/garden";
+    selectedSort === "newest"
+        ? "/garden/sort/newest"
+        : selectedSort === "alphabetical"
+          ? "/garden/sort/alphabetical"
+          : "/garden";
 ---
 
 <div>
-    <div class="mb-5 font-bold">Topics</div>
+    <div class="mb-3 font-bold">Topics</div>
     <div class="flex flex-row flex-wrap gap-3">
         <Chip
             indicator="black"

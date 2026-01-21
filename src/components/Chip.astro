@@ -6,8 +6,6 @@ interface Props {
     isActive?: boolean;
     indicator?: string;
     indicatorType?: "dot" | "text";
-    variant?: "default" | "mono";
-    activeStyle?: "neutral" | "blue";
     class?: string;
 }
 
@@ -18,23 +16,13 @@ const {
     isActive = false,
     indicator,
     indicatorType = "dot",
-    variant = "default",
-    activeStyle = "blue",
     class: className,
 } = Astro.props;
 
 const baseClasses =
-    "inline-flex items-center gap-2 rounded-full border px-3 py-1 no-underline cursor-pointer";
+    "inline-flex items-center gap-2 rounded-full border px-3 py-1 no-underline cursor-pointer font-mono text-sm";
 
-const variantClasses = {
-    default: "text-sm",
-    mono: "font-mono text-xs",
-};
-
-const activeClasses = {
-    neutral: "bg-neutral-200 font-bold text-black border-border",
-    blue: "border-blue bg-blue text-surface",
-};
+const activeClasses = "border-blue bg-blue text-surface";
 
 const inactiveClasses =
     "border-border bg-background text-current hover:border-blue hover:text-blue";
@@ -44,16 +32,18 @@ const inactiveClasses =
     href={href}
     class:list={[
         baseClasses,
-        variantClasses[variant],
-        isActive ? activeClasses[activeStyle] : inactiveClasses,
+        isActive ? activeClasses : inactiveClasses,
         className,
     ]}
 >
     {
         indicator && indicatorType === "dot" && (
             <span
-                class="inline-block h-2 w-2 shrink-0 rounded-full"
-                style={`background-color: ${indicator}`}
+                class:list={[
+                    "inline-block h-2 w-2 shrink-0 rounded-full",
+                    isActive && "bg-blue-dark",
+                ]}
+                style={!isActive ? `background-color: ${indicator}` : undefined}
             />
         )
     }
@@ -67,9 +57,7 @@ const inactiveClasses =
         count !== undefined && (
             <span
                 class:list={[
-                    isActive && activeStyle === "blue"
-                        ? "text-surface/70"
-                        : "text-text-muted",
+                    isActive ? "text-surface/70" : "text-text-muted",
                 ]}
             >
                 ({count})

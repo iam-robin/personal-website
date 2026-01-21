@@ -21,7 +21,7 @@ export async function getStaticPaths() {
     });
 
     // Generate paths for all category + sort combinations
-    const sortOptions = ["newest", "last-edited"] as const;
+    const sortOptions = ["newest", "last-edited", "alphabetical"] as const;
     const paths: {
         params: { category: string; sort: string };
         props: {
@@ -29,7 +29,7 @@ export async function getStaticPaths() {
             notes: Note[];
             allCategories: typeof categoryInfoList;
             categoryIndexMap: Record<string, number>;
-            selectedSort: "newest" | "last-edited";
+            selectedSort: "newest" | "last-edited" | "alphabetical";
         };
     }[] = [];
 
@@ -44,6 +44,9 @@ export async function getStaticPaths() {
                         new Date(b.created).getTime() -
                         new Date(a.created).getTime()
                     );
+                }
+                if (sort === "alphabetical") {
+                    return a.title.localeCompare(b.title);
                 }
                 return (
                     new Date(b.edited).getTime() - new Date(a.edited).getTime()

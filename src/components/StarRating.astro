@@ -28,11 +28,7 @@ const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
                 ))}
                 {hasHalfStar && <Icon name="ph:star-half-fill" width={size} />}
                 {Array.from({ length: emptyStars }).map(() => (
-                    <Icon
-                        name="ph:star-fill"
-                        width={size}
-                        class="text-neutral-300"
-                    />
+                    <Icon name="ph:star" width={size} />
                 ))}
             </div>
         </div>

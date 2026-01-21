@@ -1,49 +1,47 @@
 ---
+import Select from "@components/Select.astro";
+
 interface Props {
-    selectedSort: "newest" | "last-edited";
+    selectedSort: "newest" | "last-edited" | "alphabetical";
     selectedCategory?: string;
 }
 
 const { selectedSort, selectedCategory } = Astro.props;
 
-// Build URLs based on whether a category is selected
-const newestUrl = selectedCategory
-    ? `/garden/${selectedCategory.toLowerCase()}/newest`
-    : "/garden/sort/newest";
-
-const lastEditedUrl = selectedCategory
-    ? `/garden/${selectedCategory.toLowerCase()}/last-edited`
-    : "/garden/sort/last-edited";
+const sortOptions = [
+    { label: "Newest", value: "newest" },
+    { label: "Last edited", value: "last-edited" },
+    { label: "Alphabetical", value: "alphabetical" },
+];
 ---
 
-<div class="flex gap-4 items-center">
-    <p class="font-bold">Sort by</p>
-    <ul class="flex gap-1">
-        <li>
-            <a
-                href={newestUrl}
-                class:list={[
-                    "px-2 py-1 rounded no-underline",
-                    selectedSort === "newest"
-                        ? "bg-surface-raised text-text-primary"
-                        : "text-text-muted hover:text-text-primary",
-                ]}
-            >
-                Newest
-            </a>
-        </li>
-        <li>
-            <a
-                href={lastEditedUrl}
-                class:list={[
-                    "px-2 py-1 rounded no-underline",
-                    selectedSort === "last-edited"
-                        ? "bg-surface-raised text-text-primary"
-                        : "text-text-muted hover:text-text-primary",
-                ]}
-            >
-                Last edited
-            </a>
-        </li>
-    </ul>
+<div
+    class="sort-filter mt-[39px]"
+    data-category={selectedCategory?.toLowerCase() || ""}
+>
+    <Select options={sortOptions} selectedValue={selectedSort} name="sort" />
 </div>
+
+<script>
+    function initSortFilter() {
+        const filters = document.querySelectorAll(".sort-filter");
+
+        filters.forEach((filter) => {
+            const select = filter.querySelector("select") as HTMLSelectElement;
+            if (!select) return;
+
+            const category = (filter as HTMLElement).dataset.category;
+
+            select.addEventListener("change", () => {
+                const sort = select.value;
+                const url = category
+                    ? `/garden/${category}/${sort}`
+                    : `/garden/sort/${sort}`;
+                window.location.href = url;
+            });
+        });
+    }
+
+    initSortFilter();
+    document.addEventListener("astro:after-swap", initSortFilter);
+</script>

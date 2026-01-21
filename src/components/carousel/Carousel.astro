@@ -2,6 +2,7 @@
 import "@blossom-carousel/core/style.css";
 import Link from "@components/Link.astro";
 import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import Container from "@components/Container.astro";
 
 interface Props {
     columns?: number;
@@ -43,11 +44,16 @@ const {
 
     {
         link && (
-            <div class="max-w-(--max-width) mx-auto w-full flex justify-end">
-                <Link href={link.href} standalone external={link.external}>
+            <Container class="flex justify-end">
+                <Link
+                    href={link.href}
+                    class="self-end"
+                    standalone
+                    external={link.external}
+                >
                     {link.text}
                 </Link>
-            </div>
+            </Container>
         )
     }
 </section>

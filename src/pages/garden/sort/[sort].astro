@@ -27,8 +27,8 @@ export async function getStaticPaths() {
         allNotes.push(...categoryNotes);
     }
 
-    // Generate paths for both sort options
-    const sortOptions = ["newest", "last-edited"] as const;
+    // Generate paths for all sort options
+    const sortOptions = ["newest", "last-edited", "alphabetical"] as const;
 
     return sortOptions.map((sort) => {
         // Sort notes based on the sort option
@@ -38,6 +38,9 @@ export async function getStaticPaths() {
                     new Date(b.created).getTime() -
                     new Date(a.created).getTime()
                 );
+            }
+            if (sort === "alphabetical") {
+                return a.title.localeCompare(b.title);
             }
             return (
                 new Date(b.edited).getTime() - new Date(a.edited).getTime()
