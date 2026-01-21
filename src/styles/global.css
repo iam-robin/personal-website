@@ -5,6 +5,7 @@
 @import "./theme/colors.css";
 @import "./theme/transitions.css";
 @import "./theme/typography.css";
+@import "./theme/breakpoints.css";
 @import "./view-transition.css";
 
 :root {
@@ -19,12 +20,6 @@ body {
     margin: 0;
     padding: 0;
     font-size: 18px;
-}
-
-@media (max-width: calc(800px + 32px)) {
-    body {
-        padding-inline: var(--gap);
-    }
 }
 
 @layer base {

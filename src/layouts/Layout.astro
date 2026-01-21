@@ -21,6 +21,9 @@ const { hasHeader = true } = Astro.props;
         <title>iamrobin</title>
         <ClientRouter />
         <script is:inline>
+            // Mark that JS is enabled (for graceful degradation)
+            document.documentElement.classList.add('js');
+
             // Apply theme immediately to prevent flash on initial load
             (function() {
                 const theme = localStorage.getItem("theme");

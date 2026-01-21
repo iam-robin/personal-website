@@ -6,6 +6,8 @@ import MobileMenu from "./MobileMenu.astro";
 import ThemeSwitcher from "./ThemeSwitcher.astro";
 import Container from "@components/Container.astro";
 
+const isIndexPage = Astro.url.pathname === "/";
+
 const navigation = [
     {
         type: "group" as const,
@@ -73,7 +75,10 @@ const navigation = [
 
 <header
     id="site-header"
-    class="sticky top-0 z-20 bg-background mt-8 border-border opacity-0 -translate-y-full"
+    class:list={[
+        "sticky top-0 z-20 mt-4 md:mt-8 border-border opacity-0 -translate-y-full",
+        { "bg-surface": isIndexPage },
+    ]}
 >
     <Container>
         <div class="flex items-center justify-between h-16">
@@ -167,13 +172,14 @@ const navigation = [
             const isSticky = window.scrollY >= stickyThreshold;
 
             if (isSticky) {
-                header.classList.add("border-b");
-                logo.classList.add("flex");
+                header?.classList.add("border-b", "bg-background");
+                header?.classList.remove("bg-surface");
+                logo?.classList.add("flex");
                 logoRobin[0]?.classList.remove("-mt-1.5", "ml-5");
                 logoSpace[0]?.classList.remove("w-1");
             } else {
-                header.classList.remove("border-b");
-                logo.classList.remove("flex");
+                header?.classList.remove("border-b", "bg-background");
+                logo?.classList.remove("flex");
                 logoRobin[0]?.classList.add("-mt-1.5", "ml-5");
                 logoSpace[0]?.classList.add("w-1");
             }
@@ -194,3 +200,11 @@ const navigation = [
         initHeader();
     }
 </script>
+
+<style>
+    /* When JS is disabled, show header immediately (override Tailwind hiding classes) */
+    html:not(.js) #site-header {
+        opacity: 1 !important;
+        --tw-translate-y: 0 !important;
+    }
+</style>

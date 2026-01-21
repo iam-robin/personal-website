@@ -63,13 +63,6 @@
             const current = getStoredTheme();
             const currentIndex = themes.indexOf(current);
             const nextIndex = (currentIndex + 1) % themes.length;
-            console.log(
-                "cycle theme",
-                current,
-                currentIndex,
-                nextIndex,
-                themes[nextIndex]
-            );
             setTheme(themes[nextIndex]);
         }
 

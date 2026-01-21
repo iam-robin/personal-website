@@ -22,12 +22,35 @@ const {
     linkText,
     linkUrl,
     class: classes,
-    contentStart = 5,
+    contentStart,
     contentEnd,
     buttonStyle,
     headlineSize = "xl",
     isFirstElement = false,
 } = Astro.props;
+
+const mergeBreakpointValue = (
+    prop: number | BreakpointValue | undefined,
+    defaultValue: BreakpointValue,
+): BreakpointValue => {
+    if (prop === undefined) return defaultValue;
+    if (typeof prop === "number") {
+        return { ...defaultValue, large: prop };
+    }
+    return prop;
+};
+
+const computedColStart = mergeBreakpointValue(contentStart, {
+    small: 1,
+    medium: 1,
+    large: 5,
+});
+
+const computedColEnd = mergeBreakpointValue(contentEnd, {
+    small: 13,
+    medium: 13,
+    large: linkText && linkUrl ? 10 : 13,
+});
 ---
 
 <hgroup>
@@ -43,12 +66,8 @@ const {
             </h3>
         </GridItem>
         <GridItem
-            colStart={{ small: 1, medium: 1, large: 5 }}
-            colEnd={{
-                small: 13,
-                medium: 13,
-                large: linkText && linkUrl ? 10 : 13,
-            }}
+            colStart={computedColStart}
+            colEnd={computedColEnd}
             class="text-base font-mono mt-4 lg:mt-0"
         >
             <slot />

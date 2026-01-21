@@ -1,5 +1,18 @@
 @theme {
-    /* Neutral palette */
+    /* Slate palette (for light theme - cooler, blue-tinted grays) */
+    --color-slate-50: oklch(98.4% 0.003 247.858);
+    --color-slate-100: oklch(96.8% 0.007 247.896);
+    --color-slate-200: oklch(92.9% 0.013 255.508);
+    --color-slate-300: oklch(86.9% 0.022 252.894);
+    --color-slate-400: oklch(70.4% 0.04 256.788);
+    --color-slate-500: oklch(55.4% 0.046 257.417);
+    --color-slate-600: oklch(44.6% 0.043 257.281);
+    --color-slate-700: oklch(37.2% 0.044 257.287);
+    --color-slate-800: oklch(27.9% 0.041 260.031);
+    --color-slate-900: oklch(20.8% 0.042 265.755);
+    --color-slate-950: oklch(12.9% 0.042 264.695);
+
+    /* Neutral palette (for dark theme - warmer, brownish grays) */
     --color-neutral-50: oklch(0.985 0.001 106.423);
     --color-neutral-100: oklch(0.97 0.001 106.424);
     --color-neutral-200: oklch(0.923 0.003 48.717);
@@ -12,29 +25,30 @@
     --color-neutral-900: oklch(0.216 0.006 56.043);
     --color-neutral-950: oklch(0.147 0.004 49.25);
 
-    /* Base semantic colors */
-    --color-background: var(--color-neutral-50);
-    --color-foreground: var(--color-neutral-900);
+    /* Base semantic colors (light theme uses slate) */
+    --color-background: var(--color-slate-50);
+    --color-foreground: var(--color-slate-900);
 
     /* Surfaces (cards, containers, elevated elements) */
-    --color-surface: var(--color-neutral-100);
-    --color-surface-raised: var(--color-neutral-200);
-    --color-surface-inverse: var(--color-neutral-800);
+    --color-surface: var(--color-slate-100);
+    --color-surface-raised: var(--color-slate-200);
+    --color-surface-inverse: var(--color-slate-800);
 
     /* Text hierarchy */
-    --color-text-primary: var(--color-neutral-900);
-    --color-text-secondary: var(--color-neutral-500);
-    --color-text-muted: var(--color-neutral-400);
-    --color-text-inverse: var(--color-neutral-200);
+    --color-text-primary: var(--color-slate-900);
+    --color-text-secondary: var(--color-slate-500);
+    --color-text-muted: var(--color-slate-400);
+    --color-text-inverse: var(--color-slate-200);
 
     /* Interactive states */
-    --color-hover-bg: var(--color-neutral-100);
-    --color-hover-text: var(--color-neutral-500);
+    --color-hover-bg: var(--color-slate-100);
+    --color-hover-text: var(--color-slate-500);
 
     /* Borders */
-    --color-border: var(--color-neutral-200);
-    --color-border-light: var(--color-neutral-100);
-    --color-border-dark: var(--color-neutral-300);
+    --color-border: var(--color-slate-200);
+    --color-border-light: var(--color-slate-100);
+    --color-border-dark: var(--color-slate-300);
+    --color-border-darkest: var(--color-slate-600);
 
     /* Accent color palette */
     --color-yellow: oklch(0.85 0.18 85.65);

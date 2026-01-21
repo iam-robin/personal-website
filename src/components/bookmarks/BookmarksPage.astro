@@ -42,6 +42,20 @@ tags.sort((a, b) => b.count - a.count);
                 href="https://raindrop.io"
                 external>Raindrop.io</Link>. Thanks to their fantastic API, I can also share that list
             here on my personal website.
+            <ul class="mt-8 flex items-center gap-4 font-mono text-xs">
+                <li>
+                    <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-green"></span>Article
+                </li>
+                <li>
+                    <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-lilac"></span>Website
+                </li>
+                <li>
+                    <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-blue"></span>Video
+                </li>
+                <li>
+                    <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-red"></span>Misc
+                </li>
+            </ul>
         </HeadlineParagraphSection>
         <TagCloud
             tags={tags}

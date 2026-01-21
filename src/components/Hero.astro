@@ -11,7 +11,7 @@ import Container from "./Container.astro";
 
 <div
     data-hero
-    class="mt-20 md:mt-0 md:min-h-[calc(100vh-96px)] flex items-center"
+    class="group -mt-24 pt-40 md:pt-64 md:pb-32 flex items-center bg-surface"
 >
     <Container>
         <Grid class="mb-16!">
@@ -19,7 +19,7 @@ import Container from "./Container.astro";
                 <h1 class="text-2xl md:text-3xl leading-tight font-bold">
                     Hey
                     <SmileySticker
-                        class="hero-icon inline-block align-[-0.25em] h-auto w-12 md:w-[72px] -mr-1 -mt-5 overflow-hidden"
+                        class="hero-icon inline-block align-[-0.25em] h-auto w-12 md:w-0 md:group-data-hero-ready:w-[72px] -mr-1 -mt-5 overflow-hidden"
                         iconColor="--color-sticker-yellow-dark"
                         bgColor="--color-sticker-yellow"
                         data-target-width="72"
@@ -29,21 +29,21 @@ import Container from "./Container.astro";
                     A Design Engineer who enjoys working at the intersection of
                     <br class="hidden sm:block" />
                     <CodeSticker
-                        class="hero-icon inline-block align-[-0.25em] h-auto w-12 md:w-[72px] -mr-1 -mt-5 overflow-hidden"
+                        class="hero-icon inline-block align-[-0.25em] h-auto w-12 md:w-0 md:group-data-hero-ready:w-[72px] -mr-1 -mt-5 overflow-hidden"
                         iconColor="--color-sticker-blue-dark"
                         bgColor="--color-sticker-blue"
                         data-target-width="72"
                     />
                     code,
                     <DesignSticker
-                        class="hero-icon inline-block align-[-0.25em] h-auto w-10 md:w-15 -mr-1 -mt-5 rotate-12 translate-y-1 overflow-hidden"
+                        class="hero-icon inline-block align-[-0.25em] h-auto w-10 md:w-0 md:group-data-hero-ready:w-15 -mr-1 -mt-5 rotate-12 translate-y-1 overflow-hidden"
                         iconColor="--color-sticker-red-dark"
                         bgColor="--color-sticker-red"
                         data-target-width="60"
                     />
                     design and
                     <ArtSticker
-                        class="hero-icon inline-block align-[-0.25em] h-auto w-12 md:w-[72px] -mr-1 -mt-5 translate-y-0.5 md:translate-y-0 overflow-hidden"
+                        class="hero-icon inline-block align-[-0.25em] h-auto w-12 md:w-0 md:group-data-hero-ready:w-[72px] -mr-1 -mt-5 translate-y-0.5 md:translate-y-0 overflow-hidden"
                         iconColor="--color-sticker-lilac-dark"
                         bgColor="--color-sticker-lilac"
                         data-target-width="72"
@@ -78,7 +78,10 @@ import Container from "./Container.astro";
         const isDesktop = window.matchMedia("(min-width: 768px)").matches;
 
         // Only animate on desktop
-        if (!isDesktop) return;
+        if (!isDesktop) {
+            hero.setAttribute("data-hero-ready", "");
+            return;
+        }
 
         // Reset hero opacity and fade in
         (hero as HTMLElement).style.opacity = "0";
@@ -99,6 +102,9 @@ import Container from "./Container.astro";
                 (icon as HTMLElement).style.marginRight = "-12px";
                 (icon as HTMLElement).style.transform = "translateY(25px)";
             });
+
+            // Mark hero ready so CSS takes over when inline styles are removed
+            hero.setAttribute("data-hero-ready", "");
 
             // Animate each icon with stagger, clear styles when done
             icons.forEach((icon, index) => {
@@ -153,3 +159,19 @@ import Container from "./Container.astro";
     // Re-run when navigating back via View Transitions
     document.addEventListener("astro:page-load", animateHero);
 </script>
+
+<style is:global>
+    /* Hide entire hero on desktop with JS until animation is ready, preventing flicker */
+    @media (min-width: 768px) {
+        html.js [data-hero]:not([data-hero-ready]) {
+            opacity: 0;
+        }
+    }
+
+    /* When JS is disabled, show icons at proper width on desktop */
+    @media (min-width: 768px) {
+        html:not(.js) .hero-icon {
+            width: auto !important;
+        }
+    }
+</style>

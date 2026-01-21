@@ -6,6 +6,6 @@ thumbnailWidth: "50px"
 tags: ["Photography", "Website"]
 year: "2025"
 bgColor: "#282A2E"
-bgColorDark: "#3D3E42"
+#bgColorDark: "#3D3E42"
 externalUrl: "https://robins.photos"
 ---
