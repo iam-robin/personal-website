@@ -24,7 +24,7 @@ const {
 } = Astro.props;
 
 const baseClasses =
-    "inline-flex items-center gap-2 rounded-full border px-3 py-1 no-underline transition-all duration-200 cursor-pointer";
+    "inline-flex items-center gap-2 rounded-full border px-3 py-1 no-underline cursor-pointer";
 
 const variantClasses = {
     default: "text-sm",
@@ -37,7 +37,7 @@ const activeClasses = {
 };
 
 const inactiveClasses =
-    "border-border bg-surface text-current hover:border-blue hover:text-blue";
+    "border-border bg-background text-current hover:border-blue hover:text-blue";
 ---
 
 <a
@@ -57,7 +57,11 @@ const inactiveClasses =
             />
         )
     }
-    {indicator && indicatorType === "text" && <span class="shrink-0">{indicator}</span>}
+    {
+        indicator && indicatorType === "text" && (
+            <span class="shrink-0">{indicator}</span>
+        )
+    }
     {title}
     {
         count !== undefined && (

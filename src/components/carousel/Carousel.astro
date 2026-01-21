@@ -72,14 +72,25 @@ const {
         );
     }
 
-    @media (max-width: 800px) {
+    @media (min-width: 769px) and (max-width: 1088px) {
         .carousel-section :global(.carousel) {
             grid-auto-columns: calc(
-                (100vw - (var(--columns) - 1) * var(--gap) - 2 * var(--gap)) /
+                (100vw - (var(--columns) - 1) * var(--gap) - 64px) /
                     var(--columns)
             );
-            padding-inline: unset;
-            scroll-padding-inline-start: unset;
+            padding-inline: 32px;
+            scroll-padding-inline-start: 32px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .carousel-section :global(.carousel) {
+            grid-auto-columns: calc(
+                (100vw - (var(--columns) - 1) * var(--gap) - 32px) /
+                    var(--columns)
+            );
+            padding-inline: 16px;
+            scroll-padding-inline-start: 16px;
         }
     }
 </style>

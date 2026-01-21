@@ -27,7 +27,7 @@ const {
 
 // Helper to check if value is a breakpoint object
 const isBreakpointValue = (
-    val: number | BreakpointValue | undefined
+    val: number | BreakpointValue | undefined,
 ): val is BreakpointValue => {
     return val !== undefined && typeof val === "object";
 };
@@ -35,7 +35,7 @@ const isBreakpointValue = (
 // Helper to get value for a specific breakpoint or raw number
 const getValue = (
     val: number | BreakpointValue | undefined,
-    breakpoint: "small" | "medium" | "large"
+    breakpoint: "small" | "medium" | "large",
 ): number | undefined => {
     if (val === undefined) return undefined;
     if (typeof val === "number") return val;
@@ -44,7 +44,7 @@ const getValue = (
 
 // Build grid-column value for a breakpoint
 const buildGridColumn = (
-    breakpoint: "small" | "medium" | "large"
+    breakpoint: "small" | "medium" | "large",
 ): string | undefined => {
     const span = getValue(colSpan, breakpoint);
     const start = getValue(colStart, breakpoint);
@@ -59,7 +59,7 @@ const buildGridColumn = (
 
 // Build grid-row value for a breakpoint
 const buildGridRow = (
-    breakpoint: "small" | "medium" | "large"
+    breakpoint: "small" | "medium" | "large",
 ): string | undefined => {
     const span = getValue(rowSpan, breakpoint);
     const start = getValue(rowStart, breakpoint);
@@ -136,7 +136,7 @@ const responsiveStyle = hasResponsiveProps
         grid-row: var(--large-row);
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 768px) {
         .grid-item.responsive {
             grid-column: var(--medium-col, var(--large-col));
             grid-row: var(--medium-row, var(--large-row));
