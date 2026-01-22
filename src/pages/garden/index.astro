@@ -39,7 +39,7 @@ if (notesData) {
 
 // Sort notes by edited date (most recent first)
 allNotes.sort(
-    (a, b) => new Date(b.edited).getTime() - new Date(a.edited).getTime()
+    (a, b) => new Date(b.edited).getTime() - new Date(a.edited).getTime(),
 );
 ---
 
@@ -47,6 +47,6 @@ allNotes.sort(
     notes={allNotes}
     allCategories={categoryInfoList}
     categoryIndexMap={categoryIndexMap}
-    selectedSort="last-edited"
+    selectedSort="newest"
     error={error}
 />

@@ -42,9 +42,7 @@ export async function getStaticPaths() {
             if (sort === "alphabetical") {
                 return a.title.localeCompare(b.title);
             }
-            return (
-                new Date(b.edited).getTime() - new Date(a.edited).getTime()
-            );
+            return new Date(b.edited).getTime() - new Date(a.edited).getTime();
         });
 
         return {

@@ -108,3 +108,18 @@ label.margin-toggle:not(.sidenote-number) {
         color: var(--color-text-secondary);
     }
 }
+
+/* Blog/Garden card layout - always use dark text since cards have light backgrounds */
+.markdown .sidenote {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.markdown .sidenote-number:after {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 1024px) {
+    .markdown .sidenote-number:after {
+        color: rgba(0, 0, 0, 0.7);
+    }
+}

@@ -25,7 +25,7 @@ export async function getStaticPaths() {
         // Sort notes by edited date (most recent first)
         const sortedNotes = [...categoryNotes].sort(
             (a, b) =>
-                new Date(b.edited).getTime() - new Date(a.edited).getTime()
+                new Date(b.edited).getTime() - new Date(a.edited).getTime(),
         );
 
         return {
@@ -48,5 +48,5 @@ const { category, notes, allCategories, categoryIndexMap } = Astro.props;
     allCategories={allCategories}
     categoryIndexMap={categoryIndexMap}
     selectedCategory={category}
-    selectedSort="last-edited"
+    selectedSort="newest"
 />

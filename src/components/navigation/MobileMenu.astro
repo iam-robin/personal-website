@@ -26,7 +26,7 @@ const { navigation } = Astro.props;
 <nav class="fixed bottom-5 left-4 right-4 z-50 pointer-events-none md:hidden">
     <details id="mobile-menu" class="pointer-events-auto">
         <summary
-            class="flex h-14 cursor-pointer items-center justify-center gap-2 rounded-3xl bg-neutral-800 text-white font-mono"
+            class="flex h-14 text-lg cursor-pointer items-center justify-center gap-2 rounded-3xl bg-neutral-800 text-white font-mono"
         >
             <Icon name="ph:list" class="menu-icon" width={24} />
             <Icon name="ph:x" class="close-icon hidden" width={24} />
@@ -34,7 +34,7 @@ const { navigation } = Astro.props;
         </summary>
 
         <ul
-            class="absolute bottom-16 left-0 right-0 rounded-3xl bg-neutral-800 text-white p-2 flex flex-col"
+            class="absolute bottom-16 left-0 right-0 rounded-3xl bg-neutral-800 text-white text-lg p-2 flex flex-col"
         >
             {
                 navigation.map((item) =>

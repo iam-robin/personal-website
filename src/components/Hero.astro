@@ -71,6 +71,9 @@ import Container from "./Container.astro";
 <script>
     import { animate } from "motion";
 
+    // Module-level flag - persists across view transitions, resets on full page load
+    let hasAnimated = false;
+
     function animateHero() {
         const hero = document.querySelector("[data-hero]");
         if (!hero) return;
@@ -82,6 +85,14 @@ import Container from "./Container.astro";
             hero.setAttribute("data-hero-ready", "");
             return;
         }
+
+        // If already animated this session, just show hero immediately
+        if (hasAnimated) {
+            hero.setAttribute("data-hero-ready", "");
+            return;
+        }
+
+        hasAnimated = true;
 
         // Reset hero opacity and fade in
         (hero as HTMLElement).style.opacity = "0";
@@ -156,7 +167,7 @@ import Container from "./Container.astro";
         }
     }
 
-    // Re-run when navigating back via View Transitions
+    // Run on initial page load and view transitions (animation only plays once per session)
     document.addEventListener("astro:page-load", animateHero);
 </script>
 
