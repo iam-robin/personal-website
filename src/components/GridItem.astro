@@ -12,6 +12,7 @@ interface Props {
     rowStart?: number | BreakpointValue;
     rowEnd?: number | BreakpointValue;
     rowSpan?: number | BreakpointValue;
+    fullWidth?: boolean;
     class?: string;
 }
 
@@ -22,6 +23,7 @@ const {
     rowStart,
     rowEnd,
     rowSpan,
+    fullWidth,
     class: className,
 } = Astro.props;
 
@@ -83,9 +85,9 @@ const hasResponsiveProps = [
 ].some(isBreakpointValue);
 
 // For non-responsive usage, compute static values
-const staticGridColumn = !hasResponsiveProps
-    ? buildGridColumn("large")
-    : undefined;
+const staticGridColumn = fullWidth
+    ? "1 / -1"
+    : (!hasResponsiveProps ? buildGridColumn("large") : undefined);
 const staticGridRow = !hasResponsiveProps ? buildGridRow("large") : undefined;
 
 const staticStyle = !hasResponsiveProps
