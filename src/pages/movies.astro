@@ -1,9 +1,6 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import Grid from "@components/Grid.astro";
-import GridItem from "@components/GridItem.astro";
 import MovieYearContainer from "@components/movies/MovieYearContainer.astro";
-// import SectionContent from "@components/SectionContent.astro";
 import { scrapeLetterboxdFilms } from "@utils/letterboxd";
 import { getMockMovieData } from "@utils/mockMovies";
 import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
@@ -14,7 +11,8 @@ let movieData;
 let error = null;
 
 // Use mock data in development to avoid slow scraping on each reload
-const isDevelopment = import.meta.env.DEV;
+// const isDevelopment = import.meta.env.DEV;
+const isDevelopment = false;
 
 if (isDevelopment) {
     movieData = getMockMovieData();
@@ -66,7 +64,6 @@ const years = Object.keys(filmsByYear)
 ---
 
 <Layout>
-    <!-- <Layout title="Movies" description={`${count} movies watched on Letterboxd`}> -->
     <HeadlineParagraphSection title="Movies" isFirstElement>
         I keep track of the films I watch on Letterboxd, where I log and
         organize everything I’ve seen. To make this collection easier to browse,

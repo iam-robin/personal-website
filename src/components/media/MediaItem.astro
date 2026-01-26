@@ -86,7 +86,7 @@ const formattedDate = formatDate(date);
                 {status && <StatusBadge status={status} />}
                 {isRewatch && <StatusBadge status="rewatch" />}
                 {isLiked && <Icon name="ph:heart-fill" width={14} class="text-red" />}
-                {rating && rating > 0 && <StarRating rating={rating} showValue size={14} />}
+                {rating !== null && rating > 0 && <StarRating rating={rating} showValue size={14} />}
             </div>
         </div>
     </div>
@@ -131,7 +131,7 @@ const formattedDate = formatDate(date);
         <div class="flex items-center gap-3">
             {isRewatch && <StatusBadge status="rewatch" />}
             {isLiked && <Icon name="ph:heart-fill" width={16} class="text-red" />}
-            {rating && rating > 0 && <StarRating rating={rating} showValue size={16} />}
+            {rating !== null && rating > 0 && <StarRating rating={rating} showValue size={16} />}
         </div>
     </div>
 
