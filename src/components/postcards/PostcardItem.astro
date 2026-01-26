@@ -67,7 +67,7 @@ const {
 
 const sanitizedStampSvg = DOMPurify.sanitize(stampSvg);
 
-const fontSize = `${fontSizeFactor}em`;
+const fontSize = `${fontSizeFactor * 1.2}em`; // 20% larger
 const lineHeightValue = lineHeight.toFixed(2);
 
 const bodyCharCount = body.length;
@@ -87,7 +87,7 @@ if (bodyCharCount > 180 && bodyLineBreaks > 2) {
     bodyFontSizeFactor *= 0.9;
 }
 
-const bodyFontSize = `${bodyFontSizeFactor}em`;
+const bodyFontSize = `${bodyFontSizeFactor * 1.2}em`; // 20% larger
 
 const formattedDate = date.toLocaleDateString("en-US", {
     year: "numeric",
@@ -134,7 +134,10 @@ const wavyLinesStampContainerStyles = `
 `;
 ---
 
-<div class={`corner-shadow-effect w-full max-w-2xl sm:aspect-3/2 hover-lift ${shadowClass}`} style={transformStyles}>
+<div
+    class={`corner-shadow-effect w-full max-w-2xl sm:aspect-3/2 hover-lift ${shadowClass}`}
+    style={transformStyles}
+>
     <div
         class="flex flex-col sm:flex-row justify-between h-full w-full border border-black/10"
         style={`background-color: ${paperColor};`}
