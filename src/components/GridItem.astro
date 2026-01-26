@@ -87,7 +87,9 @@ const hasResponsiveProps = [
 // For non-responsive usage, compute static values
 const staticGridColumn = fullWidth
     ? "1 / -1"
-    : (!hasResponsiveProps ? buildGridColumn("large") : undefined);
+    : !hasResponsiveProps
+      ? buildGridColumn("large")
+      : undefined;
 const staticGridRow = !hasResponsiveProps ? buildGridRow("large") : undefined;
 
 const staticStyle = !hasResponsiveProps
