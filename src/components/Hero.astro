@@ -34,7 +34,7 @@ import Container from "./Container.astro";
                     />
                     code,
                     <DesignSticker
-                        class="hero-icon hero-icon-3 inline-block align-[-0.25em] h-auto w-10 md:w-15 -mr-1 -mt-5 rotate-12 translate-y-1 overflow-hidden"
+                        class="hero-icon hero-icon-3 inline-block align-[-0.25em] h-auto w-10 md:w-15 -mr-1 -mt-5 translate-y-1 overflow-hidden"
                         iconColor="--color-sticker-red-dark"
                         bgColor="--color-sticker-red"
                     />
@@ -51,7 +51,10 @@ import Container from "./Container.astro";
                 colStart={{ small: 1, medium: 1, large: 5 }}
                 colEnd={{ small: 13, medium: 13, large: 12 }}
             >
-                <p data-hero-subtitle class="hero-subtitle text-base font-mono mt-6 md:mt-12">
+                <p
+                    data-hero-subtitle
+                    class="hero-subtitle text-base font-mono mt-6 md:mt-12"
+                >
                     This personal website is my own little space on the internet
                     where I want to share my work, interests and passions with
                     others, without having to please the algorithms of social
@@ -67,8 +70,12 @@ import Container from "./Container.astro";
 <style is:global>
     /* Hero container fade-in */
     @keyframes heroFadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
 
     /* Icon entrance animation */
