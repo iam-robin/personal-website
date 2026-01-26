@@ -46,7 +46,7 @@ const {
             )
         }
 
-        <div class="flex flex-row gap-10 mb-24">
+        <div class="flex flex-col md:flex-row gap-4 md:gap-10 mb-10 md:mb-24">
             {
                 allCategories.length > 0 && (
                     <CategoryList
@@ -64,7 +64,7 @@ const {
 
         {
             notes.length > 0 && (
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10 items-center">
+                <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4 md:gap-y-10 items-center">
                     {notes.map((note) => (
                         <NoteCard
                             note={note}
