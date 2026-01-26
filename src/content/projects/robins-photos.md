@@ -1,7 +1,7 @@
 ---
 title: "robins.photos"
 description: "A static website dedicated to my photography"
-thumbnail: "/src/assets/projects/robinsphotos.svg"
+thumbnail: "/projects/robinsphotos.svg"
 thumbnailWidth: "50px"
 tags: ["Photography", "Website"]
 year: "2025"

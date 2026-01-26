@@ -1,7 +1,7 @@
 ---
 title: "handcoded.art"
 description: "My ongoing generative art side project. Visual experiments with p5.js."
-thumbnail: "/src/assets/projects/geeenerated.svg"
+thumbnail: "/projects/geeenerated.svg"
 thumbnailWidth: "48px"
 tags: ["Generative art", "p5.js"]
 year: "2020 - 2022"

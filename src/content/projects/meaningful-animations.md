@@ -1,7 +1,7 @@
 ---
 title: "meaningful animations"
 description: "A bachelor thesis project creating and user-testing a criteria catalog for impactful microinteraction animations in mobile apps."
-thumbnail: "/src/assets/projects/meaningful-animation.svg"
+thumbnail: "/projects/meaningful-animation.svg"
 thumbnailWidth: "112px"
 tags: ["Bachelor Thesis", "Motion Design"]
 year: "2017"

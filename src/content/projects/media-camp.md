@@ -1,7 +1,7 @@
 ---
 title: "media.camp"
 description: "Barcamp run by students"
-thumbnail: "/src/assets/projects/mediacamp.svg"
+thumbnail: "/projects/mediacamp.svg"
 tags: ["Barcamp", "Branding"]
 year: "2015-2017"
 bgColor: "#8F7FD2"

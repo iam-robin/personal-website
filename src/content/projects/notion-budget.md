@@ -1,7 +1,7 @@
 ---
 title: "notion budget"
 description: "A web app leveraging the Notion API to analyze and display personal financial data from a Notion-based budget planner"
-thumbnail: "/src/assets/projects/notionbudget.png"
+thumbnail: "/projects/notionbudget.png"
 tags: ["Data viz", "React", "Express"]
 year: "2021"
 bgColor: "#2d2e36"

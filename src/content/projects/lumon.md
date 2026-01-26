@@ -1,7 +1,7 @@
 ---
 title: "Lumon"
 description: "A project inspired by the unique software interface from Apple TVs 'Severance'."
-thumbnail: "/src/assets/projects/lumon.png"
+thumbnail: "/projects/lumon.png"
 thumbnailWidth: "128px"
 tags: ["Website", "UI Imitation"]
 year: "2022"

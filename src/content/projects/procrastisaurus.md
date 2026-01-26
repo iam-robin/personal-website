@@ -1,7 +1,7 @@
 ---
 title: "Procrastisaurus"
 description: "A browser extension to fight procrastination."
-thumbnail: "/src/assets/projects/procrastisaurus.png"
+thumbnail: "/projects/procrastisaurus.png"
 thumbnailWidth: "112px"
 tags: ["Browser Extension", "Midjourney"]
 year: "2023"
