@@ -6,8 +6,8 @@ import "../../styles/blog-styles.css";
 import TableOfContents from "@components/TableOfContents.astro";
 import { extractHeadings } from "../../utils/markdown";
 import MastodonStats from "@components/blog/MastodonStats.astro";
-import { Icon } from "astro-icon/components";
 import Divider from "@components/Divider.astro";
+import Container from "@components/Container.astro";
 
 // Generate static paths for all blog posts
 export async function getStaticPaths() {
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
     // Sort by date descending
     const sortedEntries = [...blogEntries].sort(
-        (a, b) => b.data.date.getTime() - a.data.date.getTime()
+        (a, b) => b.data.date.getTime() - a.data.date.getTime(),
     );
 
     return Promise.all(
@@ -39,7 +39,7 @@ export async function getStaticPaths() {
                     nextPost,
                 },
             };
-        })
+        }),
     );
 }
 
@@ -54,202 +54,117 @@ const formatDate = (date: Date) => {
     const year = date.getFullYear();
     return `${day} / ${month} / ${year}`;
 };
-
-// Blog post color - using a warm paper-like tone
-const bgColor = "#F4E8C8";
 ---
 
-<Layout hasHeader={false}>
-    <!-- SVG distortion filter -->
-    <svg class="hidden" aria-hidden="true">
-        <defs>
-            <filter id="distort-xl">
-                <feTurbulence baseFrequency="1 1" numOctaves="1"></feTurbulence>
-                <feDisplacementMap in="SourceGraphic" scale="1.3"
-                ></feDisplacementMap>
-            </filter>
-        </defs>
-    </svg>
-
-    <div transition:name="blog-backdrop" class="fixed inset-0 bg-surface"></div>
-
-    <article
-        transition:name="blog-card"
-        class="effect relative z-30 mx-auto my-12 w-full max-w-5xl"
-        data-prev-post={previousPost ? `/blog/${previousPost.slug}` : undefined}
-        data-next-post={nextPost ? `/blog/${nextPost.slug}` : undefined}
-    >
-        <!-- Close button -->
-        <a
-            href="/blog"
-            class="flex-center absolute right-4 top-4 z-50 h-12 w-12 cursor-pointer rounded-full bg-black/10 transition-colors hover:bg-black/20"
+<Layout>
+    <Container>
+        <article
+            class="py-12 md:py-20"
+            data-prev-post={previousPost
+                ? `/blog/${previousPost.slug}`
+                : undefined}
+            data-next-post={nextPost ? `/blog/${nextPost.slug}` : undefined}
         >
-            <Icon name="ph:x-bold" class="text-black/70" size={24} />
-        </a>
-
-        <!-- Main card with background color -->
-        <div
-            class="relative w-full p-2 text-black md:p-4"
-            style={`background-color: ${bgColor}`}
-        >
-            <div class="texture"></div>
-
-            <!-- Content border -->
-            <div class="border border-black/60 px-4 pb-24 pt-4 md:px-10 md:pt-6">
-                <div class="mx-auto mt-20 max-w-[65ch] text-[1.2rem]">
-                    <h1
-                        class="font-sans text-[2.5rem] font-black leading-[1.15] md:text-[3.5rem]"
-                    >
-                        {entry.data.title}
-                        {
-                            entry.data.subtitle && (
-                                <span class="mt-2 block text-[1.5rem] font-bold opacity-80 md:text-[2rem]">
-                                    {entry.data.subtitle}
-                                </span>
-                            )
-                        }
-                    </h1>
-                    <Divider isBlack />
-                </div>
-
-                <!-- Table of Contents -->
-                {
-                    headings.length > 0 && (
-                        <div class="mx-auto mb-8 max-w-[65ch]">
-                            <TableOfContents headings={headings} />
-                        </div>
-                    )
-                }
-
-                <!-- Markdown content with sidenotes support -->
-                <div
-                    class="markdown prose prose-lg prose-figcaption:-mt-8 prose-figcaption:mb-16 prose-figcaption:text-xs prose-figcaption:text-black/60"
+            <div class="mx-auto max-w-[65ch]">
+                <h1
+                    class="font-sans text-[2rem] font-black leading-[1.15] md:text-[3rem]"
                 >
-                    <Content />
-                </div>
+                    {entry.data.title}
+                    {
+                        entry.data.subtitle && (
+                            <span class="mt-2 block text-[1.25rem] font-bold opacity-80 md:text-[1.75rem]">
+                                {entry.data.subtitle}
+                            </span>
+                        )
+                    }
+                </h1>
 
-                <!-- Mastodon Stats -->
-                {
-                    entry.data.mastodonId && (
-                        <div class="mx-auto mt-16 max-w-[65ch]">
-                            <MastodonStats statusId={entry.data.mastodonId} />
-                        </div>
-                    )
-                }
-            </div>
-
-            <!-- Metadata footer -->
-            <div class="border-b border-l border-r border-black/60">
-                <div class="flex">
-                    <span
-                        class="flex w-1/2 flex-col items-center gap-2 border-r border-black/60 p-3 md:flex-row"
-                    >
-                        <span>Published:</span>
-                        <span
-                            class="font-decorative text-[20px] sm:text-[24px]"
-                            style="filter: url(#distort-xl);"
-                        >
-                            {formatDate(entry.data.date)}
-                        </span>
+                <!-- Metadata -->
+                <div
+                    class="mt-6 flex flex-wrap gap-4 font-mono text-sm text-muted"
+                >
+                    <span>
+                        {formatDate(entry.data.date)}
                     </span>
-                    <div
-                        class="flex w-1/2 flex-col items-center gap-2 p-3 md:flex-row"
-                    >
-                        {
-                            entry.data.category ? (
-                                <>
-                                    <span>Topic:</span>
-                                    <a
-                                        href={`/blog/category/${entry.data.category}`}
-                                        class="font-decorative text-[20px] transition-opacity hover:opacity-70 sm:text-[24px]"
-                                        style="filter: url(#distort-xl);"
-                                    >
-                                        {entry.data.category}
-                                    </a>
-                                </>
-                            ) : (
-                                <>
-                                    <span>Topic:</span>
-                                    <span
-                                        class="font-decorative text-[20px] sm:text-[24px]"
-                                        style="filter: url(#distort-xl);"
-                                    >
-                                        Blog
-                                    </span>
-                                </>
-                            )
-                        }
-                    </div>
+                    {
+                        entry.data.category && (
+                            <>
+                                <span>·</span>
+                                <a
+                                    href={`/blog/category/${entry.data.category}`}
+                                    class="transition-colors hover:text-foreground"
+                                >
+                                    {entry.data.category}
+                                </a>
+                            </>
+                        )
+                    }
                 </div>
-                {
-                    (previousPost || nextPost) && (
-                        <div class="flex border-t border-black/60">
-                            {previousPost && (
-                                <a
-                                    href={`/blog/${previousPost.slug}`}
-                                    class={`${nextPost ? "w-1/2 border-r border-black/60" : "w-full"} cursor-pointer px-3 py-9 text-center transition-colors hover:bg-black/5`}
-                                >
-                                    ← Previous post
-                                </a>
-                            )}
-                            {nextPost && (
-                                <a
-                                    href={`/blog/${nextPost.slug}`}
-                                    class={`${previousPost ? "w-1/2" : "w-full"} cursor-pointer px-3 py-9 text-center transition-colors hover:bg-black/5`}
-                                >
-                                    Next post →
-                                </a>
-                            )}
-                        </div>
-                    )
-                }
+
+                <Divider />
             </div>
-        </div>
-    </article>
+
+            <!-- Table of Contents -->
+            {
+                headings.length > 0 && (
+                    <div class="mx-auto mb-8 max-w-[65ch]">
+                        <TableOfContents headings={headings} />
+                    </div>
+                )
+            }
+
+            <!-- Markdown content with sidenotes support -->
+            <div class="markdown prose prose-lg dark:prose-invert">
+                <Content />
+            </div>
+
+            <!-- Mastodon Stats -->
+            {
+                entry.data.mastodonId && (
+                    <div class="mx-auto mt-16 max-w-[65ch]">
+                        <MastodonStats statusId={entry.data.mastodonId} />
+                    </div>
+                )
+            }
+
+            <!-- Previous/Next Navigation -->
+            {
+                (previousPost || nextPost) && (
+                    <div class="mx-auto mt-16 flex max-w-[65ch] gap-4 border-t border-border pt-8">
+                        {previousPost && (
+                            <a
+                                href={`/blog/${previousPost.slug}`}
+                                class="flex-1 rounded-lg p-4 transition-colors hover:bg-surface"
+                            >
+                                <span class="text-sm text-muted">
+                                    ← Previous
+                                </span>
+                                <p class="mt-1 font-medium">
+                                    {previousPost.data.title}
+                                </p>
+                            </a>
+                        )}
+                        {nextPost && (
+                            <a
+                                href={`/blog/${nextPost.slug}`}
+                                class={`flex-1 rounded-lg p-4 text-right transition-colors hover:bg-surface ${!previousPost ? "ml-auto" : ""}`}
+                            >
+                                <span class="text-sm text-muted">Next →</span>
+                                <p class="mt-1 font-medium">
+                                    {nextPost.data.title}
+                                </p>
+                            </a>
+                        )}
+                    </div>
+                )
+            }
+        </article>
+    </Container>
 </Layout>
 
 <style>
-    .texture {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        mix-blend-mode: soft-light;
-        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 369 369' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        pointer-events: none;
-    }
-
-    .effect {
-        position: relative;
-    }
-
-    .effect:after {
-        z-index: -1;
-        position: absolute;
-        content: "";
-        width: 50%;
-        top: 80%;
-        box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.1);
-        transform: rotate(3deg);
-        bottom: 16px;
-        right: 0.5em;
-    }
-
     /* Markdown prose styling for blog posts */
     .markdown {
-        --tw-prose-body: rgba(0, 0, 0, 0.9);
-        --tw-prose-headings: rgba(0, 0, 0, 0.9);
-        --tw-prose-counters: rgba(0, 0, 0, 0.4);
-        --tw-prose-bullets: rgba(0, 0, 0, 0.3);
-        --tw-prose-bold: rgba(0, 0, 0, 1);
-        --tw-prose-links: rgba(0, 0, 0, 0.7);
-        --tw-prose-quote-borders: rgba(0, 0, 0, 0.2);
-        --tw-prose-td-borders: rgba(0, 0, 0, 0.1);
-        --tw-prose-th-borders: rgba(0, 0, 0, 0.3);
-        --tw-prose-code: rgba(0, 0, 0, 0.9);
-        --tw-prose-pre-code: rgba(0, 0, 0, 0.9);
-        --tw-prose-pre-bg: rgba(0, 0, 0, 0.05);
         max-width: 65ch;
         margin: 0 auto;
         font-size: 1.2rem;
@@ -264,7 +179,7 @@ const bgColor = "#F4E8C8";
     .markdown :global(hr)::after {
         content: "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
         display: block;
-        color: rgba(0, 0, 0, 0.5);
+        color: var(--color-muted);
         position: absolute;
         margin: 0 32px;
         left: 0;
@@ -280,7 +195,7 @@ const bgColor = "#F4E8C8";
 
     .markdown :global(a) {
         text-decoration: none;
-        border-bottom: 1px dashed rgba(0, 0, 0, 0.3);
+        border-bottom: 1px dashed var(--color-muted);
         padding-bottom: 3px;
         position: relative;
         margin-right: 20px;
@@ -295,13 +210,13 @@ const bgColor = "#F4E8C8";
         line-height: 1.2em;
         right: -18px;
         font-size: 1.2em;
-        color: rgba(0, 0, 0, 0.4);
+        color: var(--color-muted);
     }
 
     /* Code block styling */
     .markdown :global(pre) {
-        background: rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
         border-radius: 4px;
         padding: 1rem;
         overflow-x: auto;
@@ -313,31 +228,17 @@ const bgColor = "#F4E8C8";
     }
 
     .markdown :global(:not(pre) > code) {
-        background: rgba(0, 0, 0, 0.05);
+        background: var(--color-surface);
         padding: 0.2em 0.4em;
         border-radius: 3px;
     }
 
     /* Blockquote styling */
     .markdown :global(blockquote) {
-        border-left: 3px solid rgba(0, 0, 0, 0.2);
+        border-left: 3px solid var(--color-border);
         padding-left: 1rem;
         font-style: italic;
-        color: rgba(0, 0, 0, 0.7);
-    }
-
-    /* Image styling */
-    .markdown :global(img) {
-        filter: grayscale(100%) contrast(110%) brightness(110%);
-        mix-blend-mode: multiply;
-        transition:
-            filter 0.3s ease,
-            mix-blend-mode 0.3s ease;
-    }
-
-    .markdown :global(img:hover) {
-        filter: grayscale(0%) contrast(100%) brightness(100%);
-        mix-blend-mode: normal;
+        color: var(--color-muted);
     }
 </style>
 
@@ -355,7 +256,7 @@ const bgColor = "#F4E8C8";
         }
 
         const article = document.querySelector(
-            "article[data-prev-post], article[data-next-post]"
+            "article[data-prev-post], article[data-next-post]",
         );
         if (!article) return;
 
