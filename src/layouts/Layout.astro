@@ -20,12 +20,29 @@ const { hasHeader = true } = Astro.props;
         <meta name="generator" content={Astro.generator} />
         <title>iamrobin</title>
         <ClientRouter />
+        <!-- Privacy-friendly analytics by Plausible -->
+        <script async src="https://plausible.io/js/pa-tf4WN8_9YDKt6QGrGPw7z.js"
+        ></script>
+        <script is:inline>
+            ((window.plausible =
+                window.plausible ||
+                function () {
+                    (plausible.q = plausible.q || []).push(arguments);
+                }),
+                (plausible.init =
+                    plausible.init ||
+                    function (i) {
+                        plausible.o = i || {};
+                    }));
+            plausible.init();
+        </script>
+
         <script is:inline>
             // Mark that JS is enabled (for graceful degradation)
-            document.documentElement.classList.add('js');
+            document.documentElement.classList.add("js");
 
             // Apply theme immediately to prevent flash on initial load
-            (function() {
+            (function () {
                 const theme = localStorage.getItem("theme");
                 if (theme === "dark") {
                     document.documentElement.dataset.theme = theme;
