@@ -41,7 +41,7 @@ export async function getStaticPaths() {
         // Sort notes by created date for consistent ordering
         const sortedNotes = [...notes].sort(
             (a, b) =>
-                new Date(b.created).getTime() - new Date(a.created).getTime()
+                new Date(b.created).getTime() - new Date(a.created).getTime(),
         );
 
         for (let i = 0; i < sortedNotes.length; i++) {
@@ -55,8 +55,21 @@ export async function getStaticPaths() {
                 (_match: string, id: string, content: string) => {
                     footnotes.push({ id, content });
                     return "";
-                }
+                },
             );
+
+            // Remove indentation from HTML blocks to prevent them from being treated as code blocks
+            // This handles both <div> and other HTML elements that might be indented in Obsidian notes
+            contentWithoutFootnotes = contentWithoutFootnotes.replace(
+                /^[ \t]+(<[^>]+>)/gm,
+                "$1",
+            );
+
+            // Configure marked to handle HTML properly
+            marked.setOptions({
+                gfm: true, // GitHub Flavored Markdown
+                breaks: false, // Don't convert \n to <br>
+            });
 
             // Parse markdown content to HTML
             const htmlContent = await marked.parse(contentWithoutFootnotes);
@@ -102,7 +115,8 @@ const formatDate = (dateString: string) => {
 };
 
 // Only show edited if it exists and differs from created
-const showEdited = note.edited && formatDate(note.created) !== formatDate(note.edited);
+const showEdited =
+    note.edited && formatDate(note.created) !== formatDate(note.edited);
 ---
 
 <Layout hasHeader={false}>
@@ -123,8 +137,12 @@ const showEdited = note.edited && formatDate(note.created) !== formatDate(note.e
     <article
         transition:name="garden-card"
         class="effect relative w-full max-w-5xl my-12 z-30 mx-auto"
-        data-prev-note={previousNote ? `/garden/${note.thema.toLowerCase()}/${previousNote.slug}` : undefined}
-        data-next-note={nextNote ? `/garden/${note.thema.toLowerCase()}/${nextNote.slug}` : undefined}
+        data-prev-note={previousNote
+            ? `/garden/${note.thema.toLowerCase()}/${previousNote.slug}`
+            : undefined}
+        data-next-note={nextNote
+            ? `/garden/${note.thema.toLowerCase()}/${nextNote.slug}`
+            : undefined}
     >
         <!-- Close button -->
         <a
@@ -166,7 +184,7 @@ const showEdited = note.edited && formatDate(note.created) !== formatDate(note.e
                     <span
                         class:list={[
                             "flex flex-col items-center gap-2 border-r border-black/60 p-3 md:flex-row",
-                            showEdited ? "w-1/3" : "w-1/2"
+                            showEdited ? "w-1/3" : "w-1/2",
                         ]}
                     >
                         <span>Created:</span>
@@ -177,23 +195,23 @@ const showEdited = note.edited && formatDate(note.created) !== formatDate(note.e
                             {formatDate(note.created)}
                         </span>
                     </span>
-                    {showEdited && (
-                        <span
-                            class="flex w-1/3 flex-col items-center gap-2 border-r border-black/60 p-3 md:flex-row"
-                        >
-                            <span>Edited:</span>
-                            <span
-                                class="font-decorative text-[20px] sm:text-[24px]"
-                                style="filter: url(#distort-xl);"
-                            >
-                                {formatDate(note.edited)}
+                    {
+                        showEdited && (
+                            <span class="flex w-1/3 flex-col items-center gap-2 border-r border-black/60 p-3 md:flex-row">
+                                <span>Edited:</span>
+                                <span
+                                    class="font-decorative text-[20px] sm:text-[24px]"
+                                    style="filter: url(#distort-xl);"
+                                >
+                                    {formatDate(note.edited)}
+                                </span>
                             </span>
-                        </span>
-                    )}
+                        )
+                    }
                     <div
                         class:list={[
                             "flex flex-col items-center gap-2 p-3 md:flex-row",
-                            showEdited ? "w-1/3" : "w-1/2"
+                            showEdited ? "w-1/3" : "w-1/2",
                         ]}
                     >
                         <span>Topic:</span>
@@ -460,7 +478,7 @@ const showEdited = note.edited && formatDate(note.created) !== formatDate(note.e
         paragraphs?.forEach((p) => {
             const images = p.querySelectorAll("img");
             const elementNodes = Array.from(p.childNodes).filter(
-                (node) => node.nodeType === Node.ELEMENT_NODE
+                (node) => node.nodeType === Node.ELEMENT_NODE,
             );
             if (images.length > 0 && images.length === elementNodes.length) {
                 p.classList.add("image-gallery");
@@ -476,11 +494,16 @@ const showEdited = note.edited && formatDate(note.created) !== formatDate(note.e
     // Keyboard navigation for prev/next notes
     function handleKeyboardNavigation(e: KeyboardEvent) {
         // Don't trigger if user is typing in an input
-        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        if (
+            e.target instanceof HTMLInputElement ||
+            e.target instanceof HTMLTextAreaElement
+        ) {
             return;
         }
 
-        const article = document.querySelector("article[data-prev-note], article[data-next-note]");
+        const article = document.querySelector(
+            "article[data-prev-note], article[data-next-note]",
+        );
         if (!article) return;
 
         const prevUrl = article.getAttribute("data-prev-note");
