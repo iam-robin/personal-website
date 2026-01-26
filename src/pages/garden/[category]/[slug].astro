@@ -134,9 +134,16 @@ const showEdited =
     <div transition:name="garden-backdrop" class="fixed inset-0 bg-surface">
     </div>
 
+    <a
+        href="/garden"
+        transition:name="garden-close-button"
+        class="fixed top-4 right-4 z-50 rounded-full h-12 w-12 bg-black/10 flex-center cursor-pointer hover:bg-black/20 transition-colors no-underline"
+    >
+        <Icon name="ph:x-bold" class="text-black/70" size={24} />
+    </a>
     <article
         transition:name="garden-card"
-        class="effect relative w-full max-w-5xl my-12 z-30 mx-auto"
+        class="effect relative w-full max-w-5xl lg:my-12 z-30 mx-auto"
         data-prev-note={previousNote
             ? `/garden/${note.thema.toLowerCase()}/${previousNote.slug}`
             : undefined}
@@ -144,14 +151,6 @@ const showEdited =
             ? `/garden/${note.thema.toLowerCase()}/${nextNote.slug}`
             : undefined}
     >
-        <!-- Close button -->
-        <a
-            href="/garden"
-            class="absolute top-4 right-4 z-50 rounded-full h-12 w-12 bg-black/10 flex-center cursor-pointer hover:bg-black/20 transition-colors"
-        >
-            <Icon name="ph:x-bold" class="text-black/70" size={24} />
-        </a>
-
         <!-- Main card with background color -->
         <div
             class="relative w-full p-2 md:p-4 text-black"
@@ -517,4 +516,30 @@ const showEdited =
     }
 
     document.addEventListener("keydown", handleKeyboardNavigation);
+
+    // Calculate precise slide distance based on element position
+    document.addEventListener("astro:before-preparation", (e) => {
+        const isNavigatingToGarden =
+            e.newDocument?.URL.includes("/garden") &&
+            !e.newDocument?.URL.match(/\/garden\/[^/]+\/[^/]+$/);
+
+        if (isNavigatingToGarden) {
+            const article = document.querySelector(
+                'article[transition\\:name="garden-card"]',
+            );
+            if (article) {
+                const rect = article.getBoundingClientRect();
+                // Calculate distance to slide element's top edge below viewport bottom
+                // rect.top can be negative if element is scrolled above viewport
+                // window.innerHeight is the viewport height (bottom edge position)
+                // Translation needed: viewport bottom - current top position
+                const slideDistance = window.innerHeight - rect.top;
+
+                document.documentElement.style.setProperty(
+                    "--slide-distance",
+                    `${slideDistance}px`,
+                );
+            }
+        }
+    });
 </script>

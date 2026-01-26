@@ -37,9 +37,9 @@ if (notesData) {
     }
 }
 
-// Sort notes by edited date (most recent first)
+// Sort notes by created date (most recent first)
 allNotes.sort(
-    (a, b) => new Date(b.edited).getTime() - new Date(a.edited).getTime(),
+    (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime(),
 );
 ---
 

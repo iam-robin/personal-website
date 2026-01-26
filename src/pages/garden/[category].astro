@@ -22,10 +22,10 @@ export async function getStaticPaths() {
 
     return categories.map((category) => {
         const categoryNotes = (notesData[category] as Note[]) || [];
-        // Sort notes by edited date (most recent first)
+        // Sort notes by created date (most recent first)
         const sortedNotes = [...categoryNotes].sort(
             (a, b) =>
-                new Date(b.edited).getTime() - new Date(a.edited).getTime(),
+                new Date(b.created).getTime() - new Date(a.created).getTime(),
         );
 
         return {

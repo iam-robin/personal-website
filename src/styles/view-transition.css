@@ -11,11 +11,8 @@
 }
 
 @keyframes slide-down {
-    from {
-        transform: translateY(0);
-    }
     to {
-        transform: translateY(100vh);
+        transform: translateY(var(--slide-distance, 200vh));
     }
 }
 
@@ -89,4 +86,15 @@
 /* Backward: old backdrop fades out and stays hidden */
 ::view-transition-old(garden-backdrop) {
     animation: fade-out 0.6s ease-out 0.4s forwards;
+}
+
+/* ===== GARDEN CLOSE BUTTON ===== */
+/* Forward: new close button fades in */
+::view-transition-new(garden-close-button) {
+    animation: fade-in 0.6s ease-in 0.4s both;
+}
+
+/* Backward: old close button fades out */
+::view-transition-old(garden-close-button) {
+    animation: fade-out 0.3s ease-out forwards;
 }
