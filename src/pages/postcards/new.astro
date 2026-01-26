@@ -46,11 +46,11 @@ if (Astro.request.method === "POST") {
 
         // Select random colors
         const randomPenColorIndex = Math.floor(
-            Math.random() * penColors.length
+            Math.random() * penColors.length,
         );
         const penColor = penColors[randomPenColorIndex];
         const randomPaperColorIndex = Math.floor(
-            Math.random() * paperColors.length
+            Math.random() * paperColors.length,
         );
         const paperColor = paperColors[randomPaperColorIndex];
 
@@ -268,7 +268,7 @@ if (Astro.request.method === "POST") {
         P5SVGExtension(p5);
     } else {
         console.error(
-            "P5SVGExtension is not a function. SVG rendering might fail."
+            "P5SVGExtension is not a function. SVG rendering might fail.",
         );
     }
 
@@ -365,7 +365,7 @@ if (Astro.request.method === "POST") {
                         size,
                         p.PI,
                         p.TWO_PI,
-                        p.PIE
+                        p.PIE,
                     );
                 },
                 (x: number, y: number, size: number) => {
@@ -376,7 +376,7 @@ if (Astro.request.method === "POST") {
                         size,
                         0,
                         p.PI,
-                        p.PIE
+                        p.PIE,
                     );
                 },
                 (x: number, y: number, size: number) => {
@@ -387,7 +387,7 @@ if (Astro.request.method === "POST") {
                         size,
                         p.HALF_PI,
                         p.PI + p.HALF_PI,
-                        p.PIE
+                        p.PIE,
                     );
                 },
                 (x: number, y: number, size: number) => {
@@ -398,7 +398,7 @@ if (Astro.request.method === "POST") {
                         size,
                         p.PI + p.HALF_PI,
                         p.HALF_PI,
-                        p.PIE
+                        p.PIE,
                     );
                 },
                 // Quarter Circles
@@ -410,7 +410,7 @@ if (Astro.request.method === "POST") {
                         size * 2,
                         p.PI,
                         p.PI + p.HALF_PI,
-                        p.PIE
+                        p.PIE,
                     );
                 },
                 (x: number, y: number, size: number) => {
@@ -421,7 +421,7 @@ if (Astro.request.method === "POST") {
                         size * 2,
                         p.PI + p.HALF_PI,
                         p.TWO_PI,
-                        p.PIE
+                        p.PIE,
                     );
                 },
                 (x: number, y: number, size: number) => {
@@ -432,7 +432,7 @@ if (Astro.request.method === "POST") {
                         size * 2,
                         p.HALF_PI,
                         p.PI,
-                        p.PIE
+                        p.PIE,
                     );
                 },
                 (x: number, y: number, size: number) => {
@@ -472,7 +472,7 @@ if (Astro.request.method === "POST") {
                         x + size,
                         y + size,
                         centerX,
-                        centerY
+                        centerY,
                     );
 
                     // Bottom triangle
@@ -483,7 +483,7 @@ if (Astro.request.method === "POST") {
                         x,
                         y + size,
                         centerX,
-                        centerY
+                        centerY,
                     );
 
                     // Left triangle
@@ -511,7 +511,7 @@ if (Astro.request.method === "POST") {
         // Function to update the hidden SVG input field
         const updateStampSvgInput = () => {
             const hiddenInput = document.getElementById(
-                "stamp-svg"
+                "stamp-svg",
             ) as HTMLInputElement | null;
             if (!hiddenInput) {
                 console.error("Hidden input #stamp-svg not found!");
@@ -543,7 +543,7 @@ if (Astro.request.method === "POST") {
             p5canvas = p.createCanvas(
                 CANVAS_WIDTH,
                 CANVAS_HEIGHT,
-                renderer || undefined
+                renderer || undefined,
             );
 
             const parentDiv = document.getElementById("stamp-preview");
@@ -607,7 +607,7 @@ if (Astro.request.method === "POST") {
                 (p5Instance as any).regenerate();
             } else {
                 console.error(
-                    "p5 instance or regenerate function not available."
+                    "p5 instance or regenerate function not available.",
                 );
             }
         });

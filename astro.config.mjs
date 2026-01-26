@@ -4,7 +4,7 @@ import icon from "astro-icon";
 import db from "@astrojs/db";
 import tailwindcss from "@tailwindcss/vite";
 
-import netlify from "@astrojs/netlify";
+import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,5 +14,5 @@ export default defineConfig({
         plugins: [tailwindcss()],
     },
 
-    adapter: netlify(),
+    adapter: vercel(),
 });
