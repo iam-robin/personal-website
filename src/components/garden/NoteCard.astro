@@ -27,7 +27,8 @@ const shadowClass = randomRotation >= 0 ? "hide-after" : "hide-before";
 
 // Random vertical alignment
 const alignOptions = ["self-start", "self-center", "self-end"];
-const randomAlign = alignOptions[Math.floor(Math.random() * alignOptions.length)];
+const randomAlign =
+    alignOptions[Math.floor(Math.random() * alignOptions.length)];
 
 // Random styling for description text
 const randomTypeRotation = Math.floor(Math.random() * 4 - 2);
@@ -50,10 +51,10 @@ const editedDay = note.edited ? formatDate(note.edited) : null;
 <div
     class:list={["group block min-h-[280px]", randomAlign, classes]}
     style={transformStyles}
-    data-rotation={randomRotation}
 >
     <div
         class={`corner-shadow-effect hover:before:opacity-0 before:transition-all before:duration-300 ${shadowClass}`}
+        data-rotation={randomRotation}
     >
         <a
             href={`/garden/${note.thema.toLowerCase()}/${note.slug}`}
