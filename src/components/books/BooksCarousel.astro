@@ -1,9 +1,8 @@
 ---
 import Carousel from "@components/carousel/Carousel.astro";
 import CarouselItem from "@components/carousel/CarouselItem.astro";
-import BookCarouselItem from "./BookCarouselItem.astro";
 import type { Book } from "@api/github-books";
-import BookCarouselItemNew from "./BookCarouselItemNew.astro";
+import BookCarouselItem from "./BookCarouselItem.astro";
 
 interface Props {
     title: string;
@@ -30,7 +29,7 @@ const allBooks = [...currentlyReadingBooks, ...books];
                     mediumSpan={mediumSpan}
                     largeSpan={largeSpan}
                 >
-                    <BookCarouselItemNew
+                    <BookCarouselItem
                         book={book}
                         isCurrentlyReading={
                             index < currentlyReadingBooks.length

@@ -30,9 +30,7 @@ const sortedTags = [...tags].sort((a, b) => b.count - a.count);
     <span slot="title-suffix">
         {
             selectedTag && (
-                <span class="inline group-open:hidden">
-                    {" "}/ ({selectedTag})
-                </span>
+                <span class="inline group-open:hidden"> / ({selectedTag})</span>
             )
         }
     </span>
@@ -42,7 +40,6 @@ const sortedTags = [...tags].sort((a, b) => b.count - a.count);
             title="all"
             count={total}
             isActive={!selectedTag}
-            variant="mono"
         />
         {
             sortedTags.map((tag) => (
@@ -53,7 +50,6 @@ const sortedTags = [...tags].sort((a, b) => b.count - a.count);
                     isActive={selectedTag === tag.name}
                     indicator={tag.flag}
                     indicatorType="text"
-                    variant="mono"
                 />
             ))
         }

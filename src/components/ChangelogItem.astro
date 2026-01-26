@@ -17,7 +17,7 @@ const { date, version, title } = Astro.props as Props;
     class="mt-2 mb-3 lg:mb-0"
 >
     <span
-        class={`rounded-full px-3 py-1 font-mono text-xs ${
+        class={`rounded-full px-3 py-1 font-mono text-sm ${
             version.endsWith("0.0")
                 ? "text-lilac-dark bg-lilac-light"
                 : "text-neutral-500 bg-neutral-100"
