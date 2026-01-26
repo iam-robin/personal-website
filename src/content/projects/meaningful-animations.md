@@ -6,6 +6,7 @@ thumbnailWidth: "112px"
 tags: ["Bachelor Thesis", "Motion Design"]
 year: "2017"
 bgColor: "#5961eb"
+externalUrl: "https://iamrobinspielmann.notion.site/Meaningful-animations-e29647c876e44651b0065f82a25ff8b1"
 ---
 
 »Meaningful Animations - Animations in microinteractions with regard to the impact on the user experience of mobile applications« - As part of my bachelor thesis, I developed a criteria catalog for Meaningful Animations, which was then evaluated in a user test using prototypes.

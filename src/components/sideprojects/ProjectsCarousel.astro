@@ -34,6 +34,7 @@ const projects = projectsCollection
         bgColor: project.data.bgColor,
         bgColorDark: project.data.bgColorDark,
         externalUrl: project.data.externalUrl,
+        draft: project.data.draft,
     }));
 ---
 
@@ -58,6 +59,7 @@ const projects = projectsCollection
                     thumbnailWidth={project.thumbnailWidth}
                     externalUrl={project.externalUrl}
                     tags={project.tags}
+                    draft={project.draft}
                 />
             </CarouselItem>
         ))

@@ -6,4 +6,5 @@ thumbnailWidth: "112px"
 tags: ["Browser Extension", "Midjourney"]
 year: "2023"
 bgColor: "#64b89d"
+draft: true
 ---

@@ -12,6 +12,7 @@ const projectCollection = defineCollection({
         bgColor: z.string().optional(),
         bgColorDark: z.string().optional(),
         externalUrl: z.string().optional(),
+        draft: z.boolean().optional().default(false),
     }),
 });
 

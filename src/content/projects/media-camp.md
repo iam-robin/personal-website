@@ -5,6 +5,7 @@ thumbnail: "/projects/mediacamp.svg"
 tags: ["Barcamp", "Branding"]
 year: "2015-2017"
 bgColor: "#8F7FD2"
+externalUrl: "https://iamrobinspielmann.notion.site/media-camp-6192f2c280524260848b10b3e040f048"
 ---
 
 Between 2015 and 2017, together with three other students, I took over the initialization and management of the media.camp - a barcamp by students for students at Furtwangen University. Our tasks included the acquisition of supporters and speakers, the marketing, the public appearance and the implementation of the barcamp.

@@ -12,6 +12,7 @@ interface Props {
     thumbnailWidth?: string;
     externalUrl?: string;
     tags?: string[];
+    draft?: boolean;
 }
 
 const {
@@ -25,65 +26,115 @@ const {
     thumbnailWidth,
     externalUrl,
     tags,
+    draft = false,
 } = Astro.props;
 
 const href = externalUrl || `/projects/${slug}`;
 const isExternal = !!externalUrl;
+
+const cardClasses = `project-card group h-full relative aspect-4/5 rounded-2xl p-3 flex flex-col overflow-hidden ${draft ? 'cursor-default' : 'hover-lift'}`;
 ---
 
-<a
-    href={href}
-    target={isExternal ? "_blank" : undefined}
-    rel={isExternal ? "noopener noreferrer" : undefined}
-    class="project-card group hover-lift h-full relative aspect-4/5 rounded-2xl p-3 flex flex-col overflow-hidden"
-    style={`--bg-color: ${bgColor}; --bg-color-dark: ${bgColorDark || bgColor};`}
->
-    <div class="flex justify-between items-center shrink-0">
-        <span class="rounded-full bg-neutral-100/10 px-3 py-1 text-white"
-            >{year}</span
-        >
-        <span class="rounded-full bg-neutral-100/10 p-2 text-white">
+{draft ? (
+    <div
+        class={cardClasses}
+        style={`--bg-color: ${bgColor}; --bg-color-dark: ${bgColorDark || bgColor};`}
+    >
+        <div class="flex justify-between items-center shrink-0">
+            <span class="rounded-full bg-neutral-100/10 px-3 py-1 text-white"
+                >{year}</span
+            >
+            <span class="rounded-full bg-neutral-100/10 px-3 py-1 text-white text-sm">
+                Coming soon
+            </span>
+        </div>
+        <div class="thumbnail-container h-full flex-center">
             {
-                isExternal ? (
-                    <Icon name="ph:arrow-up-right-bold" class="text-white" />
+                thumbnail ? (
+                    <img
+                        src={thumbnail}
+                        alt={title}
+                        class="h-full object-contain"
+                        style={
+                            thumbnailWidth
+                                ? `width: ${thumbnailWidth}`
+                                : "width: 30%"
+                        }
+                    />
                 ) : (
-                    <Icon name="ph:arrows-out-bold" class="text-white" />
+                    <span class="text-neutral-500">–</span>
                 )
             }
-        </span>
+        </div>
+        <div class="shrink-0 text-white">
+            <h3>{title}</h3>
+            {tags && tags.length > 0 && (
+                <div class="flex flex-wrap gap-1 mt-2">
+                    {tags.map((tag) => (
+                        <span class="text-xs bg-neutral-100/10 px-2 py-0.5 rounded-full opacity-70">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+            )}
+            <p class="opacity-70 mt-2">{description}</p>
+        </div>
     </div>
-    <div class="thumbnail-container h-full flex-center">
-        {
-            thumbnail ? (
-                <img
-                    src={thumbnail}
-                    alt={title}
-                    class="h-full object-contain"
-                    style={
-                        thumbnailWidth
-                            ? `width: ${thumbnailWidth}`
-                            : "width: 30%"
-                    }
-                />
-            ) : (
-                <span class="text-neutral-500">–</span>
-            )
-        }
-    </div>
-    <div class="shrink-0 text-white">
-        <h3>{title}</h3>
-        {tags && tags.length > 0 && (
-            <div class="flex flex-wrap gap-1 mt-2">
-                {tags.map((tag) => (
-                    <span class="text-xs bg-neutral-100/10 px-2 py-0.5 rounded-full opacity-70">
-                        {tag}
-                    </span>
-                ))}
-            </div>
-        )}
-        <p class="opacity-70 mt-2">{description}</p>
-    </div>
-</a>
+) : (
+    <a
+        href={href}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        class={cardClasses}
+        style={`--bg-color: ${bgColor}; --bg-color-dark: ${bgColorDark || bgColor};`}
+    >
+        <div class="flex justify-between items-center shrink-0">
+            <span class="rounded-full bg-neutral-100/10 px-3 py-1 text-white"
+                >{year}</span
+            >
+            <span class="rounded-full bg-neutral-100/10 p-2 text-white">
+                {
+                    isExternal ? (
+                        <Icon name="ph:arrow-up-right-bold" class="text-white" />
+                    ) : (
+                        <Icon name="ph:arrows-out-bold" class="text-white" />
+                    )
+                }
+            </span>
+        </div>
+        <div class="thumbnail-container h-full flex-center">
+            {
+                thumbnail ? (
+                    <img
+                        src={thumbnail}
+                        alt={title}
+                        class="h-full object-contain"
+                        style={
+                            thumbnailWidth
+                                ? `width: ${thumbnailWidth}`
+                                : "width: 30%"
+                        }
+                    />
+                ) : (
+                    <span class="text-neutral-500">–</span>
+                )
+            }
+        </div>
+        <div class="shrink-0 text-white">
+            <h3>{title}</h3>
+            {tags && tags.length > 0 && (
+                <div class="flex flex-wrap gap-1 mt-2">
+                    {tags.map((tag) => (
+                        <span class="text-xs bg-neutral-100/10 px-2 py-0.5 rounded-full opacity-70">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+            )}
+            <p class="opacity-70 mt-2">{description}</p>
+        </div>
+    </a>
+)}
 
 <style>
     .project-card {
