@@ -11,7 +11,7 @@ import Container from "./Container.astro";
 
 <div
     data-hero
-    class="group -mt-24 pt-40 md:pt-64 md:pb-32 flex items-center bg-surface"
+    class="hero-animate -mt-24 pt-40 md:pt-64 md:pb-32 flex items-center bg-surface"
 >
     <Container>
         <Grid class="mb-16!">
@@ -19,34 +19,30 @@ import Container from "./Container.astro";
                 <h1 class="text-2xl md:text-3xl leading-tight font-bold">
                     Hey
                     <SmileySticker
-                        class="hero-icon inline-block align-[-0.25em] h-auto w-12 md:w-0 md:group-data-hero-ready:w-[72px] -mr-1 -mt-5 overflow-hidden"
+                        class="hero-icon hero-icon-1 inline-block align-[-0.25em] h-auto w-12 md:w-[72px] -mr-1 -mt-5 overflow-hidden"
                         iconColor="--color-sticker-yellow-dark"
                         bgColor="--color-sticker-yellow"
-                        data-target-width="72"
                     />
                     I am Robin Spielmann.
                     <br class="hidden sm:block" />
                     A Design Engineer who enjoys working at the intersection of
                     <br class="hidden sm:block" />
                     <CodeSticker
-                        class="hero-icon inline-block align-[-0.25em] h-auto w-12 md:w-0 md:group-data-hero-ready:w-[72px] -mr-1 -mt-5 overflow-hidden"
+                        class="hero-icon hero-icon-2 inline-block align-[-0.25em] h-auto w-12 md:w-[72px] -mr-1 -mt-5 overflow-hidden"
                         iconColor="--color-sticker-blue-dark"
                         bgColor="--color-sticker-blue"
-                        data-target-width="72"
                     />
                     code,
                     <DesignSticker
-                        class="hero-icon inline-block align-[-0.25em] h-auto w-10 md:w-0 md:group-data-hero-ready:w-15 -mr-1 -mt-5 rotate-12 translate-y-1 overflow-hidden"
+                        class="hero-icon hero-icon-3 inline-block align-[-0.25em] h-auto w-10 md:w-15 -mr-1 -mt-5 rotate-12 translate-y-1 overflow-hidden"
                         iconColor="--color-sticker-red-dark"
                         bgColor="--color-sticker-red"
-                        data-target-width="60"
                     />
                     design and
                     <ArtSticker
-                        class="hero-icon inline-block align-[-0.25em] h-auto w-12 md:w-0 md:group-data-hero-ready:w-[72px] -mr-1 -mt-5 translate-y-0.5 md:translate-y-0 overflow-hidden"
+                        class="hero-icon hero-icon-4 inline-block align-[-0.25em] h-auto w-12 md:w-[72px] -mr-1 -mt-5 translate-y-0.5 md:translate-y-0 overflow-hidden"
                         iconColor="--color-sticker-lilac-dark"
                         bgColor="--color-sticker-lilac"
-                        data-target-width="72"
                     />
                     art.
                 </h1>
@@ -55,7 +51,7 @@ import Container from "./Container.astro";
                 colStart={{ small: 1, medium: 1, large: 5 }}
                 colEnd={{ small: 13, medium: 13, large: 12 }}
             >
-                <p data-hero-subtitle class="text-base font-mono mt-6 md:mt-12">
+                <p data-hero-subtitle class="hero-subtitle text-base font-mono mt-6 md:mt-12">
                     This personal website is my own little space on the internet
                     where I want to share my work, interests and passions with
                     others, without having to please the algorithms of social
@@ -68,121 +64,112 @@ import Container from "./Container.astro";
     </Container>
 </div>
 
-<script>
-    import { animate } from "motion";
-
-    // Module-level flag - persists across view transitions, resets on full page load
-    let hasAnimated = false;
-
-    function animateHero() {
-        const hero = document.querySelector("[data-hero]");
-        if (!hero) return;
-
-        const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-
-        // Only animate on desktop
-        if (!isDesktop) {
-            hero.setAttribute("data-hero-ready", "");
-            return;
-        }
-
-        // If already animated this session, just show hero immediately
-        if (hasAnimated) {
-            hero.setAttribute("data-hero-ready", "");
-            return;
-        }
-
-        hasAnimated = true;
-
-        // Reset hero opacity and fade in
-        (hero as HTMLElement).style.opacity = "0";
-        animate(hero, { opacity: [0, 1] }, { duration: 1 }).finished.then(
-            () => {
-                (hero as HTMLElement).style.removeProperty("opacity");
-            },
-        );
-
-        const icons = hero.querySelectorAll(".hero-icon");
-
-        // Animate icons
-        if (icons.length > 0) {
-            // Set initial state for animation
-            icons.forEach((icon) => {
-                (icon as HTMLElement).style.opacity = "0";
-                (icon as HTMLElement).style.width = "0px";
-                (icon as HTMLElement).style.marginRight = "-12px";
-                (icon as HTMLElement).style.transform = "translateY(25px)";
-            });
-
-            // Mark hero ready so CSS takes over when inline styles are removed
-            hero.setAttribute("data-hero-ready", "");
-
-            // Animate each icon with stagger, clear styles when done
-            icons.forEach((icon, index) => {
-                const targetWidth =
-                    (icon as HTMLElement).dataset.targetWidth || "72";
-                const delay = 0.25 + index * 0.25;
-                animate(
-                    icon,
-                    {
-                        opacity: [0, 1],
-                        y: [25, 0],
-                        width: ["0px", `${targetWidth}px`],
-                        marginRight: ["-12px", "-4px"],
-                    },
-                    {
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 12,
-                        mass: 1.5,
-                        delay,
-                    },
-                ).finished.then(() => {
-                    // Clear inline styles so CSS can control responsive behavior
-                    (icon as HTMLElement).style.removeProperty("opacity");
-                    (icon as HTMLElement).style.removeProperty("width");
-                    (icon as HTMLElement).style.removeProperty("margin-right");
-                    (icon as HTMLElement).style.removeProperty("transform");
-                });
-            });
-        }
-
-        // Animate subtitle
-        const subtitle = hero.querySelector("[data-hero-subtitle]");
-        if (subtitle) {
-            (subtitle as HTMLElement).style.opacity = "0";
-            animate(
-                subtitle,
-                { opacity: [0, 1], y: [20, 0] },
-                {
-                    duration: 0.6,
-                    delay: 1.5,
-                    ease: [0.39, 0.24, 0.3, 1],
-                },
-            ).finished.then(() => {
-                // Clear inline styles after animation
-                (subtitle as HTMLElement).style.removeProperty("opacity");
-                (subtitle as HTMLElement).style.removeProperty("transform");
-            });
-        }
-    }
-
-    // Run on initial page load and view transitions (animation only plays once per session)
-    document.addEventListener("astro:page-load", animateHero);
-</script>
-
 <style is:global>
-    /* Hide entire hero on desktop with JS until animation is ready, preventing flicker */
-    @media (min-width: 768px) {
-        html.js [data-hero]:not([data-hero-ready]) {
+    /* Hero container fade-in */
+    @keyframes heroFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* Icon entrance animation */
+    @keyframes iconEntrance72 {
+        from {
             opacity: 0;
+            width: 0;
+            margin-right: -12px;
+            transform: translateY(25px);
+        }
+        to {
+            opacity: 1;
+            width: 72px;
+            margin-right: -4px;
+            transform: translateY(0);
         }
     }
 
-    /* When JS is disabled, show icons at proper width on desktop */
+    @keyframes iconEntrance60 {
+        from {
+            opacity: 0;
+            width: 0;
+            margin-right: -12px;
+            transform: translateY(25px) rotate(12deg);
+        }
+        to {
+            opacity: 1;
+            width: 60px;
+            margin-right: -4px;
+            transform: translateY(4px) rotate(12deg);
+        }
+    }
+
+    /* Subtitle fade-in */
+    @keyframes subtitleFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Apply animations only on desktop */
     @media (min-width: 768px) {
-        html:not(.js) .hero-icon {
-            width: auto !important;
+        .hero-animate {
+            animation: heroFadeIn 1s ease-out forwards;
+        }
+
+        /* Icons start hidden and animate in */
+        /* Using 'both' fill-mode keeps first keyframe styles during delay */
+        .hero-icon {
+            opacity: 0;
+            width: 0;
+            margin-right: -12px;
+            animation-fill-mode: both;
+            animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation-duration: 0.6s;
+        }
+
+        .hero-icon-1 {
+            animation-name: iconEntrance72;
+            animation-delay: 0.25s;
+        }
+
+        .hero-icon-2 {
+            animation-name: iconEntrance72;
+            animation-delay: 0.5s;
+        }
+
+        .hero-icon-3 {
+            animation-name: iconEntrance60;
+            animation-delay: 0.75s;
+        }
+
+        .hero-icon-4 {
+            animation-name: iconEntrance72;
+            animation-delay: 1s;
+        }
+
+        /* Subtitle animation */
+        .hero-subtitle {
+            opacity: 0;
+            animation: subtitleFadeIn 0.6s ease-out 1.5s both;
+        }
+    }
+
+    /* On mobile, no animations - show everything immediately */
+    @media (max-width: 767px) {
+        .hero-animate {
+            opacity: 1;
+        }
+
+        .hero-icon {
+            opacity: 1;
+        }
+
+        .hero-subtitle {
+            opacity: 1;
         }
     }
 </style>

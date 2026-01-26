@@ -75,8 +75,9 @@ const navigation = [
 
 <header
     id="site-header"
+    data-index-page={isIndexPage ? "true" : undefined}
     class:list={[
-        "sticky top-0 z-20 mt-4 md:mt-8 border-border opacity-0 -translate-y-full",
+        "sticky top-0 z-20 mt-4 md:mt-8 border-border",
         { "bg-surface": isIndexPage },
     ]}
 >
@@ -120,8 +121,6 @@ const navigation = [
 <MobileMenu navigation={navigation} />
 
 <script>
-    import { animate } from "motion";
-
     // Module-level flag - persists across view transitions, resets on full page load
     let hasAnimated = false;
 
@@ -136,36 +135,17 @@ const navigation = [
         // Use the margin-top value (mt-8 = 32px) as the sticky threshold
         const stickyThreshold = 32;
         const isSticky = window.scrollY >= stickyThreshold;
+        const isIndexPage = header.dataset.indexPage === "true";
+        const isDesktop = window.matchMedia("(min-width: 768px)").matches;
 
-        if (hasAnimated) {
-            // Already animated this session - just show header immediately
-            header.classList.remove("opacity-0", "-translate-y-full");
-        } else {
+        if (!hasAnimated && isIndexPage && !isSticky && isDesktop) {
+            // First visit to index page, not scrolled, desktop - trigger CSS animation
             hasAnimated = true;
-            const isIndexPage = window.location.pathname === "/";
-            const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-
-            if (isIndexPage && !isSticky && isDesktop) {
-                // Index page, not scrolled, desktop - play delayed animation
-                header.classList.remove("opacity-0", "-translate-y-full");
-                header.style.opacity = "0";
-                header.style.transform = "translateY(-100%)";
-
-                animate(
-                    header,
-                    {
-                        opacity: [0, 1],
-                        transform: ["translateY(-100%)", "translateY(0%)"],
-                    },
-                    { duration: 0.5, delay: 1.5, ease: [0.39, 0.24, 0.3, 1] },
-                ).then(() => {
-                    header.style.opacity = "";
-                    header.style.transform = "";
-                });
-            } else {
-                // Other pages, scrolled, or mobile - show immediately
-                header.classList.remove("opacity-0", "-translate-y-full");
-            }
+            header.classList.add("header-animate");
+        } else {
+            // Already animated, other pages, scrolled, or mobile - show immediately
+            hasAnimated = true;
+            header.classList.add("header-visible");
         }
 
         function updateHeaderStyle() {
@@ -201,10 +181,40 @@ const navigation = [
     }
 </script>
 
-<style>
-    /* When JS is disabled, show header immediately (override Tailwind hiding classes) */
+<style is:global>
+    /* Header animation keyframes */
+    @keyframes headerSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Initial state - hidden until JS adds a class */
+    #site-header:not(.header-visible):not(.header-animate) {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+
+    /* Animated entrance (index page, desktop, first visit) */
+    /* Using 'both' fill-mode keeps first keyframe styles during delay */
+    #site-header.header-animate {
+        animation: headerSlideIn 0.5s cubic-bezier(0.39, 0.24, 0.3, 1) 1.5s both;
+    }
+
+    /* Immediate visibility (other pages or return visits) */
+    #site-header.header-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* When JS is disabled, show header immediately */
     html:not(.js) #site-header {
         opacity: 1 !important;
-        --tw-translate-y: 0 !important;
+        transform: translateY(0) !important;
     }
 </style>
