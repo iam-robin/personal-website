@@ -131,15 +131,12 @@ const showEdited =
         </defs>
     </svg>
 
-    <div transition:name="garden-backdrop" class="fixed inset-0 bg-surface">
-    </div>
-
     <a
         href="/garden"
         transition:name="garden-close-button"
-        class="fixed top-4 right-4 z-50 rounded-full h-12 w-12 bg-black/10 flex-center cursor-pointer hover:bg-black/20 transition-colors no-underline"
+        class="close-button fixed top-4 right-4 z-50 rounded-full h-12 w-12 flex-center cursor-pointer transition-colors no-underline"
     >
-        <Icon name="ph:x-bold" class="text-black/70" size={24} />
+        <Icon name="ph:x-bold" size={24} />
     </a>
     <article
         transition:name="garden-card"

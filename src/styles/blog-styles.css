@@ -17,7 +17,7 @@ article h3:hover::before,
 article h4:hover::before,
 article h5:hover::before,
 article h6:hover::before {
-    content: '#';
+    content: "#";
     position: absolute;
     left: -1em;
     color: #689bf7;

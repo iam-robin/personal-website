@@ -55,17 +55,6 @@
     animation: slide-down 0.6s ease-in forwards;
 }
 
-/* ===== PROJECT BACKDROP ===== */
-/* Forward: new backdrop fades in */
-::view-transition-new(project-backdrop) {
-    animation: fade-in 0.6s ease-in;
-}
-
-/* Backward: old backdrop fades out and stays hidden */
-::view-transition-old(project-backdrop) {
-    animation: fade-out 0.6s ease-out 0.4s forwards;
-}
-
 /* ===== GARDEN CARD ===== */
 /* Forward: new card slides up from bottom with subtle bounce */
 ::view-transition-new(garden-card) {
@@ -77,15 +66,34 @@
     animation: slide-down 0.6s ease-in forwards;
 }
 
-/* ===== GARDEN BACKDROP ===== */
-/* Forward: new backdrop fades in */
-::view-transition-new(garden-backdrop) {
-    animation: fade-in 0.6s ease-in;
+/* ===== CLOSE BUTTON (shared for project and garden) ===== */
+.close-button {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.7);
 }
 
-/* Backward: old backdrop fades out and stays hidden */
-::view-transition-old(garden-backdrop) {
-    animation: fade-out 0.6s ease-out 0.4s forwards;
+.close-button:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .close-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+[data-theme="dark"] .close-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ===== PROJECT CLOSE BUTTON ===== */
+/* Forward: new close button fades in */
+::view-transition-new(project-close-button) {
+    animation: fade-in 0.6s ease-in 0.4s both;
+}
+
+/* Backward: old close button fades out */
+::view-transition-old(project-close-button) {
+    animation: fade-out 0.3s ease-out forwards;
 }
 
 /* ===== GARDEN CLOSE BUTTON ===== */

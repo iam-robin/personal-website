@@ -23,14 +23,14 @@
 }
 
 .markdown hr:after {
-    content: '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
+    content: "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
     display: block;
     color: rgba(0, 0, 0, 0.5);
     position: absolute;
     margin: 0 32px;
     left: 0;
     right: 0;
-    font-family: 'Fira Mono', monospace;
+    font-family: "Fira Mono", monospace;
     letter-spacing: 0.1em;
     font-size: 1.125rem;
     line-height: 1.5;
@@ -75,7 +75,7 @@
 }
 
 .markdown a::after {
-    content: '↗'; /* Unicode arrow character */
+    content: "↗"; /* Unicode arrow character */
     position: absolute;
     font-style: normal;
     top: 0;
@@ -85,7 +85,7 @@
     color: rgba(0, 0, 0, 0.4); /* Match the color of the link */
 }
 
-.markdown input[type='checkbox'] {
+.markdown input[type="checkbox"] {
     appearance: none;
     width: 1.5em;
     height: 1.5em;
@@ -97,8 +97,8 @@
     top: -0.1em;
 }
 
-.markdown input[type='checkbox']:checked::after {
-    content: '✓';
+.markdown input[type="checkbox"]:checked::after {
+    content: "✓";
     display: block;
     position: absolute;
     top: 0.05em;
@@ -108,20 +108,20 @@
     color: rgba(0, 0, 0, 0.7);
 }
 
-.markdown ul:has(> li > input[type='checkbox']) {
+.markdown ul:has(> li > input[type="checkbox"]) {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-.markdown ul:has(> li > input[type='checkbox']) li {
+.markdown ul:has(> li > input[type="checkbox"]) li {
     display: flex;
     font-size: 0.9em;
     line-height: 1.4em;
     margin-bottom: 16px;
 }
 
-.markdown ul:has(> li > input[type='checkbox']) li input[type='checkbox'] {
+.markdown ul:has(> li > input[type="checkbox"]) li input[type="checkbox"] {
     margin-right: 0.5em;
     flex-shrink: 0;
 }
@@ -169,4 +169,39 @@
     .markdown .columns img {
         max-width: 100%;
     }
+}
+
+/* Project page image overrides */
+.project-content img {
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+    margin: 2rem 0;
+    filter: none;
+    mix-blend-mode: normal;
+}
+
+/* Side-by-side layout */
+.project-content .image-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.project-content .image-row img {
+    margin: 0;
+}
+
+@media (max-width: 640px) {
+    .project-content .image-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Figcaption styling */
+.project-content figcaption {
+    text-align: center;
+    font-size: 0.875rem;
+    opacity: 0.7;
+    margin-top: 0.5rem;
 }
