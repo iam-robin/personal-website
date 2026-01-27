@@ -11,6 +11,10 @@ import Layout from "@layouts/Layout.astro";
 import TagCloud from "@components/TagCloud.astro";
 import Container from "@components/Container.astro";
 import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import { Image } from "astro:assets";
+import robinCoffee from "@assets/illustrations/robin-coffee.png";
+import Grid from "@components/Grid.astro";
+import GridItem from "@components/GridItem.astro";
 
 interface Props {
     selectedCountry?: string;
@@ -85,5 +89,36 @@ const visitedCountries = countryCloudData.map((country) => country.name);
     <PostcardsSection postcards={displayedPostcards} hasDescription={false} />
     <Container class="mt-8 md:mt-24">
         <WorldMapDetail visitedCountries={visitedCountries} />
+    </Container>
+    <Container class="mt-8 md:mt-24">
+        <Grid class="flex items-center">
+            <GridItem
+                colStart={{ small: 1, medium: 1, large: 3 }}
+                colEnd={{ small: 13, medium: 4, large: 6 }}
+                class="justify-center hidden xs:flex"
+            >
+                <Image
+                    src={robinCoffee}
+                    alt="Robin drinking coffee"
+                    width={240}
+                    format="webp"
+                    quality={80}
+                    loading="lazy"
+                    decoding="async"
+                    class="w-30 shrink-0"
+                />
+            </GridItem>
+            <GridItem
+                colStart={{ small: 1, medium: 5, large: 6 }}
+                colEnd={{ small: 13, medium: 13, large: 11 }}
+            >
+                <h2 class="text-lg font-bold mb-2">What is this about?</h2>
+                <p>
+                    It's a quiet way to say hello, and a reminder that there are
+                    people out there reading, visiting, connecting — even if
+                    just for a moment. Feel free to leave a postcard!
+                </p>
+            </GridItem>
+        </Grid>
     </Container>
 </Layout>
