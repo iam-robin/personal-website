@@ -32,7 +32,7 @@ const {
 const href = externalUrl || `/projects/${slug}`;
 const isExternal = !!externalUrl;
 
-const cardClasses = `project-card group h-full relative aspect-4/5 rounded-2xl p-3 flex flex-col overflow-hidden ${draft ? 'cursor-default' : 'hover-lift'}`;
+const cardClasses = `project-card group h-full relative aspect-4/5 rounded-2xl p-3 flex flex-col overflow-hidden ${draft ? 'cursor-not-allowed' : 'hover-lift'}`;
 ---
 
 {draft ? (
