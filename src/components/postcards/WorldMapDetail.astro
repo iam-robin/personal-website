@@ -5,6 +5,8 @@ import WorldMapSvg from "./WorldMapSvg.astro";
 
 const { visitedCountries = [] } = Astro.props;
 
+const TOTAL_COUNTRIES = 195;
+
 const countryFlags = Object.fromEntries(
     COUNTRIES.flatMap((country) => {
         const entries = [[country.name, country.flag]];
@@ -19,7 +21,7 @@ const countryFlags = Object.fromEntries(
 ---
 
 <Collapsible
-    title="From where I received Postcards"
+    title={`From where I received Postcards (${visitedCountries.length}/${TOTAL_COUNTRIES})`}
     class="mb-12"
     contentClass="relative py-12 px-4 -mt-4"
 >
