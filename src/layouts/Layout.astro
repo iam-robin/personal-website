@@ -27,8 +27,8 @@ const fullOgImageUrl = new URL(ogImage, siteUrl).toString();
 const pathSegment = Astro.url.pathname.split("/").filter(Boolean)[0];
 
 // Auto-detect favicon from path if not provided
-const faviconPath = favicon
-    || (pathSegment ? `/favicon-${pathSegment}.svg` : "/favicon.svg");
+const faviconPath =
+    favicon || (pathSegment ? `/favicon-${pathSegment}.svg` : "/favicon.svg");
 const pageTitle = title
     ? `${title} | iamrobin`
     : pathSegment

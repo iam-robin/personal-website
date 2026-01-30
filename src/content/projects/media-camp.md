@@ -1,6 +1,6 @@
 ---
 title: "media.camp"
-description: "Barcamp run by students"
+description: "A barcamp run by students for students"
 thumbnail: "/projects/mediacamp.svg"
 tags: ["Barcamp", "Branding"]
 year: "2015-2017"
