@@ -20,7 +20,14 @@ const {
 
 const siteUrl = Astro.site?.origin || Astro.url.origin;
 const fullOgImageUrl = new URL(ogImage, siteUrl).toString();
-const pageTitle = title ? `${title} | iamrobin` : "iamrobin";
+
+// Get page name from URL path (e.g., "/movies" → "movies")
+const pathSegment = Astro.url.pathname.split("/").filter(Boolean)[0];
+const pageTitle = title
+    ? `${title} | iamrobin`
+    : pathSegment
+      ? `${pathSegment} | iamrobin`
+      : "iamrobin";
 ---
 
 <!doctype html>
