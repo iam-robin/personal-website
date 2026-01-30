@@ -14,11 +14,11 @@ interface Props {
 const {
     hasHeader = true,
     title,
-    description,
+    description = "robins own little space on the internet",
     ogImage = "/opengraph/opengraph.jpg",
 } = Astro.props;
 
-const siteUrl = Astro.url.origin;
+const siteUrl = Astro.site?.origin || Astro.url.origin;
 const fullOgImageUrl = new URL(ogImage, siteUrl).toString();
 const pageTitle = title ? `${title} | iamrobin` : "iamrobin";
 ---
@@ -50,11 +50,11 @@ const pageTitle = title ? `${title} | iamrobin` : "iamrobin";
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="generator" content={Astro.generator} />
         <title>{pageTitle}</title>
-        {description && <meta name="description" content={description} />}
+        <meta name="description" content={description} />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:image" content={fullOgImageUrl} />
         <meta property="og:type" content="website" />
-        {description && <meta property="og:description" content={description} />}
+        <meta property="og:description" content={description} />
         <meta name="twitter:card" content="summary_large_image" />
         <ClientRouter />
         <!-- Privacy-friendly analytics by Plausible -->
