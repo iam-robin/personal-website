@@ -6,9 +6,21 @@ import Footer from "@components/Footer.astro";
 
 interface Props {
     hasHeader?: boolean;
+    title?: string;
+    description?: string;
+    ogImage?: string;
 }
 
-const { hasHeader = true } = Astro.props;
+const {
+    hasHeader = true,
+    title,
+    description,
+    ogImage = "/opengraph/opengraph.jpg",
+} = Astro.props;
+
+const siteUrl = Astro.url.origin;
+const fullOgImageUrl = new URL(ogImage, siteUrl).toString();
+const pageTitle = title ? `${title} | iamrobin` : "iamrobin";
 ---
 
 <!doctype html>
@@ -37,7 +49,13 @@ const { hasHeader = true } = Astro.props;
         />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="generator" content={Astro.generator} />
-        <title>iamrobin</title>
+        <title>{pageTitle}</title>
+        {description && <meta name="description" content={description} />}
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:image" content={fullOgImageUrl} />
+        <meta property="og:type" content="website" />
+        {description && <meta property="og:description" content={description} />}
+        <meta name="twitter:card" content="summary_large_image" />
         <ClientRouter />
         <!-- Privacy-friendly analytics by Plausible -->
         <script async src="https://plausible.io/js/pa-tf4WN8_9YDKt6QGrGPw7z.js"

@@ -56,7 +56,11 @@ const formatDate = (date: Date) => {
 };
 ---
 
-<Layout>
+<Layout
+    title={entry.data.title}
+    description={entry.data.description}
+    ogImage={entry.data.ogImageName ? `/opengraph/${entry.data.ogImageName}` : undefined}
+>
     <Container>
         <article
             class="py-12 md:py-20"
