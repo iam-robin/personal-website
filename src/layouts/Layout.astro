@@ -9,6 +9,7 @@ interface Props {
     title?: string;
     description?: string;
     ogImage?: string;
+    favicon?: string;
 }
 
 const {
@@ -16,6 +17,7 @@ const {
     title,
     description = "robins own little space on the internet",
     ogImage = "/opengraph/opengraph.jpg",
+    favicon,
 } = Astro.props;
 
 const siteUrl = Astro.site?.origin || Astro.url.origin;
@@ -23,6 +25,10 @@ const fullOgImageUrl = new URL(ogImage, siteUrl).toString();
 
 // Get page name from URL path (e.g., "/movies" → "movies")
 const pathSegment = Astro.url.pathname.split("/").filter(Boolean)[0];
+
+// Auto-detect favicon from path if not provided
+const faviconPath = favicon
+    || (pathSegment ? `/favicon-${pathSegment}.svg` : "/favicon.svg");
 const pageTitle = title
     ? `${title} | iamrobin`
     : pathSegment
@@ -34,9 +40,8 @@ const pageTitle = title
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href={faviconPath} />
         <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link
             rel="apple-touch-icon"
             sizes="180x180"
