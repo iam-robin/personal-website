@@ -42,6 +42,8 @@ const authors = book.author.join(", ");
                                 class="book-3d__cover"
                                 src={`/${book.cover}`}
                                 alt={book.title}
+                                loading="lazy"
+                                onerror="this.style.opacity='0';"
                             />
                             <div class="effect" />
                             <div class="light" />
