@@ -3,7 +3,9 @@
     "type": "module",
     "version": "0.0.1",
     "scripts": {
-        "dev": "astro dev",
+        "sync-book-cover-data": "mkdir -p public/book-covers && cp -r data/output/book-covers/* public/book-covers/ && mkdir -p src/data && cp data/output/books.json src/data/books.json",
+        "prebuild": "npm run sync-book-cover-data",
+        "dev": "npm run sync-book-cover-data && astro dev",
         "build": "astro build --remote",
         "preview": "astro preview",
         "astro": "astro"

@@ -1,3 +1,5 @@
+import booksData from "@data/books.json";
+
 export interface Book {
     title: string;
     author: string[];
@@ -18,19 +20,5 @@ export interface BooksData {
 }
 
 export async function fetchBooks(): Promise<BooksData> {
-    const response = await fetch(
-        "https://raw.githubusercontent.com/iam-robin/obsidian-personal-website-data/main/output/books.json",
-        {
-            headers: {
-                Authorization: `token ${import.meta.env.GITHUB_TOKEN}`,
-                Accept: "application/vnd.github.v3.raw",
-            },
-        }
-    );
-
-    if (!response.ok) {
-        throw new Error(`Failed to fetch books: ${response.statusText}`);
-    }
-
-    return response.json();
+    return booksData as BooksData;
 }

@@ -9,7 +9,8 @@
             "@assets/*": ["src/assets/*"],
             "@layouts/*": ["src/layouts/*"],
             "@utils/*": ["src/utils/*"],
-            "@api/*": ["src/api/*"]
+            "@api/*": ["src/api/*"],
+            "@data/*": ["src/data/*"]
         }
     }
 }
