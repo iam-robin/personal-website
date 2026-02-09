@@ -5,6 +5,6 @@ thumbnail: "/projects/timegarden.svg"
 thumbnailWidth: "80px"
 tags: ["Data visualization", "Obsidian"]
 year: "2026"
-bgColor: "#019CA3"
+bgColor: "#3b82f6"
 draft: true
 ---

@@ -1,17 +1,13 @@
-<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_3_57)">
-<path d="M6.64832 41.351C1.89399 36.5967 -0.309477 30.2585 0.0349119 24.0349C6.25847 23.6905 12.5967 25.894 17.351 30.6483C22.1055 35.4028 24.3096 41.7413 23.9651 47.9651C17.7413 48.3096 11.4028 46.1055 6.64832 41.351Z" fill="#F2DCF4"/>
-<path d="M41.3517 41.351C46.106 36.5967 48.3095 30.2585 47.9651 24.0349C41.7415 23.6905 35.4033 25.894 30.649 30.6483C25.8945 35.4028 23.6904 41.7413 24.0349 47.9651C30.2587 48.3096 36.5972 46.1055 41.3517 41.351Z" fill="#F2DCF4"/>
-<circle cx="24" cy="7" r="7" fill="#F2DCF4"/>
-<circle cx="9" cy="13" r="7" fill="#F2DCF4"/>
-<circle cx="39" cy="13" r="7" fill="#F2DCF4"/>
-<path d="M24 48V6" stroke="#F2DCF4" stroke-width="4"/>
-<path d="M24.1522 28.1543L6.15222 10.1543" stroke="#F2DCF4" stroke-width="4"/>
-<path d="M24 28.1543L42 10.1543" stroke="#F2DCF4" stroke-width="4"/>
-</g>
-<defs>
-<clipPath id="clip0_3_57">
-<rect width="48" height="48" fill="white"/>
-</clipPath>
-</defs>
+<svg width="52" height="44" viewBox="0 0 52 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="8" cy="8" r="8" fill="#ECEBE0"/>
+<circle cx="26" cy="36" r="8" fill="#ECEBE0"/>
+<circle cx="44" cy="8" r="8" fill="#ECEBE0"/>
+<rect x="30.2018" y="20.3734" width="12.031" height="3" transform="rotate(45 30.2018 20.3734)" fill="#ECEBE0"/>
+<rect width="11.88" height="3" transform="matrix(-0.707107 0.707107 0.707107 0.707107 37.4789 12.5959)" fill="#ECEBE0"/>
+<rect x="12.8284" y="20.0785" width="14.1171" height="3" transform="rotate(45 12.8284 20.0785)" fill="#ECEBE0"/>
+<rect width="11.88" height="3" transform="matrix(-0.707107 0.707107 0.707107 0.707107 19.4004 12.5959)" fill="#ECEBE0"/>
+<path d="M18 8C18 3.58172 21.5817 0 26 0H34V8C34 12.4183 30.4183 16 26 16H18V8Z" fill="#ECEBE0"/>
+<path d="M44 28C48.4183 28 52 31.5817 52 36L52 44L44 44C39.5817 44 36 40.4183 36 36L36 28L44 28Z" fill="#ECEBE0"/>
+<path d="M8 28C12.4183 28 16 31.5817 16 36L16 44L8 44C3.58172 44 -5.4282e-07 40.4183 -3.49691e-07 36L0 28L8 28Z" fill="#ECEBE0"/>
+<rect y="20.5" width="52" height="3" fill="#ECEBE0"/>
 </svg>
