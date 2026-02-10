@@ -45,23 +45,23 @@ const sortedYears = Object.keys(abgeschlossen).sort(
                 >
                     <div class="flex flex-col h-full">
                         <div
-                            class={`flex items-end justify-center h-full w-full bg-surface-raised pt-20 pb-12 px-10 ${roundedClass}`}
+                            class={`flex flex-col justify-end items-center h-full w-full bg-surface-raised pt-20 pb-12 px-10 ${roundedClass}`}
                         >
-                            <YearSpineStack books={books} />
-                        </div>
-                        <div class="flex flex-col items-center mt-3">
-                            <span class="text-base font-bold text-text-primary">
-                                {year}
-                            </span>
-                            <div>
-                                <span class="text-sm font-mono text-text-muted">
+                            <div class="mb-2">
+                                <span class="text-sm font-mono font-bold text-text-primary">
                                     {books.length}{" "}
                                     {books.length === 1 ? "book" : "books"}
                                 </span>
-                                <span class="text-sm font-mono text-text-muted">
+                                <span class="text-sm font-mono text-text-primary">
                                     | {totalPages.toLocaleString()} pages
                                 </span>
                             </div>
+                            <YearSpineStack books={books} />
+                        </div>
+                        <div class="flex justify-center mt-3">
+                            <span class="text-base font-bold text-text-primary">
+                                {year}
+                            </span>
                         </div>
                     </div>
                 </CarouselItem>
