@@ -2,6 +2,7 @@
     /* Slate palette (for light theme - cooler, blue-tinted grays) */
     --color-slate-50: oklch(98.4% 0.003 247.858);
     --color-slate-100: oklch(96.8% 0.007 247.896);
+    --color-slate-150: oklch(94.85% 0.01 251.7);
     --color-slate-200: oklch(92.9% 0.013 255.508);
     --color-slate-300: oklch(86.9% 0.022 252.894);
     --color-slate-400: oklch(70.4% 0.04 256.788);
@@ -31,7 +32,7 @@
 
     /* Surfaces (cards, containers, elevated elements) */
     --color-surface: var(--color-slate-100);
-    --color-surface-raised: var(--color-slate-200);
+    --color-surface-raised: var(--color-slate-150);
     --color-surface-inverse: var(--color-slate-800);
 
     /* Text hierarchy */
