@@ -9,6 +9,8 @@ export interface Book {
     finished: string | null;
     genre: string[] | null;
     published: string;
+    spineColor?: string | null;
+    textColor?: string | null;
 }
 
 export interface BooksData {

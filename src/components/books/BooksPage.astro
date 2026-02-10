@@ -4,6 +4,7 @@ import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro
 import Container from "@components/Container.astro";
 import BooksFilter from "./BooksFilter.astro";
 import BooksCarousel from "./BooksCarousel.astro";
+import BooksSpineCarousel from "./BooksSpineCarousel.astro";
 import type { Book, BooksData } from "@api/github-books";
 
 interface Props {
@@ -136,4 +137,11 @@ const merklisteGraphicNovels = merkliste.filter(isGraphicNovel);
             )
         }
     </div>
+    {
+        !isWantToRead && (
+            <div class="my-24">
+                <BooksSpineCarousel abgeschlossen={abgeschlossen} />
+            </div>
+        )
+    }
 </Layout>

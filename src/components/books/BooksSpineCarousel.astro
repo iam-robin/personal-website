@@ -1,0 +1,71 @@
+---
+import Carousel from "@components/carousel/Carousel.astro";
+import CarouselItem from "@components/carousel/CarouselItem.astro";
+import type { Book } from "@api/github-books";
+import YearSpineStack from "./YearSpineStack.astro";
+
+interface Props {
+    abgeschlossen: Record<string, Book[]>;
+}
+
+const { abgeschlossen } = Astro.props;
+
+// Newest first (left to right)
+const sortedYears = Object.keys(abgeschlossen).sort(
+    (a, b) => Number(b) - Number(a),
+);
+---
+
+<Carousel
+    headline="Annual stacks of books"
+    headlineSize="base"
+    columns={12}
+    gap="0px"
+>
+    {
+        sortedYears.map((year, index) => {
+            const books = abgeschlossen[year];
+            const totalPages = books.reduce(
+                (sum: number, book: Book) => sum + (Number(book.pages) || 0),
+                0,
+            );
+            const isFirst = index === 0;
+            const isLast = index === sortedYears.length - 1;
+            const roundedClass = isFirst
+                ? "rounded-l-lg"
+                : isLast
+                  ? "rounded-r-lg"
+                  : "";
+            return (
+                <CarouselItem
+                    smallSpan={10}
+                    mediumSpan={6}
+                    largeSpan={4}
+                    paddingTop={24}
+                >
+                    <div class="flex flex-col h-full">
+                        <div
+                            class={`flex items-end justify-center h-full w-full bg-surface-raised pt-20 pb-12 px-10 ${roundedClass}`}
+                        >
+                            <YearSpineStack books={books} />
+                        </div>
+                        <div class="flex flex-col items-center mt-3">
+                            <span class="text-base font-bold text-text-primary">
+                                {year}
+                            </span>
+                            <div>
+                                <span class="text-sm font-mono text-text-muted">
+                                    {books.length}{" "}
+                                    {books.length === 1 ? "book" : "books"}
+                                </span>
+                                <span class="text-sm font-mono text-text-muted">
+                                    | {totalPages.toLocaleString()} pages
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </CarouselItem>
+            );
+        })
+    }
+</Carousel>

@@ -3,33 +3,28 @@ interface SpineColors {
     text: string;
 }
 
-// Manual overrides for specific books
-const spineColorMap: Record<string, SpineColors> = {
-    "hello world: being human in the age of algorithms": {
-        background: "#00AEAD",
-        text: "#FFFFFF",
-    },
-    "The Glass Castle: A Memoir": {
-        background: "#021C37",
-        text: "#fff",
-    },
-    "Project Hail Mary": {
-        background: "#2E6CB6",
-        text: "#000000",
-    },
-};
-
 const defaultColors: SpineColors = {
     background: "#666666",
     text: "#FFFFFF",
 };
 
-export function getSpineColors(title: string): SpineColors {
-    const lowerTitle = title.toLowerCase();
-    for (const [key, value] of Object.entries(spineColorMap)) {
-        if (key.toLowerCase() === lowerTitle) {
-            return value;
-        }
-    }
+export function getSpineColors(_title: string): SpineColors {
     return defaultColors;
+}
+
+const DEFAULT_PAGE_COUNT = 250;
+
+export function getSpineHeight(pages: number): number {
+    const pageCount = Number(pages) || DEFAULT_PAGE_COUNT;
+    return Math.max(12, pageCount * 0.11);
+}
+
+export function hashString(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = (hash << 5) - hash + char;
+        hash = hash & hash;
+    }
+    return Math.abs(hash);
 }

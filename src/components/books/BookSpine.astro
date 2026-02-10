@@ -1,0 +1,61 @@
+---
+import type { Book } from "@api/github-books";
+import { getSpineColors, getSpineHeight, hashString } from "@utils/spineColors";
+
+interface Props {
+    book: Book;
+}
+
+const { book } = Astro.props;
+
+const generatedColors = getSpineColors(book.title);
+const spineColors = {
+    background: book.spineColor || generatedColors.background,
+    text: book.textColor || generatedColors.text,
+};
+
+const pageCount = Number(book.pages) || 250;
+const spineHeight = getSpineHeight(book.pages);
+
+// Spine width as % of container: pages + hash variation mapped to 60-100%
+const baseLength = Math.max(140, Math.min(160 + pageCount * 0.1, 220));
+const hashOffset = (hashString(book.title) % 21) - 10;
+const spineLength = Math.max(140, Math.min(baseLength + hashOffset, 230));
+const spinePercent = ((spineLength - 140) / 90) * 25 + 70;
+
+// Font size: base from spine height + deterministic hash offset for variety
+const baseFontSize = 12 + ((spineHeight - 18) / (54 - 18)) * 3;
+const fontHashOffset = ((hashString(book.title) >> 4) % 5) - 2; // -2 to +2
+const fontSize = Math.round(
+    Math.max(13, Math.min(baseFontSize + fontHashOffset, 16)),
+);
+
+// Deterministic variations based on title hash
+const titleHash = hashString(book.title);
+// const alignments = ["text-left", "text-center"] as const;
+// const alignClass = alignments[titleHash % 3];
+const alignClass = "text-center";
+const fontFamily = (titleHash >> 5) % 2 === 0 ? "font-mono" : "font-sans";
+// Change this seed to re-roll the horizontal offset arrangement
+const TRANSLATE_SEED = 3;
+const translateX = (((titleHash + TRANSLATE_SEED * 7919) >> 9) % 13) - 6;
+
+// Allow 2-line titles when spine is tall enough
+const canFitTwoLines = spineHeight >= fontSize * 2 + 8;
+
+// Slight border-radius variation: 0–3px per corner
+const borderRadius = `${(titleHash >> 2) % 4}px`;
+---
+
+<div
+    class="group relative overflow-hidden flex items-center shrink-0 py-1"
+    style={`width: ${spinePercent}%; height: ${spineHeight}px; border-radius: ${borderRadius}; background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.03) 60%, rgba(0,0,0,0.01) 100%), ${spineColors.background}; color: ${spineColors.text}; transform: translateX(${translateX}px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.1), 0 1px 1px rgba(0,0,0,0.05);`}
+    title={`${book.title} — ${book.author.join(", ")} — ${pageCount} pages`}
+>
+    <span
+        class={`px-6 w-full font-normal opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${fontFamily} ${alignClass} ${canFitTwoLines ? "leading-tight line-clamp-2" : "leading-none whitespace-nowrap truncate"}`}
+        style={`font-size: ${fontSize}px;`}
+    >
+        {book.title.split(":")[0]}
+    </span>
+</div>

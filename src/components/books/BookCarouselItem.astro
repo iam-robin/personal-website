@@ -12,9 +12,9 @@ interface Props {
 
 const { book, isCurrentlyReading = false } = Astro.props;
 
-// Get spine color from map or use fallback
-const spineColors = getSpineColors(book.title);
-const coverColor = spineColors.background;
+// Get spine color: prefer book data, fall back to default
+const fallbackColors = getSpineColors(book.title);
+const coverColor = book.spineColor || fallbackColors.background;
 
 // Calculate book thickness based on pages
 const thicknessPerPage = 0.1;
