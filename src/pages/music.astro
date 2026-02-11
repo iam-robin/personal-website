@@ -1,0 +1,68 @@
+---
+import Layout from "@layouts/Layout.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import Container from "@components/Container.astro";
+import Link from "@components/Link.astro";
+import AlbumCarousel from "@components/music/AlbumCarousel.astro";
+import { fetchTopAlbums, type AlbumDetails } from "@api/lastfm";
+
+let monthlyAlbums: AlbumDetails[] = [];
+let overallAlbums: AlbumDetails[] = [];
+let error = null;
+
+try {
+    [monthlyAlbums, overallAlbums] = await Promise.all([
+        fetchTopAlbums("1month", 12),
+        fetchTopAlbums("overall", 12),
+    ]);
+} catch (e) {
+    console.error("Failed to fetch Last.fm data:", e);
+    error = e instanceof Error ? e.message : "Unknown error occurred";
+    monthlyAlbums = [];
+    overallAlbums = [];
+}
+---
+
+<Layout>
+    <HeadlineParagraphSection title="Music" isFirstElement>
+        I've been tracking my listening habits on <Link
+            href="https://www.last.fm/"
+            external>Last.fm</Link
+        > since 2013. The data is pulled from the Last.fm API and displayed here,
+        showing my most played albums from the last month and of all time.
+    </HeadlineParagraphSection>
+
+    {
+        error && (
+            <Container>
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                    <p class="text-red-800">
+                        Failed to load music data: {error}
+                    </p>
+                </div>
+            </Container>
+        )
+    }
+
+    {
+        (monthlyAlbums.length > 0 || overallAlbums.length > 0) && (
+            <div class="flex flex-col gap-24">
+                <AlbumCarousel title="Last 30 days" albums={monthlyAlbums} />
+                <AlbumCarousel title="All time" albums={overallAlbums} />
+            </div>
+        )
+    }
+
+    {
+        monthlyAlbums.length === 0 && overallAlbums.length === 0 && !error && (
+            <Container>
+                <div class="text-center py-20">
+                    <h2 class="text-xl font-medium mb-2">No albums found</h2>
+                    <p class="text-neutral-600">
+                        Check back later for music updates.
+                    </p>
+                </div>
+            </Container>
+        )
+    }
+</Layout>

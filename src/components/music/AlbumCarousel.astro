@@ -1,0 +1,33 @@
+---
+import Carousel from "@components/carousel/Carousel.astro";
+import CarouselItem from "@components/carousel/CarouselItem.astro";
+import type { AlbumDetails } from "@api/lastfm";
+import AlbumItem from "./AlbumItem.astro";
+
+interface Props {
+    title: string;
+    albums: AlbumDetails[];
+}
+
+const { title, albums } = Astro.props;
+
+const smallSpan = 10;
+const mediumSpan = 5;
+const largeSpan = 4;
+---
+
+{
+    albums.length > 0 && (
+        <Carousel headline={title} headlineSize="base">
+            {albums.map((album) => (
+                <CarouselItem
+                    smallSpan={smallSpan}
+                    mediumSpan={mediumSpan}
+                    largeSpan={largeSpan}
+                >
+                    <AlbumItem album={album} />
+                </CarouselItem>
+            ))}
+        </Carousel>
+    )
+}
