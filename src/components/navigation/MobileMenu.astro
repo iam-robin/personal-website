@@ -101,6 +101,77 @@ const { navigation } = Astro.props;
                     ),
                 )
             }
+            <li class="border-t border-white/10 mt-1 pt-1">
+                <details class="submenu-group">
+                    <summary
+                        class="flex items-center justify-between px-4 py-2 cursor-pointer rounded-xl hover:bg-white/10 transition-colors text-sm text-white/60"
+                    >
+                        <div class="flex items-center gap-2">
+                            <Icon name="ph:rss-simple" width={16} />
+                            <span>RSS Feeds</span>
+                        </div>
+                        <Icon
+                            name="ph:caret-down"
+                            class="submenu-icon transition-transform"
+                            width={16}
+                        />
+                    </summary>
+                    <ul>
+                        {
+                            [
+                                {
+                                    label: "Blog",
+                                    url: "/blog-rss.xml",
+                                },
+                                {
+                                    label: "Bookmarks",
+                                    url: "/bookmarks-rss.xml",
+                                },
+                            ].map((feed) => (
+                                <li>
+                                    <div class="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-white/10 transition-colors">
+                                        <Icon
+                                            name="ph:arrow-right"
+                                            class="text-white/40"
+                                            width={16}
+                                        />
+                                        <span class="font-mono text-sm flex-1">
+                                            {feed.label}
+                                        </span>
+                                        <button
+                                            class="rss-copy-btn p-2 hover:bg-white/20 rounded-lg transition-colors"
+                                            data-url={feed.url}
+                                            title="Copy URL"
+                                            aria-label={`Copy ${feed.label} RSS feed URL`}
+                                        >
+                                            <Icon
+                                                name="ph:copy"
+                                                class="copy-icon"
+                                                width={16}
+                                            />
+                                            <Icon
+                                                name="ph:check"
+                                                class="check-icon hidden"
+                                                width={16}
+                                            />
+                                        </button>
+                                        <a
+                                            href={feed.url}
+                                            class="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                                            title="Open feed"
+                                        >
+                                            <Icon
+                                                name="ph:arrow-square-out"
+                                                width={16}
+                                            />
+                                        </a>
+                                    </div>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </details>
+            </li>
         </ul>
     </details>
 </nav>

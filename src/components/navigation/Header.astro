@@ -4,6 +4,7 @@ import NavLink from "./NavLink.astro";
 import NavGroup from "./NavGroup.astro";
 import MobileMenu from "./MobileMenu.astro";
 import ThemeSwitcher from "./ThemeSwitcher.astro";
+import RssDropdown from "./RssDropdown.astro";
 import Container from "@components/Container.astro";
 
 const isIndexPage = Astro.url.pathname === "/";
@@ -112,7 +113,10 @@ const navigation = [
                 }
             </nav>
 
-            <ThemeSwitcher />
+            <div class="hidden md:flex items-center gap-1">
+                <RssDropdown />
+                <ThemeSwitcher />
+            </div>
         </div>
     </Container>
 </header>

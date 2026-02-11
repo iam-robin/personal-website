@@ -1,0 +1,126 @@
+---
+import { Icon } from "astro-icon/components";
+
+const rssFeeds = [
+    { label: "Blog", url: "/blog-rss.xml" },
+    { label: "Bookmarks", url: "/bookmarks-rss.xml" },
+];
+---
+
+<details id="rss-dropdown" class="relative">
+    <summary
+        class="p-2 cursor-pointer list-none hover:text-neutral-500 transition-colors"
+        aria-label="RSS Feeds"
+        title="Subscribe to RSS"
+    >
+        <Icon name="ph:rss-simple-bold" size={18} />
+    </summary>
+
+    <div
+        class="absolute right-0 mt-2 w-64 z-50 bg-surface rounded-xl shadow-lg border border-border p-2"
+    >
+        <div class="px-3 py-2 border-b border-border mb-1">
+            <h3 class="text-xs uppercase tracking-wide text-muted font-mono">
+                RSS Feeds
+            </h3>
+        </div>
+        {
+            rssFeeds.map((feed) => (
+                <div class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-raised transition-colors">
+                    <Icon
+                        name="ph:rss-simple"
+                        size={16}
+                        class="flex-shrink-0 text-muted"
+                    />
+                    <span class="text-sm flex-1">{feed.label}</span>
+                    <button
+                        class="rss-copy-btn p-1.5 rounded-lg hover:bg-background transition-colors"
+                        data-url={feed.url}
+                        title="Copy feed URL"
+                        aria-label={`Copy ${feed.label} RSS feed URL`}
+                    >
+                        <Icon name="ph:copy" size={14} class="copy-icon" />
+                        <Icon
+                            name="ph:check"
+                            size={14}
+                            class="check-icon hidden text-green-dark"
+                        />
+                    </button>
+                    <a
+                        href={feed.url}
+                        class="p-1.5 rounded-lg hover:bg-background transition-colors"
+                        title="Open feed"
+                        aria-label={`Open ${feed.label} RSS feed`}
+                    >
+                        <Icon name="ph:arrow-square-out" size={14} />
+                    </a>
+                </div>
+            ))
+        }
+    </div>
+</details>
+
+<style>
+    summary::marker,
+    summary::-webkit-details-marker {
+        display: none;
+    }
+</style>
+
+<script>
+    function initRssDropdown() {
+        const dropdown = document.getElementById(
+            "rss-dropdown",
+        ) as HTMLDetailsElement;
+        if (!dropdown) return;
+
+        if (dropdown.dataset.initialized) return;
+        dropdown.dataset.initialized = "true";
+
+        // Close when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!dropdown.contains(e.target as Node)) {
+                dropdown.open = false;
+            }
+        });
+
+        // Copy to clipboard functionality (targets all rss-copy-btn on the page)
+        const copyButtons = document.querySelectorAll(".rss-copy-btn");
+        copyButtons.forEach((button) => {
+            button.addEventListener("click", async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const url = button.getAttribute("data-url");
+                if (!url) return;
+
+                const fullUrl = `${window.location.origin}${url}`;
+
+                try {
+                    await navigator.clipboard.writeText(fullUrl);
+
+                    const copyIcon = button.querySelector(".copy-icon");
+                    const checkIcon = button.querySelector(".check-icon");
+
+                    copyIcon?.classList.add("hidden");
+                    checkIcon?.classList.remove("hidden");
+
+                    button.classList.add("bg-green-light");
+
+                    setTimeout(() => {
+                        copyIcon?.classList.remove("hidden");
+                        checkIcon?.classList.add("hidden");
+                        button.classList.remove("bg-green-light");
+                    }, 2000);
+                } catch (err) {
+                    console.error("Failed to copy:", err);
+                }
+            });
+        });
+    }
+
+    document.addEventListener("astro:page-load", initRssDropdown);
+    if (document.readyState !== "loading") {
+        initRssDropdown();
+    }
+</script>
