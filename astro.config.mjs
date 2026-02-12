@@ -6,11 +6,23 @@ import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "url";
 
 import vercel from "@astrojs/vercel";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
     site: "https://iamrob.in",
-    integrations: [icon(), db()],
+    integrations: [
+        icon(),
+        db(),
+        sitemap({
+            filter: (page) =>
+                !page.includes('/postcards/error') &&
+                !page.includes('/postcards/success') &&
+                !page.includes('/postcards/new') &&
+                !page.endsWith('/blog-rss.xml') &&
+                !page.endsWith('/bookmarks-rss.xml'),
+        }),
+    ],
 
     vite: {
         plugins: [tailwindcss()],

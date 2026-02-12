@@ -13,6 +13,7 @@
     "dependencies": {
         "@astrojs/db": "^0.18.3",
         "@astrojs/rss": "^4.0.15",
+        "@astrojs/sitemap": "^3.7.0",
         "@astrojs/vercel": "^9.0.4",
         "@blossom-carousel/web": "^0.2.1",
         "@tailwindcss/vite": "^4.1.17",

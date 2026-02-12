@@ -1,0 +1,12 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow utility pages
+Disallow: /postcards/error
+Disallow: /postcards/success
+Disallow: /postcards/new
+
+# Sitemap location
+Sitemap: https://iamrob.in/sitemap-index.xml
+Sitemap: https://iamrob.in/sitemap-0.xml
