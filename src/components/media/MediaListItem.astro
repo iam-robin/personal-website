@@ -75,18 +75,41 @@ const formattedDate = formatDate(date);
                 {
                     subtitle && (
                         <span class="border border-neutral-300 text-text-secondary px-1.5 py-0.5 rounded text-xs shrink-0">
-                            <span class="hidden sm:inline">Season </span>{subtitle}
+                            <span class="hidden sm:inline">Season </span>
+                            {subtitle}
                         </span>
                     )
                 }
             </div>
             <div class="flex items-center gap-2 text-sm">
-                {formattedDate && <span class="font-mono text-neutral-400">{formattedDate}</span>}
-                {formattedDate && (rating || status) && <span class="text-neutral-400">|</span>}
+                {
+                    formattedDate && (
+                        <span class="font-mono text-neutral-400">
+                            {formattedDate}
+                        </span>
+                    )
+                }
+                {
+                    formattedDate && (rating || status) && (
+                        <span class="text-neutral-400">|</span>
+                    )
+                }
                 {status && <StatusBadge status={status} />}
                 {isRewatch && <StatusBadge status="rewatch" />}
-                {isLiked && <Icon name="ph:heart-fill" width={14} class="text-red" />}
-                {rating !== null && rating > 0 && <StarRating rating={rating} showValue size={14} />}
+                {
+                    isLiked && (
+                        <Icon
+                            name="ph:heart-fill"
+                            width={14}
+                            class="text-red"
+                        />
+                    )
+                }
+                {
+                    rating !== null && rating > 0 && (
+                        <StarRating rating={rating} showValue size={14} />
+                    )
+                }
             </div>
         </div>
     </div>
@@ -130,8 +153,16 @@ const formattedDate = formatDate(date);
         </div>
         <div class="flex items-center gap-3">
             {isRewatch && <StatusBadge status="rewatch" />}
-            {isLiked && <Icon name="ph:heart-fill" width={16} class="text-red" />}
-            {rating !== null && rating > 0 && <StarRating rating={rating} showValue size={16} />}
+            {
+                isLiked && (
+                    <Icon name="ph:heart-fill" width={16} class="text-red" />
+                )
+            }
+            {
+                rating !== null && rating > 0 && (
+                    <StarRating rating={rating} showValue size={16} />
+                )
+            }
         </div>
     </div>
 

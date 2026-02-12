@@ -1,6 +1,6 @@
 ---
 interface Props {
-    status: "watching" | "paused" | "reading" | "rewatch";
+    status: "watching" | "paused" | "reading" | "rewatch" | (string & {});
     class?: string;
 }
 
@@ -12,8 +12,10 @@ const styles: Record<string, string> = {
     reading: "bg-sticker-lilac text-sticker-lilac-dark",
     rewatch: "bg-neutral-200 text-neutral-500",
 };
+
+const defaultStyle = "bg-neutral-100 text-neutral-600";
 ---
 
-<span class:list={["px-1.5 py-0.5 rounded text-xs", styles[status], className]}>
+<span class:list={["px-1.5 py-0.5 rounded text-xs", styles[status] || defaultStyle, className]}>
     {status}
 </span>

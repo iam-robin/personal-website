@@ -7,10 +7,11 @@ import StatusBadge from "@components/StatusBadge.astro";
 
 interface Props {
     book: Book;
-    isCurrentlyReading?: boolean;
+    badge?: string;
+    fillHeight?: boolean;
 }
 
-const { book, isCurrentlyReading = false } = Astro.props;
+const { book, badge, fillHeight = false } = Astro.props;
 
 // Get spine color: prefer book data, fall back to default
 const fallbackColors = getSpineColors(book.title);
@@ -26,11 +27,10 @@ const bookThickness = Math.max(15, Math.min(pageCount * thicknessPerPage, 40));
 const authors = book.author.join(", ");
 ---
 
-<a href="#" class="flex flex-col gap-3 h-full justify-between">
-    <div class="h-full">
-        <div
-            class="relative bg-surface-raised rounded-lg flex-center py-20 px-4 h-full book-item"
-        >
+<a href="#" class:list={["flex flex-col gap-3", fillHeight && "h-full"]}>
+    <div
+        class:list={["relative bg-surface-raised rounded-lg flex-center py-20 px-4 book-item", fillHeight ? "flex-1" : "h-80"]}
+    >
             {
                 book.cover ? (
                     <div
@@ -56,16 +56,15 @@ const authors = book.author.join(", ");
                 )
             }
             {
-                isCurrentlyReading && (
+                badge && (
                     <StatusBadge
-                        status="reading"
+                        status={badge}
                         class="absolute right-2 top-2"
                     />
                 )
             }
-        </div>
     </div>
-    <div class="flex flex-col gap-.5 min-h-[100px]">
+    <div class="flex flex-col gap-.5">
         <p class="text-text-primary text-sm leading-tight font-bold">
             {book.title}
         </p>

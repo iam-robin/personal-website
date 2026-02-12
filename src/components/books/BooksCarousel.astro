@@ -31,8 +31,10 @@ const allBooks = [...currentlyReadingBooks, ...books];
                 >
                     <BookCarouselItem
                         book={book}
-                        isCurrentlyReading={
+                        badge={
                             index < currentlyReadingBooks.length
+                                ? "reading"
+                                : undefined
                         }
                     />
                 </CarouselItem>

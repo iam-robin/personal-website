@@ -1,0 +1,57 @@
+---
+import StatusBadge from "@components/StatusBadge.astro";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    title: string;
+    subtitle?: string;
+    coverUrl?: string;
+    href?: string;
+    external?: boolean;
+    badge?: string;
+    fallbackIcon?: string;
+    class?: string;
+}
+
+const {
+    title,
+    subtitle,
+    coverUrl,
+    href = "#",
+    external = false,
+    badge,
+    fallbackIcon = "ph:image",
+    class: className,
+} = Astro.props;
+
+const linkProps = external
+    ? { target: "_blank", rel: "noopener noreferrer" }
+    : {};
+---
+
+<a href={href} class:list={["flex flex-col gap-3 h-full", className]} {...linkProps}>
+    <div
+        class="relative bg-surface-raised rounded-lg flex items-center justify-center py-16 px-4 flex-1"
+    >
+        {
+            coverUrl ? (
+                <img
+                    src={coverUrl}
+                    alt={title}
+                    class="max-h-48 w-auto rounded-sm shadow-lg"
+                    loading="lazy"
+                />
+            ) : (
+                <Icon name={fallbackIcon} class="text-neutral-400" width={48} />
+            )
+        }
+        {badge && <StatusBadge status={badge} class="absolute right-2 top-2" />}
+    </div>
+    <div class="flex flex-col gap-.5">
+        <p class="text-text-primary text-sm leading-tight font-bold">
+            {title}
+        </p>
+        {subtitle && <p class="text-text-secondary text-sm">{subtitle}</p>}
+        <slot />
+    </div>
+</a>

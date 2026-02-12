@@ -1,0 +1,137 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import Grid from "@components/Grid.astro";
+import GridItem from "@components/GridItem.astro";
+import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
+import StatusBadge from "@components/StatusBadge.astro";
+import { Icon } from "astro-icon/components";
+import { fetchBooks } from "@api/github-books";
+import { fetchSeries } from "@api/github-series";
+import { fetchTopAlbums, type AlbumDetails } from "@api/lastfm";
+import { scrapeLetterboxdFilms, type LetterboxdFilm } from "@utils/letterboxd";
+import Link from "@components/Link.astro";
+import BookCarouselItem from "@components/books/BookCarouselItem.astro";
+import MediaCardItem from "@components/media/MediaCardItem.astro";
+
+// Books - currently reading
+let booksData;
+let booksError = null;
+try {
+    booksData = await fetchBooks();
+} catch (e) {
+    console.error("Failed to fetch books:", e);
+    booksError = e instanceof Error ? e.message : "Unknown error";
+    booksData = { aktiv: [], merkliste: [], abgeschlossen: {} };
+}
+
+// Series - currently watching
+let seriesData;
+let seriesError = null;
+try {
+    seriesData = await fetchSeries();
+} catch (e) {
+    console.error("Failed to fetch series:", e);
+    seriesError = e instanceof Error ? e.message : "Unknown error";
+    seriesData = { aktiv: [], merkliste: [], pausiert: [], abgeschlossen: {} };
+}
+
+// Music - just get the top album
+let albums: AlbumDetails[] = [];
+let musicError = null;
+try {
+    albums = await fetchTopAlbums("1month", 1);
+} catch (e) {
+    console.error("Failed to fetch albums:", e);
+    musicError = e instanceof Error ? e.message : "Unknown error";
+}
+
+// Movies - latest watched
+let latestMovie: LetterboxdFilm | undefined;
+let movieError = null;
+try {
+    const movieData = await scrapeLetterboxdFilms("iamrobin");
+    const sorted = movieData.films.sort(
+        (a, b) =>
+            new Date(b.watched_on).getTime() - new Date(a.watched_on).getTime(),
+    );
+    latestMovie = sorted[0];
+} catch (e) {
+    console.error("Failed to fetch movies:", e);
+    movieError = e instanceof Error ? e.message : "Unknown error";
+}
+
+// Extract current media
+const activeBooks = booksData.aktiv;
+const activeSeries = seriesData.aktiv;
+const currentAlbum = albums[0];
+
+// Check if we have any current media
+const hasCurrentMedia =
+    activeBooks.length > 0 ||
+    activeSeries.length > 0 ||
+    currentAlbum ||
+    latestMovie;
+---
+
+<Layout>
+    <Container>
+        <Grid class="py-40">
+            <GridItem colSpan={12}>
+                <HeadlineParagraphSection title="Now">
+                    This page is inspired by the <Link
+                        href="https://nownownow.com/about"
+                        external>now page movement</Link
+                    >. It's a snapshot of what I'm currently focused on, updated
+                    whenever things change significantly. Last updated: February
+                    2026.
+                </HeadlineParagraphSection>
+            </GridItem>
+        </Grid>
+    </Container>
+
+    <!-- Current Media Grid -->
+    {
+        hasCurrentMedia && (
+            <Container>
+                <h2 class="text-base font-bold mb-4">Current Media</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 sm:auto-rows-fr gap-4">
+                    {activeBooks.map((book) => (
+                        <BookCarouselItem book={book} badge="Book" fillHeight />
+                    ))}
+                    {activeSeries.map((series) => (
+                        <MediaCardItem
+                            title={series.title}
+                            subtitle={`Season ${series.season}`}
+                            coverUrl={series.cover}
+                            href="/series"
+                            badge="TV series"
+                            fallbackIcon="ph:television"
+                        />
+                    ))}
+                    {latestMovie && (
+                        <MediaCardItem
+                            title={latestMovie.title}
+                            coverUrl={latestMovie.posterUrl}
+                            href={latestMovie.permalink}
+                            external
+                            badge="Last movie"
+                            fallbackIcon="ph:film-slate"
+                        />
+                    )}
+                    {currentAlbum && (
+                        <MediaCardItem
+                            title={currentAlbum.title}
+                            subtitle={currentAlbum.artist}
+                            coverUrl={currentAlbum.cover}
+                            href={currentAlbum.url}
+                            external
+                            badge="Most listened album"
+                            fallbackIcon="ph:music-notes"
+                        />
+                    )}
+                </div>
+            </Container>
+        )
+    }
+</Layout>

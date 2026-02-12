@@ -1,5 +1,5 @@
 ---
-import MediaItem from "@components/media/MediaItem.astro";
+import MediaListItem from "@components/media/MediaListItem.astro";
 
 interface Props {
     film: {
@@ -16,7 +16,7 @@ interface Props {
 const { film } = Astro.props;
 ---
 
-<MediaItem
+<MediaListItem
     title={film.title}
     date={film.watched_on}
     coverUrl={film.posterUrl}
