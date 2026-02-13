@@ -1,0 +1,25 @@
+@font-face {
+    font-family: "Bedstead";
+    src: url("/fonts/bedstead.otf") format("otf");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+[data-theme="teletext"] {
+    font-family: "Bedstead", "Fira Mono", ui-monospace, monospace;
+}
+
+[data-theme="teletext"] body,
+[data-theme="teletext"] h1,
+[data-theme="teletext"] h2,
+[data-theme="teletext"] h3,
+[data-theme="teletext"] h4,
+[data-theme="teletext"] h5,
+[data-theme="teletext"] h6,
+[data-theme="teletext"] p,
+[data-theme="teletext"] a,
+[data-theme="teletext"] button,
+[data-theme="teletext"] .prose {
+    font-family: "Bedstead", "Fira Mono", ui-monospace, monospace;
+}

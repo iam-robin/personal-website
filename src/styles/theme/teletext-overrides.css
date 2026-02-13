@@ -1,0 +1,27 @@
+/* Remove rounded corners for blocky teletext aesthetic */
+[data-theme="teletext"] * {
+    border-radius: 0 !important;
+}
+
+/* Thicker, more prominent borders */
+[data-theme="teletext"] .border,
+[data-theme="teletext"] [class*="border-"] {
+    border-width: 2px;
+}
+
+[data-theme="teletext"] button,
+[data-theme="teletext"] .button {
+    border: 2px solid var(--color-border);
+    padding: 0.5em 1em;
+}
+
+/* Add teletext-style heading underlines */
+[data-theme="teletext"] article h2::after,
+[data-theme="teletext"] article h3::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: oklch(90% 0.20 100);
+    margin-top: 0.25em;
+}

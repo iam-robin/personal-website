@@ -109,7 +109,7 @@ const pageTitle = title
             // Apply theme immediately to prevent flash on initial load
             (function () {
                 const theme = localStorage.getItem("theme");
-                if (theme === "dark") {
+                if (theme === "dark" || theme === "teletext") {
                     document.documentElement.dataset.theme = theme;
                 }
             })();
@@ -117,7 +117,7 @@ const pageTitle = title
             // Preserve theme during View Transitions
             document.addEventListener("astro:before-swap", (e) => {
                 const theme = localStorage.getItem("theme");
-                if (theme === "dark") {
+                if (theme === "dark" || theme === "teletext") {
                     e.newDocument.documentElement.dataset.theme = theme;
                 }
             });

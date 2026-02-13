@@ -48,3 +48,23 @@ html {
     --tw-prose-th-borders: var(--color-border);
     --tw-prose-td-borders: var(--color-border);
 }
+
+/* Teletext theme prose overrides */
+[data-theme="teletext"] .prose {
+    --tw-prose-body: oklch(100% 0 0);
+    --tw-prose-headings: oklch(90% 0.20 100); /* Yellow */
+    --tw-prose-lead: oklch(85% 0.15 195); /* Cyan */
+    --tw-prose-links: oklch(65% 0.28 328); /* Magenta */
+    --tw-prose-bold: oklch(62% 0.25 27); /* Red */
+    --tw-prose-counters: oklch(75% 0.23 142); /* Green */
+    --tw-prose-bullets: oklch(75% 0.23 142); /* Green */
+    --tw-prose-hr: oklch(65% 0.28 328); /* Magenta */
+    --tw-prose-quotes: oklch(85% 0.15 195); /* Cyan */
+    --tw-prose-quote-borders: oklch(65% 0.28 328); /* Magenta */
+    --tw-prose-captions: oklch(55% 0.25 264); /* Blue */
+    --tw-prose-code: oklch(75% 0.23 142); /* Green */
+    --tw-prose-pre-code: oklch(75% 0.23 142); /* Green */
+    --tw-prose-pre-bg: oklch(10% 0 0);
+    --tw-prose-th-borders: oklch(65% 0.28 328); /* Magenta */
+    --tw-prose-td-borders: oklch(55% 0.25 264); /* Blue */
+}

@@ -1,6 +1,7 @@
 @font-face {
     font-family: "apercu";
-    src: url("/fonts/apercu-regular-pro.woff2") format("woff2"),
+    src:
+        url("/fonts/apercu-regular-pro.woff2") format("woff2"),
         url("/fonts/apercu-regular-pro.woff") format("woff");
     font-weight: normal;
     font-style: normal;
@@ -9,7 +10,8 @@
 
 @font-face {
     font-family: "apercu";
-    src: url("/fonts/apercu-bold-pro.woff2") format("woff2"),
+    src:
+        url("/fonts/apercu-bold-pro.woff2") format("woff2"),
         url("/fonts/apercu-bold-pro.woff") format("woff");
     font-weight: bold;
     font-style: normal;
@@ -43,14 +45,15 @@
 @theme {
     /* Font Family */
     --font-*: initial;
-    --font-sans: "apercu", ui-sans-serif, system-ui, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
-    --font-mono: "Fira Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-        Consolas, "Liberation Mono", "Courier New", monospace;
-    --font-decorative: "LiebeHeide", ui-sans-serif, system-ui, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
+    --font-sans:
+        "apercu", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono:
+        "Fira Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+    --font-decorative:
+        "LiebeHeide", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
     /* Font Weight */
     --font-weight-*: initial;

@@ -29,40 +29,36 @@ const authors = book.author.join(", ");
 
 <a href="#" class:list={["flex flex-col gap-3", fillHeight && "h-full"]}>
     <div
-        class:list={["relative bg-surface-raised rounded-lg flex-center py-20 px-4 book-item", fillHeight ? "flex-1" : "h-80"]}
+        class:list={[
+            "relative bg-surface-raised rounded-lg flex-center py-20 px-4 book-item",
+            fillHeight ? "flex-1" : "h-80",
+        ]}
     >
-            {
-                book.cover ? (
-                    <div
-                        class="book-3d"
-                        style={`--cover-color: ${coverColor}; --book-thickness: ${bookThickness}px`}
-                    >
-                        <div class="book-3d__inner">
-                            <img
-                                class="book-3d__cover"
-                                src={`/${book.cover}`}
-                                alt={book.title}
-                                loading="lazy"
-                                onerror="this.style.opacity='0';"
-                            />
-                            <div class="effect" />
-                            <div class="light" />
-                        </div>
+        {
+            book.cover ? (
+                <div
+                    class="book-3d"
+                    style={`--cover-color: ${coverColor}; --book-thickness: ${bookThickness}px`}
+                >
+                    <div class="book-3d__inner">
+                        <img
+                            class="book-3d__cover"
+                            src={`/${book.cover}`}
+                            alt={book.title}
+                            loading="lazy"
+                            onerror="this.style.opacity='0';"
+                        />
+                        <div class="effect" />
+                        <div class="light" />
                     </div>
-                ) : (
-                    <div class="flex h-full w-full items-center justify-center text-neutral-400">
-                        <Icon name="ph:book" width={48} />
-                    </div>
-                )
-            }
-            {
-                badge && (
-                    <StatusBadge
-                        status={badge}
-                        class="absolute right-2 top-2"
-                    />
-                )
-            }
+                </div>
+            ) : (
+                <div class="flex h-full w-full items-center justify-center text-neutral-400">
+                    <Icon name="ph:book" width={48} />
+                </div>
+            )
+        }
+        {badge && <StatusBadge status={badge} class="absolute right-2 top-2" />}
     </div>
     <div class="flex flex-col gap-.5">
         <p class="text-text-primary text-sm leading-tight font-bold">

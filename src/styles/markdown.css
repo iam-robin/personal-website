@@ -205,3 +205,31 @@
     opacity: 0.7;
     margin-top: 0.5rem;
 }
+
+/* Teletext theme markdown overrides */
+[data-theme="teletext"] .markdown {
+    --tw-prose-body: oklch(100% 0 0);
+    --tw-prose-headings: oklch(90% 0.20 100);
+    --tw-prose-links: oklch(65% 0.28 328);
+    --tw-prose-bold: oklch(100% 0 0);
+}
+
+[data-theme="teletext"] .markdown hr:after {
+    color: oklch(90% 0.20 100);
+}
+
+[data-theme="teletext"] .markdown a {
+    border-bottom-color: oklch(65% 0.28 328);
+}
+
+[data-theme="teletext"] .markdown a::after {
+    color: oklch(65% 0.28 328);
+}
+
+[data-theme="teletext"] .markdown input[type="checkbox"] {
+    border-color: oklch(75% 0.23 142);
+}
+
+[data-theme="teletext"] .markdown input[type="checkbox"]:checked::after {
+    color: oklch(75% 0.23 142);
+}

@@ -114,4 +114,73 @@
         --color-border-light: var(--color-neutral-800);
         --color-border-dark: var(--color-neutral-600);
     }
+
+    [data-theme="teletext"] {
+        /* Base colors - pure black background, white text */
+        --color-background: oklch(0% 0 0);
+        --color-foreground: oklch(100% 0 0);
+
+        /* Surfaces - subtle dark variations */
+        --color-surface: oklch(10% 0 0);
+        --color-surface-raised: oklch(15% 0 0);
+        --color-surface-inverse: oklch(85% 0 0);
+
+        /* Text hierarchy using teletext colors */
+        --color-text-primary: oklch(100% 0 0); /* White */
+        --color-text-secondary: oklch(85% 0.15 195); /* Cyan */
+        --color-text-muted: oklch(65% 0.08 264); /* Dimmed blue */
+        --color-text-inverse: oklch(0% 0 0); /* Black */
+
+        /* Interactive states */
+        --color-hover-bg: oklch(15% 0.10 100);
+        --color-hover-text: oklch(90% 0.20 100); /* Yellow */
+
+        /* Borders - bright teletext colors */
+        --color-border: oklch(65% 0.28 328); /* Magenta */
+        --color-border-light: oklch(55% 0.25 264); /* Blue */
+        --color-border-dark: oklch(62% 0.25 27); /* Red */
+        --color-border-darkest: oklch(100% 0 0); /* White */
+
+        /* Accent colors - classic teletext palette */
+        --color-yellow: oklch(90% 0.20 100);
+        --color-yellow-dark: oklch(70% 0.18 100);
+        --color-yellow-light: oklch(95% 0.15 100);
+
+        --color-blue: oklch(55% 0.25 264);
+        --color-blue-dark: oklch(40% 0.20 264);
+        --color-blue-light: oklch(70% 0.20 264);
+
+        --color-red: oklch(62% 0.25 27);
+        --color-red-dark: oklch(45% 0.22 27);
+        --color-red-light: oklch(75% 0.20 27);
+
+        --color-lilac: oklch(65% 0.28 328); /* Magenta */
+        --color-lilac-dark: oklch(50% 0.25 328);
+        --color-lilac-light: oklch(80% 0.22 328);
+
+        --color-green: oklch(75% 0.23 142);
+        --color-green-dark: oklch(55% 0.20 142);
+        --color-green-light: oklch(85% 0.18 142);
+
+        /* Sticker colors inherit from accent colors */
+        --color-sticker-yellow: var(--color-yellow);
+        --color-sticker-yellow-dark: var(--color-yellow-dark);
+        --color-sticker-yellow-light: var(--color-yellow-light);
+
+        --color-sticker-blue: var(--color-blue);
+        --color-sticker-blue-dark: var(--color-blue-dark);
+        --color-sticker-blue-light: var(--color-blue-light);
+
+        --color-sticker-red: var(--color-red);
+        --color-sticker-red-dark: var(--color-red-dark);
+        --color-sticker-red-light: var(--color-red-light);
+
+        --color-sticker-lilac: var(--color-lilac);
+        --color-sticker-lilac-dark: var(--color-lilac-dark);
+        --color-sticker-lilac-light: var(--color-lilac-light);
+
+        --color-sticker-green: var(--color-green);
+        --color-sticker-green-dark: var(--color-green-dark);
+        --color-sticker-green-light: var(--color-green-light);
+    }
 }

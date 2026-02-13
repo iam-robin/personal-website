@@ -6,6 +6,8 @@
 @import "./theme/transitions.css";
 @import "./theme/typography.css";
 @import "./theme/breakpoints.css";
+@import "./theme/teletext-font.css";
+@import "./theme/teletext-overrides.css";
 @import "./view-transition.css";
 
 :root {
