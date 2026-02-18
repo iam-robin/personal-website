@@ -22,7 +22,7 @@ export interface AlbumDetails {
     url: string;
 }
 
-type Period = "1month" | "overall";
+type Period = "1month" | "12month" | "overall";
 
 const TIMEOUT_MS = 5000;
 
