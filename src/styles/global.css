@@ -51,4 +51,32 @@ body {
     .corner-shadow-effect.hide-after:after {
         display: none;
     }
+    .corner-shadow-effect-left {
+        position: relative;
+    }
+    .corner-shadow-effect-left:before {
+        z-index: -1;
+        position: absolute;
+        content: "";
+        width: 50%;
+        top: 80%;
+        box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.3);
+        left: 0.5rem;
+        bottom: 16px;
+        transform: rotate(-3deg);
+    }
+    .corner-shadow-effect-right {
+        position: relative;
+    }
+    .corner-shadow-effect-right:before {
+        z-index: -1;
+        position: absolute;
+        content: "";
+        width: 50%;
+        top: 80%;
+        box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.3);
+        transform: rotate(3deg);
+        bottom: 16px;
+        right: 0.5em;
+    }
 }

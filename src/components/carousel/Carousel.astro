@@ -9,9 +9,18 @@ interface Props {
     gap?: string;
     headline?: string;
     description?: string;
-    link?: { href: string; text: string; external?: boolean };
+    link?: {
+        href: string;
+        text: string;
+        external?: boolean;
+        disabled?: boolean;
+    };
     headlineSize?: "base" | "md" | "lg" | "xl";
+    alignment?: "top" | "center" | "bottom";
+    autoWidth?: boolean;
 }
+
+const alignmentMap = { top: "start", center: "center", bottom: "end" } as const;
 
 const {
     columns = 12,
@@ -20,6 +29,8 @@ const {
     description,
     link,
     headlineSize,
+    alignment = "top",
+    autoWidth = false,
 } = Astro.props;
 ---
 
@@ -38,21 +49,32 @@ const {
         )
     }
 
-    <blossom-carousel class="carousel">
+    <blossom-carousel
+        class:list={["carousel", { "auto-width": autoWidth }]}
+        style={alignment !== "top"
+            ? `align-items: ${alignmentMap[alignment]}`
+            : undefined}
+    >
         <slot />
     </blossom-carousel>
 
     {
         link && (
             <Container class="flex justify-end">
-                <Link
-                    href={link.href}
-                    class="self-end"
-                    standalone
-                    external={link.external}
-                >
-                    {link.text}
-                </Link>
+                {link.disabled ? (
+                    <span class="text-base font-mono flex gap-2 items-center text-text-secondary cursor-default">
+                        {link.text}
+                    </span>
+                ) : (
+                    <Link
+                        href={link.href}
+                        class="self-end"
+                        standalone
+                        external={link.external}
+                    >
+                        {link.text}
+                    </Link>
+                )}
             </Container>
         )
     }
@@ -76,6 +98,10 @@ const {
             0px,
             calc((100vw - var(--max-width)) / 2)
         );
+    }
+
+    .carousel-section :global(.carousel.auto-width) {
+        grid-auto-columns: max-content;
     }
 
     @media (min-width: 769px) and (max-width: 1088px) {

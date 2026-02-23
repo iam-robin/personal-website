@@ -1,0 +1,150 @@
+---
+import { Image } from "astro:assets";
+import Carousel from "../carousel/Carousel.astro";
+import CarouselItem from "../carousel/CarouselItem.astro";
+import { Icon } from "astro-icon/components";
+
+const arrowIcons = ["arrow-scribble"] as const;
+
+import Art01 from "@assets/landingpage-art/01.png";
+import Art02 from "@assets/landingpage-art/02.jpg";
+import Art03 from "@assets/landingpage-art/03.jpg";
+import Art04 from "@assets/landingpage-art/04.jpg";
+import Art05 from "@assets/landingpage-art/05.png";
+import Art06 from "@assets/landingpage-art/06.jpg";
+import Art10 from "@assets/landingpage-art/10.png";
+import Art11 from "@assets/landingpage-art/11.png";
+import Art12 from "@assets/landingpage-art/12.png";
+import Art13 from "@assets/landingpage-art/13.jpg";
+
+type Artwork = {
+    image: ImageMetadata | string;
+    shadow: boolean;
+    description?: string;
+};
+
+const artworks: Artwork[] = [
+    { image: Art01, shadow: false },
+    { image: "/art/08.gif", shadow: false },
+    {
+        image: Art10,
+        shadow: true,
+        description: "This is real ink on paper <br> plotted by my pen plotter",
+    },
+    { image: "/art/09.gif", shadow: false },
+    { image: Art03, shadow: true },
+    { image: Art12, shadow: false },
+    { image: Art05, shadow: true },
+    { image: Art06, shadow: true },
+    { image: "/art/07.gif", shadow: false },
+    { image: Art13, shadow: true },
+    { image: Art11, shadow: false },
+    { image: Art04, shadow: true },
+    // { image: Art02, shadow: true },
+];
+
+const headline = "Hand-coded Art";
+const description =
+    "At some point I started to see code not just as a tool for building products but as a medium for creating art. What started with small visual experiments eventually led me to generative art and pen plotting – where code meets paper and ink. There’s more to come!";
+---
+
+<Carousel
+    headline={headline}
+    description={description}
+    alignment="top"
+    autoWidth
+>
+    {
+        artworks.map((art, index) => (
+            <CarouselItem
+                largeSpan={4}
+                mediumSpan={5}
+                smallSpan={10}
+                paddingBottom={24}
+                paddingTop={24}
+            >
+                <div class="art-item">
+                    <div
+                        class:list={[
+                            {
+                                "corner-shadow-effect-right art-shadow":
+                                    art.shadow,
+                            },
+                        ]}
+                    >
+                        {typeof art.image === "string" ? (
+                            <img
+                                src={art.image}
+                                alt="Handcoded Art"
+                                class="art-image bg-neutral-100"
+                            />
+                        ) : (
+                            <Image
+                                src={art.image}
+                                alt="Handcoded Art"
+                                height={680}
+                                format="webp"
+                                quality={80}
+                                class="art-image bg-neutral-100"
+                            />
+                        )}
+                    </div>
+                    {art.description && (
+                        <div class="annotation">
+                            <p
+                                class="annotation-text"
+                                set:html={art.description}
+                            />
+                            <Icon
+                                name={arrowIcons[index % arrowIcons.length]}
+                                class="annotation-arrow"
+                            />
+                        </div>
+                    )}
+                </div>
+            </CarouselItem>
+        ))
+    }
+</Carousel>
+
+<style>
+    .art-image {
+        height: 340px;
+        width: auto;
+    }
+
+    .art-shadow {
+        box-shadow:
+            0 -4px 4px -4px rgba(0, 0, 0, 0.1),
+            0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    }
+
+    .art-item {
+        position: relative;
+    }
+
+    .annotation {
+        display: flex;
+        margin-top: 24px;
+        transform: translateX(-64px);
+        color: #00356b;
+    }
+
+    .annotation-arrow {
+        width: 36px;
+        height: auto;
+        margin-top: -24px;
+        rotate: -20deg;
+        flex-shrink: 0;
+    }
+
+    .annotation-text {
+        font-family: var(--font-decorative);
+        font-size: 1.6rem;
+        line-height: 1.1;
+        rotate: -2deg;
+        margin: 0;
+        margin-top: 24px;
+    }
+</style>
