@@ -6,6 +6,7 @@ import BooksFilter from "./BooksFilter.astro";
 import BooksCarousel from "./BooksCarousel.astro";
 import BooksSpineCarousel from "./BooksSpineCarousel.astro";
 import type { Book, BooksData } from "@api/github-books";
+import { buildGardenNoteMap } from "@utils/gardenNotes";
 
 interface Props {
     booksData: BooksData;
@@ -13,6 +14,22 @@ interface Props {
 }
 
 const { booksData, selectedYear } = Astro.props;
+
+// Fetch garden notes and build a map of book title -> garden note slug
+const allBooksFlat = [
+    ...booksData.aktiv,
+    ...booksData.merkliste,
+    ...Object.values(booksData.abgeschlossen).flat(),
+];
+const gardenNoteMapRaw = await buildGardenNoteMap(
+    "Books",
+    allBooksFlat.map((b) => b.title),
+);
+// Convert to simple string map for backwards compatibility with book components
+const gardenNoteMap = new Map<string, string>();
+for (const [title, match] of gardenNoteMapRaw) {
+    gardenNoteMap.set(title, match.slug);
+}
 
 const { aktiv, merkliste, abgeschlossen } = booksData;
 
@@ -107,6 +124,7 @@ const merklisteGraphicNovels = merkliste.filter(isGraphicNovel);
                         currentlyReadingBooks={
                             isCurrentYear ? aktivRegular : []
                         }
+                        gardenNoteMap={gardenNoteMap}
                     />
                 )
         }
@@ -120,12 +138,13 @@ const merklisteGraphicNovels = merkliste.filter(isGraphicNovel);
                         currentlyReadingBooks={
                             isCurrentYear ? aktivGraphicNovels : []
                         }
+                        gardenNoteMap={gardenNoteMap}
                     />
                 )
         }
         {
             isWantToRead && merklisteRegular.length > 0 && (
-                <BooksCarousel title="Want to Read" books={merklisteRegular} />
+                <BooksCarousel title="Want to Read" books={merklisteRegular} gardenNoteMap={gardenNoteMap} />
             )
         }
         {
@@ -133,6 +152,7 @@ const merklisteGraphicNovels = merkliste.filter(isGraphicNovel);
                 <BooksCarousel
                     title="Graphic Novels"
                     books={merklisteGraphicNovels}
+                    gardenNoteMap={gardenNoteMap}
                 />
             )
         }

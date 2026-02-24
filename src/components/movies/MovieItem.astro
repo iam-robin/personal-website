@@ -11,9 +11,10 @@ interface Props {
         permalink: string;
         posterUrl?: string;
     };
+    gardenNoteUrl?: string;
 }
 
-const { film } = Astro.props;
+const { film, gardenNoteUrl } = Astro.props;
 ---
 
 <MediaListItem
@@ -24,4 +25,5 @@ const { film } = Astro.props;
     isRewatch={film.rewatched}
     isLiked={film.liked}
     externalUrl={`https://letterboxd.com/${film.permalink}`}
+    gardenNoteUrl={gardenNoteUrl}
 />

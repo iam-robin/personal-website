@@ -5,6 +5,7 @@ import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
 import AlbumCarousel from "@components/music/AlbumCarousel.astro";
 import { fetchTopAlbums, type AlbumDetails } from "@api/lastfm";
+import { buildGardenNoteMap } from "@utils/gardenNotes";
 
 let monthlyAlbums: AlbumDetails[] = [];
 let yearlyAlbums: AlbumDetails[] = [];
@@ -24,6 +25,15 @@ try {
     yearlyAlbums = [];
     overallAlbums = [];
 }
+
+const allAlbumTitles = [
+    ...new Set([
+        ...monthlyAlbums.map((a) => a.title),
+        ...yearlyAlbums.map((a) => a.title),
+        ...overallAlbums.map((a) => a.title),
+    ]),
+];
+const gardenNoteMap = await buildGardenNoteMap("Music", allAlbumTitles);
 ---
 
 <Layout>
@@ -50,9 +60,9 @@ try {
     {
         (monthlyAlbums.length > 0 || yearlyAlbums.length > 0 || overallAlbums.length > 0) && (
             <div class="flex flex-col gap-24">
-                <AlbumCarousel title="Last 30 days" albums={monthlyAlbums} />
-                <AlbumCarousel title="Last 365 days" albums={yearlyAlbums} />
-                <AlbumCarousel title="All time" albums={overallAlbums} />
+                <AlbumCarousel title="Last 30 days" albums={monthlyAlbums} gardenNoteMap={gardenNoteMap} />
+                <AlbumCarousel title="Last 365 days" albums={yearlyAlbums} gardenNoteMap={gardenNoteMap} />
+                <AlbumCarousel title="All time" albums={overallAlbums} gardenNoteMap={gardenNoteMap} />
             </div>
         )
     }

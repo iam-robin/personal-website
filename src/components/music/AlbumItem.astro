@@ -1,12 +1,14 @@
 ---
 import type { AlbumDetails } from "@api/lastfm";
 import { hashString } from "@utils/spineColors";
+import GardenSticker from "@components/stickers/GardenSticker.astro";
 
 interface Props {
     album: AlbumDetails;
+    gardenNoteUrl?: string;
 }
 
-const { album } = Astro.props;
+const { album, gardenNoteUrl } = Astro.props;
 
 const discColors = [
     "#ff8477",
@@ -46,6 +48,17 @@ const discColor = discColors[colorIndex];
                     </div>
                 </div>
             </div>
+            {
+                gardenNoteUrl && (
+                    <a href={gardenNoteUrl} class="absolute left-2 top-2 z-10">
+                        <GardenSticker
+                            size={40}
+                            iconColor="--color-sticker-green-dark"
+                            bgColor="--color-sticker-green"
+                        />
+                    </a>
+                )
+            }
         </div>
     </div>
     <div class="flex flex-col gap-.5">

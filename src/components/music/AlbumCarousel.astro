@@ -3,13 +3,15 @@ import Carousel from "@components/carousel/Carousel.astro";
 import CarouselItem from "@components/carousel/CarouselItem.astro";
 import type { AlbumDetails } from "@api/lastfm";
 import AlbumItem from "./AlbumItem.astro";
+import type { GardenNoteMatch } from "@utils/gardenNotes";
 
 interface Props {
     title: string;
     albums: AlbumDetails[];
+    gardenNoteMap?: Map<string, GardenNoteMatch>;
 }
 
-const { title, albums } = Astro.props;
+const { title, albums, gardenNoteMap } = Astro.props;
 
 const smallSpan = 10;
 const mediumSpan = 5;
@@ -25,7 +27,7 @@ const largeSpan = 4;
                     mediumSpan={mediumSpan}
                     largeSpan={largeSpan}
                 >
-                    <AlbumItem album={album} />
+                    <AlbumItem album={album} gardenNoteUrl={gardenNoteMap?.get(album.title) ? `/garden/${gardenNoteMap.get(album.title)!.category}/${gardenNoteMap.get(album.title)!.slug}` : undefined} />
                 </CarouselItem>
             ))}
         </Carousel>

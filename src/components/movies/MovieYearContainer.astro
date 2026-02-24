@@ -1,6 +1,7 @@
 ---
 import YearSection from "@components/YearSection.astro";
 import MovieItem from "./MovieItem.astro";
+import type { GardenNoteMatch } from "@utils/gardenNotes";
 
 interface Props {
     year: number;
@@ -12,11 +13,16 @@ interface Props {
         rewatched: boolean;
         permalink: string;
     }>;
+    gardenNoteMap?: Map<string, GardenNoteMatch>;
 }
 
-const { year, films = [] } = Astro.props;
+const { year, films = [], gardenNoteMap } = Astro.props;
 ---
 
 <YearSection year={year} count={films.length}>
-    {films.map((film) => <MovieItem film={film} />)}
+    {films.map((film) => {
+        const match = gardenNoteMap?.get(film.title);
+        const gardenNoteUrl = match ? `/garden/${match.category}/${match.slug}` : undefined;
+        return <MovieItem film={film} gardenNoteUrl={gardenNoteUrl} />;
+    })}
 </YearSection>

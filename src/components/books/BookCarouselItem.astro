@@ -4,14 +4,16 @@ import type { Book } from "@api/github-books";
 import { getSpineColors } from "@utils/spineColors";
 import StarRating from "@components/StarRating.astro";
 import StatusBadge from "@components/StatusBadge.astro";
+import GardenSticker from "@components/stickers/GardenSticker.astro";
 
 interface Props {
     book: Book;
     badge?: string;
     fillHeight?: boolean;
+    gardenNoteSlug?: string;
 }
 
-const { book, badge, fillHeight = false } = Astro.props;
+const { book, badge, fillHeight = false, gardenNoteSlug } = Astro.props;
 
 // Get spine color: prefer book data, fall back to default
 const fallbackColors = getSpineColors(book.title);
@@ -27,7 +29,7 @@ const bookThickness = Math.max(15, Math.min(pageCount * thicknessPerPage, 40));
 const authors = book.author.join(", ");
 ---
 
-<a href="#" class:list={["flex flex-col gap-3", fillHeight && "h-full"]}>
+<a href={gardenNoteSlug ? `/garden/books/${gardenNoteSlug}` : "#"} class:list={["flex flex-col gap-3", fillHeight && "h-full"]}>
     <div
         class:list={["relative bg-surface-raised rounded-lg flex-center py-20 px-4 book-item", fillHeight ? "flex-1" : "h-80"]}
     >
@@ -60,6 +62,16 @@ const authors = book.author.join(", ");
                     <StatusBadge
                         status={badge}
                         class="absolute right-2 top-2"
+                    />
+                )
+            }
+            {
+                gardenNoteSlug && (
+                    <GardenSticker
+                        size={40}
+                        iconColor="--color-sticker-green-dark"
+                        bgColor="--color-sticker-green"
+                        class="absolute left-2 top-2"
                     />
                 )
             }

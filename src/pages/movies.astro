@@ -5,6 +5,7 @@ import { scrapeLetterboxdFilms } from "@utils/letterboxd";
 import { getMockMovieData } from "@utils/mockMovies";
 import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
 import Container from "@components/Container.astro";
+import { buildGardenNoteMap } from "@utils/gardenNotes";
 
 const username = "iamrobin";
 let movieData;
@@ -61,6 +62,11 @@ const filmsByYear = sortedFilms.reduce(
 const years = Object.keys(filmsByYear)
     .map(Number)
     .sort((a, b) => b - a);
+
+const gardenNoteMap = await buildGardenNoteMap(
+    "Movies",
+    sortedFilms.map((f) => f.title),
+);
 ---
 
 <Layout>
@@ -89,6 +95,7 @@ const years = Object.keys(filmsByYear)
                         <MovieYearContainer
                             films={filmsByYear[year]}
                             year={year}
+                            gardenNoteMap={gardenNoteMap}
                         />
                     ))}
                 </div>

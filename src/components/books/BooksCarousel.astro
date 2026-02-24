@@ -8,9 +8,10 @@ interface Props {
     title: string;
     books: Book[];
     currentlyReadingBooks?: Book[];
+    gardenNoteMap?: Map<string, string>;
 }
 
-const { title, books, currentlyReadingBooks = [] } = Astro.props;
+const { title, books, currentlyReadingBooks = [], gardenNoteMap } = Astro.props;
 
 const smallSpan = 10;
 const mediumSpan = 5;
@@ -36,6 +37,7 @@ const allBooks = [...currentlyReadingBooks, ...books];
                                 ? "reading"
                                 : undefined
                         }
+                        gardenNoteSlug={gardenNoteMap?.get(book.title)}
                     />
                 </CarouselItem>
             ))}

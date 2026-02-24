@@ -2,17 +2,27 @@
 import YearSection from "@components/YearSection.astro";
 import SeriesItem from "./SeriesItem.astro";
 import type { Series } from "@api/github-series";
+import type { GardenNoteMatch } from "@utils/gardenNotes";
 
 interface Props {
     year: number | string;
     series: Series[];
     aktivSeries?: Series[];
+    gardenNoteMap?: Map<string, GardenNoteMatch>;
 }
 
-const { year, series = [], aktivSeries = [] } = Astro.props;
+const { year, series = [], aktivSeries = [], gardenNoteMap } = Astro.props;
 ---
 
 <YearSection year={year} count={series.length > 0 ? series.length : undefined}>
-    {aktivSeries.map((s) => <SeriesItem series={s} status="watching" />)}
-    {series.map((s) => <SeriesItem series={s} />)}
+    {aktivSeries.map((s) => {
+        const match = gardenNoteMap?.get(s.title);
+        const gardenNoteUrl = match ? `/garden/${match.category}/${match.slug}` : undefined;
+        return <SeriesItem series={s} status="watching" gardenNoteUrl={gardenNoteUrl} />;
+    })}
+    {series.map((s) => {
+        const match = gardenNoteMap?.get(s.title);
+        const gardenNoteUrl = match ? `/garden/${match.category}/${match.slug}` : undefined;
+        return <SeriesItem series={s} gardenNoteUrl={gardenNoteUrl} />;
+    })}
 </YearSection>

@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 import StarRating from "@components/StarRating.astro";
 import StatusBadge from "@components/StatusBadge.astro";
+import GardenSticker from "@components/stickers/GardenSticker.astro";
 
 interface Props {
     title: string;
@@ -13,6 +14,7 @@ interface Props {
     isRewatch?: boolean;
     isLiked?: boolean;
     externalUrl?: string;
+    gardenNoteUrl?: string;
 }
 
 const {
@@ -25,6 +27,7 @@ const {
     isRewatch,
     isLiked,
     externalUrl,
+    gardenNoteUrl,
 } = Astro.props;
 
 const formatDate = (dateString: string | null) => {
@@ -106,6 +109,17 @@ const formattedDate = formatDate(date);
                     )
                 }
                 {
+                    gardenNoteUrl && (
+                        <span class="shrink-0">
+                            <GardenSticker
+                                size={20}
+                                iconColor="--color-sticker-green-dark"
+                                bgColor="--color-sticker-green"
+                            />
+                        </span>
+                    )
+                }
+                {
                     rating !== null && rating > 0 && (
                         <StarRating rating={rating} showValue size={14} />
                     )
@@ -159,6 +173,15 @@ const formattedDate = formatDate(date);
                 )
             }
             {
+                gardenNoteUrl && (
+                    <GardenSticker
+                        size={20}
+                        iconColor="--color-sticker-green-dark"
+                        bgColor="--color-sticker-green"
+                    />
+                )
+            }
+            {
                 rating !== null && rating > 0 && (
                     <StarRating rating={rating} showValue size={16} />
                 )
@@ -167,7 +190,14 @@ const formattedDate = formatDate(date);
     </div>
 
     {
-        externalUrl && (
+        gardenNoteUrl ? (
+            <a
+                href={gardenNoteUrl}
+                class="absolute bottom-0 left-0 right-0 top-0 h-full w-full"
+            >
+                <span class="sr-only">View garden note</span>
+            </a>
+        ) : externalUrl ? (
             <a
                 href={externalUrl}
                 target="_blank"
@@ -176,6 +206,6 @@ const formattedDate = formatDate(date);
             >
                 <span class="sr-only">View external link</span>
             </a>
-        )
+        ) : null
     }
 </div>

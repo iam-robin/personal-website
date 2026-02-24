@@ -5,6 +5,7 @@ import SeriesItem from "@components/series/SeriesItem.astro";
 import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
 import Container from "@components/Container.astro";
 import { fetchSeries } from "@api/github-series";
+import { buildGardenNoteMap } from "@utils/gardenNotes";
 
 let seriesData;
 let error = null;
@@ -51,6 +52,17 @@ const years = Object.keys(abgeschlossen)
 
 // Check if current year exists in completed
 const hasCurrentYear = years.includes(currentYear);
+
+const allSeriesFlat = [
+    ...aktiv,
+    ...merkliste,
+    ...pausiert,
+    ...Object.values(abgeschlossen).flat(),
+];
+const gardenNoteMap = await buildGardenNoteMap(
+    "Series",
+    allSeriesFlat.map((s) => s.title),
+);
 ---
 
 <Layout>
@@ -84,6 +96,7 @@ const hasCurrentYear = years.includes(currentYear);
                                 abgeschlossen[currentYear.toString()] || [],
                             )}
                             aktivSeries={aktiv}
+                            gardenNoteMap={gardenNoteMap}
                         />
                     )}
 
@@ -96,6 +109,7 @@ const hasCurrentYear = years.includes(currentYear);
                                 series={sortSeriesByDate(
                                     abgeschlossen[year.toString()],
                                 )}
+                                gardenNoteMap={gardenNoteMap}
                             />
                         ))}
 
@@ -106,9 +120,11 @@ const hasCurrentYear = years.includes(currentYear);
                                 Want to Watch
                             </h2>
                             <div class="col-start-1 col-end-13 md:col-start-4">
-                                {merkliste.map((s) => (
-                                    <SeriesItem series={s} />
-                                ))}
+                                {merkliste.map((s) => {
+                                    const match = gardenNoteMap.get(s.title);
+                                    const gardenNoteUrl = match ? `/garden/${match.category}/${match.slug}` : undefined;
+                                    return <SeriesItem series={s} gardenNoteUrl={gardenNoteUrl} />;
+                                })}
                             </div>
                         </div>
                     )}

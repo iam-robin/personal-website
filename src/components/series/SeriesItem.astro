@@ -5,9 +5,10 @@ import type { Series } from "@api/github-series";
 interface Props {
     series: Series;
     status?: "watching" | "paused";
+    gardenNoteUrl?: string;
 }
 
-const { series, status } = Astro.props;
+const { series, status, gardenNoteUrl } = Astro.props;
 ---
 
 <MediaListItem
@@ -18,4 +19,5 @@ const { series, status } = Astro.props;
     rating={series.rating}
     status={status}
     isLiked={series.favorite}
+    gardenNoteUrl={gardenNoteUrl}
 />
