@@ -1,22 +1,24 @@
 ---
-
+import { Icon } from "astro-icon/components";
 ---
 
 <button
     id="theme-switcher"
-    class="p-2 cursor-pointer"
+    class="p-2 cursor-pointer hover:text-neutral-500 transition-colors"
     aria-label="Toggle theme"
 >
-    <div
-        class="theme-icon h-4 w-4 bg-foreground rounded-full"
+    <Icon
+        name="ph:circle-half-fill"
+        size={18}
+        class="theme-icon"
         data-theme-icon="light"
-    >
-    </div>
-    <div
-        class="theme-icon h-4 w-4 bg-foreground rounded-full hidden"
+    />
+    <Icon
+        name="ph:circle-half-fill"
+        size={18}
+        class="theme-icon hidden rotate-180"
         data-theme-icon="dark"
-    >
-    </div>
+    />
 </button>
 
 <script>

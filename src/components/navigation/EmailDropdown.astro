@@ -1,0 +1,193 @@
+---
+import { Icon } from "astro-icon/components";
+
+const email = "hey@iamrob.in";
+const mastodon = {
+    handle: "@iamrobin",
+    url: "https://mastodon.social/@iamrobin",
+};
+const bluesky = {
+    handle: "@iam-robin",
+    url: "https://bsky.app/profile/iam-robin.bsky.social",
+};
+---
+
+<details id="email-dropdown" class="relative">
+    <summary
+        class="p-2 cursor-pointer list-none hover:text-neutral-500 transition-colors"
+        aria-label="Contact"
+        title="Contact via email"
+    >
+        <Icon name="ph:hand-bold" class="-rotate-32" size={17} />
+    </summary>
+
+    <div
+        class="absolute right-0 mt-2 w-64 z-50 bg-surface rounded-xl shadow-lg border border-border p-2"
+    >
+        <div class="px-3 py-2 border-b border-border mb-1">
+            <h3 class="text-xs uppercase tracking-wide text-muted font-mono">
+                Contact
+            </h3>
+        </div>
+        <div
+            class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-raised transition-colors"
+        >
+            <Icon
+                name="ph:envelope-simple-bold"
+                size={16}
+                class="shrink-0 text-muted"
+            />
+            <span class="text-sm flex-1">{email}</span>
+            <button
+                class="email-copy-btn p-1.5 rounded-lg hover:bg-background transition-colors"
+                data-email={email}
+                title="Copy email address"
+                aria-label="Copy email address"
+            >
+                <Icon name="ph:copy-bold" size={14} class="copy-icon" />
+                <Icon
+                    name="ph:check-bold"
+                    size={14}
+                    class="check-icon hidden text-green-dark"
+                />
+            </button>
+            <a
+                href={`mailto:${email}`}
+                class="p-1.5 rounded-lg hover:bg-background transition-colors"
+                title="Open mail client"
+                aria-label="Send email"
+            >
+                <Icon name="ph:arrow-square-out-bold" size={14} />
+            </a>
+        </div>
+        <div
+            class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-raised transition-colors"
+        >
+            <Icon
+                name="ph:mastodon-logo-bold"
+                size={16}
+                class="shrink-0 text-muted"
+            />
+            <span class="text-sm flex-1">{mastodon.handle}</span>
+            <button
+                class="email-copy-btn p-1.5 rounded-lg hover:bg-background transition-colors"
+                data-email={mastodon.handle}
+                title="Copy Mastodon handle"
+                aria-label="Copy Mastodon handle"
+            >
+                <Icon name="ph:copy-bold" size={14} class="copy-icon" />
+                <Icon
+                    name="ph:check-bold"
+                    size={14}
+                    class="check-icon hidden text-green-dark"
+                />
+            </button>
+            <a
+                href={mastodon.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="p-1.5 rounded-lg hover:bg-background transition-colors"
+                title="Open Mastodon profile"
+                aria-label="Open Mastodon profile"
+            >
+                <Icon name="ph:arrow-square-out-bold" size={14} />
+            </a>
+        </div>
+        <div
+            class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-raised transition-colors"
+        >
+            <Icon
+                name="ph:butterfly-bold"
+                size={16}
+                class="shrink-0 text-muted"
+            />
+            <span class="text-sm flex-1">{bluesky.handle}</span>
+            <button
+                class="email-copy-btn p-1.5 rounded-lg hover:bg-background transition-colors"
+                data-email={bluesky.handle}
+                title="Copy Bluesky handle"
+                aria-label="Copy Bluesky handle"
+            >
+                <Icon name="ph:copy-bold" size={14} class="copy-icon" />
+                <Icon
+                    name="ph:check-bold"
+                    size={14}
+                    class="check-icon hidden text-green-dark"
+                />
+            </button>
+            <a
+                href={bluesky.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="p-1.5 rounded-lg hover:bg-background transition-colors"
+                title="Open Bluesky profile"
+                aria-label="Open Bluesky profile"
+            >
+                <Icon name="ph:arrow-square-out-bold" size={14} />
+            </a>
+        </div>
+    </div>
+</details>
+
+<style>
+    summary::marker,
+    summary::-webkit-details-marker {
+        display: none;
+    }
+</style>
+
+<script>
+    function initEmailDropdown() {
+        const dropdown = document.getElementById(
+            "email-dropdown",
+        ) as HTMLDetailsElement;
+        if (!dropdown) return;
+
+        if (dropdown.dataset.initialized) return;
+        dropdown.dataset.initialized = "true";
+
+        // Close when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!dropdown.contains(e.target as Node)) {
+                dropdown.open = false;
+            }
+        });
+
+        // Copy to clipboard functionality
+        const copyButtons = document.querySelectorAll(".email-copy-btn");
+        copyButtons.forEach((button) => {
+            button.addEventListener("click", async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const email = button.getAttribute("data-email");
+                if (!email) return;
+
+                try {
+                    await navigator.clipboard.writeText(email);
+
+                    const copyIcon = button.querySelector(".copy-icon");
+                    const checkIcon = button.querySelector(".check-icon");
+
+                    copyIcon?.classList.add("hidden");
+                    checkIcon?.classList.remove("hidden");
+
+                    button.classList.add("bg-green-light");
+
+                    setTimeout(() => {
+                        copyIcon?.classList.remove("hidden");
+                        checkIcon?.classList.add("hidden");
+                        button.classList.remove("bg-green-light");
+                    }, 2000);
+                } catch (err) {
+                    console.error("Failed to copy:", err);
+                }
+            });
+        });
+    }
+
+    document.addEventListener("astro:page-load", initEmailDropdown);
+    if (document.readyState !== "loading") {
+        initEmailDropdown();
+    }
+</script>

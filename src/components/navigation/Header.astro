@@ -5,6 +5,7 @@ import NavGroup from "./NavGroup.astro";
 import MobileMenu from "./MobileMenu.astro";
 import ThemeSwitcher from "./ThemeSwitcher.astro";
 import RssDropdown from "./RssDropdown.astro";
+import EmailDropdown from "./EmailDropdown.astro";
 import Container from "@components/Container.astro";
 
 const isIndexPage = Astro.url.pathname === "/";
@@ -113,9 +114,45 @@ const navigation = [
                 }
             </nav>
 
-            <div class="hidden md:flex items-center gap-1">
-                <RssDropdown />
-                <ThemeSwitcher />
+            <div
+                class="hidden md:flex items-center gap-0.5 relative"
+                id="header-icons"
+            >
+                <div
+                    data-annotation-target
+                    data-annotation-text="stay in<br/>the loop"
+                >
+                    <RssDropdown />
+                </div>
+                <div
+                    data-annotation-target
+                    data-annotation-text="don't be a<br/>stranger :)"
+                    data-annotation-default
+                >
+                    <EmailDropdown />
+                </div>
+                <div
+                    data-annotation-target
+                    data-annotation-text="go dark!"
+                    data-annotation-text-alt="let there<br/>be light!"
+                >
+                    <ThemeSwitcher />
+                </div>
+                {
+                    isIndexPage && (
+                        <div class="annotation" id="header-annotation">
+                            <p class="annotation-text">
+                                don't be a
+                                <br />
+                                stranger :)
+                            </p>
+                            <Icon
+                                name="arrow-scribble"
+                                class="annotation-arrow"
+                            />
+                        </div>
+                    )
+                }
             </div>
         </div>
     </Container>
@@ -123,6 +160,43 @@ const navigation = [
 
 <!-- Mobile Menu -->
 <MobileMenu navigation={navigation} />
+
+<style>
+    .annotation {
+        position: absolute;
+        top: 0;
+        left: -16px;
+        display: flex;
+        margin-top: 64px;
+        transform: translateX(-64px);
+        color: #3b2f2f;
+        pointer-events: none;
+        transition: left 0.3s ease;
+        opacity: 0.7;
+    }
+
+    :global([data-theme="dark"]) .annotation {
+        color: white;
+    }
+
+    .annotation-arrow {
+        width: 36px;
+        height: 40px;
+        margin-top: -24px;
+        rotate: -20deg;
+        flex-shrink: 0;
+    }
+
+    .annotation-text {
+        font-family: var(--font-decorative);
+        font-size: 1.6rem;
+        line-height: 1.1;
+        rotate: -2deg;
+        margin: 0;
+        text-align: center;
+        width: 100px;
+    }
+</style>
 
 <script>
     // Module-level flag - persists across view transitions, resets on full page load
@@ -133,6 +207,9 @@ const navigation = [
         const logo = document.getElementById("site-logo");
         const logoRobin = document.getElementsByClassName("logo-robin");
         const logoSpace = document.getElementsByClassName("logo-space");
+        const annotation = header.querySelector(
+            ".annotation",
+        ) as HTMLElement | null;
 
         if (!header || !logo) return;
 
@@ -161,11 +238,13 @@ const navigation = [
                 logo?.classList.add("flex");
                 logoRobin[0]?.classList.remove("-mt-1.5", "ml-5");
                 logoSpace[0]?.classList.remove("w-1");
+                if (annotation) annotation.style.display = "none";
             } else {
                 header?.classList.remove("border-b", "bg-background");
                 logo?.classList.remove("flex");
                 logoRobin[0]?.classList.add("-mt-1.5", "ml-5");
                 logoSpace[0]?.classList.add("w-1");
+                if (annotation) annotation.style.display = "";
             }
         }
 
@@ -174,6 +253,73 @@ const navigation = [
 
         // Listen for scroll
         window.addEventListener("scroll", updateHeaderStyle);
+
+        // Annotation hover interaction
+        if (annotation) {
+            const iconGroup = document.getElementById("header-icons");
+            const annotationText = annotation.querySelector(
+                ".annotation-text",
+            ) as HTMLElement | null;
+            const iconTargets = header.querySelectorAll<HTMLElement>(
+                "[data-annotation-target]",
+            );
+            const defaultTarget = header.querySelector<HTMLElement>(
+                "[data-annotation-default]",
+            );
+
+            // Remove CSS transform so JS fully controls positioning
+            annotation.style.transform = "none";
+
+            function updateAnnotation(target: HTMLElement) {
+                if (!annotation || !annotationText || !iconGroup) return;
+
+                const targetRect = target.getBoundingClientRect();
+                const groupRect = iconGroup.getBoundingClientRect();
+                const targetCenter =
+                    targetRect.left - groupRect.left + targetRect.width / 2;
+
+                // Position so the arrow tip aligns with the icon center
+                // The arrow is on the right side of the annotation
+                const arrowTipOffset = 0;
+                const annotationWidth = annotation.offsetWidth;
+                annotation.style.left = `${targetCenter - annotationWidth + arrowTipOffset}px`;
+
+                let text = target.dataset.annotationText || "";
+                if (target.dataset.annotationTextAlt) {
+                    const isDark =
+                        document.documentElement.dataset.theme === "dark";
+                    text = isDark ? target.dataset.annotationTextAlt : text;
+                }
+                annotationText.innerHTML = text;
+            }
+
+            // Set initial position to default target
+            if (defaultTarget) {
+                updateAnnotation(defaultTarget);
+            }
+
+            iconTargets.forEach((target) => {
+                target.addEventListener("mouseenter", () =>
+                    updateAnnotation(target),
+                );
+            });
+
+            iconGroup?.addEventListener("mouseleave", () => {
+                if (defaultTarget) {
+                    updateAnnotation(defaultTarget);
+                }
+            });
+
+            // Re-update annotation when theme changes while hovering
+            const themeSwitcher = document.getElementById("theme-switcher");
+            const themeTarget = themeSwitcher?.closest("[data-annotation-target]") as HTMLElement | null;
+            if (themeSwitcher && themeTarget) {
+                themeSwitcher.addEventListener("click", () => {
+                    // Wait a tick for the theme to actually change
+                    requestAnimationFrame(() => updateAnnotation(themeTarget));
+                });
+            }
+        }
     }
 
     // For view transitions (navigation between pages)

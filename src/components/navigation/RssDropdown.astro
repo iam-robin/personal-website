@@ -28,9 +28,9 @@ const rssFeeds = [
             rssFeeds.map((feed) => (
                 <div class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-surface-raised transition-colors">
                     <Icon
-                        name="ph:rss-simple"
+                        name="ph:rss-simple-bold"
                         size={16}
-                        class="flex-shrink-0 text-muted"
+                        class="shrink-0 text-muted"
                     />
                     <span class="text-sm flex-1">{feed.label}</span>
                     <button
@@ -39,9 +39,9 @@ const rssFeeds = [
                         title="Copy feed URL"
                         aria-label={`Copy ${feed.label} RSS feed URL`}
                     >
-                        <Icon name="ph:copy" size={14} class="copy-icon" />
+                        <Icon name="ph:copy-bold" size={14} class="copy-icon" />
                         <Icon
-                            name="ph:check"
+                            name="ph:check-bold"
                             size={14}
                             class="check-icon hidden text-green-dark"
                         />
@@ -52,7 +52,7 @@ const rssFeeds = [
                         title="Open feed"
                         aria-label={`Open ${feed.label} RSS feed`}
                     >
-                        <Icon name="ph:arrow-square-out" size={14} />
+                        <Icon name="ph:arrow-square-out-bold" size={14} />
                     </a>
                 </div>
             ))

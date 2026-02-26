@@ -172,6 +172,45 @@ const { navigation } = Astro.props;
                     </ul>
                 </details>
             </li>
+            <li class="border-t border-white/10 mt-1 pt-1">
+                <div class="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-white/10 transition-colors">
+                    <Icon
+                        name="ph:envelope-simple"
+                        class="text-white/40"
+                        width={16}
+                    />
+                    <span class="font-mono text-sm flex-1">
+                        iamrob@in
+                    </span>
+                    <button
+                        class="email-copy-btn p-2 hover:bg-white/20 rounded-lg transition-colors"
+                        data-email="iamrob@in"
+                        title="Copy email"
+                        aria-label="Copy email address"
+                    >
+                        <Icon
+                            name="ph:copy"
+                            class="copy-icon"
+                            width={16}
+                        />
+                        <Icon
+                            name="ph:check"
+                            class="check-icon hidden"
+                            width={16}
+                        />
+                    </button>
+                    <a
+                        href="mailto:iamrob@in"
+                        class="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                        title="Send email"
+                    >
+                        <Icon
+                            name="ph:arrow-square-out"
+                            width={16}
+                        />
+                    </a>
+                </div>
+            </li>
         </ul>
     </details>
 </nav>
