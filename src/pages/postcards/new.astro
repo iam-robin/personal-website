@@ -1,5 +1,5 @@
 ---
-import { db, Postcard } from "astro:db";
+import { db, Postcard, eq, and, gt } from "astro:db";
 import Layout from "@layouts/Layout.astro";
 import Button from "@components/Button.astro";
 import { sendPostcardNotification } from "@utils/email";
@@ -84,6 +84,23 @@ if (Astro.request.method === "POST") {
         const wavyStampRotation = Math.floor(Math.random() * 21) - 10; // -10 to +10 degrees
 
         if (typeof author === "string" && typeof body === "string") {
+            // Deduplicate: skip if identical postcard was submitted in the last 5 minutes
+            const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+            const existing = await db
+                .select({ id: Postcard.id })
+                .from(Postcard)
+                .where(
+                    and(
+                        eq(Postcard.author, author),
+                        eq(Postcard.body, body),
+                        gt(Postcard.date, fiveMinutesAgo),
+                    ),
+                );
+
+            if (existing.length > 0) {
+                return Astro.redirect("/postcards/success");
+            }
+
             await db.insert(Postcard).values({
                 author,
                 body,
@@ -236,7 +253,7 @@ if (Astro.request.method === "POST") {
                 <input type="hidden" id="stamp-svg" name="stamp-svg" value="" />
             </div>
 
-            <Button type="submit">Send Postcard</Button>
+            <Button type="submit" class="submit-btn">Send Postcard</Button>
             <p class="text-xs text-neutral-400 mt-4 text-center">
                 Only the information you provide above is stored in a database.<br
                 />No IP addresses or any other personal data is collected.
@@ -244,6 +261,16 @@ if (Astro.request.method === "POST") {
         </form>
     </div>
 </Layout>
+
+<script is:inline>
+    document.querySelector("form").addEventListener("submit", function () {
+        const btn = document.querySelector(".submit-btn");
+        btn.disabled = true;
+        btn.textContent = "Sending...";
+        btn.style.opacity = "0.6";
+        btn.style.pointerEvents = "none";
+    });
+</script>
 
 <style>
     .stamp {
