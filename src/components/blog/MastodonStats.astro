@@ -29,18 +29,18 @@ try {
                 <div class="self-end text-text-secondary transition-all group-hover:-translate-y-2 group-hover:translate-x-2 group-hover:text-lilac-dark">
                     <Icon name="ph:arrow-up-right-bold" size={20} />
                 </div>
-                <ul class="list-style-none !m-0 flex gap-6 !p-0 text-sm">
-                    <li class="!m-0 flex items-center gap-1 !p-0">
+                <ul class="list-style-none m-0! flex gap-6 p-0! text-sm">
+                    <li class="m-0! flex items-center gap-1 p-0!">
                         <Icon name="ph:heart-bold" size={18} />
                         {status?.favourites_count
                             ? status.favourites_count
                             : "-"}
                     </li>
-                    <li class="!m-0 flex items-center gap-1 !p-0">
+                    <li class="m-0! flex items-center gap-1 p-0!">
                         <Icon name="ph:rocket-launch-bold" size={18} />
                         {status?.reblogs_count ? status.reblogs_count : "-"}
                     </li>
-                    <li class="!m-0 flex items-center gap-1 !p-0">
+                    <li class="m-0! flex items-center gap-1 p-0!">
                         <Icon name="ph:chat-circle-text-bold" size={18} />
                         {status?.replies_count ? status.replies_count : "-"}
                     </li>
