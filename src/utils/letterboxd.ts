@@ -15,6 +15,7 @@ export interface LetterboxdData {
 }
 
 const LETTERBOXD_BASE_URL = "https://letterboxd.com";
+const TIMEOUT_MS = 5000;
 
 function getTagContent(xml: string, tagName: string): string | null {
     const regex = new RegExp(`<${tagName}>([\\s\\S]*?)<\\/${tagName}>`, "i");
@@ -27,8 +28,12 @@ export async function scrapeLetterboxdFilms(
 ): Promise<LetterboxdData> {
     console.log(`Fetching Letterboxd RSS feed for user: ${username}`);
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
     const url = `${LETTERBOXD_BASE_URL}/${username}/rss/`;
-    const response = await fetch(url);
+    const response = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
     const xml = await response.text();
 
     const films: LetterboxdFilm[] = [];
