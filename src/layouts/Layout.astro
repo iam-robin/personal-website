@@ -85,22 +85,10 @@ const pageTitle = title
         <meta property="og:url" content={canonicalUrl} />
         <meta name="twitter:card" content="summary_large_image" />
         <ClientRouter />
-        <!-- Privacy-friendly analytics by Plausible -->
-        <script async src="https://plausible.io/js/pa-tf4WN8_9YDKt6QGrGPw7z.js"
-        ></script>
-        <script is:inline>
-            ((window.plausible =
-                window.plausible ||
-                function () {
-                    (plausible.q = plausible.q || []).push(arguments);
-                }),
-                (plausible.init =
-                    plausible.init ||
-                    function (i) {
-                        plausible.o = i || {};
-                    }));
-            plausible.init();
-        </script>
+        <script
+            defer
+            src="https://umami.iamrob.in/script.js"
+            data-website-id="9e274244-e311-4ebe-8ff0-c691ce080455"></script>
 
         <script is:inline>
             // Mark that JS is enabled (for graceful degradation)
