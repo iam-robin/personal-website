@@ -13,5 +13,9 @@ const { year, posts = [], currentCategory } = Astro.props;
 ---
 
 <YearSection year={year}>
-    {posts.map((post) => <BlogPostItem post={post} currentCategory={currentCategory} />)}
+    {
+        posts.map((post) => (
+            <BlogPostItem post={post} currentCategory={currentCategory} />
+        ))
+    }
 </YearSection>
