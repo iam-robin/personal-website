@@ -1,15 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import BookmarkTag from "./BookmarkTag.astro";
-
-export type Bookmark = {
-    link: string;
-    title: string;
-    cover: string;
-    tags: string[];
-    type: string;
-    created: string;
-};
+import type { Bookmark } from "@api/obsidian-bookmarks";
 
 interface Props {
     bookmark: Bookmark;
@@ -47,7 +39,7 @@ const domain = url.hostname;
                         ? "bg-green"
                         : bookmark.type === "video"
                           ? "bg-blue"
-                          : bookmark.type === "link"
+                          : bookmark.type === "website"
                             ? "bg-lilac"
                             : "bg-red"
                 }`}
@@ -91,7 +83,7 @@ const domain = url.hostname;
                             ? "bg-green"
                             : bookmark.type === "video"
                               ? "bg-blue"
-                              : bookmark.type === "link"
+                              : bookmark.type === "website"
                                 ? "bg-lilac"
                                 : "bg-red"
                     }`}

@@ -1,16 +1,16 @@
 ---
 import BookmarksPage from "@components/bookmarks/BookmarksPage.astro";
-import { fetchBookmarks } from "../../../api/raindrop";
-import type { Bookmark } from "@components/bookmarks/BookmarkItem.astro";
+import { fetchBookmarks } from "@api/obsidian-bookmarks";
+import type { Bookmark } from "@api/obsidian-bookmarks";
 
 export async function getStaticPaths() {
-    const allBookmarks: Bookmark[] = await fetchBookmarks(0);
+    const allBookmarks: Bookmark[] = await fetchBookmarks();
     const allTags = allBookmarks.flatMap((bookmark) => bookmark.tags);
     const uniqueTags = [...new Set(allTags)];
 
     return uniqueTags.map((tag) => {
         const filteredBookmarks = allBookmarks.filter(
-            (bookmark) => bookmark.tags && bookmark.tags.includes(tag)
+            (bookmark) => bookmark.tags && bookmark.tags.includes(tag),
         );
 
         return {

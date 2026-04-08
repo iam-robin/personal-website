@@ -1,9 +1,9 @@
 ---
 import BookmarksPage from "@components/bookmarks/BookmarksPage.astro";
-import { fetchBookmarks } from "../../api/raindrop";
-import type { Bookmark } from "@components/bookmarks/BookmarkItem.astro";
+import { fetchBookmarks } from "@api/obsidian-bookmarks";
+import type { Bookmark } from "@api/obsidian-bookmarks";
 
-const bookmarks: Bookmark[] = await fetchBookmarks(0);
+const bookmarks: Bookmark[] = await fetchBookmarks();
 ---
 
 <BookmarksPage bookmarks={bookmarks} allBookmarks={bookmarks} />

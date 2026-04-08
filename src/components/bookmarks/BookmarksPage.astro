@@ -3,7 +3,7 @@ import Layout from "@layouts/Layout.astro";
 import BookmarkItem from "./BookmarkItem.astro";
 import TagCloud from "@components/TagCloud.astro";
 import Container from "@components/Container.astro";
-import type { Bookmark } from "./BookmarkItem.astro";
+import type { Bookmark } from "@api/obsidian-bookmarks";
 import HeadlineParagraphSection from "@components/HeadlineParagraphSection.astro";
 import Link from "@components/Link.astro";
 
@@ -22,7 +22,7 @@ const tagCounts = allTags.reduce(
         acc[tag] = (acc[tag] || 0) + 1;
         return acc;
     },
-    {} as Record<string, number>
+    {} as Record<string, number>,
 );
 
 const tags = Object.entries(tagCounts).map(([name, count]) => ({
@@ -30,6 +30,8 @@ const tags = Object.entries(tagCounts).map(([name, count]) => ({
     count,
 }));
 tags.sort((a, b) => b.count - a.count);
+
+console.log("bookmarks", bookmarks);
 ---
 
 <Layout>
@@ -38,22 +40,31 @@ tags.sort((a, b) => b.count - a.count);
             Daily I receive new articles, videos, essays, etc. in the RSS reader
             of my choice: <Link
                 href="https://www.goldenhillsoftware.com/unread/"
-                external>Unread</Link>. I categorize and tag items I have read and found interesting in <Link
-                href="https://raindrop.io"
-                external>Raindrop.io</Link>. Thanks to their fantastic API, I can also share that list
-            here on my personal website.
+                external>Unread</Link
+            >. The ones I love I tag and save into my <Link
+                href="https://obsidian.md"
+                external>Obsidian</Link
+            > vault — and from there they flow straight onto this page.
             <ul class="mt-8 flex items-center gap-4 font-mono text-xs">
                 <li>
-                    <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-green"></span>Article
+                    <span
+                        class="mr-1.5 inline-block h-2 w-2 rounded-full bg-green"
+                    ></span>Article
                 </li>
                 <li>
-                    <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-lilac"></span>Website
+                    <span
+                        class="mr-1.5 inline-block h-2 w-2 rounded-full bg-lilac"
+                    ></span>Website
                 </li>
                 <li>
-                    <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-blue"></span>Video
+                    <span
+                        class="mr-1.5 inline-block h-2 w-2 rounded-full bg-blue"
+                    ></span>Video
                 </li>
                 <li>
-                    <span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-red"></span>Misc
+                    <span
+                        class="mr-1.5 inline-block h-2 w-2 rounded-full bg-red"
+                    ></span>Misc
                 </li>
             </ul>
         </HeadlineParagraphSection>

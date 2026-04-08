@@ -1,8 +1,8 @@
 import rss from "@astrojs/rss";
-import { fetchBookmarks } from "../api/raindrop";
+import { fetchBookmarks } from "@api/obsidian-bookmarks";
 
 export async function GET(context) {
-    const bookmarks = await fetchBookmarks(0);
+    const bookmarks = await fetchBookmarks();
 
     const lastUpdated =
         bookmarks.length > 0 ? new Date(bookmarks[0].created) : new Date();

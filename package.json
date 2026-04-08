@@ -3,9 +3,9 @@
     "type": "module",
     "version": "0.0.1",
     "scripts": {
-        "sync-book-cover-data": "mkdir -p public/book-covers && cp -r data/output/book-covers/* public/book-covers/ && mkdir -p src/data && cp data/output/books.json src/data/books.json",
-        "prebuild": "npm run sync-book-cover-data",
-        "dev": "npm run sync-book-cover-data && astro dev",
+        "sync-data": "mkdir -p public/book-covers public/bookmark-covers src/data && cp -r data/output/book-covers/* public/book-covers/ && (cp -r data/output/bookmark-covers/* public/bookmark-covers/ 2>/dev/null || true) && cp data/output/books.json src/data/books.json && cp data/output/bookmarks.json src/data/bookmarks.json",
+        "prebuild": "npm run sync-data",
+        "dev": "npm run sync-data && astro dev",
         "build": "astro build --remote",
         "preview": "astro preview",
         "astro": "astro"

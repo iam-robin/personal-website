@@ -1,9 +1,9 @@
 ---
 import Container from "@components/Container.astro";
-import { fetchBookmarks } from "../../api/raindrop";
+import { fetchBookmarks } from "@api/obsidian-bookmarks";
 import BookmarkItem from "./BookmarkItem.astro";
 
-const bookmarks = await fetchBookmarks(0);
+const bookmarks = await fetchBookmarks();
 const firstTenBookmarks = bookmarks.slice(0, 10);
 ---
 
