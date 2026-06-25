@@ -22,7 +22,11 @@ const getLastYear = (year: string | undefined): number => {
 };
 
 const projects = projectsCollection
-    .sort((a, b) => getLastYear(b.data.year) - getLastYear(a.data.year))
+    .sort(
+        (a, b) =>
+            getLastYear(b.data.year) - getLastYear(a.data.year) ||
+            b.data.order - a.data.order,
+    )
     .map((project) => ({
         slug: project.slug,
         title: project.data.title,
