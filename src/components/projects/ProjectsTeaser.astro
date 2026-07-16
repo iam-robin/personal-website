@@ -1,0 +1,35 @@
+---
+import TeaserSection from '../TeaserSection.astro';
+import ProjectCard from './ProjectCard.astro';
+import { getFeaturedProjects } from '../../utils/projects';
+
+const projects = await getFeaturedProjects();
+
+const link = {
+  href: '/projects',
+  text: 'All Projects',
+};
+---
+
+<TeaserSection title="Side Projects" link={link}>
+  <ul class="divide-y divide-ink/15 border-y border-ink/15">
+    {
+      projects.map((project) => (
+        <li class="cursor-pointer">
+
+          <ProjectCard
+            slug={project.id}
+            title={project.data.title}
+            description={project.data.description}
+            year={project.data.year}
+            bgColor={project.data.bgColor}
+            bgColorDark={project.data.bgColorDark}
+            externalUrl={project.data.externalUrl}
+            tags={project.data.tags}
+            draft={project.data.draft}
+          />
+        </li>
+      ))
+    }
+  </ul>
+</TeaserSection>

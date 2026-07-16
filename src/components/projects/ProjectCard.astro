@@ -1,0 +1,71 @@
+---
+import FanPreview from "./FanPreview.astro";
+
+interface Props {
+    title: string;
+    description: string;
+    year: string;
+    slug: string;
+    bgColor?: string;
+    bgColorDark?: string;
+    externalUrl?: string;
+    tags?: string[];
+    draft?: boolean;
+    /** Cursor-following fan preview on hover (used on /projects). */
+    showFanPreview?: boolean;
+}
+
+const {
+    title,
+    description,
+    year,
+    slug,
+    externalUrl,
+    tags,
+    draft = false,
+    showFanPreview = false,
+} = Astro.props;
+
+const href = externalUrl || `/projects/${slug}`;
+const isExternal = !!externalUrl;
+
+const Tag = draft ? "div" : "a";
+const linkAttrs = draft
+    ? {}
+    : {
+          href,
+          target: isExternal ? "_blank" : undefined,
+          rel: isExternal ? "noopener noreferrer" : undefined,
+      };
+
+const meta = (draft ? ["Coming soon"] : (tags ?? [])).join(" · ");
+---
+
+<Tag
+    {...linkAttrs}
+    data-project={slug}
+    class={`project-card flex items-start gap-5 px-3 py-5 font-mono ${draft ? "cursor-not-allowed" : ""}`}
+>
+    {showFanPreview && <FanPreview projectId={slug} />}
+    <div class="flex min-w-0 flex-1 flex-col gap-1">
+        <h3 class="text-base">{title}</h3>
+        <p class="text-sm opacity-70">{description}</p>
+        {meta && <span class="text-sm opacity-40">{meta}</span>}
+    </div>
+    <span class="shrink-0 text-sm whitespace-nowrap opacity-40">{year}</span>
+</Tag>
+
+<style>
+    /*
+      Hover keys off the parent <li> (its border-included box leaves no
+      dead zone between adjacent cards, so moving across the divider never
+      drops the state).
+    */
+    :global(li:hover) > .project-card {
+        background-color: color-mix(
+            in srgb,
+            var(--color-ink) 6%,
+            var(--color-paper)
+        );
+    }
+</style>

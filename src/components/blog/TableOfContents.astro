@@ -1,0 +1,43 @@
+---
+/**
+ * Table of contents for a blog post, built from the headings Astro
+ * extracts during render(). Lists h2 + h3 (h3 indented), linking to the
+ * auto-generated heading ids. Renders nothing if the post is too short
+ * to warrant one.
+ */
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+    headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+const toc = headings.filter(
+    (h) => (h.depth === 2 || h.depth === 3) && h.slug !== "footnote-label",
+);
+const show = toc.length >= 2;
+---
+
+{
+    show && (
+        <nav
+            aria-label="Table of contents"
+            class="mb-12 border-y border-ink/15 py-6"
+        >
+            <p class="mb-3 font-mono text-sm opacity-40">Contents</p>
+            <ul class="flex flex-col gap-1.5 font-mono text-sm">
+                {toc.map((heading) => (
+                    <li class:list={[heading.depth === 3 && "pl-5"]}>
+                        <a
+                            href={`#${heading.slug}`}
+                            class="opacity-70 underline-offset-4 hover:underline hover:opacity-100"
+                        >
+                            {heading.text}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    )
+}

@@ -1,0 +1,100 @@
+---
+/**
+ * Expanded footer for subpages: a large robin on the left, then columns of
+ * link lists on the right, closing with a copyright line. The compact
+ * single-row SiteFooter is used on the homepage's sticky hero instead —
+ * there's no room for this layout in that column.
+ */
+import Bird from "../Bird.astro";
+
+interface Props {
+    class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+
+type Link = { label: string; href: string; me?: boolean };
+
+const columns: { title: string; links: Link[] }[] = [
+    {
+        title: "Explore",
+        links: [
+            { label: "Work", href: "/work" },
+            { label: "Projects", href: "/projects" },
+            { label: "Blog", href: "/blog" },
+            { label: "Garden", href: "/garden" },
+        ],
+    },
+    {
+        title: "Elsewhere",
+        links: [
+            { label: "Email", href: "mailto:hey@iamrob.in" },
+            { label: "GitHub", href: "https://github.com/iam-robin" },
+            {
+                label: "Mastodon",
+                href: "https://mastodon.social/@iamrobin",
+                me: true,
+            },
+            {
+                label: "Bluesky",
+                href: "https://bsky.app/profile/iam-robin.bsky.social",
+            },
+        ],
+    },
+    {
+        title: "Site",
+        links: [
+            { label: "Changelog", href: "/changelog" },
+            { label: "Legal notice", href: "/legal" },
+            { label: "Colophon", href: "/colophon" },
+        ],
+    },
+];
+
+const isExternal = (href: string) => href.startsWith("http");
+const year = new Date().getFullYear();
+---
+
+<footer class={className}>
+    <div
+        class="flex flex-col gap-12 md:flex-row md:items-start md:justify-between md:gap-16"
+    >
+        <!-- Logo: the robin, doubling as a link home -->
+        <a href="/" aria-label="Back to homepage" class="shrink-0">
+            <Bird interactive={false} class="h-24 w-auto text-ink" />
+        </a>
+
+        <!-- Link columns -->
+        <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 md:gap-16">
+            {
+                columns.map((col) => (
+                    <nav class="flex flex-col gap-3 font-mono text-sm">
+                        <span class="mb-1 text-xs tracking-widest uppercase opacity-50">
+                            {col.title}
+                        </span>
+                        {col.links.map((link) => (
+                            <a
+                                href={link.href}
+                                class="opacity-60 underline-offset-4 hover:underline hover:opacity-100"
+                                {...(isExternal(link.href) && {
+                                    target: "_blank",
+                                    rel: link.me
+                                        ? "me noopener noreferrer"
+                                        : "noopener noreferrer",
+                                })}
+                            >
+                                {link.label}
+                            </a>
+                        ))}
+                    </nav>
+                ))
+            }
+        </div>
+    </div>
+
+    <div
+        class="mt-12 border-t border-ink/10 pt-6 font-mono text-sm opacity-40"
+    >
+        © {year} Robin Spielmann
+    </div>
+</footer>

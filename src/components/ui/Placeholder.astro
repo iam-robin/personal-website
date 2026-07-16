@@ -1,0 +1,17 @@
+---
+/**
+ * Temporary placeholder for pages whose real content/layout is still to
+ * come. Delete usages as each page gets built out.
+ */
+interface Props {
+    label?: string;
+}
+
+const { label = "Content coming soon" } = Astro.props;
+---
+
+<div
+    class="flex h-48 items-center justify-center border border-dashed border-ink/20 font-mono text-xs text-ink/40"
+>
+    {label}
+</div>

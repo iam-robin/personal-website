@@ -1,0 +1,30 @@
+---
+/**
+ * Static category filter. Each category is its own page — no client JS.
+ * `active` is the currently-viewed category (null on the "All" index).
+ */
+import { categorySlug, categoryLabel } from "../../utils/blog";
+import FilterBar from "../ui/FilterBar.astro";
+import FilterTag from "../ui/FilterTag.astro";
+
+interface Props {
+    categories: string[];
+    active?: string | null;
+}
+
+const { categories, active = null } = Astro.props;
+---
+
+<FilterBar>
+    <FilterTag href="/blog" active={active === null}>All</FilterTag>
+    {
+        categories.map((category) => (
+            <FilterTag
+                href={`/blog/category/${categorySlug(category)}`}
+                active={active === category}
+            >
+                {categoryLabel(category)}
+            </FilterTag>
+        ))
+    }
+</FilterBar>

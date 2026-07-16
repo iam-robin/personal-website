@@ -1,0 +1,286 @@
+---
+import SubpageLayout from "../layouts/SubpageLayout.astro";
+import Bird from "../components/Bird.astro";
+import Bird404 from "../components/Bird404.astro";
+import { timeSince } from "../utils/timeSince";
+import { changelog } from "../data/changelog";
+
+// The newest changelog entry drives the "last updated" line below.
+const latest = changelog[0];
+
+const colors = [
+    {
+        name: "--color-ink",
+        value: "#1a1919",
+        role: "Text & foreground",
+        swatch: "bg-ink",
+    },
+    {
+        name: "--color-paper",
+        value: "#eae8e3",
+        role: "Page background",
+        swatch: "bg-paper",
+    },
+    {
+        name: "--color-surface",
+        value: "#d2d1ca",
+        role: "Cards & surfaces",
+        swatch: "bg-surface",
+    },
+];
+
+const typefaces = [
+    {
+        token: "font-sans",
+        name: "Apercu",
+        role: "Headlines & interface",
+        foundry: "Colophon Foundry",
+        cls: "font-sans",
+        sample: "The quick brown fox jumps over the lazy dog",
+    },
+    {
+        token: "font-mono",
+        name: "Fira Mono",
+        role: "Body copy & labels",
+        foundry: "Carrois · Mozilla",
+        cls: "font-mono",
+        sample: "The quick brown fox jumps over the lazy dog",
+    },
+    {
+        token: "font-decorative",
+        name: "LiebeHeide",
+        role: "Handwritten accents",
+        foundry: "LiebeFonts",
+        cls: "font-decorative",
+        sample: "The quick brown fox jumps over the lazy dog",
+    },
+];
+
+// Credits & inspirations — the honest attribution the page was missing.
+const thanks = [
+    {
+        label: "Palette",
+        html: 'The three greige neutrals, borrowed from <a href="https://www.terrain.com" target="_blank" rel="noopener noreferrer">terrain.com</a>.',
+    },
+    {
+        label: "Inspiration",
+        html: 'This page owes a nod to <a href="https://karolinaszczur.com/colophon" target="_blank" rel="noopener noreferrer">Karolina Szczur’s colophon</a>.',
+    },
+];
+
+// Rendered largest → smallest. The sizes are fluid (clamped to the
+// container width), so they shift as the column grows.
+const typeScale = [
+    { cls: "text-4xl", token: "text-4xl" },
+    { cls: "text-3xl", token: "text-3xl" },
+    { cls: "text-2xl", token: "text-2xl" },
+    { cls: "text-xl", token: "text-xl" },
+    { cls: "text-lg", token: "text-lg" },
+    { cls: "text-md", token: "text-md" },
+    { cls: "text-base", token: "text-base" },
+    { cls: "text-sm", token: "text-sm" },
+    { cls: "text-xs", token: "text-xs" },
+];
+
+const birds = [
+    { label: "Resting", note: "The logo", cls: "" },
+    { label: "Happy", note: "One click", cls: "is-clicked" },
+    { label: "Angry", note: "Three clicks", cls: "is-angry" },
+];
+---
+
+<SubpageLayout
+    title="Colophon"
+    description="The pieces this site is built from — colours, type, and the robin. A reference for how it's put together."
+>
+    <div class="flex flex-col gap-24">
+        <!-- Colours -->
+        <section>
+            <h2
+                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+            >
+                Colours
+            </h2>
+            <p class="mb-8 max-w-xl font-mono text-sm opacity-70">
+                Three warm greige neutrals. Colour is added only when a page
+                needs it.
+            </p>
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                {
+                    colors.map((c) => (
+                        <div class="flex flex-col gap-3">
+                            <div
+                                class:list={[
+                                    "aspect-[4/3] w-full rounded-md border border-ink/10",
+                                    c.swatch,
+                                ]}
+                            />
+                            <div class="font-mono text-sm">
+                                <div>{c.role}</div>
+                                <div class="opacity-50">{c.name}</div>
+                                <div class="opacity-50">{c.value}</div>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+
+        <!-- Typefaces -->
+        <section>
+            <h2
+                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+            >
+                Typefaces
+            </h2>
+            <div class="flex flex-col divide-y divide-ink/10">
+                {
+                    typefaces.map((t) => (
+                        <div class="flex flex-col gap-3 py-8 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-8">
+                            <div class="shrink-0 font-mono text-sm sm:w-48">
+                                <div>{t.name}</div>
+                                <div class="opacity-50">{t.token}</div>
+                                <div class="opacity-50">{t.role}</div>
+                                <div class="opacity-50">{t.foundry}</div>
+                            </div>
+                            <p class:list={[t.cls, "text-lg"]}>{t.sample}</p>
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+
+        <!-- Type scale -->
+        <section>
+            <h2
+                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+            >
+                Type scale
+            </h2>
+            <p class="mb-8 max-w-xl font-mono text-sm opacity-70">
+                A fluid scale tuned to the container width, not the viewport.
+            </p>
+            <div class="flex flex-col divide-y divide-ink/10">
+                {
+                    typeScale.map((s) => (
+                        <div class="flex items-baseline gap-6 py-4 first:pt-0 last:pb-0">
+                            <span class="w-20 shrink-0 font-mono text-xs opacity-50">
+                                {s.token}
+                            </span>
+                            <span class:list={[s.cls, "font-sans font-bold"]}>
+                                Ag
+                            </span>
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+
+        <!-- The bird -->
+        <section>
+            <h2
+                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+            >
+                The robin
+            </h2>
+            <p class="mb-8 max-w-xl font-mono text-sm opacity-70">
+                One bird, a few moods. It's the logo and the favicon. Click
+                the one in the corner.
+            </p>
+            <div class="grid grid-cols-2 gap-8 sm:grid-cols-4">
+                {
+                    birds.map((b) => (
+                        <div class="flex flex-col items-center gap-4 rounded-md border border-ink/10 bg-surface/40 p-6 text-center">
+                            <Bird
+                                interactive={false}
+                                class:list={[b.cls, "h-24 w-auto text-ink"]}
+                            />
+                            <div class="font-mono text-sm">
+                                <div>{b.label}</div>
+                                <div class="opacity-50">{b.note}</div>
+                            </div>
+                        </div>
+                    ))
+                }
+                <div class="flex flex-col items-center gap-4 rounded-md border border-ink/10 bg-surface/40 p-6 text-center">
+                    <Bird404 class="h-24 w-auto text-ink" />
+                    <div class="font-mono text-sm">
+                        <div>Dazed</div>
+                        <div class="opacity-50">You found a 404</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Signature details -->
+        <section>
+            <h2
+                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+            >
+                Signature details
+            </h2>
+            <div class="flex flex-col divide-y divide-ink/10">
+                <div class="flex flex-col gap-2 py-6 first:pt-0 sm:flex-row sm:items-center sm:gap-8">
+                    <div class="shrink-0 font-mono text-sm opacity-50 sm:w-48">
+                        .marker
+                    </div>
+                    <p class="font-mono text-base">
+                        A <span class="marker">marker highlight</span>, skewed
+                        and slightly rotated.
+                    </p>
+                </div>
+                <div class="flex flex-col gap-2 py-6 last:pb-0 sm:flex-row sm:items-center sm:gap-8">
+                    <div class="shrink-0 font-mono text-sm opacity-50 sm:w-48">
+                        a:hover
+                    </div>
+                    <p class="font-mono text-base">
+                        Every <a href="/colophon">link tilts into italic</a> on
+                        hover.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Thanks -->
+        <section>
+            <h2
+                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+            >
+                Thanks
+            </h2>
+            <div class="flex flex-col divide-y divide-ink/10">
+                {
+                    thanks.map((t) => (
+                        <div class="flex flex-col gap-2 py-6 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-8">
+                            <div class="shrink-0 font-mono text-sm opacity-50 sm:w-48">
+                                {t.label}
+                            </div>
+                            <p class="font-mono text-base" set:html={t.html} />
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+
+        <!-- Built with -->
+        <section>
+            <h2
+                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+            >
+                Built with
+            </h2>
+            <p class="max-w-xl font-mono text-base">
+                Version four, built with Astro and Tailwind CSS. Static
+                wherever it can be — the personal sections (books, films,
+                bookmarks, garden notes) come straight from my Obsidian vault.
+                Type is set in Apercu, Fira Mono and LiebeHeide. It lives at
+                iamrob.in, served by a small Node server on Hetzner via
+                Coolify.
+            </p>
+            <p class="mt-6 font-mono text-sm opacity-50">
+                Last updated {timeSince(new Date(latest.date))} —{" "}
+                <a href="/changelog">v{latest.version}</a>
+            </p>
+        </section>
+    </div>
+</SubpageLayout>

@@ -1,0 +1,31 @@
+---
+/**
+ * Shared filter-tag pill. Used by every subpage filter (blog, bookmarks,
+ * garden, postcards) so a filter tag looks identical everywhere. Filtering
+ * stays server-side — this is just the link's presentation.
+ *
+ * Soft chip: faint filled chip when inactive, slightly darker chip with a
+ * thin inset ring when active.
+ * Inactive tags mute the *text* (not the whole element) so page-specific
+ * decoration passed via the slot — a color dot, a flag — keeps full color.
+ * Pass the item count via `count`.
+ */
+interface Props {
+    href: string;
+    active?: boolean;
+    count?: number;
+}
+
+const { href, active = false, count } = Astro.props;
+
+const base =
+    "inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-sm transition-colors";
+const state = active
+    ? "bg-ink/10 text-ink inset-ring inset-ring-ink/25"
+    : "bg-ink/5 text-ink/65 hover:bg-ink/10 hover:text-ink";
+---
+
+<a href={href} class:list={[base, state]}>
+    <slot />
+    {count !== undefined && <span class="opacity-50">{count}</span>}
+</a>

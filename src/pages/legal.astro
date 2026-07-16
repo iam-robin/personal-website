@@ -1,0 +1,117 @@
+---
+import SubpageLayout from "../layouts/SubpageLayout.astro";
+
+/**
+ * Legal notice (Impressum) — the bits German law requires, plus a plain-English
+ * note on what the postcard feature stores. Ported from v3; the postcard
+ * section is updated to match the v4 Astro DB setup.
+ *
+ * The formal liability/copyright/privacy wording is intentionally left in its
+ * standard legal phrasing rather than rewritten in the site's usual voice.
+ */
+const sections: { title: string; body: string }[] = [
+    {
+        title: "Liability for content",
+        body: "As a service provider, I am responsible for my own content on these pages in accordance with general legislation pursuant to Section 7 (1) of the German Telemedia Act (TMG). According to §§ 8 to 10 TMG, however, I am not obligated as a service provider to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under the general laws remain unaffected. However, liability in this regard is only possible from the point in time at which a concrete infringement of the law becomes known. If I become aware of any such infringements, I will remove this content immediately.",
+    },
+    {
+        title: "Liability for links",
+        body: "This site contains links to external websites of third parties, over whose content I have no influence. Therefore, I cannot assume any liability for this external content. The respective provider or operator of the pages is always responsible for the content of the linked pages. The linked pages were checked for possible legal violations at the time of linking. Illegal content was not recognizable at the time of linking. However, permanent monitoring of the content of the linked pages is not reasonable without concrete evidence of a violation of the law. If I become aware of any infringements, I will remove such links immediately.",
+    },
+    {
+        title: "Copyright",
+        body: "The content and works created by me on these pages are subject to German copyright law. Reproduction, editing, distribution and any kind of exploitation outside the limits of copyright require my written consent. Downloads and copies of this site are only permitted for private, non-commercial use. Insofar as the content on this site was not created by me, the copyrights of third parties are respected. In particular, third-party content is identified as such. Should you nevertheless become aware of a copyright infringement, please let me know. If I become aware of any infringements, I will remove such content immediately.",
+    },
+    {
+        title: "Privacy",
+        body: "I take the protection of your personal data very seriously and treat it confidentially, in accordance with the statutory data protection regulations and this notice. Using this website is generally possible without providing personal data. Insofar as personal data (for example a name or website) is collected on these pages, this is always done, as far as possible, on a voluntary basis. This data will not be passed on to third parties without your express consent. Please note that data transmission over the Internet can have security gaps — complete protection of data against access by third parties is not possible.",
+    },
+];
+---
+
+<SubpageLayout
+    title="Legal notice"
+    description="The bits the law requires — who runs this site, and a plain note on the little the postcard feature stores."
+>
+    <div class="flex flex-col gap-16">
+        <!-- Editor · Contact -->
+        <section class="grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2">
+            <div>
+                <h2
+                    class="mb-4 font-mono text-xs tracking-widest uppercase opacity-50"
+                >
+                    Editor
+                </h2>
+                <ul class="flex flex-col gap-1 font-mono text-base opacity-80">
+                    <li>Robin Spielmann</li>
+                    <li>hey@iamrob.in</li>
+                    <li>www.iamrob.in</li>
+                </ul>
+            </div>
+            <div>
+                <h2
+                    class="mb-4 font-mono text-xs tracking-widest uppercase opacity-50"
+                >
+                    Contact
+                </h2>
+                <ul class="flex flex-col gap-1 font-mono text-base opacity-80">
+                    <li>Robin Spielmann</li>
+                    <li>Pelkovenstr. 70</li>
+                    <li>80992 München</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Formal sections -->
+        <div class="flex flex-col divide-y divide-ink/10">
+            {
+                sections.map((s) => (
+                    <section class="py-10 first:pt-0">
+                        <h2 class="mb-4 font-mono text-xs tracking-widest uppercase opacity-50">
+                            {s.title}
+                        </h2>
+                        <p class="max-w-2xl font-mono text-base opacity-80">
+                            {s.body}
+                        </p>
+                    </section>
+                ))
+            }
+
+            <!-- Postcard data collection -->
+            <section class="py-10 last:pb-0">
+                <h2
+                    class="mb-4 font-mono text-xs tracking-widest uppercase opacity-50"
+                >
+                    Postcard data collection
+                </h2>
+                <div class="flex max-w-2xl flex-col gap-4 font-mono text-base opacity-80">
+                    <p>
+                        When you send a postcard through the postcard feature, I
+                        store the following in my database (Astro DB, built on
+                        Turso / libSQL):
+                    </p>
+                    <ul class="ml-6 flex list-disc flex-col gap-2">
+                        <li>
+                            <strong>Required:</strong> your name and message
+                        </li>
+                        <li>
+                            <strong>Optional:</strong> your country and website URL,
+                            if you add them
+                        </li>
+                        <li>
+                            <strong>Automatically generated:</strong> the submission
+                            date and the styling parameters used to draw the card
+                        </li>
+                    </ul>
+                    <p>
+                        I don't collect IP addresses, email addresses, or any
+                        other personal identifiers beyond what you choose to
+                        provide. Every postcard is reviewed before it's
+                        published. Email me at hey@iamrob.in to have your
+                        postcard removed.
+                    </p>
+                </div>
+            </section>
+        </div>
+    </div>
+</SubpageLayout>

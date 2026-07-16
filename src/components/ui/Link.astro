@@ -1,0 +1,24 @@
+---
+/**
+ * The site's one link style: mono, underlined, arrow variants.
+ * - external links open in a new tab and get an ↗
+ * - `arrow` adds a → for call-to-action links
+ * Size via `class` (e.g. text-xs, text-base); defaults to text-xs.
+ */
+interface Props {
+    href: string;
+    external?: boolean;
+    arrow?: boolean;
+    class?: string;
+}
+
+const { href, external = false, arrow = false, class: className = "text-xs" } = Astro.props;
+---
+
+<a
+    href={href}
+    class={`font-mono underline underline-offset-4 hover:no-underline ${className}`}
+    {...external && { target: "_blank", rel: "noopener noreferrer" }}
+>
+    <slot />{external && " ↗"}{arrow && " →"}
+</a>

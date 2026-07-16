@@ -1,0 +1,463 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import TeaserSection from "../components/TeaserSection.astro";
+import Bird from "../components/Bird.astro";
+import ProjectsTeaser from "../components/projects/ProjectsTeaser.astro";
+import BlogTeaser from "../components/blog/BlogTeaser.astro";
+import Link from "../components/ui/Link.astro";
+import Nav from "../components/ui/Nav.astro";
+import ContactSection from "../components/ui/ContactSection.astro";
+import SiteFooter from "../components/ui/SiteFooter.astro";
+import FooterColumns from "../components/ui/FooterColumns.astro";
+import RssDropdown from "../components/ui/RssDropdown.astro";
+import MobileMenu from "../components/ui/MobileMenu.astro";
+import PostcardItem from "../components/postcards/PostcardItem.astro";
+import { getFeaturedProjects } from "../utils/projects";
+import { getFanImages } from "../utils/projectFans";
+import { getNewestPostcards, toPostcardProps } from "../utils/postcards";
+
+const projects = await getFeaturedProjects();
+
+// Fan images (Matchprint posters, robins.photos prints) shown in the
+// hero on card hover — shared with the /projects previews via the util.
+const matchprintPosters = getFanImages("matchprint")!;
+const fanPhotos = getFanImages("robins-photos")!;
+// handcoded.art (project id "geeenerated"): generative prints.
+const handcodedArt = getFanImages("geeenerated")!;
+
+// Newest postcards, fanned into the hero when the contact section's
+// "Send a postcard" row is hovered — same swap as the project cards.
+const newestPostcards = await getNewestPostcards(3);
+
+// Hovering a card swaps the hero's default intro for that card's panel.
+// Only the center content area swaps — nav, footer and the rest of the
+// left column stay put. The project card's own darken is handled in
+// ProjectCard. Pure CSS via :has(), no client JS.
+//
+// Each entry pairs the trigger a hovered <li>'s direct child carries
+// (projects: [data-project]; the postcard row: [data-hero-panel]) with
+// the [data-panel] it reveals in the hero. The predicate is the <li>
+// (li:hover > trigger), not the trigger itself: adjacent li boxes are
+// contiguous, so moving across a divider never drops the state; and
+// hidden panels use opacity + visibility so the swap has no default
+// flash.
+//
+// Panels fade with a ~100ms delay so quick pass-throughs over the card
+// list don't flicker the hero. Transitions come from the destination
+// state: rules that SHOW a panel flip visibility at the delay start
+// (0.1s) so the fade is seen; rules that HIDE one keep it visible until
+// the fade ends (0.25s). The hiding half for the panels lives on the
+// [data-panel] base rule in the <style> block below.
+const SHOW_TRANSITION =
+    "transition: opacity 0.15s ease-out 0.1s, visibility 0s 0.1s;";
+const HIDE_TRANSITION =
+    "transition: opacity 0.15s ease-out 0.1s, visibility 0s 0.25s;";
+
+const heroPanels = [
+    ...projects.map((project) => ({
+        trigger: `[data-project="${project.id}"]`,
+        panel: project.id,
+    })),
+    { trigger: `[data-hero-panel="postcards"]`, panel: "postcards" },
+];
+
+// Hovering any trigger hides the default intro...
+const hideDefaultCss = `
+${heroPanels
+    .map((p) => `.home:has(li:hover > ${p.trigger}) [data-panel="default"]`)
+    .join(",\n")} {
+    opacity: 0;
+    visibility: hidden;
+    ${HIDE_TRANSITION}
+}`;
+
+// ...and reveals that trigger's own panel.
+const panelCss = heroPanels
+    .map(
+        (p) => `
+.home:has(li:hover > ${p.trigger}) [data-panel="${p.panel}"] {
+    opacity: 1;
+    visibility: visible;
+    ${SHOW_TRANSITION}
+}`,
+    )
+    .join("\n");
+
+// The swap only exists on the lg side-by-side layout. Below that the hero
+// stacks above the cards, and a tap's sticky :hover would invisibly swap
+// (or blank) the hero off-screen — so the whole effect is gated to lg+.
+const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}`;
+---
+
+<Layout title="Robin">
+    <div class="home lg:grid lg:grid-cols-2">
+        <!-- Left half: fixed (sticky) hero, panels swap on project hover -->
+        <header
+            class="@container relative flex flex-col lg:sticky lg:top-0 lg:h-screen"
+        >
+            <!-- justify-end keeps the RSS icon right when the nav is
+                 display:none on mobile (MobileMenu takes over there). -->
+            <div
+                class="flex items-center justify-end px-6 py-8 md:justify-between lg:px-12"
+            >
+                <Nav />
+                <RssDropdown />
+            </div>
+            <div class="relative flex w-full flex-1 items-center px-6 lg:px-12">
+                <div data-panel="default">
+                    <Bird class="mb-8 h-20 w-auto text-ink" />
+                    <h1 class="max-w-3xl text-3xl font-bold text-balance">
+                        Robin&nbsp;Spielmann — <br /> a <a
+                            href="/work"
+                            class="marker">design engineer</a
+                        > at the intersection of code, design&nbsp;&amp;&nbsp;art.
+                    </h1>
+                    <p class="mt-8 max-w-xl font-mono text-base">
+                        This website is my own little space on the internet — a
+                        place to share my work, interests and passions without
+                        pleasing the algorithms of social media platforms. I
+                        hope you enjoy exploring my digital living room as much
+                        as I enjoyed building it.
+                    </p>
+                </div>
+
+                <!-- Project panels: swap in over the hero content on hover -->
+                {
+                    projects.map((project) => {
+                        // Projects with visuals show ONLY those: the
+                        // hovered card already carries title, description
+                        // and tags, so the hero is a pure visual stage —
+                        // the picture to the card's caption. Projects
+                        // without assets yet fall back to a text panel.
+                        const hasFan = !!getFanImages(project.id);
+                        return (
+                            <div
+                                data-panel={project.id}
+                                class="pointer-events-none invisible absolute inset-0 flex flex-col justify-center px-6 opacity-0 lg:px-12"
+                            >
+                                {!hasFan && (
+                                    <>
+                                        <h2 class="text-xl font-bold">
+                                            {project.data.title}
+                                        </h2>
+                                        <p class="mt-4 max-w-md font-mono text-base">
+                                            {project.data.description}
+                                        </p>
+                                        <span class="mt-4 block font-mono text-sm opacity-50">
+                                            {[
+                                                project.data.year,
+                                                ...(project.data.tags ?? []),
+                                            ].join(" · ")}
+                                        </span>
+                                    </>
+                                )}
+                                {project.id === "robins-photos" && (
+                                    <div
+                                        class="photo-fan"
+                                        aria-hidden="true"
+                                    >
+                                        {fanPhotos.map((photo) => (
+                                            <Image
+                                                src={photo}
+                                                alt=""
+                                                widths={[300, 600]}
+                                                sizes="18vw"
+                                                loading="eager"
+                                                class="photo-fan-card"
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                                {project.id === "matchprint" && (
+                                    <div
+                                        class="poster-fan"
+                                        aria-hidden="true"
+                                    >
+                                        {matchprintPosters.map((poster) => (
+                                            <Image
+                                                src={poster}
+                                                alt=""
+                                                widths={[300, 600]}
+                                                sizes="18vw"
+                                                loading="eager"
+                                                class="poster-fan-card"
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                                {project.id === "geeenerated" && (
+                                    <div class="art-fan" aria-hidden="true">
+                                        {handcodedArt.map((art) => (
+                                            <Image
+                                                src={art}
+                                                alt=""
+                                                widths={[300, 600]}
+                                                sizes="16vw"
+                                                loading="eager"
+                                                class="art-fan-card"
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })
+                }
+
+                {/* Postcards: swaps in when the contact section's "Send a
+                    postcard" row is hovered (see hoverCss + data-hero-panel). */}
+                <div
+                    data-panel="postcards"
+                    class="pointer-events-none invisible absolute inset-0 flex flex-col justify-center px-6 opacity-0 lg:px-12"
+                >
+                    {/* Distortion filter the handwriting references — it must
+                        live in the DOM or the filtered text is not rendered. */}
+                    <svg class="hidden" aria-hidden="true">
+                        <defs>
+                            <filter id="distort-xl">
+                                <feTurbulence baseFrequency="1 1" numOctaves="1" />
+                                <feDisplacementMap in="SourceGraphic" scale="1.3" />
+                            </filter>
+                        </defs>
+                    </svg>
+                    <div class="postcard-fan" aria-hidden="true">
+                        {newestPostcards.map((postcard) => (
+                            <div class="postcard-fan-card">
+                                <PostcardItem
+                                    {...toPostcardProps(postcard)}
+                                    distorted={false}
+                                    hoverEffect={false}
+                                    rotation={0}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+            <!-- Compact meta footer: only in the hero on desktop. On mobile the
+                 hero stacks above the teasers, so this would land mid-page —
+                 hidden there in favour of the full FooterColumns below. -->
+            <div class="hidden lg:block">
+                <SiteFooter class="px-6 py-8 lg:px-12" />
+            </div>
+        </header>
+
+        <!-- Right half: scrollable teasers -->
+        <!-- pt-20 below lg: breathing room where the teasers stack directly
+             under the hero; back to pt-8 once the split layout kicks in. -->
+        <main
+            class="@container border-ink/15 px-6 pt-20 pb-8 lg:border-l lg:px-12 lg:pt-8"
+        >
+            <div class="flex flex-col gap-24">
+                <ProjectsTeaser />
+                <BlogTeaser />
+                <ContactSection />
+            </div>
+        </main>
+
+        <!-- Mobile-only page footer: stands in for the hero's SiteFooter, which
+             is hidden on small screens. Removed from the grid on desktop. -->
+        <FooterColumns class="border-t border-ink/10 px-6 py-12 lg:hidden" />
+
+        <MobileMenu />
+    </div>
+
+    <style is:inline set:html={hoverCss}></style>
+
+    <style>
+        /*
+          Base-state halves of the panel fade (see hoverCss in the
+          frontmatter): a project panel's base state is hidden, so it
+          carries the hiding transition; the default panel's base state
+          is visible, so it carries the showing one.
+        */
+        [data-panel] {
+            transition:
+                opacity 0.15s ease-out 0.1s,
+                visibility 0s 0.25s;
+        }
+
+        [data-panel="default"] {
+            transition:
+                opacity 0.15s ease-out 0.1s,
+                visibility 0s 0.1s;
+        }
+
+        /*
+          Loose two-row stack: three 2:3 cards on top, two staggered
+          below the gaps, all slightly rotated and overlapping — like
+          prints casually laid out on a table. The width cap's vh term
+          keeps the (slightly taller than wide) stack inside the
+          h-screen hero on short viewports: nav + footer + breathing
+          room ≈ 16rem.
+        */
+        .poster-fan,
+        .photo-fan {
+            position: relative;
+            aspect-ratio: 20 / 21;
+            width: min(100%, 34rem, calc((100vh - 16rem) * 20 / 21));
+            margin-inline: auto;
+        }
+
+        .poster-fan-card,
+        .photo-fan-card {
+            position: absolute;
+            width: 38%;
+            height: auto;
+            border-radius: 0.375rem;
+            border: 1px solid
+                color-mix(in srgb, var(--color-ink) 15%, transparent);
+        }
+
+        /* Photos read as plain prints: square corners. */
+        .photo-fan-card {
+            border-radius: 0;
+        }
+
+        /* Offsets and rotations are deliberately a touch irregular so
+           the stack looks hand-placed instead of a tidy grid. */
+        .poster-fan-card:nth-child(1),
+        .photo-fan-card:nth-child(1) {
+            left: 0;
+            top: 0;
+            z-index: 6;
+            transform: rotate(-3.5deg);
+        }
+        .poster-fan-card:nth-child(2),
+        .photo-fan-card:nth-child(2) {
+            left: 30%;
+            top: 3%;
+            z-index: 5;
+            transform: rotate(1deg);
+        }
+        .poster-fan-card:nth-child(3),
+        .photo-fan-card:nth-child(3) {
+            left: 61%;
+            top: 1%;
+            z-index: 4;
+            transform: rotate(4deg);
+        }
+        .poster-fan-card:nth-child(4),
+        .photo-fan-card:nth-child(4) {
+            left: 13%;
+            top: 48%;
+            z-index: 3;
+            transform: rotate(-2deg);
+        }
+        .poster-fan-card:nth-child(5),
+        .photo-fan-card:nth-child(5) {
+            left: 46%;
+            top: 51%;
+            z-index: 2;
+            transform: rotate(3deg);
+        }
+
+        /*
+          handcoded.art: seven roughly-square prints in a looser three-row
+          scatter (3 / 2 / 2). Squarer cards are shorter than the posters,
+          so a third row fits within the same hero height — the width cap's
+          vh term still keeps the stack inside the h-screen hero on short
+          viewports.
+        */
+        .art-fan {
+            position: relative;
+            aspect-ratio: 5 / 6;
+            width: min(100%, 33rem, calc((100vh - 14rem) * 5 / 6));
+            margin-inline: auto;
+        }
+
+        .art-fan-card {
+            position: absolute;
+            width: 40%;
+            height: auto;
+            border-radius: 0.375rem;
+            border: 1px solid
+                color-mix(in srgb, var(--color-ink) 15%, transparent);
+        }
+
+        /* Row 1 (3 cards) */
+        .art-fan-card:nth-child(1) {
+            left: 2%;
+            top: 2%;
+            z-index: 7;
+            transform: rotate(-4deg);
+        }
+        .art-fan-card:nth-child(2) {
+            left: 31%;
+            top: 0%;
+            z-index: 6;
+            transform: rotate(2deg);
+        }
+        .art-fan-card:nth-child(3) {
+            left: 60%;
+            top: 3%;
+            z-index: 5;
+            transform: rotate(4.5deg);
+        }
+        /* Row 2 (2 cards, offset into the gaps above) */
+        .art-fan-card:nth-child(4) {
+            left: 13%;
+            top: 31%;
+            z-index: 4;
+            transform: rotate(-2.5deg);
+        }
+        .art-fan-card:nth-child(5) {
+            left: 48%;
+            top: 29%;
+            z-index: 3;
+            transform: rotate(3deg);
+        }
+        /* Row 3 (2 cards) */
+        .art-fan-card:nth-child(6) {
+            left: 3%;
+            top: 60%;
+            z-index: 2;
+            transform: rotate(-3deg);
+        }
+        .art-fan-card:nth-child(7) {
+            left: 39%;
+            top: 58%;
+            z-index: 1;
+            transform: rotate(3.5deg);
+        }
+
+        /*
+          Postcards fan: the three newest cards as a loose hand — the
+          newest front and centre, the two older ones fanning up behind
+          to either side. Landscape (3:2) cards, so a wider, shorter
+          spread than the print fans.
+        */
+        .postcard-fan {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            width: min(100%, 32rem, calc(100vh - 13rem));
+            margin-inline: auto;
+        }
+
+        .postcard-fan-card {
+            position: absolute;
+            width: 84%;
+        }
+
+        /* First = newest (front); later children peek out behind. */
+        .postcard-fan-card:nth-child(1) {
+            left: 8%;
+            top: 30%;
+            z-index: 3;
+            transform: rotate(1.5deg);
+        }
+        .postcard-fan-card:nth-child(2) {
+            left: 1%;
+            top: 12%;
+            z-index: 2;
+            transform: rotate(-5deg);
+        }
+        .postcard-fan-card:nth-child(3) {
+            left: 15%;
+            top: 15%;
+            z-index: 1;
+            transform: rotate(5.5deg);
+        }
+    </style>
+</Layout>

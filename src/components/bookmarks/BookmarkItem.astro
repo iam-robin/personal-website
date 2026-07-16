@@ -1,0 +1,122 @@
+---
+import { Icon } from "astro-icon/components";
+import BookmarkTag from "./BookmarkTag.astro";
+import { getCover, type Bookmark } from "../../utils/bookmarks";
+
+interface Props {
+    bookmark: Bookmark["data"];
+}
+
+const { bookmark } = Astro.props;
+
+const date = new Date(bookmark.added);
+const day = String(date.getDate()).padStart(2, "0");
+const month = String(date.getMonth() + 1).padStart(2, "0");
+const formattedDate = `${day}-${month}-${date.getFullYear()}`;
+
+let domain = bookmark.url;
+try {
+    domain = new URL(bookmark.url).hostname;
+} catch {
+    /* keep raw url */
+}
+
+// Type indicator dot — colors ported from v3 (green/blue/lilac/red).
+const typeColor =
+    {
+        article: "oklch(0.75 0.16 155)",
+        video: "oklch(0.7 0.13 255.5)",
+        website: "oklch(0.81 0.11 295)",
+    }[bookmark.type ?? ""] ?? "oklch(0.73 0.14 22.5)";
+
+const cover = getCover(bookmark.cover);
+---
+
+<!-- DESKTOP -->
+<li class="list-item-image-hover-effect group relative hidden md:block">
+    <a
+        href={bookmark.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center justify-between gap-4 py-2"
+    >
+        {
+            cover && (
+                <img
+                    class="cover-image pointer-events-none absolute z-10 hidden max-h-40 max-w-64 rounded-sm shadow-lg md:group-hover:block"
+                    src={cover.src}
+                    alt=""
+                    onerror="this.style.display='none'"
+                />
+            )
+        }
+        <div class="flex max-w-[80%] shrink-0 items-center gap-2">
+            <div
+                class="h-2 w-2 shrink-0 rounded-full"
+                style={`background-color: ${typeColor}`}
+            >
+            </div>
+            <p class="mr-2 truncate font-mono text-sm">{bookmark.title}</p>
+            {
+                bookmark.tags.length > 0 && (
+                    <div class="flex gap-1">
+                        {bookmark.tags.map((tag) => (
+                            <BookmarkTag tag={tag} />
+                        ))}
+                    </div>
+                )
+            }
+        </div>
+        <div class="hidden h-px w-full grow bg-ink/15 md:block"></div>
+        <p
+            class="shrink-0 text-right font-mono text-xs opacity-40 group-hover:hidden"
+        >
+            {formattedDate}
+        </p>
+        <div
+            class="hidden shrink-0 items-center gap-2 font-mono text-sm group-hover:flex"
+        >
+            <p>{domain}</p>
+            <Icon name="ph:arrow-up-right-bold" width={16} />
+        </div>
+    </a>
+</li>
+
+<!-- MOBILE -->
+<li class="md:hidden">
+    <a
+        href={bookmark.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex flex-col gap-2 border-b border-ink/10 py-4"
+    >
+        <div class="flex items-center justify-between gap-1">
+            <div class="flex shrink items-center gap-2 overflow-x-auto">
+                <div
+                    class="h-2 w-2 shrink-0 rounded-full"
+                    style={`background-color: ${typeColor}`}
+                >
+                </div>
+                <p class="mr-2 truncate font-mono text-xs">{bookmark.title}</p>
+            </div>
+            <p class="shrink-0 text-right font-mono text-xs opacity-40">
+                {formattedDate}
+            </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+            {
+                bookmark.tags.length > 0 && (
+                    <div class="flex gap-1">
+                        {bookmark.tags.map((tag) => (
+                            <BookmarkTag tag={tag} />
+                        ))}
+                    </div>
+                )
+            }
+            <div class="flex shrink-0 items-center gap-2 font-mono opacity-40">
+                <p class="text-xs">{domain}</p>
+                <Icon name="ph:arrow-up-right-bold" width={12} />
+            </div>
+        </div>
+    </a>
+</li>

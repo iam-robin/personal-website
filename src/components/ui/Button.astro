@@ -1,0 +1,36 @@
+---
+/**
+ * The site's one button style: a mono pill, sized for a real tap target.
+ * - `primary` is the filled ink pill — one per view, at most
+ * - `secondary` is the soft chip, matching FilterTag's inactive state
+ * External links open in a new tab and get an ↗.
+ */
+interface Props {
+    href: string;
+    variant?: "primary" | "secondary";
+    external?: boolean;
+    class?: string;
+}
+
+const {
+    href,
+    variant = "secondary",
+    external = false,
+    class: className = "",
+} = Astro.props;
+
+const base =
+    "inline-flex items-center gap-1.5 rounded-full px-4 py-2 font-mono text-sm transition-colors";
+const styles = {
+    primary: "bg-ink text-paper hover:bg-ink/85",
+    secondary: "bg-ink/5 text-ink hover:bg-ink/10",
+};
+---
+
+<a
+    href={href}
+    class:list={[base, styles[variant], className]}
+    {...external && { target: "_blank", rel: "noopener noreferrer" }}
+>
+    <slot />{external && " ↗"}
+</a>

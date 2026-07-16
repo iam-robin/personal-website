@@ -1,0 +1,29 @@
+---
+/**
+ * Blueprint for all homepage teaser sections:
+ * quiet header row (title left, link right), content below.
+ * The page stays neutral — color comes from the content itself.
+ */
+import Link from './ui/Link.astro';
+
+interface Props {
+  title: string;
+  link: {
+    href: string;
+    text: string;
+    external?: boolean;
+  };
+}
+
+const { title, link } = Astro.props;
+---
+
+<section>
+  <div class="flex items-baseline justify-between gap-4">
+    <h2 class="text-sm font-bold">{title}</h2>
+    <Link href={link.href} external={link.external}>{link.text}</Link>
+  </div>
+  <div class="mt-4">
+    <slot />
+  </div>
+</section>

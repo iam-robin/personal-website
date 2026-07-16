@@ -1,0 +1,118 @@
+@font-face {
+    font-family: "apercu";
+    src:
+        url("/fonts/apercu-regular-pro.woff2") format("woff2"),
+        url("/fonts/apercu-regular-pro.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "apercu";
+    src:
+        url("/fonts/apercu-bold-pro.woff2") format("woff2"),
+        url("/fonts/apercu-bold-pro.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* fira-mono-regular - latin */
+@font-face {
+    font-display: swap;
+    font-family: "Fira Mono";
+    font-style: normal;
+    font-weight: 400;
+    src: url("/fonts/fira-mono-v14-latin-regular.woff2") format("woff2");
+}
+
+/* fira-mono-700 - latin */
+@font-face {
+    font-display: swap;
+    font-family: "Fira Mono";
+    font-style: normal;
+    font-weight: 700;
+    src: url("/fonts/fira-mono-v14-latin-700.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "LiebeHeide";
+    src: url("/fonts/LiebeHeide-FinelinerBold.otf") format("opentype");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@theme {
+    /* Font Family */
+    --font-*: initial;
+    --font-sans:
+        "apercu", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono:
+        "Fira Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+    --font-decorative:
+        "LiebeHeide", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+    /* Line Height */
+    --leading-xs: 0.8;
+    --leading-sm: 0.9;
+    --leading-none: 1;
+    --leading-tight: 1.25;
+    --leading-snug: 1.375;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+    --leading-loose: 2;
+
+    /*
+    Fluid type scale, calibrated to CONTAINER width (400px → 880px), not
+    the viewport — because the hero and content live in half-width columns.
+    Each size is declared twice: a `vi` (viewport) fallback first, then the
+    `cqi` (container) version. Browsers that don't support container query
+    units keep the fallback line; modern browsers use the container-aware
+    one. The column containers are set with `container-type: inline-size`.
+    The vi fallback uses half the cqi slope, since a column is ~50vw.
+  */
+
+    /* Font Size */
+    --text-*: initial;
+    --text-xs: 0.8125rem;
+
+    --text-sm: clamp(0.875rem, 0.1vi + 0.82rem, 0.9375rem);
+    --text-sm: clamp(0.875rem, 0.21cqi + 0.82rem, 0.9375rem);
+
+    --text-base: clamp(1rem, 0.21vi + 0.9rem, 1.125rem);
+    --text-base: clamp(1rem, 0.42cqi + 0.9rem, 1.125rem);
+
+    --text-md: clamp(1.15rem, 0.33vi + 0.98rem, 1.35rem);
+    --text-md: clamp(1.15rem, 0.67cqi + 0.98rem, 1.35rem);
+
+    --text-lg: clamp(1.35rem, 0.58vi + 1.06rem, 1.7rem);
+    --text-lg: clamp(1.35rem, 1.17cqi + 1.06rem, 1.7rem);
+
+    --text-xl: clamp(1.6rem, 0.83vi + 1.18rem, 2.1rem);
+    --text-xl: clamp(1.6rem, 1.67cqi + 1.18rem, 2.1rem);
+
+    --text-2xl: clamp(1.9rem, 1.6vi + 1.1rem, 3.2rem);
+    --text-2xl: clamp(1.9rem, 3.2cqi + 1.1rem, 3.2rem);
+
+    --text-3xl: clamp(2.2rem, 2.25vi + 1.08rem, 4.25rem);
+    --text-3xl: clamp(2.2rem, 4.5cqi + 1.08rem, 4.25rem);
+
+    --text-4xl: clamp(2.6rem, 3vi + 1.1rem, 5.5rem);
+    --text-4xl: clamp(2.6rem, 6cqi + 1.1rem, 5.5rem);
+
+    /* Line Height per size */
+    --text-xs--line-height: var(--leading-relaxed);
+    --text-sm--line-height: var(--leading-relaxed);
+    --text-base--line-height: var(--leading-relaxed);
+    --text-md--line-height: var(--leading-normal);
+    --text-lg--line-height: var(--leading-tight);
+    --text-xl--line-height: var(--leading-tight);
+    --text-2xl--line-height: var(--leading-tight);
+    --text-3xl--line-height: var(--leading-none);
+    --text-4xl--line-height: var(--leading-none);
+}

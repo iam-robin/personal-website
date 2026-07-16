@@ -1,0 +1,24 @@
+---
+import SubpageLayout from "../../layouts/SubpageLayout.astro";
+---
+
+<SubpageLayout
+    title="Something went wrong"
+    documentTitle="Postcard error — Robin Spielmann"
+    description="There was an error submitting your postcard. Please try again, or get in touch if the problem persists."
+>
+    <div class="flex flex-col items-start gap-4">
+        <a
+            href="/postcards/new"
+            class="inline-block rounded-md bg-ink px-6 py-3 font-mono text-base text-paper transition-opacity hover:opacity-90"
+        >
+            Try again
+        </a>
+        <a
+            href="/postcards"
+            class="font-mono text-sm underline underline-offset-4 opacity-60 hover:opacity-100"
+        >
+            Back to postcards
+        </a>
+    </div>
+</SubpageLayout>

@@ -1,0 +1,40 @@
+---
+/**
+ * Year-grouped list of blog posts. Shared by the /blog index and the
+ * per-category pages.
+ */
+import type { CollectionEntry } from "astro:content";
+import BlogPostRow from "./BlogPostRow.astro";
+
+interface Props {
+    posts: CollectionEntry<"blog">[];
+    showCategory?: boolean;
+}
+
+const { posts, showCategory = false } = Astro.props;
+
+const byYear = new Map<number, CollectionEntry<"blog">[]>();
+for (const post of posts) {
+    const year = post.data.date.getFullYear();
+    if (!byYear.has(year)) byYear.set(year, []);
+    byYear.get(year)!.push(post);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+---
+
+<div class="flex flex-col gap-16">
+    {
+        years.map((year) => (
+            <section>
+                <h2 class="font-mono text-sm opacity-40">{year}</h2>
+                <ul class="mt-2 divide-y divide-ink/10">
+                    {byYear.get(year)!.map((post) => (
+                        <li>
+                            <BlogPostRow post={post} showYear={false} showCategory={showCategory} />
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        ))
+    }
+</div>

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "astro-dev",
+      "runtimeExecutable": "/Users/robin/.nvm/versions/node/v22.19.0/bin/node",
+      "runtimeArgs": ["node_modules/.bin/astro", "dev"],
+      "port": 4321,
+      "autoPort": true
+    }
+  ]
+}

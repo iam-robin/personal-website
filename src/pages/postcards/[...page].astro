@@ -1,0 +1,31 @@
+---
+import type { GetStaticPaths } from "astro";
+import { db, Postcard, desc, eq } from "astro:db";
+import SubpageLayout from "../../layouts/SubpageLayout.astro";
+import PostcardsView from "../../components/postcards/PostcardsView.astro";
+import SendPostcardCta from "../../components/postcards/SendPostcardCta.astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+    const postcards = await db
+        .select()
+        .from(Postcard)
+        .where(eq(Postcard.isPublished, true))
+        .orderBy(desc(Postcard.date));
+
+    // Page 1 → /postcards, page 2 → /postcards/2, …
+    return paginate(postcards, { pageSize: 24 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+---
+
+<SubpageLayout
+    title="Postcards"
+    documentTitle={page.currentPage > 1
+        ? `Postcards (page ${page.currentPage}) — Robin Spielmann`
+        : undefined}
+    description="This website is mostly me talking. This postcard gives you a chance to talk back — even just a line. Drop me a postcard. Tell me what you're thinking, where you're visiting from, or simply that you stopped by. I'd love to hear from you."
+>
+    <SendPostcardCta slot="cta" />
+    <PostcardsView page={page} />
+</SubpageLayout>

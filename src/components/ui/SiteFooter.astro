@@ -1,0 +1,38 @@
+---
+/**
+ * Site-meta footer: the boilerplate links (changelog, legal, colophon) and
+ * a copyright line. Distinct from ContactLinks — that's "reach me", this is
+ * "about the site". Sits at the base of every page.
+ */
+interface Props {
+    class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+
+const items: { label: string; href: string }[] = [
+    { label: "Changelog", href: "/changelog" },
+    { label: "Legal notice", href: "/legal" },
+    { label: "Colophon", href: "/colophon" },
+];
+
+const year = new Date().getFullYear();
+---
+
+<div
+    class={`flex flex-wrap items-center justify-between gap-x-4 gap-y-1 font-mono text-sm ${className}`}
+>
+    <nav class="flex flex-wrap gap-x-4 gap-y-1">
+        {
+            items.map((item) => (
+                <a
+                    href={item.href}
+                    class="opacity-60 underline-offset-4 hover:underline hover:opacity-100"
+                >
+                    {item.label}
+                </a>
+            ))
+        }
+    </nav>
+    <span class="opacity-40">© {year} Robin Spielmann</span>
+</div>

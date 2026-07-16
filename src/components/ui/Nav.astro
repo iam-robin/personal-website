@@ -1,0 +1,45 @@
+---
+/**
+ * Primary site navigation. Deliberately small: rank, not inventory. The
+ * media logs (books, movies, series, music), postcards and photos are
+ * reached through About — see AGENTS.md "Site Structure".
+ * The current section is marked with a persistent underline.
+ * Hidden below md, where <MobileMenu> takes over.
+ */
+import { navItems as items } from "../../data/navigation";
+
+interface Props {
+    class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isActive = (href: string) =>
+    path === href || path.startsWith(`${href}/`);
+---
+
+<nav
+    class={`hidden flex-wrap gap-x-4 gap-y-1 font-mono text-sm md:flex ${className}`}
+>
+    {
+        items.map((item) => (
+            <a
+                href={item.href}
+                class:list={[
+                    "underline-offset-4",
+                    isActive(item.href)
+                        ? "underline opacity-100"
+                        : "opacity-60 hover:underline hover:opacity-100",
+                ]}
+                {...(item.external && {
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                })}
+            >
+                {item.label}
+                {item.external && " ↗"}
+            </a>
+        ))
+    }
+</nav>

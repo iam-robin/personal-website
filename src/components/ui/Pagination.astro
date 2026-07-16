@@ -1,0 +1,77 @@
+---
+/**
+ * Compact numbered pagination. Page 1 lives at `baseHref`; page n at
+ * `baseHref/n`. Shows first, last, and a window around the current page,
+ * collapsing the rest into an ellipsis.
+ */
+interface Props {
+    currentPage: number;
+    lastPage: number;
+    baseHref: string;
+}
+const { currentPage, lastPage, baseHref } = Astro.props;
+
+const href = (n: number) => (n <= 1 ? baseHref : `${baseHref}/${n}`);
+
+// Always show 1 and last, plus the current page and its neighbours.
+const shown = [...new Set([1, lastPage, currentPage - 1, currentPage, currentPage + 1])]
+    .filter((n) => n >= 1 && n <= lastPage)
+    .sort((a, b) => a - b);
+
+// Insert `null` markers where page numbers are skipped (→ ellipsis).
+const items: (number | null)[] = [];
+let prev = 0;
+for (const n of shown) {
+    if (n - prev > 1) items.push(null);
+    items.push(n);
+    prev = n;
+}
+---
+
+<nav
+    class="flex flex-wrap items-center justify-center gap-2 font-mono text-sm"
+    aria-label="Pagination"
+>
+    {
+        currentPage > 1 && (
+            <a
+                href={href(currentPage - 1)}
+                rel="prev"
+                class="rounded-md px-3 py-1 transition-colors hover:bg-ink/5"
+            >
+                ← Prev
+            </a>
+        )
+    }
+    {
+        items.map((n) =>
+            n === null ? (
+                <span class="px-1 opacity-40">…</span>
+            ) : (
+                <a
+                    href={href(n)}
+                    aria-current={n === currentPage ? "page" : undefined}
+                    class:list={[
+                        "rounded-md px-3 py-1 transition-colors",
+                        n === currentPage
+                            ? "bg-ink text-paper"
+                            : "hover:bg-ink/5",
+                    ]}
+                >
+                    {n}
+                </a>
+            ),
+        )
+    }
+    {
+        currentPage < lastPage && (
+            <a
+                href={href(currentPage + 1)}
+                rel="next"
+                class="rounded-md px-3 py-1 transition-colors hover:bg-ink/5"
+            >
+                Next →
+            </a>
+        )
+    }
+</nav>

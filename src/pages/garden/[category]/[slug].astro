@@ -1,0 +1,437 @@
+---
+import { marked } from "marked";
+import { Icon } from "astro-icon/components";
+import Layout from "../../../layouts/Layout.astro";
+import Divider from "../../../components/garden/Divider.astro";
+import {
+    getGardenNotes,
+    getCategories,
+    getCategoryColorMap,
+    gardenColors,
+    categorySlug,
+    type GardenNote,
+} from "../../../utils/garden";
+
+export async function getStaticPaths() {
+    const allNotes = await getGardenNotes();
+    const colorMap = getCategoryColorMap(allNotes);
+
+    const paths: {
+        params: { category: string; slug: string };
+        props: {
+            note: GardenNote["data"];
+            htmlContent: string;
+            categoryIndex: number;
+            previousNote: GardenNote["data"] | null;
+            nextNote: GardenNote["data"] | null;
+            footnotes: { id: string; content: string }[];
+        };
+    }[] = [];
+
+    for (const { name: category } of getCategories(allNotes)) {
+        // Notes in this category, newest first — for prev/next ordering.
+        const notes = allNotes
+            .filter((n) => n.data.thema === category)
+            .map((n) => n.data)
+            .sort(
+                (a, b) =>
+                    new Date(b.created).getTime() -
+                    new Date(a.created).getTime(),
+            );
+
+        for (let i = 0; i < notes.length; i++) {
+            const note = notes[i];
+
+            // Pull footnote definitions out of the body, list them separately.
+            const footnoteRegex = /\[\^(\d+)\]:\s(.+)/g;
+            const footnotes: { id: string; content: string }[] = [];
+            let body = (note.content || "").replace(
+                footnoteRegex,
+                (_m, id: string, content: string) => {
+                    footnotes.push({ id, content });
+                    return "";
+                },
+            );
+            // Un-indent HTML blocks so marked doesn't treat them as code.
+            body = body.replace(/^[ \t]+(<[^>]+>)/gm, "$1");
+
+            marked.setOptions({ gfm: true, breaks: false });
+            const htmlContent = await marked.parse(body);
+
+            paths.push({
+                params: {
+                    category: categorySlug(category),
+                    slug: note.slug,
+                },
+                props: {
+                    note,
+                    htmlContent,
+                    categoryIndex: colorMap[category],
+                    previousNote: i > 0 ? notes[i - 1] : null,
+                    nextNote: i < notes.length - 1 ? notes[i + 1] : null,
+                    footnotes,
+                },
+            });
+        }
+    }
+
+    return paths;
+}
+
+const { note, htmlContent, categoryIndex, previousNote, nextNote, footnotes } =
+    Astro.props;
+
+const bgColor = gardenColors[categoryIndex % gardenColors.length];
+
+const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    return `${day} / ${month} / ${date.getFullYear()}`;
+};
+
+const showEdited =
+    !!note.edited && formatDate(note.created) !== formatDate(note.edited);
+---
+
+<Layout title={`${note.title} — Garden — Robin Spielmann`}>
+    <!-- SVG distortion filter for the handwritten metadata -->
+    <svg class="hidden" aria-hidden="true">
+        <defs>
+            <filter id="distort-xl">
+                <feTurbulence baseFrequency="1 1" numOctaves="1"></feTurbulence>
+                <feDisplacementMap in="SourceGraphic" scale="1.3"
+                ></feDisplacementMap>
+            </filter>
+        </defs>
+    </svg>
+
+    <a
+        href="/garden"
+        aria-label="Close"
+        class="close-button flex-center fixed top-4 right-4 z-50 h-12 w-12 cursor-pointer rounded-full no-underline"
+    >
+        <Icon name="ph:x-bold" size={24} />
+    </a>
+
+    <article
+        class="effect relative z-30 mx-auto w-full max-w-5xl lg:my-12"
+        data-prev-note={previousNote
+            ? `/garden/${categorySlug(note.thema)}/${previousNote.slug}`
+            : undefined}
+        data-next-note={nextNote
+            ? `/garden/${categorySlug(note.thema)}/${nextNote.slug}`
+            : undefined}
+    >
+        <!-- Main card with category background color -->
+        <div
+            class="relative w-full p-2 text-black md:p-4"
+            style={`background-color: ${bgColor}`}
+        >
+            <div class="texture"></div>
+
+            <div class="border border-black/60 px-4 pt-4 pb-24 md:px-10 md:pt-6">
+                <div class="mx-auto mt-20 max-w-[65ch] text-[1.2rem]">
+                    <h1
+                        class="font-sans text-[3rem] leading-[1.15] font-black md:text-[4.5rem]"
+                    >
+                        {note.title}
+                    </h1>
+                    <Divider isBlack />
+                </div>
+
+                <div class="markdown prose">
+                    <Fragment set:html={htmlContent} />
+                </div>
+            </div>
+
+            <!-- Metadata footer -->
+            <div class="border-r border-b border-l border-black/60">
+                <div class="flex">
+                    <span
+                        class:list={[
+                            "flex flex-col items-center gap-2 border-r border-black/60 p-3 md:flex-row",
+                            showEdited ? "w-1/3" : "w-1/2",
+                        ]}
+                    >
+                        <span>Created:</span>
+                        <span
+                            class="font-decorative text-[20px] sm:text-[24px]"
+                            style="filter: url(#distort-xl);"
+                        >
+                            {formatDate(note.created)}
+                        </span>
+                    </span>
+                    {
+                        showEdited && (
+                            <span class="flex w-1/3 flex-col items-center gap-2 border-r border-black/60 p-3 md:flex-row">
+                                <span>Edited:</span>
+                                <span
+                                    class="font-decorative text-[20px] sm:text-[24px]"
+                                    style="filter: url(#distort-xl);"
+                                >
+                                    {formatDate(note.edited!)}
+                                </span>
+                            </span>
+                        )
+                    }
+                    <div
+                        class:list={[
+                            "flex flex-col items-center gap-2 p-3 md:flex-row",
+                            showEdited ? "w-1/3" : "w-1/2",
+                        ]}
+                    >
+                        <span>Topic:</span>
+                        <span
+                            class="font-decorative text-[20px] sm:text-[24px]"
+                            style="filter: url(#distort-xl);"
+                        >
+                            {note.thema}
+                        </span>
+                    </div>
+                </div>
+                {
+                    footnotes.length > 0 && (
+                        <div class="flex flex-col border-t border-black/60 px-3 py-6 md:flex-row">
+                            <div class="mb-2 w-1/3">Footnotes:</div>
+                            <ul class="text-xs md:w-2/3">
+                                {footnotes.map((fn) => (
+                                    <li class="flex gap-2" id={`footnote-${fn.id}`}>
+                                        <span class="font-decorative text-sm">
+                                            {fn.id}
+                                        </span>
+                                        <a href={fn.content}>{fn.content}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )
+                }
+                {
+                    (previousNote || nextNote) && (
+                        <div class="flex border-t border-black/60">
+                            {previousNote && (
+                                <a
+                                    href={`/garden/${categorySlug(note.thema)}/${previousNote.slug}`}
+                                    class={`${nextNote ? "w-1/2 border-r border-black/60" : "w-full"} cursor-pointer px-3 py-9 text-center transition-colors hover:bg-black/5`}
+                                >
+                                    ← Previous note
+                                </a>
+                            )}
+                            {nextNote && (
+                                <a
+                                    href={`/garden/${categorySlug(note.thema)}/${nextNote.slug}`}
+                                    class={`${previousNote ? "w-1/2" : "w-full"} cursor-pointer px-3 py-9 text-center transition-colors hover:bg-black/5`}
+                                >
+                                    Next note →
+                                </a>
+                            )}
+                        </div>
+                    )
+                }
+            </div>
+        </div>
+    </article>
+</Layout>
+
+<style>
+    .texture {
+        position: absolute;
+        inset: 0;
+        mix-blend-mode: soft-light;
+        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 369 369' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        pointer-events: none;
+    }
+
+    .effect {
+        position: relative;
+    }
+
+    .effect:after {
+        z-index: -1;
+        position: absolute;
+        content: "";
+        width: 50%;
+        top: 80%;
+        box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.1);
+        transform: rotate(3deg);
+        bottom: 16px;
+        right: 0.5em;
+    }
+
+    /* Markdown prose styling */
+    .markdown {
+        --tw-prose-body: rgba(0, 0, 0, 0.9);
+        --tw-prose-headings: rgba(0, 0, 0, 0.9);
+        --tw-prose-counters: rgba(0, 0, 0, 0.4);
+        --tw-prose-bullets: rgba(0, 0, 0, 0.3);
+        --tw-prose-bold: rgba(0, 0, 0, 1);
+        --tw-prose-links: rgba(0, 0, 0, 0.7);
+        --tw-prose-quote-borders: rgba(0, 0, 0, 0.2);
+        --tw-prose-td-borders: rgba(0, 0, 0, 0.1);
+        --tw-prose-th-borders: rgba(0, 0, 0, 0.3);
+        max-width: 65ch;
+        margin: 0 auto;
+        font-size: 1.2rem;
+    }
+
+    .markdown :global(hr) {
+        display: block;
+        margin: 3rem 0;
+        border: none;
+    }
+
+    .markdown :global(hr)::after {
+        content: "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+        display: block;
+        color: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        margin: 0 32px;
+        left: 0;
+        right: 0;
+        font-family: "Fira Mono", monospace;
+        letter-spacing: 0.1em;
+        font-size: 1.125rem;
+        line-height: 1.5;
+        text-overflow: clip;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .markdown :global(img) {
+        filter: grayscale(100%) contrast(110%) brightness(110%);
+        mix-blend-mode: multiply;
+    }
+
+    .markdown :global(img:hover) {
+        filter: grayscale(0%) contrast(100%) brightness(100%);
+        mix-blend-mode: normal;
+    }
+
+    .markdown :global(p) :global(img) {
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        display: none;
+    }
+
+    .markdown :global(.image-gallery) {
+        display: flex;
+        gap: 16px;
+    }
+
+    .markdown :global(.image-gallery) :global(img) {
+        display: block;
+    }
+
+    .markdown :global(a) {
+        text-decoration: none;
+        border-bottom: 1px dashed rgba(0, 0, 0, 0.3);
+        padding-bottom: 3px;
+        position: relative;
+        margin-right: 20px;
+        font-style: italic;
+    }
+
+    .markdown :global(a)::after {
+        content: "↗";
+        position: absolute;
+        font-style: normal;
+        top: 0;
+        line-height: 1.2em;
+        right: -18px;
+        font-size: 1.2em;
+        color: rgba(0, 0, 0, 0.4);
+    }
+
+    .markdown :global(input[type="checkbox"]) {
+        appearance: none;
+        width: 1.5em;
+        height: 1.5em;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 0.25em;
+        margin-right: 0.5em;
+        vertical-align: middle;
+        position: relative;
+        top: -0.1em;
+    }
+
+    .markdown :global(input[type="checkbox"]:checked)::after {
+        content: "✓";
+        display: block;
+        position: absolute;
+        top: 0.05em;
+        left: 0.15em;
+        font-size: 1.2em;
+        line-height: 1em;
+        color: rgba(0, 0, 0, 0.7);
+    }
+
+    .markdown :global(ul:has(> li > input[type="checkbox"])) {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .markdown :global(ul:has(> li > input[type="checkbox"]) li) {
+        display: flex;
+        font-size: 0.9em;
+        line-height: 1.4em;
+        margin-bottom: 16px;
+    }
+
+    .markdown :global(.footnotes) {
+        display: none;
+    }
+
+    .markdown :global(sup > a) {
+        border: none;
+        margin-right: 0px;
+    }
+
+    .markdown :global(sup > a)::after {
+        display: none;
+    }
+
+    .close-button {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: rgba(0, 0, 0, 0.7);
+    }
+    .close-button:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<script>
+    function initImageGallery() {
+        const paragraphs = document.querySelectorAll(".markdown p");
+        paragraphs.forEach((p) => {
+            const images = p.querySelectorAll("img");
+            const elementNodes = Array.from(p.childNodes).filter(
+                (node) => node.nodeType === Node.ELEMENT_NODE,
+            );
+            if (images.length > 0 && images.length === elementNodes.length) {
+                p.classList.add("image-gallery");
+            }
+        });
+    }
+    initImageGallery();
+
+    // Arrow keys move between notes
+    document.addEventListener("keydown", (e) => {
+        if (
+            e.target instanceof HTMLInputElement ||
+            e.target instanceof HTMLTextAreaElement
+        ) {
+            return;
+        }
+        const article = document.querySelector(
+            "article[data-prev-note], article[data-next-note]",
+        );
+        if (!article) return;
+        const prevUrl = article.getAttribute("data-prev-note");
+        const nextUrl = article.getAttribute("data-next-note");
+        if (e.key === "ArrowLeft" && prevUrl) window.location.href = prevUrl;
+        if (e.key === "ArrowRight" && nextUrl) window.location.href = nextUrl;
+    });
+</script>

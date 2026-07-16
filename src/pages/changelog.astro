@@ -1,0 +1,49 @@
+---
+import SubpageLayout from "../layouts/SubpageLayout.astro";
+import { timeSince } from "../utils/timeSince";
+import { changelog as entries } from "../data/changelog";
+
+const isMajor = (version: string) => /\.0\.0$/.test(version);
+---
+
+<SubpageLayout
+    title="Changelog"
+    description="A version history of this little corner of the internet — every rebuild, new section, and bit of polish since the very first commit."
+>
+    <ol class="flex flex-col divide-y divide-ink/10">
+        {
+            entries.map((entry) => (
+                <li class="grid grid-cols-1 gap-x-12 gap-y-3 py-16 first:pt-0 last:pb-0 md:grid-cols-5">
+                    <div class="flex flex-col gap-1 md:col-span-2">
+                        <span
+                            class:list={[
+                                "w-fit rounded-full px-3 py-1 font-mono text-xs",
+                                isMajor(entry.version)
+                                    ? "bg-ink text-paper"
+                                    : "bg-surface/60 text-ink/70",
+                            ]}
+                        >
+                            v{entry.version}
+                        </span>
+                        <span class="font-mono text-sm opacity-50">
+                            {timeSince(new Date(entry.date))}
+                        </span>
+                    </div>
+                    <div class="md:col-span-3">
+                        <h2 class="mb-3 text-base font-bold">{entry.title}</h2>
+                        {entry.bodyHtml ? (
+                            <p
+                                class="font-mono text-base opacity-80"
+                                set:html={entry.bodyHtml}
+                            />
+                        ) : (
+                            <p class="font-mono text-base opacity-80">
+                                {entry.body}
+                            </p>
+                        )}
+                    </div>
+                </li>
+            ))
+        }
+    </ol>
+</SubpageLayout>

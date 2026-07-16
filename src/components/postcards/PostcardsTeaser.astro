@@ -1,0 +1,53 @@
+---
+import TeaserSection from '../TeaserSection.astro';
+import PostcardItem from './PostcardItem.astro';
+import { getNewestPostcards, toPostcardProps } from '../../utils/postcards';
+
+const postcards = await getNewestPostcards(3);
+
+const link = {
+  href: '/postcards',
+  text: 'All Postcards',
+};
+
+// Pile layout: newest card front and center, older ones peeking out behind
+const [newest, second, third] = postcards;
+---
+
+{
+  postcards.length > 0 && (
+    <TeaserSection title="Postcards" link={link}>
+      {/* SVG distortion filter used by PostcardItem's handwriting */}
+      <svg class="hidden" aria-hidden="true">
+        <defs>
+          <filter id="distort-xl">
+            <feTurbulence baseFrequency="1 1" numOctaves="1" />
+            <feDisplacementMap in="SourceGraphic" scale="1.3" />
+          </filter>
+        </defs>
+      </svg>
+      {/*
+        Tidy deck: all three cards the same size, centered, offset by a small
+        uniform step in one direction with a gentle same-lean rotation. Only a
+        thin strip of each back card's blank padding peeks out, so the pile
+        reads as "a stack of postcards" — the newest card on top carries all
+        the detail; the ones behind are just clean paper edges + shadow.
+      */}
+      <div class="isolate grid items-start justify-items-center">
+        {third && (
+          <div class="col-start-1 row-start-1 w-[86%] translate-x-[26px] translate-y-[28px] rotate-[2deg] drop-shadow-[0_1px_2px_rgba(0,0,0,0.08)]">
+            <PostcardItem {...toPostcardProps(third)} distorted={false} hoverEffect={false} rotation={0} />
+          </div>
+        )}
+        {second && (
+          <div class="col-start-1 row-start-1 w-[86%] translate-x-[13px] translate-y-[14px] rotate-[1deg] drop-shadow-[0_1px_3px_rgba(0,0,0,0.10)]">
+            <PostcardItem {...toPostcardProps(second)} distorted={false} hoverEffect={false} rotation={0} />
+          </div>
+        )}
+        <div class="col-start-1 row-start-1 z-10 w-[86%] -rotate-[0.8deg] drop-shadow-[0_3px_8px_rgba(0,0,0,0.14)]">
+          <PostcardItem {...toPostcardProps(newest)} distorted={false} hoverEffect={false} rotation={0} />
+        </div>
+      </div>
+    </TeaserSection>
+  )
+}

@@ -1,0 +1,19 @@
+---
+/** Dashed divider line used inside garden note cards (ported from v3). */
+interface Props {
+    isBlack?: boolean;
+    class?: string;
+}
+
+const { isBlack, class: className = "" } = Astro.props;
+---
+
+<div
+    class:list={[
+        "w-full truncate font-mono tracking-widest text-clip",
+        isBlack ? "text-black" : "text-black/20",
+        className,
+    ]}
+>
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+</div>

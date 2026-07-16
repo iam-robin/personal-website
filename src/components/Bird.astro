@@ -1,0 +1,209 @@
+---
+// Robin bird logo — two states in one SVG. Clicking swaps to the "happy"
+// state, then it resets after a short beat. Both states share a single
+// `feTurbulence` + `feDisplacementMap` filter (static, so the browser
+// rasterizes the noise once) and we only cross-fade `opacity` between the
+// two groups, which stays cheap/composited.
+interface Props {
+    class?: string;
+    /**
+     * Interactive birds are <button>s that swap to happy/angry states on
+     * click (the script targets `button.bird`). Set false for a static,
+     * decorative bird — e.g. inside a link — which renders as a <span> the
+     * script never picks up.
+     */
+    interactive?: boolean;
+}
+const { class: className, interactive = true } = Astro.props;
+
+// Unique filter id so multiple instances on a page don't collide.
+const uid = Math.random().toString(36).slice(2, 8);
+const filterId = `bird-turbulence-${uid}`;
+const angryMaskId = `bird-angry-mask-${uid}`;
+
+const Tag = interactive ? "button" : "span";
+const tagProps: Record<string, string> = interactive
+    ? { type: "button", "aria-label": "Robin logo" }
+    : {};
+---
+
+<Tag class:list={["bird", className]} {...tagProps}>
+    <svg
+        width="139"
+        height="162"
+        viewBox="0 0 139 162"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+    >
+        <filter
+            id={filterId}
+            x="-20%"
+            y="-20%"
+            width="140%"
+            height="140%"
+            filterUnits="objectBoundingBox"
+        >
+            <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.07"
+                numOctaves="3"
+                seed="81"
+                result="n"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="3"></feDisplacementMap>
+        </filter>
+
+        <g filter={`url(#${filterId})`}>
+            <!-- Default (resting) state -->
+            <g class="bird-state bird-default">
+                <path class="bird-tail" d="M32.0769 105.96L0 138.037L16.0384 148.73L53.4615 120.217L32.0769 105.96Z" fill="currentColor"></path>
+                <path d="M71.282 143.384C99.8238 143.384 122.961 120.246 122.961 91.7041C122.961 63.1623 99.8238 40.0247 71.282 40.0247C42.7402 40.0247 19.6025 63.1623 19.6025 91.7041C19.6025 120.246 42.7402 143.384 71.282 143.384Z" fill="currentColor"></path>
+                <path d="M90.8845 84.5759C108.6 84.5759 122.961 70.2146 122.961 52.499C122.961 34.7834 108.6 20.4221 90.8845 20.4221C73.1689 20.4221 58.8076 34.7834 58.8076 52.499C58.8076 70.2146 73.1689 84.5759 90.8845 84.5759Z" fill="currentColor"></path>
+                <path d="M80.1926 102.396C100.861 102.396 117.616 88.0349 117.616 70.3193C117.616 52.6037 100.861 38.2424 80.1926 38.2424C59.5244 38.2424 42.7695 52.6037 42.7695 70.3193C42.7695 88.0349 59.5244 102.396 80.1926 102.396Z" fill="currentColor"></path>
+                <path d="M119.397 43.1926L139 53.39L119.397 63.5873V43.1926Z" fill="currentColor"></path>
+                <path d="M96.2307 64.9733C106.073 64.9733 114.051 56.9948 114.051 47.1528C114.051 37.3108 106.073 29.3323 96.2307 29.3323C86.3887 29.3323 78.4102 37.3108 78.4102 47.1528C78.4102 56.9948 86.3887 64.9733 96.2307 64.9733Z" fill="var(--color-paper, white)"></path>
+                <path class="bird-pupil" d="M96.2306 55.172C100.66 55.172 104.25 51.5817 104.25 47.1528C104.25 42.7239 100.66 39.1335 96.2306 39.1335C91.8018 39.1335 88.2114 42.7239 88.2114 47.1528C88.2114 51.5817 91.8018 55.172 96.2306 55.172Z" fill="currentColor"></path>
+                <path d="M64.5498 135.859L64.5498 161.6" stroke="currentColor" stroke-width="4.68" stroke-linecap="round"></path>
+                <path d="M89.3008 135.859L89.3008 161.6" stroke="currentColor" stroke-width="4.68" stroke-linecap="round"></path>
+            </g>
+
+            <!-- Clicked (happy) state. The export is drawn ~5% smaller than
+                 the resting state; the scale matches the two body sizes. The
+                 translate both aligns on the body center (-10.01, 2.6) and
+                 adds a jump offset (+12 right, -20 up) so the bird looks like
+                 it hops up and to the right when clicked. -->
+            <g class="bird-state bird-clicked" transform="translate(1.99 -17.4) scale(1.0539)">
+                <path d="M47.1408 78.2916L2.86354 54.477L11.485 40.1284L64.375 63.5384L47.1408 78.2916Z" fill="currentColor"></path>
+                <path d="M77.1306 133.585C104.213 133.585 126.168 111.63 126.168 84.5474C126.168 57.4648 104.213 35.51 77.1306 35.51C50.048 35.51 28.0933 57.4648 28.0933 84.5474C28.0933 111.63 50.048 133.585 77.1306 133.585Z" fill="currentColor"></path>
+                <path d="M95.7304 76.0924C111.606 76.0924 124.476 63.2224 124.476 47.3464C124.476 31.4704 111.606 18.6003 95.7304 18.6003C79.8544 18.6003 66.9844 31.4704 66.9844 47.3464C66.9844 63.2224 79.8544 76.0924 95.7304 76.0924Z" fill="currentColor"></path>
+                <path d="M120.955 45.291L139.38 52.5409L117.184 54.8758L120.955 45.291Z" fill="currentColor"></path>
+                <path d="M116.386 40.0713L138.684 39.0914L121.536 48.9914L116.386 40.0713Z" fill="currentColor"></path>
+                <path d="M85.585 93.0021C105.197 93.0021 121.095 80.1321 121.095 64.2561C121.095 48.3801 105.197 35.51 85.585 35.51C65.9735 35.51 50.0752 48.3801 50.0752 64.2561C50.0752 80.1321 65.9735 93.0021 85.585 93.0021Z" fill="currentColor"></path>
+                <path d="M99.3862 61.1714C109.88 61.1714 118.386 52.6648 118.386 42.1714C118.386 31.678 109.88 23.1714 99.3862 23.1714C88.8928 23.1714 80.3862 31.678 80.3862 42.1714C80.3862 52.6648 88.8928 61.1714 99.3862 61.1714Z" fill="var(--color-paper, white)"></path>
+                <path d="M100.804 52.4193C106.407 52.4193 110.95 47.8769 110.95 42.2736C110.95 36.6703 106.407 32.1279 100.804 32.1279C95.2006 32.1279 90.6582 36.6703 90.6582 42.2736C90.6582 47.8769 95.2006 52.4193 100.804 52.4193Z" fill="currentColor"></path>
+                <path d="M69.3307 128.198C69.9064 126.969 71.307 126.47 72.4584 127.084C73.6097 127.698 74.0774 129.193 73.5021 130.422L66.3291 145.736C65.7535 146.965 64.3529 147.464 63.2015 146.85C62.0501 146.235 61.5825 144.74 62.1577 143.511L69.3307 128.198Z" fill="currentColor"></path>
+                <path d="M93.0045 126.621C93.5802 125.29 94.9808 124.749 96.1322 125.414C97.2836 126.08 97.7512 127.7 97.176 129.031L90.003 145.621C89.4273 146.952 88.0267 147.493 86.8753 146.828C85.7239 146.162 85.2563 144.542 85.8316 143.211L93.0045 126.621Z" fill="currentColor"></path>
+                <path d="M82.2032 11.8368L78.8213 1.69116" stroke="currentColor" stroke-width="4" stroke-linecap="round"></path>
+                <path d="M100.804 10.1457L102.495 0" stroke="currentColor" stroke-width="4" stroke-linecap="round"></path>
+                <path d="M117.713 16.9096L124.477 8.45483" stroke="currentColor" stroke-width="4" stroke-linecap="round"></path>
+            </g>
+
+            <!-- Angry state (easter egg: three clicks in a row). Drawn ~4%
+                 smaller than the resting state; the transform matches the two
+                 body sizes and aligns on the body center so it stays in place
+                 and the same size as the other birds. -->
+            <g class="bird-state bird-angry" transform="translate(-1.78 -4.96) scale(1.0385)">
+                <path d="M37.753 82.7902L0 48.4693L12.0123 36.457L58.3455 72.494L37.753 82.7902Z" fill="currentColor"></path>
+                <path d="M70.3581 142.852C97.8427 142.852 120.123 120.571 120.123 93.0866C120.123 65.602 97.8427 43.3213 70.3581 43.3213C42.8734 43.3213 20.5928 65.602 20.5928 93.0866C20.5928 120.571 42.8734 142.852 70.3581 142.852Z" fill="currentColor"></path>
+                <path d="M89.2343 84.5061C105.346 84.5061 118.407 71.4451 118.407 55.3334C118.407 39.2217 105.346 26.1606 89.2343 26.1606C73.1226 26.1606 60.0615 39.2217 60.0615 55.3334C60.0615 71.4451 73.1226 84.5061 89.2343 84.5061Z" fill="currentColor"></path>
+                <path d="M78.9378 101.667C98.8404 101.667 114.975 88.6057 114.975 72.494C114.975 56.3824 98.8404 43.3213 78.9378 43.3213C59.0352 43.3213 42.9009 56.3824 42.9009 72.494C42.9009 88.6057 59.0352 101.667 78.9378 101.667Z" fill="currentColor"></path>
+                <path d="M116.691 51.9014L135.567 56.1915L116.691 60.4816V51.9014Z" fill="currentColor"></path>
+                <path d="M94.3821 67.3458C103.86 67.3458 111.543 59.6628 111.543 50.1853C111.543 40.7079 103.86 33.0249 94.3821 33.0249C84.9047 33.0249 77.2217 40.7079 77.2217 50.1853C77.2217 59.6628 84.9047 67.3458 94.3821 67.3458Z" fill="var(--color-paper, white)"></path>
+                <mask id={angryMaskId} style="mask-type:luminance" maskUnits="userSpaceOnUse" x="77" y="33" width="35" height="35">
+                    <path d="M91.9942 67.1786C101.379 68.4976 110.057 61.9587 111.376 52.5734C112.695 43.1882 106.156 34.5107 96.7708 33.1917C87.3856 31.8727 78.7081 38.4117 77.3891 47.7969C76.0701 57.1821 82.609 65.8596 91.9942 67.1786Z" fill="white"></path>
+                </mask>
+                <g mask={`url(#${angryMaskId})`}>
+                    <path d="M122.711 21.2414L75.1294 14.5542L70.8305 45.1424L118.412 51.8295L122.711 21.2414Z" fill="currentColor"></path>
+                </g>
+                <path d="M95.8346 55.6691C99.0569 55.6691 101.669 53.0569 101.669 49.8346C101.669 46.6122 99.0569 44 95.8346 44C92.6122 44 90 46.6122 90 49.8346C90 53.0569 92.6122 55.6691 95.8346 55.6691Z" fill="currentColor"></path>
+                <path d="M131.106 9.34332C131.864 8.77469 132.94 8.9283 133.508 9.68644C134.077 10.4446 133.923 11.5205 133.165 12.0892C130.656 13.9714 128.015 15.0063 125.271 15.0063C122.528 15.0063 119.887 13.9714 117.377 12.0892C116.619 11.5205 116.466 10.4446 117.034 9.68644C117.603 8.9283 118.679 8.77469 119.437 9.34332C121.503 10.8931 123.439 11.5743 125.271 11.5743C127.104 11.5743 129.039 10.8931 131.106 9.34332Z" fill="currentColor"></path>
+                <path d="M135.911 14.8346C136.48 14.0765 137.555 13.9229 138.314 14.4915C139.072 15.0602 139.225 16.136 138.657 16.8942C137.107 18.9606 136.426 20.8962 136.426 22.7286C136.426 24.561 137.107 26.4966 138.657 28.563C139.225 29.3212 139.072 30.397 138.314 30.9657C137.555 31.5343 136.48 31.3807 135.911 30.6226C134.029 28.1129 132.994 25.4723 132.994 22.7286C132.994 19.9849 134.029 17.3444 135.911 14.8346Z" fill="currentColor"></path>
+                <path d="M125.271 30.4507C128.015 30.4507 130.656 31.4856 133.165 33.3679C133.923 33.9365 134.077 35.0124 133.508 35.7706C132.94 36.5287 131.864 36.6823 131.106 36.1137C129.039 34.564 127.104 33.8828 125.271 33.8828C123.439 33.8828 121.503 34.564 119.437 36.1137C118.679 36.6823 117.603 36.5287 117.034 35.7706C116.466 35.0124 116.619 33.9365 117.377 33.3679C119.887 31.4856 122.528 30.4507 125.271 30.4507Z" fill="currentColor"></path>
+                <path d="M112.229 14.4915C112.988 13.9229 114.063 14.0765 114.632 14.8346C116.514 17.3444 117.549 19.9849 117.549 22.7286C117.549 25.4723 116.514 28.1129 114.632 30.6226C114.063 31.3807 112.988 31.5343 112.229 30.9657C111.471 30.397 111.318 29.3212 111.886 28.563C113.436 26.4966 114.117 24.561 114.117 22.7286C114.117 20.8962 113.436 18.9606 111.886 16.8942C111.318 16.136 111.471 15.0602 112.229 14.4915Z" fill="currentColor"></path>
+                <path d="M61.2627 160.012V135.129C61.2627 133.897 62.2616 132.898 63.4936 132.898C64.7257 132.898 65.7246 133.897 65.7246 135.129V160.012C65.7246 161.244 64.7257 162.243 63.4936 162.243C62.2616 162.243 61.2627 161.244 61.2627 160.012Z" fill="currentColor"></path>
+                <path d="M85.2871 160.012V135.129C85.2871 133.897 86.286 132.898 87.5181 132.898C88.7501 132.898 89.749 133.897 89.749 135.129V160.012C89.749 161.244 88.7501 162.243 87.5181 162.243C86.286 162.243 85.2871 161.244 85.2871 160.012Z" fill="currentColor"></path>
+            </g>
+        </g>
+    </svg>
+</Tag>
+
+<style>
+    .bird {
+        display: inline-flex;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: inherit;
+        cursor: pointer;
+        line-height: 0;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .bird svg {
+        height: 100%;
+        width: auto;
+        /* The scaled-up clicked state's tail tip reaches a few px past the
+           left edge; let it paint into the surrounding whitespace. */
+        overflow: visible;
+    }
+    /* Swap between states. Resting shows the default; .is-clicked shows the
+       happy state; .is-angry shows the angry state. Instant — no transition.
+       The angry rules come last so they win when both classes are briefly
+       present. */
+    .bird-clicked,
+    .bird-angry {
+        opacity: 0;
+    }
+    .bird.is-clicked .bird-default {
+        opacity: 0;
+    }
+    .bird.is-clicked .bird-clicked {
+        opacity: 1;
+    }
+    .bird.is-angry .bird-default,
+    .bird.is-angry .bird-clicked {
+        opacity: 0;
+    }
+    .bird.is-angry .bird-angry {
+        opacity: 1;
+    }
+    /* Hover: same resting bird, but the pupil dilates and the tail lifts.
+       Static swap — no transition. */
+    .bird-pupil {
+        transform-box: fill-box;
+        transform-origin: center;
+    }
+    .bird-tail {
+        transform-box: view-box;
+        transform-origin: 50px 120px;
+    }
+    .bird:hover .bird-pupil {
+        transform: scale(1.2);
+    }
+    .bird:hover .bird-tail {
+        transform: rotate(8deg);
+    }
+</style>
+
+<script>
+    // Click swaps to the happy state; the third click of a streak swaps to
+    // the angry state. Two timers, decoupled on purpose: the bird returns to
+    // default shortly after each click (visual), but the click streak lives
+    // on a longer window so it also counts when the user clicks, lets it reset
+    // to default, and clicks again. The streak only resets after a real pause.
+    const VISUAL_RESET = 900;
+    const STREAK_WINDOW = 3000;
+    for (const btn of document.querySelectorAll<HTMLButtonElement>("button.bird")) {
+        let visualTimer: ReturnType<typeof setTimeout>;
+        let streakTimer: ReturnType<typeof setTimeout>;
+        let streak = 0;
+        btn.addEventListener("click", () => {
+            streak++;
+            clearTimeout(visualTimer);
+            clearTimeout(streakTimer);
+            if (streak >= 3) {
+                btn.classList.remove("is-clicked");
+                btn.classList.add("is-angry");
+                streak = 0;
+            } else {
+                btn.classList.remove("is-angry");
+                btn.classList.add("is-clicked");
+            }
+            visualTimer = setTimeout(() => {
+                btn.classList.remove("is-clicked", "is-angry");
+            }, VISUAL_RESET);
+            streakTimer = setTimeout(() => {
+                streak = 0;
+            }, STREAK_WINDOW);
+        });
+    }
+</script>

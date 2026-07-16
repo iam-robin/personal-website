@@ -1,0 +1,37 @@
+---
+import SubpageLayout from "../layouts/SubpageLayout.astro";
+import ProjectCard from "../components/projects/ProjectCard.astro";
+import { getAllProjects } from "../utils/projects";
+
+const projects = await getAllProjects();
+---
+
+<SubpageLayout
+    title="Projects"
+    description="Like most of us – I have lot of ideas and projects that I would like to implement. Many of them get lost in my notes or as random thoughts on my computer. But can you believe it? Some of them actually happen."
+>
+    <ul class="divide-y divide-ink/15 border-y border-ink/15">
+        {
+            projects.map((project) => (
+                <li
+                    class="list-item-image-hover-effect group relative cursor-pointer"
+                >
+                    <ProjectCard
+                        slug={project.id}
+                        title={project.data.title}
+                        description={project.data.description}
+                        year={project.data.year}
+                        bgColor={project.data.bgColor}
+                        bgColorDark={project.data.bgColorDark}
+                        externalUrl={project.data.externalUrl}
+                        tags={project.data.tags}
+                        draft={project.data.draft}
+                        showFanPreview
+                    />
+                </li>
+            ))
+        }
+    </ul>
+</SubpageLayout>
+
+<script src="../scripts/listHoverPreview.ts"></script>

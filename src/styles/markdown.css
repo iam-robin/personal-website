@@ -1,0 +1,117 @@
+/*
+  Long-form article styling. Follows the site system: mono body text,
+  Apercu-bold headings (same split as the homepage — bold display,
+  mono text). Applied via a `.blog-prose` wrapper around rendered markdown.
+*/
+.blog-prose {
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--color-ink);
+}
+
+/* Vertical rhythm — space between all top-level blocks */
+.blog-prose > * + * {
+    margin-top: 1.5em;
+}
+
+/* Headings — Apercu bold, with extra space above */
+.blog-prose h2,
+.blog-prose h3,
+.blog-prose h4 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    line-height: var(--leading-tight);
+    /* Breathing room when jumped to via a table-of-contents anchor */
+    scroll-margin-top: 2rem;
+}
+.blog-prose h2 {
+    font-size: var(--text-xl);
+    margin-top: 2.5em;
+}
+.blog-prose h3 {
+    font-size: var(--text-lg);
+    margin-top: 2em;
+}
+.blog-prose h4 {
+    font-size: var(--text-md);
+    margin-top: 1.75em;
+}
+.blog-prose :is(h2, h3, h4) + * {
+    margin-top: 0.75em;
+}
+
+/* Links — underlined; the global a:hover italic still applies */
+.blog-prose a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Lists */
+.blog-prose ul,
+.blog-prose ol {
+    padding-left: 1.5em;
+}
+.blog-prose ul {
+    list-style: disc;
+}
+.blog-prose ol {
+    list-style: decimal;
+}
+.blog-prose li + li {
+    margin-top: 0.4em;
+}
+.blog-prose li::marker {
+    color: color-mix(in srgb, var(--color-ink) 40%, transparent);
+}
+
+/* Inline code */
+.blog-prose :not(pre) > code {
+    background-color: var(--color-surface);
+    padding: 0.1em 0.35em;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+}
+
+/* Code blocks (Shiki sets its own background + colors) */
+.blog-prose pre {
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+}
+
+/* Images */
+.blog-prose img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Blockquotes */
+.blog-prose blockquote {
+    border-left: 2px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+    padding-left: 1rem;
+    opacity: 0.8;
+}
+
+/* Rules */
+.blog-prose hr {
+    border: 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    margin-top: 2.5em;
+    margin-bottom: 2.5em;
+}
+
+/* Footnotes (GFM) — quieter, set off by a rule */
+.blog-prose .footnotes {
+    margin-top: 3em;
+    padding-top: 1.5em;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    font-size: var(--text-sm);
+    opacity: 0.7;
+}

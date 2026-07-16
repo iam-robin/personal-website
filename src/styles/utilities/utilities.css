@@ -1,0 +1,73 @@
+.flex-center {
+    @apply flex justify-center items-center;
+}
+
+/*
+  Analog text-marker highlight: a skewed, slightly rotated swatch with
+  hand-cut corners and uneven ink density, drawn behind the text.
+*/
+.marker {
+    --marker-color: var(--color-surface);
+    position: relative;
+}
+
+.marker::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0.08em -0.25em 0.02em -0.18em;
+    background: linear-gradient(
+        100deg,
+        color-mix(in srgb, var(--marker-color) 55%, transparent) 0%,
+        var(--marker-color) 6%,
+        var(--marker-color) 82%,
+        color-mix(in srgb, var(--marker-color) 75%, transparent) 96%,
+        color-mix(in srgb, var(--marker-color) 40%, transparent) 100%
+    );
+    border-radius: 0.08em 0.15em 0.1em 0.18em / 0.18em 0.1em 0.15em 0.08em;
+    transform: skew(-7deg) rotate(-0.7deg);
+    transition: background-color 0.15s ease-out;
+}
+
+a.marker:hover {
+    --marker-color: color-mix(in srgb, var(--color-ink) 10%, var(--color-surface));
+}
+
+.hover-lift {
+    @apply transition-all duration-600 ease-spring-playful;
+}
+
+.hover-lift:hover {
+    @apply scale-102;
+    filter: drop-shadow(0px 14px 18px rgba(0, 0, 0, 0.1));
+}
+
+/* Postcard corner shadows (from v3) */
+.corner-shadow-effect {
+    position: relative;
+}
+.corner-shadow-effect:before,
+.corner-shadow-effect:after {
+    z-index: -1;
+    position: absolute;
+    content: "";
+    width: 50%;
+    top: 80%;
+    box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.3);
+}
+.corner-shadow-effect:before {
+    left: 0.5rem;
+    bottom: 16px;
+    transform: rotate(-3deg);
+}
+.corner-shadow-effect:after {
+    transform: rotate(3deg);
+    bottom: 16px;
+    right: 0.5em;
+}
+.corner-shadow-effect.hide-before:before {
+    display: none;
+}
+.corner-shadow-effect.hide-after:after {
+    display: none;
+}

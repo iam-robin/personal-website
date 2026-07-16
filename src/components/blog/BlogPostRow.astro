@@ -1,0 +1,51 @@
+---
+/**
+ * One blog post as a list row: date · title · Read →. Shared by the
+ * homepage teaser and the /blog index. `showYear` off drops the year
+ * from the date (used when the index groups rows under a year heading).
+ */
+import type { CollectionEntry } from "astro:content";
+import { categoryLabel } from "../../utils/blog";
+
+interface Props {
+    post: CollectionEntry<"blog">;
+    showYear?: boolean;
+    showCategory?: boolean;
+}
+
+const { post, showYear = true, showCategory = false } = Astro.props;
+
+const formatDate = (date: Date) =>
+    date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+        ...(showYear ? { year: "numeric" } : {}),
+    });
+---
+
+<a
+    href={`/blog/${post.id}`}
+    class="group flex items-start gap-6 py-5 font-mono"
+>
+    <span class="shrink-0 whitespace-nowrap text-sm opacity-40">
+        {formatDate(post.data.date)}
+    </span>
+    <span
+        class="min-w-0 flex-1 text-base group-hover:underline group-hover:underline-offset-4"
+    >
+        {post.data.title}
+    </span>
+    {
+        showCategory && post.data.category && (
+            <span class="hidden shrink-0 text-sm opacity-40 sm:inline">
+                {categoryLabel(post.data.category)}
+            </span>
+        )
+    }
+    <span
+        class="shrink-0 text-base opacity-40 transition-opacity group-hover:opacity-100"
+        aria-hidden="true"
+    >
+        →
+    </span>
+</a>

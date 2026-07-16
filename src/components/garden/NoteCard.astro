@@ -1,0 +1,129 @@
+---
+/** Garden note card — ported to match v3 exactly. */
+import Divider from "./Divider.astro";
+import { gardenColors, categorySlug, type GardenNote } from "../../utils/garden";
+
+interface Props {
+    note: GardenNote["data"];
+    categoryIndex?: number;
+    distorted?: boolean;
+    classes?: string;
+}
+
+const { note, categoryIndex = 0, distorted, classes } = Astro.props;
+
+const backgroundColor = gardenColors[categoryIndex % gardenColors.length];
+const backgroundColorStyle = `background-color: ${backgroundColor};`;
+
+const randomMarginBottom = Math.floor(Math.random() * 8);
+const randomMarginRight = Math.floor(Math.random() * 8);
+const randomRotation = Math.floor(Math.random() * 4 - 2);
+
+const transformStyles = distorted
+    ? `transform: translateY(${randomMarginBottom}px) translateX(${randomMarginRight}px) rotate(${randomRotation}deg);`
+    : `transform: rotate(${randomRotation}deg);`;
+
+const shadowClass = randomRotation >= 0 ? "hide-after" : "hide-before";
+
+const alignOptions = ["self-start", "self-center", "self-end"];
+const randomAlign =
+    alignOptions[Math.floor(Math.random() * alignOptions.length)];
+
+const randomTypeRotation = Math.floor(Math.random() * 4 - 2);
+const randomTypeMarginBottom = Math.floor(Math.random() * 12 - 6);
+const randomTypeMarginRight = Math.floor(Math.random() * 12 - 6);
+
+const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+};
+
+const createdDay = formatDate(note.created);
+const editedDay = note.edited ? formatDate(note.edited) : null;
+---
+
+<div
+    class:list={["group block min-h-[280px]", randomAlign, classes]}
+    style={transformStyles}
+>
+    <div
+        class={`corner-shadow-effect hover:before:opacity-0 before:transition-all before:duration-300 ${shadowClass}`}
+        data-rotation={randomRotation}
+    >
+        <a
+            href={`/garden/${categorySlug(note.thema)}/${note.slug}`}
+            class="hover-lift relative block p-2 no-underline"
+            style={backgroundColorStyle}
+        >
+            <div class="texture"></div>
+            <div
+                class="flex h-full flex-col justify-between border border-black/60 p-3 font-mono text-black"
+            >
+                <div>
+                    <ul class="flex gap-2">
+                        <li
+                            class="mb-2 inline-block rounded-full border border-black/60 px-2 py-[2px] text-[11px]"
+                        >
+                            {note.thema}
+                        </li>
+                    </ul>
+                    <h3 class="mt-3 text-base font-bold">{note.title}</h3>
+                </div>
+                {
+                    note.description && (
+                        <>
+                            <Divider isBlack />
+                            <div style="filter: url(#distort);">
+                                <p
+                                    class="line-clamp-3 py-1 font-decorative text-md leading-[1.1]"
+                                    style={`transform: translateY(${randomTypeMarginBottom}px) translateX(${randomTypeMarginRight}px) rotate(${randomTypeRotation}deg); opacity: 0.9;`}
+                                >
+                                    {note.description}
+                                </p>
+                            </div>
+                        </>
+                    )
+                }
+                <Divider isBlack />
+                <div class="text-[12px]">
+                    <p>
+                        <span class="inline-block min-w-[72px]">created:</span>
+                        {createdDay}
+                    </p>
+                    {
+                        editedDay && createdDay !== editedDay && (
+                            <p>
+                                <span class="inline-block min-w-[72px]">
+                                    edited:
+                                </span>
+                                {editedDay}
+                            </p>
+                        )
+                    }
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Opt out of the site-wide italic-on-hover for the whole card */
+    a:hover {
+        font-style: normal;
+    }
+
+    .texture {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.5;
+        mix-blend-mode: soft-light;
+        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 369 369' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+</style>

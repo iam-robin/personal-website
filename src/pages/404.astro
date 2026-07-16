@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Bird404 from "../components/Bird404.astro";
+---
+
+<Layout title="404 — Robin Spielmann">
+    <main
+        class="flex min-h-screen flex-col items-center justify-center gap-8 px-6 py-16 text-center"
+    >
+        <!-- The dazed, crossed-eye robin — same bird as the logo, but this
+             one clearly wasn't expecting you here. -->
+        <Bird404 class="h-40 w-auto text-ink" />
+
+        <div class="flex flex-col items-center gap-3">
+            <h1 class="text-5xl font-bold">404</h1>
+            <p class="max-w-md font-mono text-base text-balance">
+                This page flew the nest. Maybe the link is broken, maybe it
+                never existed — either way, there's nothing here.
+            </p>
+        </div>
+
+        <a
+            href="/"
+            class="font-mono text-base underline underline-offset-4 hover:italic"
+        >
+            ← Back to the living room
+        </a>
+    </main>
+</Layout>

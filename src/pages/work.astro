@@ -1,0 +1,178 @@
+---
+import { Image } from "astro:assets";
+import SubpageLayout from "../layouts/SubpageLayout.astro";
+import Button from "../components/ui/Button.astro";
+import Placeholder from "../components/ui/Placeholder.astro";
+import RoleDiagram from "../components/work/RoleDiagram.astro";
+import portrait from "../assets/robin-portrait.avif";
+
+// Client logos are inlined (not <img>) so their fills, rewritten to
+// currentColor, inherit the page's ink instead of shouting in brand colours.
+const logoSvgs = import.meta.glob<string>("../assets/logos/*.svg", {
+    query: "?raw",
+    import: "default",
+    eager: true,
+});
+
+// Names only — the work here belongs to the agencies, so no case studies.
+const clients: { name: string; logo: string }[] = [
+    { name: "Union Investment", logo: "ui" },
+    { name: "Scout24", logo: "scout24" },
+    { name: "Caritas", logo: "caritas" },
+    { name: "Sto", logo: "sto" },
+];
+
+// Quiet definition list. Values are plain text so the block stays calm.
+// Kept in sync with cv.iamrob.in — a shortlist, not the full proficiencies.
+const details: { label: string; value: string }[] = [
+    { label: "Based in", value: "Munich, Germany — and remote" },
+    {
+        label: "Focus",
+        value: "Design systems, UI systems, interfaces that scale",
+    },
+    {
+        label: "Tools",
+        value: "TypeScript, React, Next.js, Astro, Tailwind, Storybook, Figma & Claude Code",
+    },
+];
+---
+
+<SubpageLayout
+    title="Work"
+    description="A design engineer lives in the overlap of design and code. I build the design systems, components and prototypes that keep a product consistent — and help designers and engineers move as one."
+    hideHero
+>
+    <div class="flex flex-col gap-16">
+        <!-- Intro — portrait left; focus, details and contact links right -->
+        <section class="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-5">
+            <div class="md:col-span-2">
+                {
+                    /* Same treatment as the homepage photo fan: a plain print —
+                    square corners, thin ink border. */
+                }
+                <Image
+                    src={portrait}
+                    alt="Black-and-white portrait of Robin Spielmann in profile"
+                    widths={[240, 480]}
+                    sizes="(min-width: 768px) 240px, 60vw"
+                    class="w-full max-w-[240px] border border-ink/15"
+                />
+            </div>
+            <div class="flex max-w-2xl flex-col gap-8 md:col-span-3">
+                <p class="font-mono text-base leading-relaxed">
+                    I'm Robin — a design engineer, eight years into building UI
+                    systems, web applications and the design systems that hold
+                    them together. I'd rather build the thing than hand it off.
+                    The part I care about is the part that lasts: interfaces
+                    that still hold up once they scale, and product and
+                    development staying close enough that they don't drift
+                    apart.
+                </p>
+                <div>
+                    <dl class="divide-y divide-ink/10 border-y border-ink/10">
+                        {
+                            details.map((d) => (
+                                <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-[10rem_1fr] sm:gap-4">
+                                    <dt class="font-mono text-sm opacity-50">
+                                        {d.label}
+                                    </dt>
+                                    <dd class="font-mono text-sm">{d.value}</dd>
+                                </div>
+                            ))
+                        }
+                    </dl>
+                    {
+                        /* Mirrors the row grid above so the buttons line up
+                        with the values, not the labels. */
+                    }
+                    <div
+                        class="mt-6 grid grid-cols-1 sm:grid-cols-[10rem_1fr] sm:gap-4"
+                    >
+                        <div class="hidden sm:block"></div>
+                        <div class="flex flex-wrap gap-3">
+                            <Button
+                                href="mailto:hey@iamrob.in"
+                                variant="primary"
+                            >
+                                Get in touch
+                            </Button>
+                            <Button href="https://cv.iamrob.in" external>
+                                View CV
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What I do — plain prose, with the role diagram filling the label column -->
+        <section class="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-5">
+            <div class="md:col-span-2">
+                <h2 class="text-sm font-bold">What I do</h2>
+            </div>
+            <div class="flex max-w-2xl flex-col gap-8 md:col-span-3">
+                <div
+                    class="flex flex-col gap-4 font-mono text-base leading-relaxed"
+                >
+                    <p>
+                        I work where design meets front-end. Rather than handing
+                        designs off, I build them: accessible, performant UI
+                        components and the design-system patterns that keep a
+                        product consistent as it grows.
+                    </p>
+                    <p>
+                        I'm at my best bridging the two sides — prototyping in
+                        real code, closing the gaps where a product drifts out
+                        of sync, and giving designers and engineers a shared
+                        vocabulary to build from. Lately that's meant using
+                        AI-assisted tools to get from design to production code
+                        faster, without dropping the bar for craft.
+                    </p>
+                </div>
+                <RoleDiagram class="w-full max-w-[340px] text-ink" />
+            </div>
+        </section>
+
+        <!-- Where I come from — the career story in prose, not a CV timeline
+             (the full history lives at cv.iamrob.in). -->
+        <section class="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-5">
+            <div class="md:col-span-2">
+                <h2 class="text-sm font-bold">Where I come from</h2>
+            </div>
+            <div
+                class="flex max-w-2xl flex-col gap-4 font-mono text-base leading-relaxed md:col-span-3"
+            >
+                {/* TODO: Robin — replace with your real career history. */}
+                <Placeholder label="Career history — text to come" />
+            </div>
+        </section>
+
+        <!-- Clients — logos only, flattened to ink. The work itself was done
+             at the agencies, so there's nothing to link to. -->
+        <section class="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-5">
+            <div class="md:col-span-2">
+                <h2 class="text-sm font-bold">Companies I've worked with</h2>
+            </div>
+            <ul
+                class="flex max-w-2xl flex-wrap items-center gap-x-10 gap-y-8 text-ink md:col-span-3"
+            >
+                {
+                    clients.map((client) => (
+                        <li class="flex items-center">
+                            <span class="sr-only">{client.name}</span>
+                            <span
+                                aria-hidden="true"
+                                class="[&>svg]:h-7 [&>svg]:w-auto"
+                                set:html={
+                                    logoSvgs[
+                                        `../assets/logos/${client.logo}.svg`
+                                    ]
+                                }
+                            />
+                        </li>
+                    ))
+                }
+            </ul>
+        </section>
+    </div>
+</SubpageLayout>

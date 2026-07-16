@@ -1,0 +1,70 @@
+---
+import { getCollection, render } from "astro:content";
+import { Icon } from "astro-icon/components";
+import Layout from "../../layouts/Layout.astro";
+import "../../styles/markdown.css";
+
+// A detail page exists only for projects the cards link to internally —
+// i.e. those without an external URL and not still a draft. Everything
+// else opens its own site (externalUrl) or is unlinked (draft).
+export async function getStaticPaths() {
+    const projects = await getCollection("projects");
+    return projects
+        .filter((p) => !p.data.externalUrl && !p.data.draft)
+        .map((project) => ({
+            params: { slug: project.id },
+            props: { project },
+        }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, description, tags, year } = project.data;
+---
+
+<Layout title={`${title} — Projects — Robin Spielmann`}>
+    <a
+        href="/projects"
+        aria-label="Close"
+        class="close-button flex-center fixed top-4 right-4 z-50 h-12 w-12 cursor-pointer rounded-full no-underline"
+    >
+        <Icon name="ph:x-bold" size={24} />
+    </a>
+
+    <article class="mx-auto w-full max-w-[65ch] px-6 py-16 md:py-24">
+        <header>
+            <h1 class="text-3xl font-bold md:text-4xl">{title}</h1>
+            <p class="mt-2 text-lg text-ink/70">{description}</p>
+            {
+                tags && tags.length > 0 && (
+                    <div class="mt-5 flex flex-wrap gap-2">
+                        {tags.map((tag) => (
+                            <span class="rounded-full bg-ink/10 px-3 py-1 font-mono text-sm">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+                )
+            }
+            {
+                year && (
+                    <p class="mt-4 font-mono text-sm text-ink/60">{year}</p>
+                )
+            }
+        </header>
+
+        <div class="blog-prose mt-12">
+            <Content />
+        </div>
+    </article>
+</Layout>
+
+<style>
+    .close-button {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: rgba(0, 0, 0, 0.7);
+    }
+    .close-button:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+</style>

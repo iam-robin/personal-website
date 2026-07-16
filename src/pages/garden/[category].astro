@@ -1,0 +1,52 @@
+---
+import SubpageLayout from "../../layouts/SubpageLayout.astro";
+import NoteCard from "../../components/garden/NoteCard.astro";
+import GardenFilter from "../../components/garden/GardenFilter.astro";
+import {
+    getGardenNotes,
+    getCategories,
+    getCategoryColorMap,
+    categorySlug,
+} from "../../utils/garden";
+
+export async function getStaticPaths() {
+    const notes = await getGardenNotes();
+    return getCategories(notes).map((category) => ({
+        params: { category: categorySlug(category.name) },
+        props: { categoryName: category.name },
+    }));
+}
+
+const { categoryName } = Astro.props;
+
+const allNotes = await getGardenNotes();
+const categories = getCategories(allNotes);
+const colorMap = getCategoryColorMap(allNotes);
+const notes = allNotes.filter((note) => note.data.thema === categoryName);
+---
+
+<SubpageLayout
+    title="Garden"
+    description="A collection of notes, ideas, and thoughts that I cultivate over time. Unlike blog posts, these notes are living documents that grow and evolve as I learn and explore new topics."
+    documentTitle={`${categoryName} — Garden — Robin Spielmann`}
+>
+    <GardenFilter
+        categories={categories}
+        colorMap={colorMap}
+        total={allNotes.length}
+        active={categoryName}
+    />
+    <div
+        class="mt-12 grid grid-cols-1 items-center gap-x-4 gap-y-4 sm:grid-cols-2 md:grid-cols-3 md:gap-y-10 lg:grid-cols-4"
+    >
+        {
+            notes.map((note) => (
+                <NoteCard
+                    note={note.data}
+                    categoryIndex={colorMap[note.data.thema]}
+                    distorted
+                />
+            ))
+        }
+    </div>
+</SubpageLayout>

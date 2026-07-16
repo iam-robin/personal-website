@@ -1,0 +1,53 @@
+---
+import type { GetStaticPaths } from "astro";
+import { db, Postcard, desc, eq } from "astro:db";
+import {
+    isValidCountry,
+    getStandardCountryName,
+} from "../../../../utils/countries";
+import SubpageLayout from "../../../../layouts/SubpageLayout.astro";
+import PostcardsView from "../../../../components/postcards/PostcardsView.astro";
+import SendPostcardCta from "../../../../components/postcards/SendPostcardCta.astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+    const postcards = await db
+        .select()
+        .from(Postcard)
+        .where(eq(Postcard.isPublished, true))
+        .orderBy(desc(Postcard.date));
+
+    const countries = [
+        ...new Set(
+            postcards
+                .map((p) => p.country)
+                .filter((c): c is string => !!c && isValidCountry(c))
+                .map((c) => getStandardCountryName(c)),
+        ),
+    ];
+
+    // One paginated set of routes per country.
+    return countries.flatMap((country) => {
+        const cards = postcards.filter(
+            (p) => p.country && getStandardCountryName(p.country) === country,
+        );
+        return paginate(cards, {
+            pageSize: 24,
+            params: { country },
+            props: { selectedCountry: country },
+        });
+    });
+}) satisfies GetStaticPaths;
+
+const { page, selectedCountry } = Astro.props;
+---
+
+<SubpageLayout
+    title="Postcards"
+    documentTitle={`Postcards from ${selectedCountry}${
+        page.currentPage > 1 ? ` (page ${page.currentPage})` : ""
+    } — Robin Spielmann`}
+    description="This website is mostly me talking. This postcard gives you a chance to talk back — even just a line. Drop me a postcard. Tell me what you're thinking, where you're visiting from, or simply that you stopped by. I'd love to hear from you."
+>
+    <SendPostcardCta slot="cta" />
+    <PostcardsView page={page} selectedCountry={selectedCountry} />
+</SubpageLayout>

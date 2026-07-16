@@ -1,0 +1,103 @@
+---
+/**
+ * "What is a design engineer" as a small hand-drawn Venn:
+ * Design ∩ Code ∩ Product — and the bird logo sits in the shared overlap.
+ * The three circles run through the same feTurbulence + feDisplacementMap
+ * filter the bird logo uses (same baseFrequency / octaves / seed), so the
+ * wobbly ink line reads as a sibling of the logo. Overlapping translucent
+ * fills make the intersections darken on their own — no clip path needed.
+ * Labels stay crisp (outside the filter) so they remain legible, and the
+ * real <Bird> component is layered over the centre overlap instead of a
+ * "me" label.
+ */
+import Bird from "../Bird.astro";
+
+interface Props {
+    class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<div class:list={["role-diagram", className]}>
+    <svg
+        class="role-diagram__venn"
+        viewBox="0 0 300 285"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+    >
+        <filter
+            id="role-scribble"
+            x="-20%"
+            y="-20%"
+            width="140%"
+            height="140%"
+            filterUnits="objectBoundingBox"
+            color-interpolation-filters="sRGB"
+        >
+            <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.07"
+                numOctaves="3"
+                seed="81"
+                result="n"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="3"
+            ></feDisplacementMap>
+        </filter>
+
+        <g
+            filter="url(#role-scribble)"
+            stroke="currentColor"
+            stroke-width="2.5"
+            fill="currentColor"
+            fill-opacity="0.10"
+        >
+            <circle cx="110" cy="108" r="80"></circle>
+            <circle cx="190" cy="108" r="80"></circle>
+            <circle cx="150" cy="180" r="80"></circle>
+        </g>
+
+        <text class="role-label" x="82" y="94" text-anchor="middle">Design</text>
+        <text class="role-label" x="218" y="94" text-anchor="middle">Code</text>
+        <text class="role-label" x="150" y="212" text-anchor="middle"
+            >Product</text
+        >
+    </svg>
+
+    <div class="role-diagram__bird">
+        <Bird interactive={false} />
+    </div>
+</div>
+
+<style>
+    .role-diagram {
+        position: relative;
+        display: block;
+    }
+    .role-diagram__venn {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    /* Seat the logo in the triple-overlap of the three circles, small enough
+       that it never crosses a circle outline. Centre (150, 130) in the
+       300×285 viewBox → 50% / 45.6%; 14% height ≈ 40 viewBox units. */
+    .role-diagram__bird {
+        position: absolute;
+        top: 45.6%;
+        left: 50%;
+        height: 14%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+    .role-diagram__bird :global(.bird),
+    .role-diagram__bird :global(.bird svg) {
+        height: 100%;
+        width: auto;
+    }
+    .role-label {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        fill: currentColor;
+    }
+</style>

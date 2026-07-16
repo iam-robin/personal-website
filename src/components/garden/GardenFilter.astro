@@ -1,0 +1,39 @@
+---
+/**
+ * Static "Topics" filter for the garden. Each category is its own page
+ * (no client JS). Shows a category color dot and note count, v3-style.
+ */
+import { gardenColors, categorySlug } from "../../utils/garden";
+import FilterBar from "../ui/FilterBar.astro";
+import FilterTag from "../ui/FilterTag.astro";
+
+interface Props {
+    categories: { name: string; count: number }[];
+    colorMap: Record<string, number>;
+    total: number;
+    active?: string | null;
+}
+
+const { categories, colorMap, total, active = null } = Astro.props;
+---
+
+<FilterBar>
+    <FilterTag href="/garden" active={active === null} count={total}>
+        All
+    </FilterTag>
+    {
+        categories.map((category) => (
+            <FilterTag
+                href={`/garden/${categorySlug(category.name)}`}
+                active={active === category.name}
+                count={category.count}
+            >
+                <span
+                    class="h-2 w-2 shrink-0 rounded-full"
+                    style={`background-color: ${gardenColors[colorMap[category.name] % gardenColors.length]}`}
+                />
+                {category.name}
+            </FilterTag>
+        ))
+    }
+</FilterBar>

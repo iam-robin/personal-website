@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@import "./theme/typography.css";
+@import "./theme/colors.css";
+@import "./theme/transitions.css";
+@import "./utilities/utilities.css";
+
+@layer base {
+    html {
+        /* No rubber-band bounce when scrolling past the top or bottom */
+        overscroll-behavior: none;
+    }
+
+    body {
+        background-color: var(--color-paper);
+        color: var(--color-ink);
+    }
+
+    /* Every link tilts into italic on hover — site-wide signature */
+    a:hover {
+        font-style: italic;
+    }
+}

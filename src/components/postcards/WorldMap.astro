@@ -1,0 +1,83 @@
+---
+/**
+ * World map highlighting the countries postcards have arrived from.
+ * Ported from v3 (WorldMapDetail): countries in `visitedCountries` get the
+ * `.active` class; hovering any country shows a flag + name tooltip.
+ */
+import { COUNTRIES } from "../../utils/countries";
+import WorldMapSvg from "./WorldMapSvg.astro";
+
+interface Props {
+    visitedCountries?: string[];
+}
+const { visitedCountries = [] } = Astro.props;
+
+const TOTAL_COUNTRIES = 195;
+
+// name (and every alias) → flag, so the tooltip resolves whatever the path uses
+const countryFlags = Object.fromEntries(
+    COUNTRIES.flatMap((country) => {
+        const entries: [string, string][] = [[country.name, country.flag]];
+        country.aliases?.forEach((alias) => entries.push([alias, country.flag]));
+        return entries;
+    }),
+);
+---
+
+<section>
+    <h2 class="mb-6 font-mono text-xs tracking-widest uppercase opacity-50">
+        Where postcards came from ({visitedCountries.length}/{TOTAL_COUNTRIES})
+    </h2>
+    <div class="relative">
+        <WorldMapSvg />
+        <div id="map-tooltip" class="hidden"></div>
+    </div>
+</section>
+
+<style>
+    #map-tooltip {
+        position: fixed;
+        background-color: var(--color-ink);
+        color: var(--color-paper);
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        line-height: 1rem;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+    }
+</style>
+
+<script define:vars={{ visitedCountries, countryFlags }}>
+    function initWorldMap() {
+        const paths = document.querySelectorAll(".world-map path");
+        const tooltip = document.getElementById("map-tooltip");
+        if (!tooltip || !paths.length) return;
+
+        paths.forEach((path) => {
+            const name =
+                path.getAttribute("name") || path.getAttribute("class");
+            if (name && visitedCountries.includes(name)) {
+                path.classList.add("active");
+            }
+            path.addEventListener("mouseenter", () => {
+                if (!name) return;
+                const flag = countryFlags[name] || "";
+                tooltip.textContent = `${flag} ${name}`.trim();
+                tooltip.classList.remove("hidden");
+            });
+            path.addEventListener("mousemove", (e) => {
+                tooltip.style.left = `${e.clientX + 15}px`;
+                tooltip.style.top = `${e.clientY + 15}px`;
+            });
+            path.addEventListener("mouseleave", () => {
+                tooltip.classList.add("hidden");
+            });
+        });
+    }
+
+    initWorldMap();
+    document.addEventListener("astro:page-load", initWorldMap);
+</script>

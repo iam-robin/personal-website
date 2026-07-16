@@ -1,0 +1,15 @@
+---
+/**
+ * Small mono kicker line above a heading
+ * (e.g. "Robin Spielmann — Cologne").
+ */
+interface Props {
+    class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<p class={`font-mono text-sm tracking-wide opacity-50 ${className}`}>
+    <slot />
+</p>

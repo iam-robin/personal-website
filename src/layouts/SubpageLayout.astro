@@ -1,0 +1,81 @@
+---
+/**
+ * Shared shell for every subpage. A wide container holds:
+ * - a three-part top bar: logo left, nav centered, icons right
+ * - a two-column hero: title left, description right
+ * - the slotted page body
+ * - contact links
+ *
+ * Long-form content (e.g. blog articles) should constrain its own reading
+ * width inside the slot; the container itself is intentionally wide.
+ */
+import Layout from "./Layout.astro";
+import Nav from "../components/ui/Nav.astro";
+import FooterColumns from "../components/ui/FooterColumns.astro";
+import RssDropdown from "../components/ui/RssDropdown.astro";
+import MobileMenu from "../components/ui/MobileMenu.astro";
+import Bird from "../components/Bird.astro";
+
+interface Props {
+    title: string;
+    description?: string;
+    /** Override the <title> tag; defaults to "<title> — Robin Spielmann". */
+    documentTitle?: string;
+    /** Drop the title/description hero; the page body starts right below the top bar. */
+    hideHero?: boolean;
+}
+
+const { title, description, documentTitle, hideHero = false } = Astro.props;
+---
+
+<Layout
+    title={documentTitle ?? `${title} — Robin Spielmann`}
+    description={description}
+>
+    <div
+        class="@container mx-auto flex min-h-dvh max-w-5xl flex-col px-6 py-8"
+    >
+        <!-- Top bar: logo left · nav center · icons right.
+             Middle column is auto-width so the nav never wraps; the side
+             columns flex evenly to keep it centered. -->
+        <header class="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+            <a
+                href="/"
+                aria-label="Back to homepage"
+                class="justify-self-start"
+            >
+                <Bird class="h-8 w-auto text-ink" interactive={false} />
+            </a>
+            <Nav class="justify-self-center" />
+            <!-- col-start-3 keeps the icons right when the nav (col 2) is
+                 display:none on mobile and would otherwise leave its cell
+                 to auto-placement. -->
+            <div class="col-start-3 flex items-center justify-self-end">
+                <RssDropdown />
+            </div>
+        </header>
+
+        <!-- Hero: narrow title column left, wider description right -->
+        {
+            !hideHero && (
+                <div class="mt-24 grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-5">
+                    <div class="flex flex-col items-start gap-10 md:col-span-2">
+                        <h1 class="text-3xl font-bold">{title}</h1>
+                        <slot name="cta" />
+                    </div>
+                    {description && (
+                        <p class="font-mono text-base md:col-span-3 md:pt-2">
+                            {description}
+                        </p>
+                    )}
+                </div>
+            )
+        }
+
+        <main class="mt-16 flex-1">
+            <slot />
+        </main>
+        <FooterColumns class="mt-32" />
+        <MobileMenu />
+    </div>
+</Layout>

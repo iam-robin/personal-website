@@ -1,0 +1,16 @@
+---
+import SubpageLayout from "../layouts/SubpageLayout.astro";
+import BlogFilter from "../components/blog/BlogFilter.astro";
+import BlogPostList from "../components/blog/BlogPostList.astro";
+import { getBlogPosts, getCategories } from "../utils/blog";
+
+const posts = await getBlogPosts();
+const categories = getCategories(posts);
+---
+
+<SubpageLayout title="Blog">
+    <BlogFilter categories={categories} />
+    <div class="mt-12">
+        <BlogPostList posts={posts} showCategory />
+    </div>
+</SubpageLayout>

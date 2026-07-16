@@ -1,0 +1,58 @@
+---
+import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
+import SubpageLayout from "../../layouts/SubpageLayout.astro";
+import Link from "../../components/ui/Link.astro";
+import TableOfContents from "../../components/blog/TableOfContents.astro";
+import "../../styles/markdown.css";
+
+export async function getStaticPaths() {
+    const posts = await getCollection("blog");
+    return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const formattedDate = post.data.date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+});
+const category = post.data.category
+    ? post.data.category.charAt(0).toUpperCase() + post.data.category.slice(1)
+    : null;
+const meta = [formattedDate, category].filter(Boolean).join(" · ");
+---
+
+<SubpageLayout
+    title={post.data.title}
+    description={post.data.subtitle ?? post.data.description}
+    documentTitle={`${post.data.title} — Robin Spielmann`}
+>
+    <div class="max-w-3xl">
+        <p class="mb-10 font-mono text-sm opacity-50">{meta}</p>
+
+        {
+            post.data.image && (
+                <Image
+                    src={post.data.image}
+                    alt=""
+                    widths={[768, 1536]}
+                    sizes="(min-width: 768px) 768px, 100vw"
+                    class="mb-12 w-full rounded-lg"
+                />
+            )
+        }
+
+        <TableOfContents headings={headings} />
+
+        <article class="blog-prose">
+            <Content />
+        </article>
+
+        <div class="mt-16 border-t border-ink/15 pt-8">
+            <Link href="/blog">← All posts</Link>
+        </div>
+    </div>
+</SubpageLayout>

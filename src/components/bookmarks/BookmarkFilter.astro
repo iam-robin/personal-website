@@ -1,0 +1,31 @@
+---
+/** Static tag filter for bookmarks — each tag is its own page. */
+import { tagSlug } from "../../utils/bookmarks";
+import FilterBar from "../ui/FilterBar.astro";
+import FilterTag from "../ui/FilterTag.astro";
+
+interface Props {
+    tags: { name: string; count: number }[];
+    total: number;
+    active?: string | null;
+}
+
+const { tags, total, active = null } = Astro.props;
+---
+
+<FilterBar>
+    <FilterTag href="/bookmarks" active={active === null} count={total}>
+        All
+    </FilterTag>
+    {
+        tags.map((tag) => (
+            <FilterTag
+                href={`/bookmarks/tag/${tagSlug(tag.name)}`}
+                active={active === tag.name}
+                count={tag.count}
+            >
+                #{tag.name}
+            </FilterTag>
+        ))
+    }
+</FilterBar>

@@ -1,0 +1,97 @@
+---
+/**
+ * Mobile navigation: a fixed "Menu" pill at the bottom of the viewport
+ * that expands into a panel of links — the concept from v3, restyled for
+ * v4. Shown below md, where the inline <Nav> is hidden. Also renders a
+ * spacer in the page flow so the floating pill never covers the last
+ * content on the page.
+ */
+import { Icon } from "astro-icon/components";
+import { navItems } from "../../data/navigation";
+
+const items = [{ label: "Home", href: "/" }, ...navItems];
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isActive = (href: string) =>
+    href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
+---
+
+<div class="h-24 md:hidden" aria-hidden="true"></div>
+
+<nav class="fixed inset-x-6 bottom-6 z-50 md:hidden" aria-label="Site menu">
+    <details id="mobile-menu">
+        <summary
+            class="flex h-12 cursor-pointer list-none items-center justify-center gap-2 rounded-xl bg-ink font-mono text-sm text-paper shadow-lg"
+        >
+            <Icon name="ph:list-bold" size={16} class="menu-icon" />
+            <Icon name="ph:x-bold" size={16} class="close-icon hidden" />
+            Menu
+        </summary>
+
+        <ul
+            class="absolute inset-x-0 bottom-14 flex flex-col rounded-xl bg-ink p-2 font-mono text-sm text-paper shadow-lg"
+        >
+            {
+                items.map((item) => (
+                    <li>
+                        <a
+                            href={item.href}
+                            class:list={[
+                                "block rounded-lg px-4 py-3 underline-offset-4 transition-colors hover:bg-paper/10",
+                                isActive(item.href)
+                                    ? "underline"
+                                    : "opacity-60",
+                            ]}
+                            aria-current={
+                                isActive(item.href) ? "page" : undefined
+                            }
+                            {...(item.external && {
+                                target: "_blank",
+                                rel: "noopener noreferrer",
+                            })}
+                        >
+                            {item.label}
+                            {item.external && " ↗"}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </details>
+</nav>
+
+<style>
+    summary::marker,
+    summary::-webkit-details-marker {
+        display: none;
+    }
+
+    details[open] .menu-icon {
+        display: none;
+    }
+    details[open] .close-icon {
+        display: block;
+    }
+</style>
+
+<script>
+    function initMobileMenu() {
+        const menu = document.getElementById(
+            "mobile-menu",
+        ) as HTMLDetailsElement | null;
+        if (!menu || menu.dataset.initialized) return;
+        menu.dataset.initialized = "true";
+
+        // Close when clicking outside or pressing Escape
+        document.addEventListener("click", (e) => {
+            if (menu.open && !menu.contains(e.target as Node))
+                menu.open = false;
+        });
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") menu.open = false;
+        });
+    }
+
+    initMobileMenu();
+    document.addEventListener("astro:page-load", initMobileMenu);
+</script>

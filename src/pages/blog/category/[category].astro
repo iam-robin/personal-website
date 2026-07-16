@@ -1,0 +1,36 @@
+---
+import SubpageLayout from "../../../layouts/SubpageLayout.astro";
+import BlogFilter from "../../../components/blog/BlogFilter.astro";
+import BlogPostList from "../../../components/blog/BlogPostList.astro";
+import {
+    getBlogPosts,
+    getCategories,
+    categorySlug,
+    categoryLabel,
+} from "../../../utils/blog";
+
+export async function getStaticPaths() {
+    const posts = await getBlogPosts();
+    return getCategories(posts).map((category) => ({
+        params: { category: categorySlug(category) },
+        props: { category },
+    }));
+}
+
+const { category } = Astro.props;
+
+const allPosts = await getBlogPosts();
+const categories = getCategories(allPosts);
+const posts = allPosts.filter((post) => post.data.category === category);
+const label = categoryLabel(category);
+---
+
+<SubpageLayout
+    title="Blog"
+    documentTitle={`${label} — Blog — Robin Spielmann`}
+>
+    <BlogFilter categories={categories} active={category} />
+    <div class="mt-12">
+        <BlogPostList posts={posts} />
+    </div>
+</SubpageLayout>

@@ -1,0 +1,117 @@
+---
+/**
+ * RSS feed dropdown: an icon that opens a flyout listing the site's feeds,
+ * each with copy-URL and open-feed actions. Ported from v3.
+ */
+import { Icon } from "astro-icon/components";
+
+const rssFeeds = [
+    { label: "Blog", url: "/blog-rss.xml" },
+    { label: "Bookmarks", url: "/bookmarks-rss.xml" },
+];
+---
+
+<details id="rss-dropdown" class="relative">
+    <summary
+        class="cursor-pointer list-none p-2 opacity-60 transition-opacity hover:opacity-100"
+        aria-label="RSS Feeds"
+        title="Subscribe to RSS"
+    >
+        <Icon name="ph:rss-simple-bold" size={18} />
+    </summary>
+
+    <div
+        class="absolute right-0 z-50 mt-2 w-64 rounded-xl border border-ink/15 bg-surface p-2 shadow-lg"
+    >
+        <div class="mb-1 border-b border-ink/15 px-3 py-2">
+            <h3 class="font-mono text-xs tracking-wide uppercase opacity-50">
+                RSS Feeds
+            </h3>
+        </div>
+        {
+            rssFeeds.map((feed) => (
+                <div class="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-ink/5">
+                    <Icon
+                        name="ph:rss-simple-bold"
+                        size={16}
+                        class="shrink-0 opacity-50"
+                    />
+                    <span class="flex-1 text-sm">{feed.label}</span>
+                    <button
+                        class="rss-copy-btn rounded-lg p-1.5 transition-colors hover:bg-paper"
+                        data-url={feed.url}
+                        title="Copy feed URL"
+                        aria-label={`Copy ${feed.label} RSS feed URL`}
+                    >
+                        <Icon name="ph:copy-bold" size={14} class="copy-icon" />
+                        <Icon
+                            name="ph:check-bold"
+                            size={14}
+                            class="check-icon hidden text-green-700"
+                        />
+                    </button>
+                    <a
+                        href={feed.url}
+                        class="rounded-lg p-1.5 transition-colors hover:bg-paper"
+                        title="Open feed"
+                        aria-label={`Open ${feed.label} RSS feed`}
+                    >
+                        <Icon name="ph:arrow-square-out-bold" size={14} />
+                    </a>
+                </div>
+            ))
+        }
+    </div>
+</details>
+
+<style>
+    summary::marker,
+    summary::-webkit-details-marker {
+        display: none;
+    }
+</style>
+
+<script>
+    function initRssDropdown() {
+        const dropdown = document.getElementById(
+            "rss-dropdown",
+        ) as HTMLDetailsElement | null;
+        if (!dropdown || dropdown.dataset.initialized) return;
+        dropdown.dataset.initialized = "true";
+
+        // Close when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!dropdown.contains(e.target as Node)) dropdown.open = false;
+        });
+
+        // Copy feed URL to clipboard
+        dropdown.querySelectorAll(".rss-copy-btn").forEach((button) => {
+            button.addEventListener("click", async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const url = button.getAttribute("data-url");
+                if (!url) return;
+
+                try {
+                    await navigator.clipboard.writeText(
+                        `${window.location.origin}${url}`,
+                    );
+                    const copyIcon = button.querySelector(".copy-icon");
+                    const checkIcon = button.querySelector(".check-icon");
+                    copyIcon?.classList.add("hidden");
+                    checkIcon?.classList.remove("hidden");
+                    setTimeout(() => {
+                        copyIcon?.classList.remove("hidden");
+                        checkIcon?.classList.add("hidden");
+                    }, 2000);
+                } catch (err) {
+                    console.error("Failed to copy:", err);
+                }
+            });
+        });
+    }
+
+    initRssDropdown();
+    document.addEventListener("astro:page-load", initRssDropdown);
+</script>

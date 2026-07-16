@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import TeaserSection from '../TeaserSection.astro';
+import BlogPostRow from './BlogPostRow.astro';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+const link = {
+  href: '/blog',
+  text: 'All Posts',
+};
+---
+
+<TeaserSection title="Blog" link={link}>
+  <ul class="divide-y divide-ink/15 border-y border-ink/15">
+    {
+      posts.map((post) => (
+        <li>
+          <BlogPostRow post={post} />
+        </li>
+      ))
+    }
+  </ul>
+</TeaserSection>

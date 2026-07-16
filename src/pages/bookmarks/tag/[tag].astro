@@ -1,0 +1,34 @@
+---
+import SubpageLayout from "../../../layouts/SubpageLayout.astro";
+import BookmarkItem from "../../../components/bookmarks/BookmarkItem.astro";
+import BookmarkFilter from "../../../components/bookmarks/BookmarkFilter.astro";
+import { getBookmarks, getTags, tagSlug } from "../../../utils/bookmarks";
+
+export async function getStaticPaths() {
+    const bookmarks = await getBookmarks();
+    return getTags(bookmarks).map((tag) => ({
+        params: { tag: tagSlug(tag.name) },
+        props: { tagName: tag.name },
+    }));
+}
+
+const { tagName } = Astro.props;
+
+const allBookmarks = await getBookmarks();
+const tags = getTags(allBookmarks);
+const bookmarks = allBookmarks.filter((b) => b.data.tags.includes(tagName));
+---
+
+<SubpageLayout
+    title="Bookmarks"
+    description="Daily I receive new articles, videos, essays, etc. in the RSS reader of my choice, Unread. The ones I love I tag and save into my Obsidian vault — and from there they flow straight onto this page."
+    documentTitle={`#${tagName} — Bookmarks — Robin Spielmann`}
+>
+    <BookmarkFilter tags={tags} total={allBookmarks.length} active={tagName} />
+
+    <ul class="mt-10 md:mt-8">
+        {bookmarks.map((bookmark) => <BookmarkItem bookmark={bookmark.data} />)}
+    </ul>
+</SubpageLayout>
+
+<script src="../../../scripts/listHoverPreview.ts"></script>
