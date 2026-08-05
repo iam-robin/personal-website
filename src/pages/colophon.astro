@@ -4,10 +4,13 @@ import Bird from "../components/Bird.astro";
 import Bird404 from "../components/Bird404.astro";
 import { timeSince } from "../utils/timeSince";
 import { changelog } from "../data/changelog";
+import { papers } from "../utils/paper";
 
-// The newest changelog entry drives the "last updated" line below.
 const latest = changelog[0];
 
+// The swatches use bg-ink/bg-paper/bg-surface, so they render *this* page's
+// stock. Two labels therefore describe how the value is derived rather than
+// quoting a hex the swatch beside them would contradict.
 const colors = [
     {
         name: "--color-ink",
@@ -17,17 +20,20 @@ const colors = [
     },
     {
         name: "--color-paper",
-        value: "#eae8e3",
-        role: "Page background",
+        value: papers.meta.hex + " on this page",
+        role: "Page background — one stock per section",
         swatch: "bg-paper",
     },
     {
         name: "--color-surface",
-        value: "#d2d1ca",
-        role: "Cards & surfaces",
+        value: "ink 10% over paper",
+        role: "Cards & surfaces — derived",
         swatch: "bg-surface",
     },
 ];
+
+// Read from the same map the pages use, so the list can't drift.
+const stocks = Object.values(papers);
 
 const typefaces = [
     {
@@ -56,7 +62,6 @@ const typefaces = [
     },
 ];
 
-// Credits & inspirations — the honest attribution the page was missing.
 const thanks = [
     {
         label: "Palette",
@@ -68,8 +73,6 @@ const thanks = [
     },
 ];
 
-// Rendered largest → smallest. The sizes are fluid (clamped to the
-// container width), so they shift as the column grows.
 const typeScale = [
     { cls: "text-4xl", token: "text-4xl" },
     { cls: "text-3xl", token: "text-3xl" },
@@ -82,10 +85,15 @@ const typeScale = [
     { cls: "text-xs", token: "text-xs" },
 ];
 
+// Every mood is its own specimen, hover included — one box can't show the
+// logo at rest and change under the cursor.
 const birds = [
     { label: "Resting", note: "The logo", cls: "" },
+    { label: "Curious", note: "On hover", cls: "is-hovered" },
     { label: "Happy", note: "One click", cls: "is-clicked" },
     { label: "Angry", note: "Three clicks", cls: "is-angry" },
+    // The note is the whole clue on purpose.
+    { label: "Smitten", note: "Fed a crumb", cls: "is-eating" },
 ];
 ---
 
@@ -102,8 +110,9 @@ const birds = [
                 Colours
             </h2>
             <p class="mb-8 max-w-xl font-mono text-sm opacity-70">
-                Three warm greige neutrals. Colour is added only when a page
-                needs it.
+                Three tokens. Ink never moves. The paper changes per section,
+                and the surface is mixed from whatever paper it lands on — so
+                every card, hairline and code chip follows the room it's in.
             </p>
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
                 {
@@ -124,6 +133,30 @@ const birds = [
                     ))
                 }
             </div>
+
+            <p class="mt-12 mb-6 max-w-xl font-mono text-sm opacity-70">
+                The stocks. The tinted ones sit at the same lightness and the
+                same chroma — only the hue moves — so no section shouts louder
+                than another. Home, the garden and the postcards keep the blank
+                one. Home because colour should mean you've gone somewhere, and
+                the other two because they arrive full of colour already.
+            </p>
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+                {
+                    stocks.map((stock) => (
+                        <div class="flex flex-col gap-2">
+                            <div
+                                class="aspect-[4/3] w-full rounded-md border border-ink/10"
+                                style={`background-color: ${stock.hex}`}
+                            />
+                            <div class="font-mono text-xs">
+                                <div>{stock.name}</div>
+                                <div class="opacity-50">{stock.hex}</div>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
         </section>
 
         <!-- Typefaces -->
@@ -133,7 +166,7 @@ const birds = [
             >
                 Typefaces
             </h2>
-            <div class="flex flex-col divide-y divide-ink/10">
+            <div class="flex flex-col divide-y divide-dotted divide-ink/30">
                 {
                     typefaces.map((t) => (
                         <div class="flex flex-col gap-3 py-8 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-8">
@@ -160,7 +193,7 @@ const birds = [
             <p class="mb-8 max-w-xl font-mono text-sm opacity-70">
                 A fluid scale tuned to the container width, not the viewport.
             </p>
-            <div class="flex flex-col divide-y divide-ink/10">
+            <div class="flex flex-col divide-y divide-dotted divide-ink/30">
                 {
                     typeScale.map((s) => (
                         <div class="flex items-baseline gap-6 py-4 first:pt-0 last:pb-0">
@@ -187,13 +220,19 @@ const birds = [
                 One bird, a few moods. It's the logo and the favicon. Click
                 the one in the corner.
             </p>
-            <div class="grid grid-cols-2 gap-8 sm:grid-cols-4">
+            <!-- Six cards, so 2-up and 3-up both come out even. -->
+            <div class="grid grid-cols-2 gap-8 sm:grid-cols-3">
                 {
                     birds.map((b) => (
                         <div class="flex flex-col items-center gap-4 rounded-md border border-ink/10 bg-surface/40 p-6 text-center">
+                            {/* Inert: each specimen is pinned to one mood,
+                                so the resting bird can't perk up on hover. */}
                             <Bird
                                 interactive={false}
-                                class:list={[b.cls, "h-24 w-auto text-ink"]}
+                                class:list={[
+                                    b.cls,
+                                    "pointer-events-none h-24 w-auto text-ink",
+                                ]}
                             />
                             <div class="font-mono text-sm">
                                 <div>{b.label}</div>
@@ -219,7 +258,7 @@ const birds = [
             >
                 Signature details
             </h2>
-            <div class="flex flex-col divide-y divide-ink/10">
+            <div class="flex flex-col divide-y divide-dotted divide-ink/30">
                 <div class="flex flex-col gap-2 py-6 first:pt-0 sm:flex-row sm:items-center sm:gap-8">
                     <div class="shrink-0 font-mono text-sm opacity-50 sm:w-48">
                         .marker
@@ -248,7 +287,7 @@ const birds = [
             >
                 Thanks
             </h2>
-            <div class="flex flex-col divide-y divide-ink/10">
+            <div class="flex flex-col divide-y divide-dotted divide-ink/30">
                 {
                     thanks.map((t) => (
                         <div class="flex flex-col gap-2 py-6 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-8">

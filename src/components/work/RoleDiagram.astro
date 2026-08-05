@@ -1,14 +1,10 @@
 ---
 /**
- * "What is a design engineer" as a small hand-drawn Venn:
- * Design ∩ Code ∩ Product — and the bird logo sits in the shared overlap.
- * The three circles run through the same feTurbulence + feDisplacementMap
- * filter the bird logo uses (same baseFrequency / octaves / seed), so the
- * wobbly ink line reads as a sibling of the logo. Overlapping translucent
- * fills make the intersections darken on their own — no clip path needed.
- * Labels stay crisp (outside the filter) so they remain legible, and the
- * real <Bird> component is layered over the centre overlap instead of a
- * "me" label.
+ * "What is a design engineer" as a hand-drawn Venn: Design ∩ Code ∩ Product,
+ * with the bird logo in the shared overlap. The circles run through the same
+ * wobble filter as the logo; translucent fills darken the intersections on
+ * their own, so no clip path is needed. Labels stay outside the filter to
+ * remain legible.
  */
 import Bird from "../Bird.astro";
 

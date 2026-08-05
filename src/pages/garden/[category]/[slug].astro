@@ -115,7 +115,7 @@ const showEdited =
     </a>
 
     <article
-        class="effect relative z-30 mx-auto w-full max-w-5xl lg:my-12"
+        class="effect relative z-30 mx-auto w-full max-w-shell lg:my-12"
         data-prev-note={previousNote
             ? `/garden/${categorySlug(note.thema)}/${previousNote.slug}`
             : undefined}
@@ -131,7 +131,7 @@ const showEdited =
             <div class="texture"></div>
 
             <div class="border border-black/60 px-4 pt-4 pb-24 md:px-10 md:pt-6">
-                <div class="mx-auto mt-20 max-w-[65ch] text-[1.2rem]">
+                <div class="mx-auto mt-20 max-w-prose text-[1.2rem]">
                     <h1
                         class="font-sans text-[3rem] leading-[1.15] font-black md:text-[4.5rem]"
                     >
@@ -192,7 +192,7 @@ const showEdited =
                 </div>
                 {
                     footnotes.length > 0 && (
-                        <div class="flex flex-col border-t border-black/60 px-3 py-6 md:flex-row">
+                        <div class="flex flex-col border-t border-dotted border-black/60 px-3 py-6 md:flex-row">
                             <div class="mb-2 w-1/3">Footnotes:</div>
                             <ul class="text-xs md:w-2/3">
                                 {footnotes.map((fn) => (
@@ -209,7 +209,7 @@ const showEdited =
                 }
                 {
                     (previousNote || nextNote) && (
-                        <div class="flex border-t border-black/60">
+                        <div class="flex border-t border-dotted border-black/60">
                             {previousNote && (
                                 <a
                                     href={`/garden/${categorySlug(note.thema)}/${previousNote.slug}`}
@@ -259,7 +259,6 @@ const showEdited =
         right: 0.5em;
     }
 
-    /* Markdown prose styling */
     .markdown {
         --tw-prose-body: rgba(0, 0, 0, 0.9);
         --tw-prose-headings: rgba(0, 0, 0, 0.9);
@@ -270,6 +269,10 @@ const showEdited =
         --tw-prose-quote-borders: rgba(0, 0, 0, 0.2);
         --tw-prose-td-borders: rgba(0, 0, 0, 0.1);
         --tw-prose-th-borders: rgba(0, 0, 0, 0.3);
+        /* Spelled out rather than read from --max-width-prose: Tailwind emits
+           that variable inside the utility's own rule, not to :root, so a
+           var() here would resolve to nothing. The font-size below is what the
+           `ch` resolves against. */
         max-width: 65ch;
         margin: 0 auto;
         font-size: 1.2rem;

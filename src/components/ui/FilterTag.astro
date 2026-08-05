@@ -1,14 +1,11 @@
 ---
 /**
- * Shared filter-tag pill. Used by every subpage filter (blog, bookmarks,
- * garden, postcards) so a filter tag looks identical everywhere. Filtering
- * stays server-side — this is just the link's presentation.
+ * Shared filter-tag pill, used by every subpage filter so they look identical.
+ * Filtering stays server-side — this is only presentation.
  *
- * Soft chip: faint filled chip when inactive, slightly darker chip with a
- * thin inset ring when active.
- * Inactive tags mute the *text* (not the whole element) so page-specific
- * decoration passed via the slot — a color dot, a flag — keeps full color.
- * Pass the item count via `count`.
+ * The active tag flips to solid ink: two fills of the same ink differ by too
+ * little to read across a wrapping row. Inactive tags mute the *text*, not the
+ * element, so slotted decoration (a colour dot, a flag) keeps full colour.
  */
 interface Props {
     href: string;
@@ -19,13 +16,25 @@ interface Props {
 const { href, active = false, count } = Astro.props;
 
 const base =
-    "inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-sm transition-colors";
+    "inline-flex items-center gap-1.5 rounded-full py-1 font-mono text-sm transition-colors";
+// The knockout slot brings its own side padding, so the active chip pulls its
+// right padding in to keep the pill balanced.
 const state = active
-    ? "bg-ink/10 text-ink inset-ring inset-ring-ink/25"
-    : "bg-ink/5 text-ink/65 hover:bg-ink/10 hover:text-ink";
+    ? `bg-ink text-paper ${count !== undefined ? "pr-1.5 pl-3" : "px-3"}`
+    : "bg-ink/5 px-3 text-ink/55 hover:bg-ink/10 hover:text-ink";
 ---
 
 <a href={href} class:list={[base, state]}>
     <slot />
-    {count !== undefined && <span class="opacity-50">{count}</span>}
+    {
+        count !== undefined && (
+            <span
+                class:list={[
+                    active ? "rounded-full bg-paper/20 px-1.5 py-px" : "opacity-50",
+                ]}
+            >
+                {count}
+            </span>
+        )
+    }
 </a>
