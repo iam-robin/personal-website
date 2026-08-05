@@ -1,178 +1,257 @@
 ---
 import { Image } from "astro:assets";
-import SubpageLayout from "../layouts/SubpageLayout.astro";
+import ArticleLayout from "../layouts/ArticleLayout.astro";
 import Button from "../components/ui/Button.astro";
-import Placeholder from "../components/ui/Placeholder.astro";
 import RoleDiagram from "../components/work/RoleDiagram.astro";
+import InkMark from "../components/ui/InkMark.astro";
 import portrait from "../assets/robin-portrait.avif";
 
-// Client logos are inlined (not <img>) so their fills, rewritten to
-// currentColor, inherit the page's ink instead of shouting in brand colours.
+// Used on the page and in the meta description below — declared once.
+const headline =
+    "Design Engineer with 8+ years of experience in building digital products, web applications and design systems.";
+const focus =
+    "Focus on scalable interfaces and a close collaboration between design and development.";
+
+// ArticleLayout passes hideHero, so this only reaches the meta tag.
+const metaDescription = `${headline} ${focus}`;
+
+const facets: { icon: string; title: string; body: string }[] = [
+    {
+        icon: "build",
+        title: "Building it for real",
+        body: "A design engineer is being able to implement the interfaces and work together with other developers on the codebase. Nothing gets lost between the design and what ships, and the person who drew it handles the part a design file can't hold: real-world cases, the states nobody sketched, accessibility, performance.",
+    },
+    {
+        icon: "feel",
+        title: "Look and feel",
+        body: "It's not just important how a product looks, but also how it feels while it's being used. Microinteractions, states, the small bits of feedback that confirm something happened. On most teams nobody owns that part. A design engineer is the person who does.",
+    },
+    {
+        icon: "longevity",
+        title: "Longevity",
+        body: "Shipping a product once isn't the job. A design engineer helps setting the guidelines and rules together with the design and development team, so the quality doesn't erode with every feature added after launch.",
+    },
+    {
+        icon: "both-languages",
+        title: "Speaking both languages",
+        body: "Designers and developers judge the same work by different criteria. The design engineer speaks both, and keeps the two sides building one thing instead of talking past each other.",
+    },
+];
+
+// Kept in sync with cv.iamrob.in — a shortlist, not the full proficiencies.
+const details: { label: string; value: string }[] = [
+    {
+        label: "Focus",
+        value: "Design systems, web applications, digital products",
+    },
+    {
+        label: "Tools",
+        value: "TypeScript, React, Next.js, Astro, Tailwind, Storybook, Figma, Claude Code, Claude Design",
+    },
+    {
+        label: "Languages",
+        value: "German (native), English (fluent)",
+    },
+];
+
+// Raw SVG rather than <img> so the fills, rewritten to currentColor, inherit
+// the page's ink. A client with no file falls back to its name set in type.
 const logoSvgs = import.meta.glob<string>("../assets/logos/*.svg", {
     query: "?raw",
     import: "default",
     eager: true,
 });
 
-// Names only — the work here belongs to the agencies, so no case studies.
 const clients: { name: string; logo: string }[] = [
     { name: "Union Investment", logo: "ui" },
     { name: "Scout24", logo: "scout24" },
     { name: "Caritas", logo: "caritas" },
     { name: "Sto", logo: "sto" },
+    { name: "shareDnC", logo: "sharednc" },
 ];
 
-// Quiet definition list. Values are plain text so the block stays calm.
-// Kept in sync with cv.iamrob.in — a shortlist, not the full proficiencies.
-const details: { label: string; value: string }[] = [
-    { label: "Based in", value: "Munich, Germany — and remote" },
-    {
-        label: "Focus",
-        value: "Design systems, UI systems, interfaces that scale",
-    },
-    {
-        label: "Tools",
-        value: "TypeScript, React, Next.js, Astro, Tailwind, Storybook, Figma & Claude Code",
-    },
-];
+const sectionHeading = "scroll-mt-8 text-lg font-bold";
 ---
 
-<SubpageLayout
-    title="Work"
-    description="A design engineer lives in the overlap of design and code. I build the design systems, components and prototypes that keep a product consistent — and help designers and engineers move as one."
-    hideHero
->
-    <div class="flex flex-col gap-16">
-        <!-- Intro — portrait left; focus, details and contact links right -->
-        <section class="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-5">
-            <div class="md:col-span-2">
-                {
-                    /* Same treatment as the homepage photo fan: a plain print —
-                    square corners, thin ink border. */
-                }
-                <Image
-                    src={portrait}
-                    alt="Black-and-white portrait of Robin Spielmann in profile"
-                    widths={[240, 480]}
-                    sizes="(min-width: 768px) 240px, 60vw"
-                    class="w-full max-w-[240px] border border-ink/15"
-                />
-            </div>
-            <div class="flex max-w-2xl flex-col gap-8 md:col-span-3">
-                <p class="font-mono text-base leading-relaxed">
-                    I'm Robin — a design engineer, eight years into building UI
-                    systems, web applications and the design systems that hold
-                    them together. I'd rather build the thing than hand it off.
-                    The part I care about is the part that lasts: interfaces
-                    that still hold up once they scale, and product and
-                    development staying close enough that they don't drift
-                    apart.
+{
+    /* No rail: too few sections for a contents list to be navigation rather
+    than furniture. */
+}
+<ArticleLayout title="Work" description={metaDescription}>
+    <div class="mt-4">
+        {
+            /* The statement sits on the lead measure, which is what makes the
+            pair fit: 30rem + 2rem gap + the 10rem portrait is the reading
+            column exactly. */
+        }
+        <header
+            class="flex flex-col gap-10 md:grid md:grid-cols-[minmax(0,var(--container-lead))_auto] md:items-start md:gap-8"
+        >
+            <div>
+                <p class="font-mono text-sm opacity-50">
+                    Robin Spielmann — Munich, and remote
                 </p>
-                <div>
-                    <dl class="divide-y divide-ink/10 border-y border-ink/10">
-                        {
-                            details.map((d) => (
-                                <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-[10rem_1fr] sm:gap-4">
-                                    <dt class="font-mono text-sm opacity-50">
-                                        {d.label}
-                                    </dt>
-                                    <dd class="font-mono text-sm">{d.value}</dd>
-                                </div>
-                            ))
-                        }
-                    </dl>
-                    {
-                        /* Mirrors the row grid above so the buttons line up
-                        with the values, not the labels. */
-                    }
-                    <div
-                        class="mt-6 grid grid-cols-1 sm:grid-cols-[10rem_1fr] sm:gap-4"
-                    >
-                        <div class="hidden sm:block"></div>
-                        <div class="flex flex-wrap gap-3">
-                            <Button
-                                href="mailto:hey@iamrob.in"
-                                variant="primary"
-                            >
-                                Get in touch
-                            </Button>
-                            <Button href="https://cv.iamrob.in" external>
-                                View CV
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+                <h1 class="mt-6 text-2xl font-bold text-balance">{headline}</h1>
             </div>
-        </section>
+            {
+                /* order-first below md, so the portrait doesn't split the
+                statement from the paragraph continuing it. */
+            }
+            <Image
+                src={portrait}
+                alt="Black-and-white portrait of Robin Spielmann in profile"
+                widths={[160, 320]}
+                sizes="(min-width: 768px) 160px, 40vw"
+                class="order-first w-[130px] rotate-4 mt-12 border-4 border-white sm:w-40 md:order-0"
+            />
+            <p class="max-w-lead text-prose leading-relaxed">
+                {focus} What I care about most is the part after the code works: how
+                something feels, the states nobody planned for and the system behind
+                it.
+            </p>
+        </header>
 
-        <!-- What I do — plain prose, with the role diagram filling the label column -->
-        <section class="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-5">
-            <div class="md:col-span-2">
-                <h2 class="text-sm font-bold">What I do</h2>
-            </div>
-            <div class="flex max-w-2xl flex-col gap-8 md:col-span-3">
+        <div class="mt-8 flex flex-wrap gap-3">
+            <Button href="mailto:hey@iamrob.in" variant="primary">
+                Get in touch
+            </Button>
+            <Button href="https://cv.iamrob.in" external>View CV</Button>
+        </div>
+
+        <div class="mt-24 flex flex-col gap-24">
+            <section>
+                <dl
+                    class="divide-y divide-dotted divide-ink/30 border-y border-dotted border-ink/30"
+                >
+                    {
+                        details.map((detail) => (
+                            <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-[9rem_1fr] sm:gap-4">
+                                <dt class="font-mono text-sm opacity-50">
+                                    {detail.label}
+                                </dt>
+                                <dd class="font-mono text-sm">
+                                    {detail.value}
+                                </dd>
+                            </div>
+                        ))
+                    }
+                </dl>
+            </section>
+
+            <section>
+                <h2 id="what-a-design-engineer-does" class={sectionHeading}>
+                    What's a Design Engineer?
+                </h2>
+                <p class="mt-2 text-prose leading-relaxed">
+                    Since there isn't (yet) a universally accepted definition
+                    for this job description, here's my take on the skills a
+                    design engineer can bring to a team.
+                </p>
+                <div class="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2">
+                    {
+                        facets.map((facet) => (
+                            <div>
+                                <h3 class="flex items-center gap-2.5 text-prose font-bold">
+                                    <InkMark
+                                        name={facet.icon}
+                                        class="h-5 w-5 shrink-0 opacity-60"
+                                    />
+                                    {facet.title}
+                                </h3>
+                                <p class="mt-2 text-prose leading-relaxed">
+                                    {facet.body}
+                                </p>
+                            </div>
+                        ))
+                    }
+                </div>
+                <p class="mt-10 text-prose leading-relaxed">
+                    All of this matters more than it ever has. Writing code
+                    stopped being the bottleneck a while ago. Keeping a product
+                    consistent and the quality high is the hard part now, and
+                    teams ship faster than ever, which means more chances to
+                    pull it out of shape. Holding it together is what this role
+                    is for.
+                </p>
+                <RoleDiagram class="mt-12 w-full max-w-[320px] text-ink" />
+            </section>
+
+            <section>
+                <h2 id="where-i-come-from" class={sectionHeading}>
+                    Where I come from
+                </h2>
                 <div
-                    class="flex flex-col gap-4 font-mono text-base leading-relaxed"
+                    class="mt-5 flex flex-col gap-4 text-prose leading-relaxed"
                 >
                     <p>
-                        I work where design meets front-end. Rather than handing
-                        designs off, I build them: accessible, performant UI
-                        components and the design-system patterns that keep a
-                        product consistent as it grows.
+                        I started in graphic design. Then I studied media
+                        computer science, because I wanted to build the things I
+                        was drawing. Then a master's in interactive media,
+                        because building them had taught me things about
+                        designing them. Looking back, it reads less like three
+                        changes of direction and more like the same subject
+                        approached from three sides.
                     </p>
                     <p>
-                        I'm at my best bridging the two sides — prototyping in
-                        real code, closing the gaps where a product drifts out
-                        of sync, and giving designers and engineers a shared
-                        vocabulary to build from. Lately that's meant using
-                        AI-assisted tools to get from design to production code
-                        faster, without dropping the bar for craft.
+                        Professionally I went deep on front-end. Years of
+                        building interfaces for production, with a fair amount
+                        of architecture and under-the-hood work underneath them.
+                        Often quite technical, but never really about the code.
+                        Code is the vehicle. What has to come out right is
+                        whether the product is any good.
+                    </p>
+                    <p>
+                        The design half never stopped either. I kept building
+                        design systems meant to still hold up a year later, and
+                        adding the micro-animations that make a product feel
+                        like it responds properly, usually the first thing cut
+                        when time gets short. I also ran coding workshops and
+                        mentored the developers coming up behind me, which does
+                        much the same job as a design system: get the shared
+                        language right, and the team builds consistently without
+                        anyone having to police it.
                     </p>
                 </div>
-                <RoleDiagram class="w-full max-w-[340px] text-ink" />
-            </div>
-        </section>
+            </section>
 
-        <!-- Where I come from — the career story in prose, not a CV timeline
-             (the full history lives at cv.iamrob.in). -->
-        <section class="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-5">
-            <div class="md:col-span-2">
-                <h2 class="text-sm font-bold">Where I come from</h2>
-            </div>
-            <div
-                class="flex max-w-2xl flex-col gap-4 font-mono text-base leading-relaxed md:col-span-3"
-            >
-                {/* TODO: Robin — replace with your real career history. */}
-                <Placeholder label="Career history — text to come" />
-            </div>
-        </section>
-
-        <!-- Clients — logos only, flattened to ink. The work itself was done
-             at the agencies, so there's nothing to link to. -->
-        <section class="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-5">
-            <div class="md:col-span-2">
-                <h2 class="text-sm font-bold">Companies I've worked with</h2>
-            </div>
-            <ul
-                class="flex max-w-2xl flex-wrap items-center gap-x-10 gap-y-8 text-ink md:col-span-3"
-            >
-                {
-                    clients.map((client) => (
-                        <li class="flex items-center">
-                            <span class="sr-only">{client.name}</span>
-                            <span
-                                aria-hidden="true"
-                                class="[&>svg]:h-7 [&>svg]:w-auto"
-                                set:html={
-                                    logoSvgs[
-                                        `../assets/logos/${client.logo}.svg`
-                                    ]
-                                }
-                            />
-                        </li>
-                    ))
-                }
-            </ul>
-        </section>
+            {
+                /* Names only — the work belongs to the agencies. */
+            }
+            <section>
+                <h2 id="companies" class={sectionHeading}>
+                    Companies I've worked with
+                </h2>
+                <ul
+                    class="mt-6 flex flex-wrap items-center gap-x-10 gap-y-8 text-ink"
+                >
+                    {
+                        clients.map((client) => {
+                            const mark =
+                                logoSvgs[`../assets/logos/${client.logo}.svg`];
+                            return (
+                                <li class="flex items-center">
+                                    <span
+                                        class:list={
+                                            mark
+                                                ? "sr-only"
+                                                : "text-lg font-bold"
+                                        }
+                                    >
+                                        {client.name}
+                                    </span>
+                                    {mark && (
+                                        <span
+                                            aria-hidden="true"
+                                            class="[&>svg]:h-7 [&>svg]:w-auto"
+                                            set:html={mark}
+                                        />
+                                    )}
+                                </li>
+                            );
+                        })
+                    }
+                </ul>
+            </section>
+        </div>
     </div>
-</SubpageLayout>
+</ArticleLayout>
