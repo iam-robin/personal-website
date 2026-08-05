@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import TeaserSection from "../components/TeaserSection.astro";
-import Bird from "../components/Bird.astro";
+import BirdFeeder from "../components/BirdFeeder.astro";
 import ProjectsTeaser from "../components/projects/ProjectsTeaser.astro";
 import BlogTeaser from "../components/blog/BlogTeaser.astro";
 import Link from "../components/ui/Link.astro";
@@ -19,36 +19,24 @@ import { getNewestPostcards, toPostcardProps } from "../utils/postcards";
 
 const projects = await getFeaturedProjects();
 
-// Fan images (Matchprint posters, robins.photos prints) shown in the
-// hero on card hover — shared with the /projects previews via the util.
+// Fan images shown in the hero on card hover — shared with the /projects
+// previews via the util. handcoded.art has the project id "geeenerated".
 const matchprintPosters = getFanImages("matchprint")!;
 const fanPhotos = getFanImages("robins-photos")!;
-// handcoded.art (project id "geeenerated"): generative prints.
 const handcodedArt = getFanImages("geeenerated")!;
 
-// Newest postcards, fanned into the hero when the contact section's
-// "Send a postcard" row is hovered — same swap as the project cards.
 const newestPostcards = await getNewestPostcards(3);
 
-// Hovering a card swaps the hero's default intro for that card's panel.
-// Only the center content area swaps — nav, footer and the rest of the
-// left column stay put. The project card's own darken is handled in
-// ProjectCard. Pure CSS via :has(), no client JS.
+// Hovering a card swaps the hero's default intro for that card's panel — pure
+// CSS via :has(), no client JS. Each entry pairs the trigger a hovered <li>'s
+// direct child carries with the [data-panel] it reveals.
 //
-// Each entry pairs the trigger a hovered <li>'s direct child carries
-// (projects: [data-project]; the postcard row: [data-hero-panel]) with
-// the [data-panel] it reveals in the hero. The predicate is the <li>
-// (li:hover > trigger), not the trigger itself: adjacent li boxes are
-// contiguous, so moving across a divider never drops the state; and
-// hidden panels use opacity + visibility so the swap has no default
-// flash.
-//
-// Panels fade with a ~100ms delay so quick pass-throughs over the card
-// list don't flicker the hero. Transitions come from the destination
-// state: rules that SHOW a panel flip visibility at the delay start
-// (0.1s) so the fade is seen; rules that HIDE one keep it visible until
-// the fade ends (0.25s). The hiding half for the panels lives on the
-// [data-panel] base rule in the <style> block below.
+// The predicate is the <li> (li:hover > trigger), not the trigger itself:
+// adjacent li boxes are contiguous, so crossing a divider never drops the
+// state. Panels fade with a ~100ms delay so quick pass-throughs don't flicker.
+// Transitions come from the destination state: showing flips visibility at the
+// delay start, hiding holds it until the fade ends (that half lives on the
+// [data-panel] base rule below).
 const SHOW_TRANSITION =
     "transition: opacity 0.15s ease-out 0.1s, visibility 0s 0.1s;";
 const HIDE_TRANSITION =
@@ -84,34 +72,105 @@ const panelCss = heroPanels
     )
     .join("\n");
 
-// The swap only exists on the lg side-by-side layout. Below that the hero
-// stacks above the cards, and a tap's sticky :hover would invisibly swap
-// (or blank) the hero off-screen — so the whole effect is gated to lg+.
+// Gated to lg: below it the hero stacks above the cards, where a tap's sticky
+// :hover would invisibly swap (or blank) the hero off-screen.
 const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}`;
 ---
 
 <Layout title="Robin">
+    <script is:inline>
+        /**
+         * Gate for the landing entrance (the `[data-entrance="play"]` rules
+         * below). CSS does the animating; this only decides whether it runs,
+         * so without JS the page renders in its final state. Runs at the top
+         * of <body> so the attribute is set before the hero is parsed.
+         */
+        (() => {
+            const root = document.documentElement;
+            const mode = new URLSearchParams(location.search).get("transition");
+
+            let navType = "navigate";
+            try {
+                navType =
+                    performance.getEntriesByType("navigation")[0]?.type ??
+                    "navigate";
+            } catch {}
+
+            let fromThisSite = false;
+            try {
+                fromThisSite =
+                    !!document.referrer &&
+                    new URL(document.referrer).origin === location.origin;
+            } catch {}
+
+            // Never when asked not to, and never on a restored scroll
+            // position — a page opening mid-column has nothing to introduce.
+            if (mode === "off" || window.scrollY > 0) return;
+
+            // The entrance is for *arriving*, so internal navigations and
+            // back/forward are out. A reload has to outrank both explicitly:
+            // it carries a same-origin referrer of its own.
+            if (
+                navType !== "reload" &&
+                (navType === "back_forward" || fromThisSite)
+            )
+                return;
+
+            root.dataset.entrance = "play";
+
+            // Any deliberate input cuts to the finished page. Every animation
+            // ends on the base state, so dropping the attribute mid-flight
+            // lands exactly where it was headed.
+            const events = [
+                "pointerdown",
+                "keydown",
+                "wheel",
+                "touchstart",
+                "scroll",
+            ];
+            const end = () => {
+                root.removeAttribute("data-entrance");
+                for (const type of events) removeEventListener(type, end);
+            };
+            for (const type of events)
+                addEventListener(type, end, { passive: true });
+
+            // Cleanup once the last beat has landed (the sheet slide).
+            setTimeout(end, 1550);
+        })();
+    </script>
+
     <div class="home lg:grid lg:grid-cols-2">
-        <!-- Left half: fixed (sticky) hero, panels swap on project hover -->
+        <!-- Left half: sticky hero. z-10 keeps it above the entrance sheet,
+             which in turn sits above the right column. -->
         <header
-            class="@container relative flex flex-col lg:sticky lg:top-0 lg:h-screen"
+            class="@container relative z-10 flex flex-col lg:sticky lg:top-0 lg:h-screen"
         >
-            <!-- justify-end keeps the RSS icon right when the nav is
-                 display:none on mobile (MobileMenu takes over there). -->
+            <!-- justify-end keeps the RSS icon right where the nav is hidden
+                 on mobile and MobileMenu takes over. -->
             <div
-                class="flex items-center justify-end px-6 py-8 md:justify-between lg:px-12"
+                data-entrance-chrome
+                class="flex items-center justify-end px-gutter py-8 md:justify-between lg:px-gutter-lg"
             >
                 <Nav />
                 <RssDropdown />
             </div>
-            <div class="relative flex w-full flex-1 items-center px-6 lg:px-12">
+            <div
+                data-entrance-hero
+                class="relative flex w-full flex-1 items-center px-gutter lg:px-gutter-lg"
+            >
                 <div data-panel="default">
-                    <Bird class="mb-8 h-20 w-auto text-ink" />
+                    <BirdFeeder class="mb-8" />
+                    <!-- Spans rather than a <br> so each line balances its own
+                         text; .entrance-line makes the break unconditional. -->
                     <h1 class="max-w-3xl text-3xl font-bold text-balance">
-                        Robin&nbsp;Spielmann — <br /> a <a
-                            href="/work"
-                            class="marker">design engineer</a
-                        > at the intersection of code, design&nbsp;&amp;&nbsp;art.
+                        <span class="entrance-line">Robin&nbsp;Spielmann —</span
+                        >
+                        <span class="entrance-line"
+                            >a <a href="/work" class="marker entrance-marker"
+                                >design engineer</a
+                            > at the intersection of code, design&nbsp;&amp;&nbsp;art.</span
+                        >
                     </h1>
                     <p class="mt-8 max-w-xl font-mono text-base">
                         This website is my own little space on the internet — a
@@ -125,16 +184,14 @@ const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}
                 <!-- Project panels: swap in over the hero content on hover -->
                 {
                     projects.map((project) => {
-                        // Projects with visuals show ONLY those: the
-                        // hovered card already carries title, description
-                        // and tags, so the hero is a pure visual stage —
-                        // the picture to the card's caption. Projects
-                        // without assets yet fall back to a text panel.
+                        // Projects with visuals show only those — the hovered
+                        // card already carries title, description and tags.
+                        // Ones without assets fall back to a text panel.
                         const hasFan = !!getFanImages(project.id);
                         return (
                             <div
                                 data-panel={project.id}
-                                class="pointer-events-none invisible absolute inset-0 flex flex-col justify-center px-6 opacity-0 lg:px-12"
+                                class="pointer-events-none invisible absolute inset-0 flex flex-col justify-center px-gutter opacity-0 lg:px-gutter-lg"
                             >
                                 {!hasFan && (
                                     <>
@@ -205,14 +262,14 @@ const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}
                     })
                 }
 
-                {/* Postcards: swaps in when the contact section's "Send a
-                    postcard" row is hovered (see hoverCss + data-hero-panel). */}
+                {/* Swaps in when the contact section's "Send a postcard" row
+                    is hovered (see hoverCss + data-hero-panel). */}
                 <div
                     data-panel="postcards"
-                    class="pointer-events-none invisible absolute inset-0 flex flex-col justify-center px-6 opacity-0 lg:px-12"
+                    class="pointer-events-none invisible absolute inset-0 flex flex-col justify-center px-gutter opacity-0 lg:px-gutter-lg"
                 >
-                    {/* Distortion filter the handwriting references — it must
-                        live in the DOM or the filtered text is not rendered. */}
+                    {/* The handwriting's distortion filter must be in the DOM
+                        or the filtered text is not rendered. */}
                     <svg class="hidden" aria-hidden="true">
                         <defs>
                             <filter id="distort-xl">
@@ -235,19 +292,17 @@ const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}
                     </div>
                 </div>
             </div>
-            <!-- Compact meta footer: only in the hero on desktop. On mobile the
-                 hero stacks above the teasers, so this would land mid-page —
-                 hidden there in favour of the full FooterColumns below. -->
-            <div class="hidden lg:block">
-                <SiteFooter class="px-6 py-8 lg:px-12" />
+            <!-- Desktop only: on mobile the hero stacks above the teasers, so
+                 this would land mid-page. FooterColumns stands in below. -->
+            <div data-entrance-chrome class="hidden lg:block">
+                <SiteFooter class="px-gutter py-8 lg:px-gutter-lg" />
             </div>
         </header>
 
-        <!-- Right half: scrollable teasers -->
-        <!-- pt-20 below lg: breathing room where the teasers stack directly
-             under the hero; back to pt-8 once the split layout kicks in. -->
+        <!-- Right half: scrollable teasers. pt-20 below lg gives room where
+             they stack under the hero; pt-8 once the split layout kicks in. -->
         <main
-            class="@container border-ink/15 px-6 pt-20 pb-8 lg:border-l lg:px-12 lg:pt-8"
+            class="content-column @container border-ink/15 px-gutter pt-20 pb-8 lg:border-l lg:px-gutter-lg lg:pt-8"
         >
             <div class="flex flex-col gap-24">
                 <ProjectsTeaser />
@@ -256,9 +311,14 @@ const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}
             </div>
         </main>
 
-        <!-- Mobile-only page footer: stands in for the hero's SiteFooter, which
-             is hidden on small screens. Removed from the grid on desktop. -->
-        <FooterColumns class="border-t border-ink/10 px-6 py-12 lg:hidden" />
+        <!-- The entrance sheet: a full-viewport pane of paper that slides off
+             to the left, uncovering the right column. Fixed rather than
+             absolute so it covers the viewport exactly and isn't a grid item;
+             display:none unless the entrance is playing. -->
+        <div class="entrance-cover" aria-hidden="true"></div>
+
+        <!-- Mobile-only: stands in for the hero's SiteFooter. -->
+        <FooterColumns class="border-t border-dotted border-ink/30 px-gutter py-12 lg:hidden" />
 
         <MobileMenu />
     </div>
@@ -267,11 +327,171 @@ const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}
 
     <style>
         /*
-          Base-state halves of the panel fade (see hoverCss in the
-          frontmatter): a project panel's base state is hidden, so it
-          carries the hiding transition; the default panel's base state
-          is visible, so it carries the showing one.
+          ── Entrance ────────────────────────────────────────────────────
+          Two acts, gated by the inline script above. Act 1: one sheet of
+          paper over the whole viewport with the hero alone on it, which
+          then marks its own words. Act 2: that sheet slides off to the
+          left, uncovering the right column — which sits in its final
+          position throughout and is never animated.
+
+          One rule governs everything here: animations run FROM a start
+          state TO the base CSS, with `backwards` fill and no `forwards`.
+          The finished page is the unstyled page, so cutting an animation
+          short at any moment lands exactly where it was going.
+
+          Act 2 is gated to lg — below it there's no second column, so the
+          title card simply is the page.
         */
+
+        /* A custom property because the entrance sheet's edge rule has to be
+           mixed against this exact value (see .entrance-cover's box-shadow). */
+        .home {
+            --content-bg: color-mix(
+                in srgb,
+                var(--color-surface) 40%,
+                var(--color-paper)
+            );
+        }
+
+        /* Only where there are two columns to tell apart — stacked, the tint
+           reads as an arbitrary darker band between two paper ones. */
+        @media (min-width: 64rem) {
+            .content-column {
+                background-color: var(--content-bg);
+            }
+        }
+
+        /* Unconditional: these spans replace the headline's old <br>. */
+        .entrance-line {
+            display: block;
+        }
+
+        /* Off by default, so no JS, reduced motion and every non-lg width get
+           the plain page — no state can strand a pane over the content. */
+        .entrance-cover {
+            display: none;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            /* ── Act 1 ── */
+
+            /* The hero arrives as one composition, not three staggered beats.
+               Opacity only — the one movement belongs to the sheet in Act 2. */
+            :global([data-entrance="play"]) [data-panel="default"] {
+                animation: entrance-fade-in 400ms ease-out 80ms backwards;
+            }
+
+            /* The highlight draws after its sentence settles. `backwards`
+               holds it fully clipped through the delay. */
+            :global([data-entrance="play"]) .entrance-marker::before {
+                animation: entrance-marker-draw 260ms ease-out 520ms backwards;
+            }
+
+            /* Chrome comes in under cover of the slide rather than as a beat
+               of its own — by then the eye is on the sheet. */
+            :global([data-entrance="play"]) [data-entrance-chrome] {
+                animation: entrance-fade-in 340ms ease-out 980ms backwards;
+            }
+
+            /* Both ends stated explicitly: an implicit `to` interpolates
+               towards the base value, and clip-path's base is `none`, which
+               doesn't interpolate at all — the wipe pops instead. */
+            @keyframes entrance-fade-in {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes entrance-marker-draw {
+                from {
+                    clip-path: inset(0 100% 0 0);
+                }
+                to {
+                    clip-path: inset(0 0 0 0);
+                }
+            }
+
+            /* ── Act 2 ── */
+            @media (min-width: 64rem) {
+                /*
+                  Cued by the marker finishing. The right column takes no
+                  part — it's painted in its final position from the first
+                  frame and the reveal is simply the sheet leaving.
+
+                  Both halves share a duration and easing so they read as one
+                  movement, but travel different distances (sheet 50vw, hero
+                  25vw) — a cover being drawn off, not a page the hero is
+                  printed on. No spring: the overshoot reads as a wobble on a
+                  single hairline.
+                */
+                :global([data-entrance="play"]) .entrance-cover {
+                    display: block;
+                    position: fixed;
+                    inset: 0;
+                    /* Above the right column, below the hero (header is z-10). */
+                    z-index: 1;
+                    pointer-events: none;
+                    background-color: var(--color-paper);
+                    /*
+                      The gutter rule, riding the sheet's right edge. A shadow
+                      rather than a border so it draws just outside the box and
+                      lands on exactly the pixels <main>'s border-l occupies —
+                      a border-right would land 1px early and jump.
+
+                      Opaque, because two coinciding ink/15 lines compound to
+                      ~28% and the rule would darken for the length of the
+                      slide. Mixed against --content-bg, not paper: it's drawn
+                      over the content column the whole way.
+                    */
+                    box-shadow: 1px 0 0
+                        color-mix(
+                            in srgb,
+                            var(--color-ink) 15%,
+                            var(--content-bg)
+                        );
+                    /* -50% of the sheet's own width, not -50vw: `vw` counts
+                       the scrollbar and the grid column doesn't, so 50vw
+                       parks the edge short and the rule jumps at the
+                       handover. */
+                    transform: translateX(-50%);
+                    animation: entrance-cover-slide 620ms
+                        cubic-bezier(0.33, 1, 0.68, 1) 780ms backwards;
+                }
+
+                /* On the hero's content, not the <header> — that one is
+                   sticky and has no business carrying an animation. 50% of
+                   its own width centres the hero on the full-width sheet. */
+                :global([data-entrance="play"]) [data-entrance-hero] {
+                    animation: entrance-hero-settle 620ms
+                        cubic-bezier(0.33, 1, 0.68, 1) 780ms backwards;
+                }
+
+                @keyframes entrance-cover-slide {
+                    from {
+                        transform: translateX(0);
+                    }
+                    to {
+                        transform: translateX(-50%);
+                    }
+                }
+
+                @keyframes entrance-hero-settle {
+                    from {
+                        transform: translateX(50%);
+                    }
+                    to {
+                        transform: translateX(0);
+                    }
+                }
+            }
+        }
+
+        /* Base-state halves of the panel fade (see hoverCss above): a project
+           panel starts hidden so it carries the hiding transition; the default
+           panel starts visible so it carries the showing one. */
         [data-panel] {
             transition:
                 opacity 0.15s ease-out 0.1s,
@@ -284,14 +504,9 @@ const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}
                 visibility 0s 0.1s;
         }
 
-        /*
-          Loose two-row stack: three 2:3 cards on top, two staggered
-          below the gaps, all slightly rotated and overlapping — like
-          prints casually laid out on a table. The width cap's vh term
-          keeps the (slightly taller than wide) stack inside the
-          h-screen hero on short viewports: nav + footer + breathing
-          room ≈ 16rem.
-        */
+        /* Loose two-row stack of 2:3 cards, like prints laid out on a table.
+           The width cap's vh term keeps it inside the h-screen hero on short
+           viewports (nav + footer + breathing room ≈ 16rem). */
         .poster-fan,
         .photo-fan {
             position: relative;
@@ -315,8 +530,8 @@ const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}
             border-radius: 0;
         }
 
-        /* Offsets and rotations are deliberately a touch irregular so
-           the stack looks hand-placed instead of a tidy grid. */
+        /* Offsets and rotations are irregular on purpose — hand-placed
+           rather than a tidy grid. */
         .poster-fan-card:nth-child(1),
         .photo-fan-card:nth-child(1) {
             left: 0;
@@ -353,13 +568,8 @@ const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}
             transform: rotate(3deg);
         }
 
-        /*
-          handcoded.art: seven roughly-square prints in a looser three-row
-          scatter (3 / 2 / 2). Squarer cards are shorter than the posters,
-          so a third row fits within the same hero height — the width cap's
-          vh term still keeps the stack inside the h-screen hero on short
-          viewports.
-        */
+        /* handcoded.art: seven near-square prints scattered 3 / 2 / 2. Squarer
+           cards are shorter, so a third row fits the same hero height. */
         .art-fan {
             position: relative;
             aspect-ratio: 5 / 6;
@@ -422,12 +632,8 @@ const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}
             transform: rotate(3.5deg);
         }
 
-        /*
-          Postcards fan: the three newest cards as a loose hand — the
-          newest front and centre, the two older ones fanning up behind
-          to either side. Landscape (3:2) cards, so a wider, shorter
-          spread than the print fans.
-        */
+        /* The three newest cards as a loose hand: newest front and centre,
+           the older two fanning up behind. Landscape, so a wider spread. */
         .postcard-fan {
             position: relative;
             aspect-ratio: 1 / 1;
