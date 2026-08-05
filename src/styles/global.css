@@ -3,6 +3,7 @@
 @import "./theme/typography.css";
 @import "./theme/colors.css";
 @import "./theme/transitions.css";
+@import "./theme/layout.css";
 @import "./utilities/utilities.css";
 
 @layer base {
@@ -14,10 +15,5 @@
     body {
         background-color: var(--color-paper);
         color: var(--color-ink);
-    }
-
-    /* Every link tilts into italic on hover — site-wide signature */
-    a:hover {
-        font-style: italic;
     }
 }

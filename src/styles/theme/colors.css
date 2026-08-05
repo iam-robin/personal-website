@@ -1,7 +1,42 @@
-@theme {
-    /* The entire palette: text, background, surface. Nothing else.
-       Warm greige neutrals borrowed from terrain.com's palette. */
+/*
+  The entire palette: text, background, surface. Nothing else.
+  Warm greige neutrals borrowed from terrain.com's palette.
+
+  `@theme static` for the reason spelled out in layout.css — all three are
+  read via var() from scoped styles, which Tailwind's scanner can't see.
+
+  Literal hexes on purpose: Tailwind only constant-folds the pre-@supports
+  fallback for opacity modifiers from literal colours.
+*/
+@theme static {
     --color-ink: #1a1919; /* terrain dark-500 — warm near-black */
     --color-paper: #eae8e3; /* terrain light-400 — warm off-white */
     --color-surface: #d2d1ca; /* terrain light-200 — soft card greige */
+}
+
+/*
+  Per-section paper. Layout.astro sets --paper and --surface inline on <body>
+  from utils/paper.ts; this maps them onto the two tokens everything else reads.
+  The literals here are the answer for a <body> rendered without that layout,
+  not placeholders.
+
+  Two things that look like they could be simpler, and can't:
+
+  1. Both are set on <body>, not a wrapper div. A custom property's var()s are
+     substituted where the property is DECLARED, so anything derived from paper
+     must be declared wherever paper is overridden. <body> because that's where
+     the background is painted, and body's background propagates to the canvas.
+
+  2. Surface is a second inline value, not color-mix() from paper. Lightning
+     CSS constant-folds color-mix() eagerly and freezes (or wrecks) it at build
+     time — invisible in dev. The derivation happens in utils/paper.ts instead.
+
+  Cascade-safe without !important: a declaration *on* body beats a value
+  inherited into it from Tailwind's :root.
+*/
+@layer base {
+    body {
+        --color-paper: var(--paper, #eae8e3);
+        --color-surface: var(--surface, #d2d1ca);
+    }
 }

@@ -68,13 +68,11 @@
     --leading-loose: 2;
 
     /*
-    Fluid type scale, calibrated to CONTAINER width (400px → 880px), not
-    the viewport — because the hero and content live in half-width columns.
-    Each size is declared twice: a `vi` (viewport) fallback first, then the
-    `cqi` (container) version. Browsers that don't support container query
-    units keep the fallback line; modern browsers use the container-aware
-    one. The column containers are set with `container-type: inline-size`.
-    The vi fallback uses half the cqi slope, since a column is ~50vw.
+    Fluid type scale, calibrated to CONTAINER width (400px → 880px) rather
+    than the viewport, since the hero and content live in half-width columns.
+    Each size is declared twice: a `vi` fallback first, then the `cqi`
+    version, which modern browsers use. The fallback runs half the slope,
+    since a column is ~50vw.
   */
 
     /* Font Size */
@@ -86,6 +84,11 @@
 
     --text-base: clamp(1rem, 0.21vi + 0.9rem, 1.125rem);
     --text-base: clamp(1rem, 0.42cqi + 0.9rem, 1.125rem);
+
+    /* Long-form body copy, between base and md: Apercu at 17–19px reads at
+       the size mono needs 16–17px to match. */
+    --text-prose: clamp(1.0625rem, 0.25vi + 1rem, 1.1875rem);
+    --text-prose: clamp(1.0625rem, 0.5cqi + 0.95rem, 1.1875rem);
 
     --text-md: clamp(1.15rem, 0.33vi + 0.98rem, 1.35rem);
     --text-md: clamp(1.15rem, 0.67cqi + 0.98rem, 1.35rem);

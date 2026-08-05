@@ -1,0 +1,66 @@
+/*
+  The page's horizontal geometry, in one place.
+
+  The shell is not a chosen width. It is exactly wide enough to hold a sticky
+  rail, a gap, and a reading column, inside its own gutters:
+
+       16rem  rail
+     +  3rem  rail gap
+     + 42rem  reading column
+     +  3rem  gutters (2 x 1.5rem)
+     = 64rem  shell
+
+  Change --container-reading and the shell follows it, so the rail still
+  starts under the logo and the column still ends under the RSS icon.
+
+  `@theme static` rather than plain `@theme`: a token no generated utility
+  references gets tree-shaken out of :root, and Astro scoped <style> blocks
+  are invisible to Tailwind's scanner.
+*/
+@theme static {
+    /* Page gutter. The shell uses the small one at every width; the split
+       homepage opens up to the large one once the two columns appear. */
+    --spacing-gutter: 1.5rem; /* 24px */
+    --spacing-gutter-lg: 3rem; /* 48px — homepage only */
+
+    /* The reading column, wherever it has to line up with the shell grid:
+       blog articles, /work, the postcard deck. Fixed rather than character-
+       based because the rail grid needs a track it can do arithmetic on.
+
+       Standalone prose pages that align to nothing — project detail, garden
+       notes — use Tailwind's built-in `max-w-prose` (65ch) instead. It's the
+       same measure said a different way: 42rem lands at ~66 characters at the
+       article's body size, and those pages set a different body size, so `ch`
+       keeps them honest where a fixed rem value wouldn't. */
+    --container-reading: 42rem; /* 672px */
+
+    /* The sticky contents column, and the space beside it. */
+    --container-rail: 16rem; /* 256px */
+    --spacing-rail: 3rem; /* 48px */
+
+    /* Short display lines rather than body copy — /work's opening statement
+       and the lead under it. Sized so the statement and the portrait beside
+       it fill the reading column exactly: 30 + 2 (gap) + 10 (portrait). */
+    --container-lead: 30rem; /* 480px */
+
+    /* Derived. Don't hand-write 64rem here. */
+    --container-shell: calc(
+        var(--container-rail) + var(--spacing-rail) + var(--container-reading) +
+            2 * var(--spacing-gutter)
+    );
+}
+
+/*
+  The two-track article grid. Always used behind `lg:`, and that breakpoint is
+  load-bearing: Tailwind's lg is 64rem, which is --container-shell. A container
+  query can't take a calc() in its condition, so this is the one part of the
+  arithmetic that stays manual — if the shell width changes, change this too.
+*/
+@utility grid-rail {
+    display: grid;
+    grid-template-columns: var(--container-rail) minmax(
+            0,
+            var(--container-reading)
+        );
+    gap: var(--spacing-rail);
+}
