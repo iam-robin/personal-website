@@ -6,6 +6,7 @@
  */
 import type { CollectionEntry } from "astro:content";
 import { categoryLabel } from "../../utils/blog";
+import InkMark from "../ui/InkMark.astro";
 
 interface Props {
     post: CollectionEntry<"blog">;
@@ -25,14 +26,13 @@ const formatDate = (date: Date) =>
 
 <a
     href={`/blog/${post.id}`}
-    class="group flex items-start gap-6 py-5 font-mono"
+    class="ink-row flex items-start gap-4 py-5 font-mono"
 >
+    <InkMark name="post" class="ink-row-mark mt-px h-5 w-5 shrink-0" />
     <span class="shrink-0 whitespace-nowrap text-sm opacity-40">
         {formatDate(post.data.date)}
     </span>
-    <span
-        class="min-w-0 flex-1 text-base group-hover:underline group-hover:underline-offset-4"
-    >
+    <span class="ink-row-title min-w-0 flex-1 text-base">
         {post.data.title}
     </span>
     {
@@ -42,10 +42,7 @@ const formatDate = (date: Date) =>
             </span>
         )
     }
-    <span
-        class="shrink-0 text-base opacity-40 transition-opacity group-hover:opacity-100"
-        aria-hidden="true"
-    >
+    <span class="ink-row-meta shrink-0 text-base" aria-hidden="true">
         →
     </span>
 </a>

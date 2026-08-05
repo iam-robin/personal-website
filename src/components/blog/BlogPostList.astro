@@ -27,7 +27,7 @@ const years = [...byYear.keys()].sort((a, b) => b - a);
         years.map((year) => (
             <section>
                 <h2 class="font-mono text-sm opacity-40">{year}</h2>
-                <ul class="mt-2 divide-y divide-ink/10">
+                <ul class="mt-2 divide-y divide-dotted divide-ink/30">
                     {byYear.get(year)!.map((post) => (
                         <li>
                             <BlogPostRow post={post} showYear={false} showCategory={showCategory} />

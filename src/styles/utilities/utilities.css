@@ -29,8 +29,51 @@
     transition: background-color 0.15s ease-out;
 }
 
+/* The italic tilt on hover used to apply to every link on the site. It now
+   belongs to this one highlighted link in the hero and nowhere else. */
 a.marker:hover {
     --marker-color: color-mix(in srgb, var(--color-ink) 10%, var(--color-surface));
+    font-style: italic;
+}
+
+/*
+  The shared hover for every teaser row — projects, blog, contact. One
+  definition on purpose: the three lists each grew their own and drifted.
+
+  The row wakes up rather than lighting up: the mark comes forward, the title
+  underlines, the meta goes to full strength. Parts opt in with
+  .ink-row-{mark,title,meta}; anything unmarked stays put.
+*/
+.ink-row {
+    --ink-row-mark: 0.4;
+}
+
+.ink-row-mark,
+.ink-row-meta {
+    transition: opacity 150ms ease-out;
+}
+
+.ink-row-mark {
+    /* A variable rather than a constant so a row whose mark carries more ink
+       than a 1.5px stroke can dial itself back to read at the same weight. */
+    opacity: var(--ink-row-mark);
+}
+
+.ink-row-meta {
+    opacity: 0.4;
+}
+
+.ink-row:hover .ink-row-mark {
+    opacity: calc(var(--ink-row-mark) + 0.4);
+}
+
+.ink-row:hover .ink-row-meta {
+    opacity: 1;
+}
+
+.ink-row:hover .ink-row-title {
+    text-decoration: underline;
+    text-underline-offset: 4px;
 }
 
 .hover-lift {
