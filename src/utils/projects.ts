@@ -21,12 +21,8 @@ export async function getAllProjects(): Promise<
 }
 
 /**
- * The projects featured on the homepage, newest first.
- *
- * If any project opts in with `featured: true`, that curated set wins —
- * otherwise fall back to the newest `limit` projects. Curating lets an
- * older favourite (e.g. handcoded.art) hold a teaser slot without
- * pretending to be recent.
+ * The projects featured on the homepage. A curated `featured: true` set wins
+ * if any project opts in; otherwise the newest `limit` projects.
  */
 export async function getFeaturedProjects(
     limit = 3,

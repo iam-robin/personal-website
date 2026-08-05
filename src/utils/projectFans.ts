@@ -1,8 +1,8 @@
 import type { ImageMetadata } from "astro";
 
-// Fan images shown for a project on hover: the big stacked version in
-// the homepage hero, the compact cursor-following row on /projects.
-// Poster filenames are number-prefixed to control the fan order.
+// Fan images shown for a project on hover — stacked in the homepage hero,
+// cursor-following on /projects. Poster filenames are number-prefixed to
+// control the fan order.
 const posterModules = import.meta.glob<{ default: ImageMetadata }>(
     "../assets/projects/matchprint/*.png",
     { eager: true },
@@ -21,7 +21,7 @@ const fanPhotos = FAN_PHOTO_IDS.map(
     (id) => photoModules[`../assets/photos/${id}.jpg`].default,
 );
 
-// handcoded.art (project id "geeenerated"): a set of generative prints.
+// handcoded.art has the project id "geeenerated".
 const artModules = import.meta.glob<{ default: ImageMetadata }>(
     "../assets/projects/handcoded/*.webp",
     { eager: true },
@@ -40,10 +40,9 @@ export function getFanImages(projectId: string): ImageMetadata[] | null {
     return fansByProject[projectId] ?? null;
 }
 
-// Fallback hover preview for projects without a curated fan: the first
-// image embedded in the project's markdown body (i.e. the first asset
-// a visitor would see on the subpage). Gifs are excluded — they'd lose
-// their animation in the image pipeline.
+// Fallback for projects without a curated fan: the first image in the
+// project's markdown body. Gifs are excluded — the image pipeline would
+// strip their animation.
 const projectAssetModules = import.meta.glob<{ default: ImageMetadata }>(
     "../assets/projects/**/*.{png,jpg,jpeg,webp}",
     { eager: true },
@@ -53,8 +52,8 @@ export function getFirstBodyImage(
     body: string | undefined,
 ): ImageMetadata | null {
     if (!body) return null;
-    // Markdown image paths are relative to src/content/projects/, the
-    // glob keys to src/utils/ — both resolve to src/assets/….
+    // Markdown paths are relative to src/content/projects/, glob keys to
+    // src/utils/ — both resolve to src/assets/….
     const matches = body.matchAll(/!\[[^\]]*\]\((\.\.\/\.\.\/assets\/[^)\s]+)\)/g);
     for (const match of matches) {
         const key = match[1].replace(/^\.\.\/\.\.\//, "../");

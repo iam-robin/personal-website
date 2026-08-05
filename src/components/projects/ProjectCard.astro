@@ -1,5 +1,6 @@
 ---
 import FanPreview from "./FanPreview.astro";
+import InkMark from "../ui/InkMark.astro";
 
 interface Props {
     title: string;
@@ -38,34 +39,69 @@ const linkAttrs = draft
           rel: isExternal ? "noopener noreferrer" : undefined,
       };
 
-const meta = (draft ? ["Coming soon"] : (tags ?? [])).join(" · ");
+// A draft row is not a link, so it also drops .ink-row: the shared hover
+// (mark forward, title underlined) is the site's promise that a row leads
+// somewhere, and a row that doesn't must not make it.
+const rowClass = draft
+    ? "project-card is-draft flex items-start gap-4 py-5 font-mono cursor-not-allowed select-none"
+    : "project-card ink-row flex items-start gap-4 py-5 font-mono";
+
+const meta = (tags ?? []).join(" · ");
 ---
 
 <Tag
     {...linkAttrs}
     data-project={slug}
-    class={`project-card flex items-start gap-5 px-3 py-5 font-mono ${draft ? "cursor-not-allowed" : ""}`}
+    aria-disabled={draft ? "true" : undefined}
+    class={rowClass}
 >
-    {showFanPreview && <FanPreview projectId={slug} />}
+    {showFanPreview && !draft && <FanPreview projectId={slug} />}
+    <InkMark
+        name={slug}
+        class:list={[
+            draft ? "opacity-20" : "ink-row-mark",
+            "mt-1 h-5 w-5 shrink-0",
+        ]}
+    />
     <div class="flex min-w-0 flex-1 flex-col gap-1">
-        <h3 class="text-base">{title}</h3>
-        <p class="text-sm opacity-70">{description}</p>
-        {meta && <span class="text-sm opacity-40">{meta}</span>}
+        <h3 class:list={["ink-row-title text-base", { "opacity-60": draft }]}>
+            {title}
+        </h3>
+        <p class:list={["text-sm", draft ? "opacity-40" : "opacity-70"]}>
+            {description}
+        </p>
+        {
+            draft ? (
+                <span class="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full border border-dotted border-ink/40 px-2.5 py-0.5 text-xs opacity-60">
+                    <span class="h-1.5 w-1.5 rounded-full bg-ink/40" />
+                    Coming soon
+                </span>
+            ) : (
+                meta && <span class="text-sm opacity-40">{meta}</span>
+            )
+        }
     </div>
-    <span class="shrink-0 text-sm whitespace-nowrap opacity-40">{year}</span>
+    <span
+        class:list={[
+            "flex shrink-0 items-center gap-2 text-sm whitespace-nowrap",
+            draft ? "opacity-30" : "ink-row-meta",
+        ]}
+    >
+        {year}
+        {
+            !draft && (
+                <>
+                    <InkMark
+                        name={isExternal ? "arrow-external" : "arrow-internal"}
+                        class="h-4 w-4 shrink-0"
+                    />
+                    <span class="sr-only">
+                        {isExternal
+                            ? "Opens on an external site in a new tab"
+                            : "Opens the project page on this site"}
+                    </span>
+                </>
+            )
+        }
+    </span>
 </Tag>
-
-<style>
-    /*
-      Hover keys off the parent <li> (its border-included box leaves no
-      dead zone between adjacent cards, so moving across the divider never
-      drops the state).
-    */
-    :global(li:hover) > .project-card {
-        background-color: color-mix(
-            in srgb,
-            var(--color-ink) 6%,
-            var(--color-paper)
-        );
-    }
-</style>

@@ -9,16 +9,13 @@ interface Props {
 
 const { projectId } = Astro.props;
 
-// Compact one-row version of the hero fan, shown as a cursor-following
-// preview (like the bookmark covers). Capped at five: this row only has
-// five positioned slots, and it stays compact next to the cursor (the
-// full set fans out in the hero).
+// Compact one-row version of the hero fan, following the cursor. Capped at
+// five — that's how many positioned slots the row has.
 const images = getFanImages(projectId)?.slice(0, 5);
 
-// Projects without a curated fan fall back to the first asset of their
-// subpage as a single-image preview. Drafts have no subpage, so they
-// render nothing — the hover script treats a missing .cover-image like
-// a cover-less bookmark.
+// Projects without a curated fan fall back to their subpage's first asset.
+// Drafts have no subpage and render nothing; the hover script treats a
+// missing .cover-image like a cover-less bookmark.
 let single = null;
 if (!images) {
     const entry = await getEntry("projects", projectId);
@@ -26,7 +23,7 @@ if (!images) {
 }
 
 // Photos read as plain prints (square corners), posters keep a slight
-// rounding — same treatment as the hero fans.
+// rounding — same as the hero fans.
 const rounded = projectId === "matchprint";
 ---
 

@@ -4,9 +4,8 @@ import { Icon } from "astro-icon/components";
 import Layout from "../../layouts/Layout.astro";
 import "../../styles/markdown.css";
 
-// A detail page exists only for projects the cards link to internally —
-// i.e. those without an external URL and not still a draft. Everything
-// else opens its own site (externalUrl) or is unlinked (draft).
+// Only for projects the cards link to internally — the rest open their own
+// site (externalUrl) or are unlinked (draft).
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
     return projects
@@ -31,7 +30,12 @@ const { title, description, tags, year } = project.data;
         <Icon name="ph:x-bold" size={24} />
     </a>
 
-    <article class="mx-auto w-full max-w-[65ch] px-6 py-16 md:py-24">
+    {/* A focused reading view. The measure is `prose` (65ch) rather than the
+      `reading` token, since this page aligns to nothing.
+
+      Deliberately no `@container`: without one the fluid type scale falls
+      back to its viewport line, and the oversized title is the page. */}
+    <article class="mx-auto w-full max-w-prose px-gutter py-16 md:py-24">
         <header>
             <h1 class="text-3xl font-bold md:text-4xl">{title}</h1>
             <p class="mt-2 text-lg text-ink/70">{description}</p>
@@ -46,11 +50,9 @@ const { title, description, tags, year } = project.data;
                     </div>
                 )
             }
-            {
-                year && (
-                    <p class="mt-4 font-mono text-sm text-ink/60">{year}</p>
-                )
-            }
+            <!-- /65 rather than /60: on the clay stock 60% ink is 4.2:1,
+                 under AA. -->
+            {year && <p class="mt-4 font-mono text-sm text-ink/65">{year}</p>}
         </header>
 
         <div class="blog-prose mt-12">

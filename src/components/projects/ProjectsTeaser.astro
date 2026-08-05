@@ -12,11 +12,10 @@ const link = {
 ---
 
 <TeaserSection title="Side Projects" link={link}>
-  <ul class="divide-y divide-ink/15 border-y border-ink/15">
+  <ul class="divide-y divide-dotted divide-ink/30 border-y border-dotted border-ink/30">
     {
       projects.map((project) => (
-        <li class="cursor-pointer">
-
+        <li class:list={[project.data.draft ? 'cursor-not-allowed' : 'cursor-pointer']}>
           <ProjectCard
             slug={project.id}
             title={project.data.title}

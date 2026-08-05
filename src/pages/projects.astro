@@ -10,11 +10,16 @@ const projects = await getAllProjects();
     title="Projects"
     description="Like most of us – I have lot of ideas and projects that I would like to implement. Many of them get lost in my notes or as random thoughts on my computer. But can you believe it? Some of them actually happen."
 >
-    <ul class="divide-y divide-ink/15 border-y border-ink/15">
+    <ul class="divide-y divide-dotted divide-ink/30 border-y border-dotted border-ink/30">
         {
             projects.map((project) => (
                 <li
-                    class="list-item-image-hover-effect group relative cursor-pointer"
+                    class:list={[
+                        "list-item-image-hover-effect group relative",
+                        project.data.draft
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer",
+                    ]}
                 >
                     <ProjectCard
                         slug={project.id}
