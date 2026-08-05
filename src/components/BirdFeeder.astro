@@ -1,0 +1,477 @@
+---
+// Click the empty band next to the logo to drop a crumb; the bird hops over,
+// pecks it up and hops home. An undiscoverable easter egg — no cursor change.
+//
+// Two nested transforms so nothing fights over `transform`:
+//   [data-feeder-bird]  travel   — the hops (translate)
+//   .bird               attitude — facing (scaleX) and pecking (rotate)
+import Bird from "./Bird.astro";
+
+interface Props {
+    class?: string;
+}
+const { class: className } = Astro.props;
+
+// A fixed pool rather than DOM churn — the pool size is the cap.
+const MAX_CRUMBS = 8;
+const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
+---
+
+<div class:list={["feeder h-20 w-full text-ink", className]} data-feeder>
+    <div class="feeder-field" data-feeder-field aria-hidden="true">
+        {
+            Array.from({ length: MAX_CRUMBS }, (_, i) => (
+                <span
+                    class="crumb"
+                    data-crumb
+                    data-variant={i % 3}
+                    style={`--rot: ${TILT[i]}deg`}
+                />
+            ))
+        }
+    </div>
+    <div class="feeder-bird" data-feeder-bird>
+        <Bird class="h-full w-auto" />
+    </div>
+</div>
+
+<style>
+    .feeder {
+        position: relative;
+        /* The hop arc and the happy state's tail paint past the band. */
+        overflow: visible;
+    }
+
+    /* Explicitly not a pointer cursor — nothing should announce this. */
+    .feeder-field {
+        position: absolute;
+        inset: 0;
+        cursor: default;
+    }
+
+    .feeder-bird {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 100%;
+        will-change: transform;
+    }
+
+    /* Origin at the feet, so a peck tips the head down instead of swinging
+       the whole bird. No transition — tweening the mirror reads as a squash. */
+    .feeder :global(.bird) {
+        transform-origin: 50% 100%;
+        will-change: transform;
+    }
+
+    /* Idle crumbs sit at zero opacity in the pool; `.is-out` is on the floor. */
+    .crumb {
+        position: absolute;
+        bottom: 0;
+        left: var(--x, 0);
+        width: 7px;
+        height: 5px;
+        margin-left: -3.5px;
+        background: currentColor;
+        opacity: 0;
+        pointer-events: none;
+        transform: rotate(var(--rot));
+    }
+    .crumb[data-variant="0"] {
+        border-radius: 60% 40% 55% 45% / 55% 60% 40% 45%;
+    }
+    .crumb[data-variant="1"] {
+        width: 5px;
+        height: 4px;
+        margin-left: -2.5px;
+        border-radius: 45% 55% 40% 60% / 60% 45% 55% 40%;
+    }
+    .crumb[data-variant="2"] {
+        width: 6px;
+        height: 6px;
+        margin-left: -3px;
+        border-radius: 50% 60% 45% 55% / 45% 50% 60% 55%;
+    }
+    .crumb.is-out {
+        opacity: 1;
+    }
+    .crumb.is-eaten {
+        opacity: 0;
+        transform: rotate(var(--rot)) scale(0.4);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .crumb.is-out {
+            animation: crumb-fall 420ms both;
+        }
+        .crumb.is-eaten {
+            transition:
+                opacity 140ms ease-out,
+                transform 140ms ease-out;
+        }
+
+        /* The rotation rides every keyframe because it shares the transform. */
+        @keyframes crumb-fall {
+            0% {
+                transform: translateY(calc(-1 * var(--drop)))
+                    rotate(var(--rot));
+                animation-timing-function: cubic-bezier(0.5, 0, 1, 1);
+            }
+            55% {
+                transform: translateY(0) rotate(var(--rot));
+                animation-timing-function: cubic-bezier(0, 0, 0.4, 1);
+            }
+            72% {
+                transform: translateY(calc(-0.18 * var(--drop)))
+                    rotate(var(--rot));
+                animation-timing-function: cubic-bezier(0.5, 0, 1, 1);
+            }
+            86% {
+                transform: translateY(0) rotate(var(--rot));
+                animation-timing-function: cubic-bezier(0, 0, 0.4, 1);
+            }
+            93% {
+                transform: translateY(calc(-0.06 * var(--drop)))
+                    rotate(var(--rot));
+                animation-timing-function: cubic-bezier(0.5, 0, 1, 1);
+            }
+            100% {
+                transform: translateY(0) rotate(var(--rot));
+            }
+        }
+    }
+</style>
+
+<script>
+    // Nominal hop values — every one is scattered per hop (see `vary`), because
+    // matched hops in a row read as a machine.
+    const HOP_LEN = 46; // hop length, px
+    const HOP_MS = 210; // hop duration; shorter strobes on the steepest arcs
+    const HOP_LIFT = 26; // arc height, px
+    const HOP_BEAT = 70; // landing, between hops
+    const HOP_VARY = 0.12; // how far length, height and duration stray
+    const HOP_LOOK = 0.15; // chance a landing is a heavier, slower one
+    const PECK_MS = 200;
+    const PECK_DEG = 22;
+    const YUM_MS = 380; // how long the happy state is held after a meal
+    const FALL_MS = 420; // must match the crumb-fall duration above
+    const MIN_DROP = 10; // a click on the floor still gets a small drop
+
+    // Where the crumb lands, as a fraction of the bird's width from its left
+    // edge (mirrored to `1 - REACH` facing left). Past 1 because the beak tip
+    // is already at the artwork's right edge and pecking swings it further
+    // forward. Derived from PECK_DEG; recompute if that angle changes.
+    const REACH = 1.255;
+
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const clamp = (v: number, lo: number, hi: number) =>
+        Math.min(Math.max(v, lo), hi);
+
+    // How far along the trip the bird is after a given share of its hops:
+    // mostly linear with a touch of smoothstep, so it sets off and arrives on
+    // shorter hops. Kept light because `vary` compounds on top of it.
+    const easeTrip = (t: number) => 0.75 * t + 0.25 * (t * t * (3 - 2 * t));
+
+    // One hop as a sampled parabola. Easing the whole transform instead would
+    // slow the bird sideways at the apex too, which reads as a stall and lurch.
+    const ARC_STEPS = 12;
+    const arc = (a: number, b: number, lift: number) =>
+        Array.from({ length: ARC_STEPS + 1 }, (_, k) => {
+            const t = k / ARC_STEPS;
+            return {
+                transform: `translate3d(${a + (b - a) * t}px,${-lift * 4 * t * (1 - t)}px,0)`,
+                easing: "linear",
+            };
+        });
+
+    // Deliberately Math.random, not the seeded stream in utils/seededRandom:
+    // here repeating identically every time is the failure mode.
+    const vary = (base: number, amount: number) =>
+        base * (1 + (Math.random() * 2 - 1) * amount);
+
+    // Most landings are light, the occasional one heavier. Kept within a hair
+    // of each other so no single gap reads as a hitch.
+    const beat = () =>
+        Math.random() < HOP_LOOK
+            ? vary(HOP_BEAT * 1.35, 0.2)
+            : vary(HOP_BEAT, 0.2);
+
+    // `animation.finished` only settles while the document renders, so a
+    // background tab would strand the bird mid-hop. Racing it against its own
+    // duration keeps the sequence moving — the inline transform already holds
+    // the destination.
+    function play(animation: Animation, duration: number) {
+        return Promise.race([
+            animation.finished.catch(() => {}),
+            wait(duration + 120).then(() => {
+                if (animation.playState !== "idle") animation.cancel();
+            }),
+        ]);
+    }
+
+    // Split out of initFeeders so the null checks land on parameters —
+    // narrowing a captured const doesn't reach the hoisted declarations below.
+    function attach(
+        field: HTMLElement,
+        travel: HTMLElement,
+        bird: HTMLElement,
+        pool: HTMLElement[],
+    ) {
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+
+        const queue: HTMLElement[] = [];
+        let cursor = 0; // round-robin pointer into the crumb pool
+        let x = 0; // the bird's offset from home, px
+        let face = 1; // 1 right, -1 left
+        let busy = false;
+
+        const birdW = () => bird.offsetWidth;
+        const center = () => x + birdW() / 2;
+        // Crumbs store their position as a percentage, so a resize moves them.
+        const crumbX = (el: HTMLElement) =>
+            (parseFloat(el.style.getPropertyValue("--x")) / 100) *
+            field.clientWidth;
+
+        function takeCrumb() {
+            for (let i = 0; i < pool.length; i++) {
+                const el = pool[(cursor + i) % pool.length];
+                if (el.dataset.active) continue;
+                cursor = (cursor + i + 1) % pool.length;
+                return el;
+            }
+            return null; // all eight are on the floor — that's the cap
+        }
+
+        function setFace(dir: number) {
+            if (face === dir) return;
+            face = dir;
+            bird.style.transform = `scaleX(${dir})`;
+        }
+
+        async function hopTo(to: number) {
+            const from = x;
+            const dist = to - from;
+            if (Math.abs(dist) < 1) {
+                x = to;
+                return;
+            }
+
+            if (reduce.matches) {
+                const duration = Math.min(600, 260 + Math.abs(dist));
+                travel.style.transform = `translate3d(${to}px,0,0)`;
+                await play(
+                    travel.animate(
+                        [
+                            { transform: `translate3d(${from}px,0,0)` },
+                            { transform: `translate3d(${to}px,0,0)` },
+                        ],
+                        { duration, easing: "linear" },
+                    ),
+                    duration,
+                );
+                x = to;
+                return;
+            }
+
+            const steps = Math.max(1, Math.ceil(Math.abs(dist) / HOP_LEN));
+
+            // Where each hop lands. Interior landings are nudged off the eased
+            // marks so no two hops match; the endpoints are left alone.
+            const marks: number[] = [];
+            for (let i = 0; i <= steps; i++) {
+                const settled = easeTrip(i / steps);
+                const loose =
+                    i === 0 || i === steps
+                        ? settled
+                        : settled +
+                          ((Math.random() * 2 - 1) * HOP_VARY) / steps;
+                marks.push(from + dist * loose);
+            }
+
+            // The inline transform is set first, then animated over — so no
+            // animation needs `fill: forwards` to hold the bird in place.
+            for (let i = 1; i <= steps; i++) {
+                const a = marks[i - 1];
+                const b = marks[i];
+                const ms = vary(HOP_MS, HOP_VARY);
+                // Bigger leap, bigger arc — uncoupled, short hops rise higher
+                // than they travel and read as bouncing on the spot.
+                const reach = Math.min(Math.abs(b - a) / HOP_LEN, 1.3);
+                const lift = vary(HOP_LIFT * (0.8 + 0.2 * reach), HOP_VARY);
+                travel.style.transform = `translate3d(${b}px,0,0)`;
+                await play(travel.animate(arc(a, b, lift), { duration: ms }), ms);
+                x = b;
+                // Land before going again, or a row of hops reads as one buzz.
+                await settle(beat());
+            }
+            x = to;
+        }
+
+        // Absorb a landing over exactly the beat it's given: a squash and a
+        // push back up. An empty pause reads as the page dropping frames.
+        function settle(ms: number) {
+            return play(
+                bird.animate(
+                    [
+                        // Starts upright, where the hop left it — compressing
+                        // over the first third continues the fall rather than
+                        // snapping the head down in a single frame.
+                        {
+                            transform: `scaleX(${face}) scaleY(1)`,
+                            easing: "ease-out",
+                        },
+                        {
+                            transform: `scaleX(${face * 1.05}) scaleY(0.92)`,
+                            offset: 0.28,
+                            easing: "ease-out",
+                        },
+                        {
+                            transform: `scaleX(${face * 0.995}) scaleY(1.015)`,
+                            offset: 0.62,
+                        },
+                        { transform: `scaleX(${face}) scaleY(1)` },
+                    ],
+                    { duration: ms, easing: "ease-out" },
+                ),
+                ms,
+            );
+        }
+
+        function peckOnce() {
+            // Positive rotate tips the beak down either way round, because the
+            // mirror flips the rotation with it — no sign flip needed.
+            return play(
+                bird.animate(
+                    [
+                        { transform: `scaleX(${face}) rotate(0deg)` },
+                        {
+                            transform: `scaleX(${face}) rotate(${PECK_DEG}deg)`,
+                            offset: 0.5,
+                        },
+                        { transform: `scaleX(${face}) rotate(0deg)` },
+                    ],
+                    { duration: PECK_MS, easing: "ease-in-out" },
+                ),
+                PECK_MS,
+            );
+        }
+
+        function eat(el: HTMLElement) {
+            el.classList.add("is-eaten");
+            setTimeout(() => {
+                el.classList.remove("is-out", "is-eaten");
+                delete el.dataset.active;
+            }, 180);
+        }
+
+        async function peckAndEat(el: HTMLElement) {
+            // Don't peck at a crumb still in the air.
+            const landAt = Number(el.dataset.landAt ?? 0);
+            await wait(Math.max(0, landAt - performance.now()));
+
+            if (reduce.matches) {
+                eat(el);
+            } else {
+                await peckOnce();
+                const second = peckOnce();
+                await wait(PECK_MS / 2); // the crumb goes at the bottom of the second peck
+                eat(el);
+                await second;
+            }
+
+            bird.classList.add("is-eating");
+            await wait(YUM_MS);
+            bird.classList.remove("is-eating");
+        }
+
+        async function run() {
+            if (busy) return;
+            busy = true;
+            try {
+                while (queue.length) {
+                    // Nearest first, re-decided each time, so crumbs dropped
+                    // mid-run join the round rather than waiting it out.
+                    queue.sort(
+                        (a, b) =>
+                            Math.abs(crumbX(a) - center()) -
+                            Math.abs(crumbX(b) - center()),
+                    );
+                    const el = queue.shift()!;
+                    const cx = crumbX(el);
+                    const dir = cx >= center() ? 1 : -1;
+                    setFace(dir);
+                    const anchor = dir === 1 ? REACH : 1 - REACH;
+                    await hopTo(
+                        clamp(
+                            cx - anchor * birdW(),
+                            0,
+                            Math.max(field.clientWidth - birdW(), 0),
+                        ),
+                    );
+                    await peckAndEat(el);
+                }
+                if (x > 0) setFace(-1); // turn around rather than moonwalk
+                await hopTo(0);
+                setFace(1);
+            } catch {
+                // An animation was cancelled mid-flight; leave the bird where
+                // it stands rather than fighting for it.
+            } finally {
+                busy = false;
+            }
+        }
+
+        field.addEventListener("click", (event) => {
+            const el = takeCrumb();
+            if (!el) return;
+
+            const rect = field.getBoundingClientRect();
+            if (!rect.width) return;
+            const px = clamp(event.clientX - rect.left, 4, rect.width - 4);
+            const py = clamp(event.clientY - rect.top, 0, rect.height);
+
+            el.style.setProperty("--x", `${(px / rect.width) * 100}%`);
+            el.style.setProperty(
+                "--drop",
+                `${Math.max(rect.height - py, MIN_DROP)}px`,
+            );
+            el.dataset.active = "true";
+            el.dataset.landAt = String(
+                performance.now() + (reduce.matches ? 0 : FALL_MS),
+            );
+
+            // Restart the fall on a recycled crumb.
+            el.classList.remove("is-out", "is-eaten");
+            void el.offsetWidth;
+            el.classList.add("is-out");
+
+            queue.push(el);
+            run();
+        });
+    }
+
+    function initFeeders() {
+        const feeders =
+            document.querySelectorAll<HTMLElement>("[data-feeder]");
+        for (const feeder of feeders) {
+            if (feeder.dataset.initialized) continue;
+
+            const field = feeder.querySelector<HTMLElement>(
+                "[data-feeder-field]",
+            );
+            const travel = feeder.querySelector<HTMLElement>(
+                "[data-feeder-bird]",
+            );
+            const bird = travel?.querySelector<HTMLElement>(".bird");
+            if (!field || !travel || !bird) continue;
+
+            feeder.dataset.initialized = "true";
+            attach(field, travel, bird, [
+                ...feeder.querySelectorAll<HTMLElement>("[data-crumb]"),
+            ]);
+        }
+    }
+
+    initFeeders();
+    document.addEventListener("astro:page-load", initFeeders);
+</script>

@@ -1,16 +1,12 @@
 ---
-// Robin bird logo — two states in one SVG. Clicking swaps to the "happy"
-// state, then it resets after a short beat. Both states share a single
-// `feTurbulence` + `feDisplacementMap` filter (static, so the browser
-// rasterizes the noise once) and we only cross-fade `opacity` between the
-// two groups, which stays cheap/composited.
+// Robin bird logo — every state in one SVG, cross-faded on opacity so the
+// shared feTurbulence filter rasterizes once.
 interface Props {
     class?: string;
     /**
-     * Interactive birds are <button>s that swap to happy/angry states on
-     * click (the script targets `button.bird`). Set false for a static,
-     * decorative bird — e.g. inside a link — which renders as a <span> the
-     * script never picks up.
+     * Interactive birds are <button>s the script targets as `button.bird`.
+     * False renders a <span> the script never picks up — for decorative
+     * birds, e.g. inside a link.
      */
     interactive?: boolean;
 }
@@ -88,6 +84,26 @@ const tagProps: Record<string, string> = interactive
                 <path d="M117.713 16.9096L124.477 8.45483" stroke="currentColor" stroke-width="4" stroke-linecap="round"></path>
             </g>
 
+            <!-- Love state (easter egg: the bird has just eaten a crumb —
+                 see BirdFeeder). Eyes shut, heart overhead. The export is
+                 drawn larger than the resting state; the scale matches the
+                 two body radii and the translate aligns on the body center,
+                 which also lands the feet on the same baseline. -->
+            <g class="bird-state bird-love" transform="translate(-1.78 0.88) scale(0.69611)">
+                <path d="M56.32 115.12L0 63.92L17.92 46L87.04 99.76L56.32 115.12Z" fill="currentColor"></path>
+                <path d="M104.96 204.72C145.961 204.72 179.2 171.482 179.2 130.48C179.2 89.4784 145.961 56.24 104.96 56.24C63.9581 56.24 30.7197 89.4784 30.7197 130.48C30.7197 171.482 63.9581 204.72 104.96 204.72Z" fill="currentColor"></path>
+                <path d="M133.12 117.68C157.155 117.68 176.64 98.1956 176.64 74.1601C176.64 50.1247 157.155 30.6401 133.12 30.6401C109.084 30.6401 89.5996 50.1247 89.5996 74.1601C89.5996 98.1956 109.084 117.68 133.12 117.68Z" fill="currentColor"></path>
+                <path d="M117.76 143.28C147.451 143.28 171.52 123.795 171.52 99.76C171.52 75.7246 147.451 56.24 117.76 56.24C88.0692 56.24 64 75.7246 64 99.76C64 123.795 88.0692 143.28 117.76 143.28Z" fill="currentColor"></path>
+                <path d="M174.08 69.04L202.24 75.44L174.08 81.84V69.04Z" fill="currentColor"></path>
+                <path d="M140.8 92.0801C154.939 92.0801 166.4 80.6186 166.4 66.4801C166.4 52.3416 154.939 40.8801 140.8 40.8801C126.662 40.8801 115.2 52.3416 115.2 66.4801C115.2 80.6186 126.662 92.0801 140.8 92.0801Z" fill="var(--color-paper, white)"></path>
+                <path d="M125.44 61.3601C135.68 75.0134 145.92 75.0134 156.16 61.3601" stroke="currentColor" stroke-width="7.168" stroke-linecap="round"></path>
+                <path d="M94.7197 202.16V230.32" stroke="currentColor" stroke-width="6.656" stroke-linecap="round"></path>
+                <path d="M130.56 202.16V230.32" stroke="currentColor" stroke-width="6.656" stroke-linecap="round"></path>
+                <path d="M169.76 20.48C175.415 20.48 180 15.8954 180 10.24C180 4.5846 175.415 0 169.76 0C164.104 0 159.52 4.5846 159.52 10.24C159.52 15.8954 164.104 20.48 169.76 20.48Z" fill="currentColor"></path>
+                <path d="M190.239 20.48C195.894 20.48 200.479 15.8954 200.479 10.24C200.479 4.5846 195.894 0 190.239 0C184.584 0 179.999 4.5846 179.999 10.24C179.999 15.8954 184.584 20.48 190.239 20.48Z" fill="currentColor"></path>
+                <path d="M159.52 12.8H200.48L180 40.96L159.52 12.8Z" fill="currentColor"></path>
+            </g>
+
             <!-- Angry state (easter egg: three clicks in a row). Drawn ~4%
                  smaller than the resting state; the transform matches the two
                  body sizes and aligns on the body center so it stays in place
@@ -138,8 +154,14 @@ const tagProps: Record<string, string> = interactive
     /* Swap between states. Resting shows the default; .is-clicked shows the
        happy state; .is-angry shows the angry state. Instant — no transition.
        The angry rules come last so they win when both classes are briefly
-       present. */
+       present.
+
+       .is-eating shows the love state; BirdFeeder sets it while the bird
+       swallows a crumb. It gets its own class rather than borrowing
+       .is-clicked because the click handler below owns that one and clears it
+       on its own timer, which would cut a meal short. */
     .bird-clicked,
+    .bird-love,
     .bird-angry {
         opacity: 0;
     }
@@ -149,15 +171,24 @@ const tagProps: Record<string, string> = interactive
     .bird.is-clicked .bird-clicked {
         opacity: 1;
     }
+    .bird.is-eating .bird-default {
+        opacity: 0;
+    }
+    .bird.is-eating .bird-love {
+        opacity: 1;
+    }
     .bird.is-angry .bird-default,
-    .bird.is-angry .bird-clicked {
+    .bird.is-angry .bird-clicked,
+    .bird.is-angry .bird-love {
         opacity: 0;
     }
     .bird.is-angry .bird-angry {
         opacity: 1;
     }
     /* Hover: same resting bird, but the pupil dilates and the tail lifts.
-       Static swap — no transition. */
+       Static swap — no transition. .is-hovered pins that state without a
+       pointer, so the colophon can stand it next to the resting bird as its
+       own specimen. */
     .bird-pupil {
         transform-box: fill-box;
         transform-origin: center;
@@ -166,20 +197,20 @@ const tagProps: Record<string, string> = interactive
         transform-box: view-box;
         transform-origin: 50px 120px;
     }
-    .bird:hover .bird-pupil {
+    .bird:hover .bird-pupil,
+    .bird.is-hovered .bird-pupil {
         transform: scale(1.2);
     }
-    .bird:hover .bird-tail {
+    .bird:hover .bird-tail,
+    .bird.is-hovered .bird-tail {
         transform: rotate(8deg);
     }
 </style>
 
 <script>
-    // Click swaps to the happy state; the third click of a streak swaps to
-    // the angry state. Two timers, decoupled on purpose: the bird returns to
-    // default shortly after each click (visual), but the click streak lives
-    // on a longer window so it also counts when the user clicks, lets it reset
-    // to default, and clicks again. The streak only resets after a real pause.
+    // Two timers on purpose: the bird returns to default shortly after each
+    // click, but the streak that triggers the angry state lives on a longer
+    // window, so it survives the bird resetting in between.
     const VISUAL_RESET = 900;
     const STREAK_WINDOW = 3000;
     for (const btn of document.querySelectorAll<HTMLButtonElement>("button.bird")) {
