@@ -1,13 +1,18 @@
 /*
-  Long-form article styling. Follows the site system: mono body text,
-  Apercu-bold headings (same split as the homepage — bold display,
-  mono text). Applied via a `.blog-prose` wrapper around rendered markdown.
+  Long-form article styling, applied via a `.blog-prose` wrapper around
+  rendered markdown. Prose is set in Apercu, not the site's mono: mono is the
+  voice of the chrome, and it flattens word shapes over a long read. It stays
+  for what's scanned rather than read — code and table data.
 */
 .blog-prose {
-    font-family: var(--font-mono);
-    font-size: var(--text-base);
+    font-family: var(--font-sans);
+    font-size: var(--text-prose);
     line-height: var(--leading-relaxed);
     color: var(--color-ink);
+    /* Even rag, no single-word last lines */
+    text-wrap: pretty;
+    /* Long URLs and identifiers break instead of escaping the column */
+    overflow-wrap: break-word;
 }
 
 /* Vertical rhythm — space between all top-level blocks */
@@ -22,6 +27,8 @@
     font-family: var(--font-sans);
     font-weight: 700;
     line-height: var(--leading-tight);
+    /* Short lines — keep them from breaking one word onto line two */
+    text-wrap: balance;
     /* Breathing room when jumped to via a table-of-contents anchor */
     scroll-margin-top: 2rem;
 }
@@ -41,10 +48,25 @@
     margin-top: 0.75em;
 }
 
-/* Links — underlined; the global a:hover italic still applies */
+/* Neither face ships an italic, so `font-style: italic` would be the browser
+   shearing uprights. Emphasis becomes a change of voice instead. */
+.blog-prose em {
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.94em;
+}
+
+/* The global `a:hover { font-style: italic }` is a nav gesture; in a
+   paragraph it shears body text, so prose links thicken their underline. */
 .blog-prose a {
     text-decoration: underline;
     text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-thickness 120ms ease;
+}
+.blog-prose a:hover {
+    font-style: normal;
+    text-decoration-thickness: 2px;
 }
 
 /* Lists */
@@ -67,14 +89,19 @@
 
 /* Inline code */
 .blog-prose :not(pre) > code {
+    font-family: var(--font-mono);
     background-color: var(--color-surface);
     padding: 0.1em 0.35em;
     border-radius: 0.25rem;
     font-size: 0.9em;
+    /* Identifiers are unbreakable words — let them wrap rather than
+       push the column sideways */
+    overflow-wrap: anywhere;
 }
 
 /* Code blocks (Shiki sets its own background + colors) */
 .blog-prose pre {
+    font-family: var(--font-mono);
     padding: 1rem 1.25rem;
     border-radius: 0.5rem;
     overflow-x: auto;
@@ -94,7 +121,7 @@
 
 /* Blockquotes */
 .blog-prose blockquote {
-    border-left: 2px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+    border-left: 2px dotted color-mix(in srgb, var(--color-ink) 40%, transparent);
     padding-left: 1rem;
     opacity: 0.8;
 }
@@ -102,16 +129,72 @@
 /* Rules */
 .blog-prose hr {
     border: 0;
-    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    border-top: 1px dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
     margin-top: 2.5em;
     margin-bottom: 2.5em;
+}
+
+/* Hairline rows, no boxes. Posts wrap wide tables in a .table-container so
+   they scroll instead of squeezing the reading column. */
+.blog-prose .table-container {
+    overflow-x: auto;
+}
+.blog-prose .table-container table {
+    /* Columns stay legible; the container scrolls instead */
+    min-width: 30rem;
+}
+.blog-prose table {
+    /* Equal advance widths make columns line up down the page */
+    font-family: var(--font-mono);
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    text-align: left;
+}
+.blog-prose :is(th, td) {
+    padding: 0.7em 1.25em 0.7em 0;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+.blog-prose :is(th, td):last-child {
+    padding-right: 0;
+}
+.blog-prose th {
+    font-weight: 400;
+    opacity: 0.5;
+    border-bottom-color: color-mix(in srgb, var(--color-ink) 50%, transparent);
+}
+.blog-prose tbody tr:last-child :is(th, td) {
+    border-bottom: 0;
+}
+
+/* Image captions */
+.blog-prose figcaption {
+    /* Pull up against the image's own bottom margin */
+    margin-top: -1.25rem;
+    font-size: var(--text-sm);
+    opacity: 0.5;
+}
+
+/* Ported from v3, where they sat in the margin. */
+.blog-prose .sidenote {
+    display: block;
+    margin-top: 0.5em;
+    font-size: 0.85em;
+    line-height: var(--leading-normal);
+    opacity: 0.55;
+}
+.blog-prose .margin-toggle {
+    display: none;
 }
 
 /* Footnotes (GFM) — quieter, set off by a rule */
 .blog-prose .footnotes {
     margin-top: 3em;
     padding-top: 1.5em;
-    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    border-top: 1px dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
     font-size: var(--text-sm);
     opacity: 0.7;
 }

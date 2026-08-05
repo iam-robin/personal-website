@@ -1,6 +1,19 @@
 import { getCollection, type CollectionEntry } from "astro:content";
+import type { MarkdownHeading } from "astro";
 
 export type BlogPost = CollectionEntry<"blog">;
+
+/**
+ * The headings worth listing in a table of contents: h2 + h3, minus the
+ * label GFM generates for the footnotes block. Shared so the page and the
+ * component can't disagree about whether a post has a contents list.
+ */
+export function getTocHeadings(headings: MarkdownHeading[]): MarkdownHeading[] {
+    return headings.filter(
+        (h) => (h.depth === 2 || h.depth === 3) && h.slug !== "footnote-label",
+    );
+}
+
 
 /** All blog posts, newest first. */
 export async function getBlogPosts(): Promise<BlogPost[]> {

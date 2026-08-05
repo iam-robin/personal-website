@@ -1,9 +1,10 @@
 ---
 import { getCollection, render } from "astro:content";
 import { Image } from "astro:assets";
-import SubpageLayout from "../../layouts/SubpageLayout.astro";
+import ArticleLayout from "../../layouts/ArticleLayout.astro";
 import Link from "../../components/ui/Link.astro";
-import TableOfContents from "../../components/blog/TableOfContents.astro";
+import SectionRail from "../../components/ui/SectionRail.astro";
+import { categoryLabel, getTocHeadings } from "../../utils/blog";
 import "../../styles/markdown.css";
 
 export async function getStaticPaths() {
@@ -19,40 +20,87 @@ const formattedDate = post.data.date.toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
 });
-const category = post.data.category
-    ? post.data.category.charAt(0).toUpperCase() + post.data.category.slice(1)
-    : null;
+const category = post.data.category ? categoryLabel(post.data.category) : null;
 const meta = [formattedDate, category].filter(Boolean).join(" · ");
+
+const sections = getTocHeadings(headings).map((heading) => ({
+    id: heading.slug,
+    text: heading.text,
+    nested: heading.depth === 3,
+}));
+
+// Without a contents list the rail would be a permanently empty gutter.
+const showRail = sections.length >= 2;
 ---
 
-<SubpageLayout
+{/* From `lg` up a sticky rail holds the contents list; below that the
+  collapsed inline version takes over. The column and the rail grid come
+  from ArticleLayout — passing the `rail` slot turns the sidebar on. */}
+<ArticleLayout
     title={post.data.title}
     description={post.data.subtitle ?? post.data.description}
     documentTitle={`${post.data.title} — Robin Spielmann`}
+    rail={showRail}
 >
-    <div class="max-w-3xl">
-        <p class="mb-10 font-mono text-sm opacity-50">{meta}</p>
+    {
+        showRail && (
+            <Fragment slot="rail">
+                <SectionRail sections={sections} variant="rail" />
+                {/* Date and category stack rather than joining with a "·" —
+                    at 13rem the joined form wraps mid-line. */}
+                <div class="font-mono text-xs opacity-50">
+                    <p>{formattedDate}</p>
+                    {category && <p class="mt-1">{category}</p>}
+                </div>
+            </Fragment>
+        )
+    }
+
+    <article>
+        <header>
+            <h1 class="text-2xl font-bold">{post.data.title}</h1>
+            {
+                post.data.subtitle && (
+                    <p class="mt-4 font-mono text-base opacity-60">
+                        {post.data.subtitle}
+                    </p>
+                )
+            }
+            {/* Steps aside once the rail is carrying it */}
+            <p
+                class:list={[
+                    "mt-6 font-mono text-sm opacity-40",
+                    showRail && "lg:hidden",
+                ]}
+            >
+                {meta}
+            </p>
+        </header>
 
         {
             post.data.image && (
                 <Image
                     src={post.data.image}
                     alt=""
-                    widths={[768, 1536]}
-                    sizes="(min-width: 768px) 768px, 100vw"
-                    class="mb-12 w-full rounded-lg"
+                    widths={[672, 1344]}
+                    sizes="(min-width: 672px) 672px, 100vw"
+                    class="mt-12 w-full rounded-lg"
                 />
             )
         }
 
-        <TableOfContents headings={headings} />
+        {/* Steps aside once the rail is carrying the same list */}
+        <SectionRail
+            sections={sections}
+            class={showRail ? "mt-12 lg:hidden" : "mt-12"}
+        />
 
-        <article class="blog-prose">
+        <div class="blog-prose mt-12">
             <Content />
-        </article>
-
-        <div class="mt-16 border-t border-ink/15 pt-8">
-            <Link href="/blog">← All posts</Link>
         </div>
-    </div>
-</SubpageLayout>
+
+        <footer class="mt-24">
+            <Link href="/blog" class="text-sm">← All posts</Link>
+        </footer>
+    </article>
+</ArticleLayout>
