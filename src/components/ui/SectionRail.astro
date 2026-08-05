@@ -1,0 +1,215 @@
+---
+/**
+ * Links to the sections of the current page, with an indicator for the one
+ * being read. Passed to ArticleLayout's `rail` slot.
+ *
+ * - `rail` — the wide-screen sidebar, in its own column, always open.
+ * - `inline` — narrow-screen fallback in the reading column, collapsed into
+ *   a <details> so it needs no client-side JS.
+ *
+ * Unresolvable ids are silently ignored.
+ */
+export interface RailSection {
+    /** id of the heading this links to */
+    id: string;
+    text: string;
+    /** Indent one level (a sub-section) */
+    nested?: boolean;
+}
+
+interface Props {
+    sections: RailSection[];
+    label?: string;
+    variant?: "inline" | "rail";
+    class?: string;
+}
+
+const {
+    sections,
+    label = "Contents",
+    variant = "inline",
+    class: className = "",
+} = Astro.props;
+
+// One entry is a list of one — nothing to navigate between.
+const show = sections.length >= 2;
+---
+
+{
+    show &&
+        (variant === "rail" ? (
+            <nav aria-label={label} data-rail-root class={className}>
+                <p class="font-mono text-xs tracking-wide opacity-40">
+                    {label}
+                </p>
+                <ul class="mt-4 flex flex-col gap-2 font-sans text-sm">
+                    {sections.map((section) => (
+                        <li class:list={[section.nested && "pl-3"]}>
+                            <a
+                                href={`#${section.id}`}
+                                data-rail-link
+                                class="rail-link block leading-snug underline-offset-4 hover:underline"
+                            >
+                                {section.text}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </nav>
+        ) : (
+            <details data-rail-root class={`rail-details group text-sm ${className}`}>
+                <summary
+                    aria-label={label}
+                    class="inline-flex cursor-pointer items-center gap-2 font-mono opacity-40 transition-opacity hover:opacity-70"
+                >
+                    <span aria-hidden="true" class="caret inline-block">
+                        ›
+                    </span>
+                    {label} ({sections.length})
+                </summary>
+                <ul class="mt-4 flex flex-col gap-1.5 font-sans">
+                    {sections.map((section) => (
+                        <li class:list={[section.nested && "pl-5"]}>
+                            <a
+                                href={`#${section.id}`}
+                                data-rail-link
+                                class="rail-link underline-offset-4 hover:underline"
+                            >
+                                {section.text}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </details>
+        ))
+}
+
+<style>
+    /* Drop the native disclosure triangle in favour of the caret span */
+    .rail-details > summary {
+        list-style: none;
+    }
+    .rail-details > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .caret {
+        transition: transform 150ms ease;
+    }
+    .rail-details[open] > summary .caret {
+        transform: rotate(90deg);
+    }
+
+    /* Before the first heading the whole list reads at full strength — dimming
+       every entry there would make it look disabled rather than waiting. */
+    .rail-link {
+        position: relative;
+        opacity: 1;
+        transition: opacity 200ms ease;
+    }
+
+    /* Once a section is under way the others step back. A short dash marks the
+       current one, so the rail carries no permanent chrome. */
+    [data-rail-reading] .rail-link {
+        opacity: 0.45;
+    }
+    [data-rail-reading] .rail-link:hover {
+        opacity: 0.8;
+    }
+    [data-rail-reading] .rail-link[aria-current] {
+        opacity: 1;
+    }
+    .rail-link[aria-current]::before {
+        content: "";
+        position: absolute;
+        left: -0.85rem;
+        top: 0.6em;
+        width: 0.5rem;
+        height: 1px;
+        background-color: var(--color-ink);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .caret,
+        .rail-link {
+            transition: none;
+        }
+    }
+</style>
+
+<script>
+    // Marks the entry for the section being read — the one thing here CSS
+    // can't express. One passive listener, coalesced into a rAF per frame,
+    // writing only `aria-current`.
+    const links = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>("[data-rail-link]"),
+    );
+    const roots = Array.from(document.querySelectorAll("[data-rail-root]"));
+
+    if (links.length > 0) {
+        // Both variants render at once (one is display:none), so several
+        // links can point at the same heading.
+        const pairs = links
+            .map((link) => ({
+                link,
+                heading: document.getElementById(
+                    decodeURIComponent(link.hash.slice(1)),
+                ),
+            }))
+            .filter(
+                (p): p is { link: HTMLAnchorElement; heading: HTMLElement } =>
+                    p.heading !== null,
+            );
+
+        // Insertion order is list order, which is document order.
+        const headings = [...new Set(pairs.map((p) => p.heading))];
+
+        // A heading counts as reached once it passes this line — roughly
+        // where the eye sits, not the top of the viewport.
+        const OFFSET = 120;
+
+        let current: HTMLElement | null = null;
+        let queued = false;
+
+        const update = () => {
+            queued = false;
+
+            let active: HTMLElement | null = null;
+            for (const heading of headings) {
+                if (heading.getBoundingClientRect().top > OFFSET) break;
+                active = heading;
+            }
+
+            if (active === current) return;
+            current = active;
+
+            for (const { link, heading } of pairs) {
+                if (heading === active) {
+                    link.setAttribute("aria-current", "location");
+                } else {
+                    link.removeAttribute("aria-current");
+                }
+            }
+
+            // Above the first heading nothing is marked — the intro isn't a
+            // section. The list drops out of its reading state instead.
+            for (const root of roots) {
+                if (active) {
+                    root.setAttribute("data-rail-reading", "");
+                } else {
+                    root.removeAttribute("data-rail-reading");
+                }
+            }
+        };
+
+        const schedule = () => {
+            if (queued) return;
+            queued = true;
+            requestAnimationFrame(update);
+        };
+
+        addEventListener("scroll", schedule, { passive: true });
+        addEventListener("resize", schedule, { passive: true });
+        update();
+    }
+</script>

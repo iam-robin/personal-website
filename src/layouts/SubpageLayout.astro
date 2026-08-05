@@ -1,13 +1,9 @@
 ---
 /**
- * Shared shell for every subpage. A wide container holds:
- * - a three-part top bar: logo left, nav centered, icons right
- * - a two-column hero: title left, description right
- * - the slotted page body
- * - contact links
- *
- * Long-form content (e.g. blog articles) should constrain its own reading
- * width inside the slot; the container itself is intentionally wide.
+ * Shared shell for every subpage: top bar, title/description hero, the slotted
+ * body, contact links. The container is wide on purpose — it's sized for lists
+ * and grids. Long-form content uses ArticleLayout, which wraps this one and
+ * adds the reading column.
  */
 import Layout from "./Layout.astro";
 import Nav from "../components/ui/Nav.astro";
@@ -33,7 +29,7 @@ const { title, description, documentTitle, hideHero = false } = Astro.props;
     description={description}
 >
     <div
-        class="@container mx-auto flex min-h-dvh max-w-5xl flex-col px-6 py-8"
+        class="@container mx-auto flex min-h-dvh max-w-shell flex-col px-gutter py-8"
     >
         <!-- Top bar: logo left · nav center · icons right.
              Middle column is auto-width so the nav never wraps; the side
@@ -75,7 +71,12 @@ const { title, description, documentTitle, hideHero = false } = Astro.props;
         <main class="mt-16 flex-1">
             <slot />
         </main>
-        <FooterColumns class="mt-32" />
+        {/* Twice the 96px (`gap-24`) rhythm the pages use between their own
+            sections. It has to clear that rhythm by a clear factor or the
+            footer reads as one more section rather than the end of the page —
+            at 1.33x it did. Keyed to `gap-24`: if that rhythm changes, this
+            moves with it. */}
+        <FooterColumns class="mt-48" />
         <MobileMenu />
     </div>
 </Layout>

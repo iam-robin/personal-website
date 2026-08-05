@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import InkDefs from '../components/ui/InkDefs.astro';
+import { getPaperKey, papers } from '../utils/paper';
 
 interface Props {
   title: string;
@@ -7,6 +9,18 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+
+/*
+  The section's paper stock, resolved from the URL rather than threaded through
+  four layout entry points as a prop — the route already spells out which
+  section a page belongs to.
+
+  See utils/paper.ts for the stocks and theme/colors.css for what derives from
+  them. `data-paper` is only a DevTools hook; the inline custom property is the
+  mechanism.
+*/
+const paperKey = getPaperKey(Astro.url.pathname);
+const paper = papers[paperKey];
 ---
 
 <html lang="en">
@@ -36,11 +50,16 @@ const { title, description } = Astro.props;
       crossorigin
     />
     <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content={paper.hex} />
     <meta name="generator" content={Astro.generator} />
     {description && <meta name="description" content={description} />}
     <title>{title}</title>
   </head>
-  <body>
+  <body
+    data-paper={paperKey}
+    style={`--paper: ${paper.hex}; --surface: ${paper.surface}`}
+  >
+    <InkDefs />
     <slot />
   </body>
 </html>
