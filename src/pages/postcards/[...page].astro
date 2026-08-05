@@ -1,19 +1,18 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { db, Postcard, desc, eq } from "astro:db";
 import SubpageLayout from "../../layouts/SubpageLayout.astro";
 import PostcardsView from "../../components/postcards/PostcardsView.astro";
 import SendPostcardCta from "../../components/postcards/SendPostcardCta.astro";
+import {
+    getPublishedPostcards,
+    POSTCARDS_PAGE_SIZE,
+} from "../../utils/postcards";
 
 export const getStaticPaths = (async ({ paginate }) => {
-    const postcards = await db
-        .select()
-        .from(Postcard)
-        .where(eq(Postcard.isPublished, true))
-        .orderBy(desc(Postcard.date));
+    const postcards = await getPublishedPostcards();
 
     // Page 1 → /postcards, page 2 → /postcards/2, …
-    return paginate(postcards, { pageSize: 24 });
+    return paginate(postcards, { pageSize: POSTCARDS_PAGE_SIZE });
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;

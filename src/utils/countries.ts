@@ -1,5 +1,4 @@
-// Country validation and flag emoji mapping utility
-// This is a comprehensive list of countries with their flag emojis
+// Countries with their flag emojis, plus the aliases visitors actually type.
 
 interface CountryData {
     name: string;
@@ -200,16 +199,12 @@ export const COUNTRIES: CountryData[] = [
     { name: 'Zimbabwe', flag: '🇿🇼' }
 ];
 
-// Create lookup maps for efficient searching
 const countryMap = new Map<string, CountryData>();
 const aliasMap = new Map<string, CountryData>();
 
-// Initialize lookup maps
 COUNTRIES.forEach((country) => {
-    // Add primary name (case-insensitive)
     countryMap.set(country.name.toLowerCase(), country);
 
-    // Add aliases (case-insensitive)
     if (country.aliases) {
         country.aliases.forEach((alias) => {
             aliasMap.set(alias.toLowerCase(), country);
@@ -217,11 +212,6 @@ COUNTRIES.forEach((country) => {
     }
 });
 
-/**
- * Validates if a string is a real country name
- * @param countryName - The country name to validate
- * @returns true if it's a valid country, false otherwise
- */
 export function isValidCountry(countryName: string): boolean {
     if (!countryName || typeof countryName !== 'string') {
         return false;
@@ -231,11 +221,7 @@ export function isValidCountry(countryName: string): boolean {
     return countryMap.has(normalizedName) || aliasMap.has(normalizedName);
 }
 
-/**
- * Gets the flag emoji for a country
- * @param countryName - The country name
- * @returns The flag emoji or empty string if not found
- */
+/** The flag emoji for a country, or  if unknown. */
 export function getCountryFlag(countryName: string): string {
     if (!countryName || typeof countryName !== 'string') {
         return '';
@@ -246,11 +232,7 @@ export function getCountryFlag(countryName: string): string {
     return country?.flag || '';
 }
 
-/**
- * Gets the standardized country name
- * @param countryName - The country name (could be an alias)
- * @returns The standardized country name or the original if not found
- */
+/** Resolves an alias to the canonical name, or returns the input unchanged. */
 export function getStandardCountryName(countryName: string): string {
     if (!countryName || typeof countryName !== 'string') {
         return countryName;
@@ -261,11 +243,6 @@ export function getStandardCountryName(countryName: string): string {
     return country?.name || countryName;
 }
 
-/**
- * Gets country data (name and flag) for a given country name
- * @param countryName - The country name
- * @returns Object with name and flag, or null if not found
- */
 export function getCountryData(countryName: string): { name: string; flag: string } | null {
     if (!countryName || typeof countryName !== 'string') {
         return null;
@@ -284,11 +261,6 @@ export function getCountryData(countryName: string): { name: string; flag: strin
     return null;
 }
 
-/**
- * Filters a list of country names to only include valid countries
- * @param countries - Array of country names to filter
- * @returns Array of valid country names only
- */
 export function filterValidCountries(countries: string[]): string[] {
     return countries.filter((country) => isValidCountry(country));
 }

@@ -1,12 +1,13 @@
 ---
 import type { Page } from "astro";
-import { db, Postcard, desc, eq } from "astro:db";
+import type { Postcard } from "astro:db";
 import {
     isValidCountry,
     getStandardCountryName,
     getCountryFlag,
 } from "../../utils/countries";
-import PostcardItem from "./PostcardItem.astro";
+import { getPublishedPostcards, postcardsHref } from "../../utils/postcards";
+import PostcardsList from "./PostcardsList.astro";
 import WorldMap from "./WorldMap.astro";
 import FilterBar from "../ui/FilterBar.astro";
 import FilterTag from "../ui/FilterTag.astro";
@@ -20,20 +21,14 @@ interface Props {
 }
 const { page, selectedCountry } = Astro.props;
 
-// The grid renders just this page's slice…
+// The list renders just this page's slice…
 const displayed = page.data;
 
 // Page 1 lives at the base path; deeper pages append the number.
-const baseHref = selectedCountry
-    ? `/postcards/country/${selectedCountry}`
-    : "/postcards";
+const baseHref = postcardsHref({ country: selectedCountry });
 
 // …but the filter chips and world map reflect the full published set.
-const allPostcards = await db
-    .select()
-    .from(Postcard)
-    .where(eq(Postcard.isPublished, true))
-    .orderBy(desc(Postcard.date));
+const allPostcards = await getPublishedPostcards();
 
 // Country chips (from every postcard, not just the filtered set).
 const counts: Record<string, number> = {};
@@ -48,38 +43,6 @@ const countryChips = Object.entries(counts)
     .sort((a, b) => b.count - a.count);
 
 const visitedCountries = countryChips.map((c) => c.name);
-
-/** Map a DB row to PostcardItem props (drizzle nulls → undefined). */
-const toProps = (p: typeof Postcard.$inferSelect) => ({
-    author: p.author,
-    body: p.body,
-    date: p.date,
-    marginBottom: p.marginBottom ?? undefined,
-    marginRight: p.marginRight ?? undefined,
-    rotation: p.rotation ?? undefined,
-    penColor: p.penColor ?? undefined,
-    paperColor: p.paperColor ?? undefined,
-    fontSizeFactor: p.fontSizeFactor ?? undefined,
-    lineHeight: p.lineHeight ?? undefined,
-    authorLeftOffset: p.authorLeftOffset ?? undefined,
-    authorTopOffset: p.authorTopOffset ?? undefined,
-    authorRotation: p.authorRotation ?? undefined,
-    dateLeftOffset: p.dateLeftOffset ?? undefined,
-    dateTopOffset: p.dateTopOffset ?? undefined,
-    dateRotation: p.dateRotation ?? undefined,
-    bodyLeftOffset: p.bodyLeftOffset ?? undefined,
-    bodyTopOffset: p.bodyTopOffset ?? undefined,
-    bodyRotation: p.bodyRotation ?? undefined,
-    stampSvg: p.stampSvg ?? undefined,
-    country: p.country,
-    websiteUrl: p.websiteUrl,
-    postOfficeStampTop: p.postOfficeStampTop ?? undefined,
-    postOfficeStampRight: p.postOfficeStampRight ?? undefined,
-    postOfficeStampRotation: p.postOfficeStampRotation ?? undefined,
-    wavyStampTop: p.wavyStampTop ?? undefined,
-    wavyStampRight: p.wavyStampRight ?? undefined,
-    wavyStampRotation: p.wavyStampRotation ?? undefined,
-});
 ---
 
 {/* SVG distortion filter used by PostcardItem's handwriting */}
@@ -99,7 +62,7 @@ const toProps = (p: typeof Postcard.$inferSelect) => ({
         countryChips.length > 0 && (
             <FilterBar>
                 <FilterTag
-                    href="/postcards"
+                    href={postcardsHref()}
                     active={!selectedCountry}
                     count={allPostcards.length}
                 >
@@ -107,7 +70,7 @@ const toProps = (p: typeof Postcard.$inferSelect) => ({
                 </FilterTag>
                 {countryChips.map((c) => (
                     <FilterTag
-                        href={`/postcards/country/${c.name}`}
+                        href={postcardsHref({ country: c.name })}
                         active={selectedCountry === c.name}
                         count={c.count}
                     >
@@ -119,33 +82,16 @@ const toProps = (p: typeof Postcard.$inferSelect) => ({
         )
     }
 
-    <!-- Postcards: the grid breaks out of the reading column so landscape
-         cards fit two per row (from lg up), and three per row on very large
-         screens (2xl) where the container also widens. Fewer cards than a
-         full row stay centered rather than stranded. -->
+    <!-- The postcards. PostcardsList picks its own arrangement from the
+         viewport — a gallery grid where there's room for more than one card
+         per row, a scroll-driven deck where there isn't. -->
     {
-        displayed.length > 0 ? (
-            <div class="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip">
-                <ul class="mx-auto flex max-w-7xl flex-wrap justify-center gap-x-10 gap-y-14 px-6 2xl:max-w-[120rem]">
-                    {displayed.map((p) => (
-                        <li
-                            class:list={[
-                                "flex w-full max-w-2xl justify-center",
-                                displayed.length > 1 &&
-                                    "lg:w-[calc(50%-1.25rem)]",
-                                displayed.length > 2 &&
-                                    "2xl:w-[calc(33.333%-1.667rem)]",
-                            ]}
-                        >
-                            <PostcardItem {...toProps(p)} />
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        ) : (
+        displayed.length === 0 ? (
             <p class="font-mono text-base opacity-60">
                 No postcards from here yet.
             </p>
+        ) : (
+            <PostcardsList postcards={displayed} />
         )
     }
 

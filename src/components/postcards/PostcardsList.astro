@@ -1,0 +1,204 @@
+---
+/**
+ * The postcards, arranged to suit the screen — one set of markup, switched by
+ * media query alone (emitting both layouts would double the HTML).
+ *
+ * From `lg`: a full-bleed gallery, since two landscape cards side by side are
+ * wider than the reading column. Below it: the deck, where each card sticks
+ * near the top of the viewport and the next slides over it. Plain
+ * `position: sticky`, no JS — every card sticks inside one tall container.
+ *
+ * Offsets are scattered rather than evenly stepped, drawn from a PRNG seeded
+ * on the card's identity so they're stable across rebuilds and pages.
+ */
+import type { Postcard } from "astro:db";
+import PostcardItem from "./PostcardItem.astro";
+import { toPostcardProps } from "../../utils/postcards";
+import { createSeededRandom } from "../../utils/seededRandom";
+
+interface Props {
+    postcards: (typeof Postcard.$inferSelect)[];
+}
+
+const { postcards } = Astro.props;
+
+// Plain numbers, not lengths: the CSS multiplies them by --pc-lift /
+// --pc-spread, which shrink on narrow screens and are unused by the gallery.
+const scattered = postcards.map((postcard) => {
+    // Prefixed so this is independent of the values PostcardItem seeds from
+    // the same identity.
+    const rand = createSeededRandom(
+        `stack|${postcard.author}|${postcard.date.getTime()}`,
+    );
+    return {
+        postcard,
+        // Centred on zero so the deck as a whole sits on --pc-rest.
+        y: (rand() - 0.5).toFixed(3), // -0.5 … 0.5  → above/below the rest line
+        x: (rand() * 2 - 1).toFixed(3), // -1 … 1  → left/right of centre
+    };
+});
+---
+
+<div class="pc-bleed">
+    <ol class="pc-cards">
+        {
+            scattered.map(({ postcard, x, y }, index) => (
+                <li
+                    class="pc-slot"
+                    style={`--pc-x: ${x}; --pc-y: ${y}; z-index: ${index};`}
+                >
+                    <div class="pc-slot-card">
+                        <PostcardItem {...toPostcardProps(postcard)} />
+                    </div>
+                </li>
+            ))
+        }
+    </ol>
+</div>
+
+<style>
+    /* ---------- the deck (below lg) ---------- */
+
+    .pc-cards {
+        /* Where the deck rests, measured from the top of the viewport. */
+        --pc-rest: 2.5rem;
+        /* The band a card may land in, either side of that line. Kept small:
+           it's the edges of the cards underneath that read as a pile, and a
+           card that lands too far off hides the one in front of it. */
+        --pc-lift: 34px;
+        --pc-spread: 8px;
+        /* The page gutter, read from the same token the shell pads with.
+           Pulled out by margin and put back as padding, so the cards keep the
+           column's width while the clip boundary sits out in the gutter. */
+        --pc-bleed: var(--spacing-gutter);
+        /* How long a card stands unobstructed before the next slides over it.
+           Keep it short — the overlap is the effect; a long pause reads as a
+           slideshow of single cards. */
+        --pc-gap: 10vh;
+        /* Travel room for the last card (see ::after). Exactly one gap, so it
+           gets the same beat as every other card and no more. */
+        --pc-tail: var(--pc-gap);
+
+        list-style: none;
+        margin: 0 calc(-1 * var(--pc-bleed));
+        padding: 0 var(--pc-bleed);
+        /* Franking marks sit off the card's right edge and would give the page
+           a horizontal scrollbar. Clipped out in the gutter, so a leaning card
+           keeps the corner it leans past. `clip` not `hidden` — hidden would
+           make this a scroll container and break the sticky. */
+        overflow-x: clip;
+        /* Keep the per-card z-indexes (0…n) out of the page's stacking. */
+        isolation: isolate;
+    }
+
+    /* A sticky box can't be pushed past the bottom of its containing block,
+       which is the list's content box — padding wouldn't count. Without this
+       spacer the last card scrolls past mid-slide. */
+    .pc-cards::after {
+        content: "";
+        display: block;
+        height: var(--pc-tail);
+    }
+
+    .pc-slot {
+        position: sticky;
+        top: calc(var(--pc-rest) + var(--pc-y) * var(--pc-lift));
+        /* The gap lives on the slot, not between slots: a sticky box is
+           pinned by its top edge, so trailing padding buys scroll distance
+           without moving the card. */
+        padding-bottom: var(--pc-gap);
+    }
+
+    /* …except the last, whose padding would survive as real whitespace
+       wedged between the deck and whatever follows the list. */
+    .pc-slot:last-child {
+        padding-bottom: 0;
+    }
+
+    .pc-slot-card {
+        margin-inline: auto;
+        width: 100%;
+        max-width: var(--container-reading);
+        transform: translateX(calc(var(--pc-x) * var(--pc-spread)));
+    }
+
+    /* Phones: the card switches to its taller stacked layout and leans further
+       past its own edges, so the sideways scatter gives up its share. */
+    @media (max-width: 640px) {
+        .pc-cards {
+            --pc-rest: 2rem;
+            --pc-lift: 20px;
+            --pc-spread: 0px;
+            --pc-gap: 6vh;
+        }
+    }
+
+    /* Short viewports fall back to a plain list: a pinned card taller than the
+       screen can never be scrolled to the end of, putting the sender and date
+       out of reach. The tallest cards run ~590px. */
+    @media (max-height: 670px) {
+        .pc-slot {
+            position: static;
+        }
+        .pc-cards {
+            --pc-tail: 0px;
+        }
+    }
+
+    /* ---------- the gallery (lg and up) ---------- */
+
+    /* Tailwind's `lg` — the width at which a second card fits per row. */
+    @media (width >= 64rem) {
+        /* `left: 50%` centres against the subpage shell, which is `mx-auto`,
+           so this lands on the viewport centre. A postcards page therefore
+           can't move to ArticleLayout's rail grid, which isn't centred. */
+        .pc-bleed {
+            position: relative;
+            left: 50%;
+            width: 100vw;
+            transform: translateX(-50%);
+        }
+
+        .pc-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            column-gap: 2.5rem;
+            row-gap: 3.5rem;
+            margin-inline: auto;
+            max-width: 80rem;
+            padding: 0 var(--spacing-gutter);
+        }
+
+        /* The deck's travel room would otherwise become a stray flex item. */
+        .pc-cards::after {
+            display: none;
+        }
+
+        .pc-slot {
+            position: static;
+            padding-bottom: 0;
+            width: 100%;
+            max-width: var(--container-reading);
+        }
+
+        .pc-slot-card {
+            transform: none;
+        }
+
+        /* Only share rows once there's a second card, so a lone postcard
+           stays full width rather than stranded at half. */
+        .pc-cards:has(> :nth-child(2)) .pc-slot {
+            width: calc(50% - 1.25rem);
+        }
+    }
+
+    @media (width >= 96rem) {
+        .pc-cards {
+            max-width: 120rem;
+        }
+        .pc-cards:has(> :nth-child(3)) .pc-slot {
+            width: calc(33.333% - 1.667rem);
+        }
+    }
+</style>

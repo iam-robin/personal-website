@@ -5,7 +5,6 @@ import { sendPostcardNotification } from "../../utils/email";
 
 export const prerender = false;
 
-// Define color arrays (same as in PostcardItem.astro)
 const penColors = [
     "#000000", // Black
     "#0A3161", // Navy Blue
@@ -26,7 +25,6 @@ const paperColors = [
     "#F2F0E6", // Soft Ecru
 ];
 
-// Process form submission
 if (Astro.request.method === "POST") {
     try {
         const formData = await Astro.request.formData();
@@ -38,12 +36,12 @@ if (Astro.request.method === "POST") {
         const isPublished = false;
         const stampSvg = formData?.get("stamp-svg");
 
-        // Generate random style values
+        // Every postcard is drawn once, at submission, and the values are
+        // stored — so a card looks the same on every later render.
         const randomMarginBottom = Math.floor(Math.random() * 8);
         const randomMarginRight = Math.floor(Math.random() * 8);
         const randomRotation = Math.floor(Math.random() * 4 - 2);
 
-        // Select random colors
         const randomPenColorIndex = Math.floor(
             Math.random() * penColors.length,
         );
@@ -53,37 +51,31 @@ if (Astro.request.method === "POST") {
         );
         const paperColor = paperColors[randomPaperColorIndex];
 
-        // Font size and line height
         const fontSizeFactor = 0.9 + Math.random() * 0.2;
         const lineHeightFactor = 1.1 + Math.random() * 0.4;
 
-        // Author positioning
         const authorLeftOffset = Math.floor(Math.random() * 10) - 5;
         const authorTopOffset = Math.floor(Math.random() * 6) - 3;
         const authorRotation = Math.floor(Math.random() * 6) - 3;
 
-        // Date positioning
         const dateLeftOffset = Math.floor(Math.random() * 10) - 5;
         const dateTopOffset = Math.floor(Math.random() * 6) - 3;
         const dateRotation = Math.floor(Math.random() * 6) - 3;
 
-        // Body positioning
         const bodyLeftOffset = Math.floor(Math.random() * 8) - 4;
         const bodyTopOffset = Math.floor(Math.random() * 8) - 4;
         const bodyRotation = Math.floor(Math.random() * 4) - 2;
 
-        // Post Office Stamp positioning & rotation
         const postOfficeStampTop = Math.floor(Math.random() * 93) - 12; // -12px to 80px
         const postOfficeStampRight = Math.floor(Math.random() * 133) - 12; // -12px to 120px
         const postOfficeStampRotation = Math.floor(Math.random() * 31) - 15; // -15 to +15 degrees
 
-        // Wavy Lines Stamp positioning & rotation
         const wavyStampTop = Math.floor(Math.random() * 69) + 4; // 4px to 72px
         const wavyStampRight = Math.floor(Math.random() * 97) - 24; // -24px to 72px
         const wavyStampRotation = Math.floor(Math.random() * 21) - 10; // -10 to +10 degrees
 
         if (typeof author === "string" && typeof body === "string") {
-            // Deduplicate: skip if identical postcard was submitted in the last 5 minutes
+            // Swallow a double submit rather than storing the card twice.
             const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
             const existing = await db
                 .select({ id: Postcard.id })
@@ -105,7 +97,6 @@ if (Astro.request.method === "POST") {
                 body,
                 date,
                 isPublished,
-                // Store all the style values
                 marginBottom: randomMarginBottom,
                 marginRight: randomMarginRight,
                 rotation: randomRotation,
@@ -131,17 +122,14 @@ if (Astro.request.method === "POST") {
                     typeof websiteUrl === "string" && websiteUrl.trim() !== ""
                         ? websiteUrl
                         : undefined,
-                // Save Post Office Stamp styles
                 postOfficeStampTop,
                 postOfficeStampRight,
                 postOfficeStampRotation,
-                // Save Wavy Lines Stamp styles
                 wavyStampTop,
                 wavyStampRight,
                 wavyStampRotation,
             });
 
-            // Send email notification after successful database insertion
             await sendPostcardNotification({
                 author,
                 body,
@@ -156,14 +144,11 @@ if (Astro.request.method === "POST") {
                 date,
             });
 
-            // Redirect to success page after successful submission
             return Astro.redirect("/postcards/success");
         } else {
-            // Redirect to error page if required fields are missing
             return Astro.redirect("/postcards/error");
         }
     } catch (error) {
-        // Redirect to error page if database operation fails
         console.error("Error submitting postcard:", error);
         return Astro.redirect("/postcards/error");
     }
@@ -233,7 +218,7 @@ if (Astro.request.method === "POST") {
 
         <div class="flex flex-col pb-4">
             <label class="mb-4 font-mono text-sm">Your Stamp</label>
-            <div class="relative w-fit">
+            <div class="flex w-fit items-center gap-4">
                 <div
                     class="stamp relative inline-block h-[144px] w-[144px] bg-white p-[6px]"
                 >
@@ -245,7 +230,7 @@ if (Astro.request.method === "POST") {
                 <button
                     type="button"
                     id="regenerate-stamp"
-                    class="absolute top-2 right-2 rounded-full border border-ink bg-paper px-3 py-1 font-mono text-xs hover:bg-ink hover:text-paper"
+                    class="shrink-0 rounded-full border border-ink bg-paper px-3 py-1 font-mono text-xs hover:bg-ink hover:text-paper"
                 >
                     Regenerate
                 </button>
@@ -294,7 +279,6 @@ if (Astro.request.method === "POST") {
     import p5 from "p5";
     import P5SVGExtension from "p5.js-svg";
 
-    // Ensure p5.js-svg extension is applied
     if (typeof P5SVGExtension === "function") {
         P5SVGExtension(p5);
     } else {
@@ -304,7 +288,6 @@ if (Astro.request.method === "POST") {
     }
 
     const sketch = (p: any) => {
-        // Canvas and Grid Constants
         const CANVAS_WIDTH = 132;
         const CANVAS_HEIGHT = 132;
         const MIN_CELLS = 1;
@@ -318,9 +301,8 @@ if (Astro.request.method === "POST") {
         let shapeDrawingFunctions: Array<
             (x: number, y: number, size: number) => void
         > = [];
-        let currentPalette: string[] | undefined; // To store the randomly selected palette
+        let currentPalette: string[] | undefined;
 
-        // Define Color Palettes
         const colorPalettes: string[][] = [
             ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF"], // Bright & Playful
             ["#2C3E50", "#E74C3C", "#ECF0F1", "#3498DB", "#2ECC71"], // Modern Flat
@@ -338,12 +320,11 @@ if (Astro.request.method === "POST") {
             ["#5F45B2", "#9467C6", "#C888D9", "#FEACEE", "#428FFB"], // Pastel Purple/Blue
         ];
 
-        // Helper function to get a random color from the current palette
         const getRandomColorFromPalette = (): string => {
             if (currentPalette && currentPalette.length > 0) {
                 return p.random(currentPalette);
             }
-            // Fallback to a random hex color if palette is not set (should not happen)
+            // Should not happen — a palette is picked before any draw.
             return (
                 "#" +
                 Math.floor(Math.random() * 16777215)
@@ -352,29 +333,23 @@ if (Astro.request.method === "POST") {
             );
         };
 
-        // Function to select a new random palette
         const selectNewPalette = () => {
             currentPalette = p.random(colorPalettes);
         };
 
-        // Function to generate new grid parameters
         const generateGridParameters = () => {
             numCells = p.floor(p.random(MIN_CELLS, MAX_CELLS + 1));
             cellSize = CANVAS_WIDTH / numCells;
         };
 
-        // Define shape drawing functions
         const initializeShapeFunctions = (): void => {
             shapeDrawingFunctions = [
-                // Full Square
                 (x: number, y: number, size: number) => {
                     p.rect(x, y, size, size);
                 },
-                // Full Circle
                 (x: number, y: number, size: number) => {
                     p.ellipse(x + size / 2, y + size / 2, size, size);
                 },
-                // Triangles (filling half the square)
                 (x: number, y: number, size: number) => {
                     p.triangle(x, y, x + size, y, x, y + size);
                 },
@@ -387,7 +362,6 @@ if (Astro.request.method === "POST") {
                 (x: number, y: number, size: number) => {
                     p.triangle(x, y + size, x + size, y + size, x, y);
                 },
-                // Half Circles
                 (x: number, y: number, size: number) => {
                     p.arc(
                         x + size / 2,
@@ -432,7 +406,6 @@ if (Astro.request.method === "POST") {
                         p.PIE,
                     );
                 },
-                // Quarter Circles
                 (x: number, y: number, size: number) => {
                     p.arc(
                         x + size,
@@ -469,7 +442,6 @@ if (Astro.request.method === "POST") {
                 (x: number, y: number, size: number) => {
                     p.arc(x, y, size * 2, size * 2, 0, p.HALF_PI, p.PIE);
                 },
-                // Bean/Lens shape (diagonal top-left to bottom-right)
                 (x: number, y: number, size: number) => {
                     p.beginShape();
                     p.vertex(x, y);
@@ -477,7 +449,6 @@ if (Astro.request.method === "POST") {
                     p.quadraticVertex(x + size, y, x, y);
                     p.endShape(p.CLOSE);
                 },
-                // Bean/Lens shape (diagonal top-right to bottom-left)
                 (x: number, y: number, size: number) => {
                     p.beginShape();
                     p.vertex(x + size, y);
@@ -485,17 +456,14 @@ if (Astro.request.method === "POST") {
                     p.quadraticVertex(x + size, y + size, x + size, y);
                     p.endShape(p.CLOSE);
                 },
-                // Four Triangles meeting at center (dividing square by diagonals)
-                // Each triangle gets a different color from the palette.
+                // Four triangles meeting at the centre, one colour each.
                 (x: number, y: number, size: number) => {
                     const centerX = x + size / 2;
                     const centerY = y + size / 2;
 
-                    // Top triangle
                     p.fill(getRandomColorFromPalette());
                     p.triangle(x, y, x + size, y, centerX, centerY);
 
-                    // Right triangle
                     p.fill(getRandomColorFromPalette());
                     p.triangle(
                         x + size,
@@ -506,7 +474,6 @@ if (Astro.request.method === "POST") {
                         centerY,
                     );
 
-                    // Bottom triangle
                     p.fill(getRandomColorFromPalette());
                     p.triangle(
                         x + size,
@@ -517,29 +484,24 @@ if (Astro.request.method === "POST") {
                         centerY,
                     );
 
-                    // Left triangle
                     p.fill(getRandomColorFromPalette());
                     p.triangle(x, y + size, x, y, centerX, centerY);
                 },
-                // Concentric Circles
                 (x: number, y: number, size: number) => {
                     const centerX = x + size / 2;
                     const centerY = y + size / 2;
                     const outerDiameter = size;
                     const innerDiameter = size * 0.6; // Inner circle is 60% of the outer
 
-                    // Outer circle
                     p.fill(getRandomColorFromPalette());
                     p.ellipse(centerX, centerY, outerDiameter, outerDiameter);
 
-                    // Inner circle
                     p.fill(getRandomColorFromPalette());
                     p.ellipse(centerX, centerY, innerDiameter, innerDiameter);
                 },
             ];
         };
 
-        // Function to update the hidden SVG input field
         const updateStampSvgInput = () => {
             const hiddenInput = document.getElementById(
                 "stamp-svg",

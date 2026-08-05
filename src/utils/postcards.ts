@@ -10,6 +10,35 @@ export async function getNewestPostcards(limit = 3) {
         .limit(limit);
 }
 
+/** Every published postcard, newest first. */
+export async function getPublishedPostcards() {
+    return db
+        .select()
+        .from(Postcard)
+        .where(eq(Postcard.isPublished, true))
+        .orderBy(desc(Postcard.date));
+}
+
+/** Shared by every postcard route so they all paginate over the same slices. */
+export const POSTCARDS_PAGE_SIZE = 24;
+
+/**
+ * URL for a country/page combination. Page 1 lives at the base path; deeper
+ * pages append the number.
+ *
+ *   /postcards      /postcards/2      /postcards/country/Japan
+ */
+export function postcardsHref({
+    country,
+    page,
+}: {
+    country?: string;
+    page?: number;
+} = {}) {
+    const base = country ? `/postcards/country/${country}` : "/postcards";
+    return page && page > 1 ? `${base}/${page}` : base;
+}
+
 /** Map a DB row to PostcardItem props (drizzle nulls → undefined). */
 export const toPostcardProps = (postcard: typeof Postcard.$inferSelect) => ({
     author: postcard.author,
