@@ -1,0 +1,33 @@
+---
+/**
+ * The bookmark type mark — see `bookmarkTypes` in utils/bookmarks.ts for why
+ * shape and not colour.
+ *
+ * The shapes are drawn to equal *area*, not equal bounding box, so none looks
+ * heavier in a list: in the 10-unit box, r=4 circle, 7.2 square, full-box
+ * triangle and diamond.
+ */
+import { getBookmarkType } from "../../utils/bookmarks";
+
+interface Props {
+    type: string | null | undefined;
+    /** Extra classes; sizing lives here so the caller can't fight the shape. */
+    class?: string;
+}
+
+const { type, class: className } = Astro.props;
+const { label, shape } = getBookmarkType(type);
+---
+
+<svg
+    class:list={["h-2.5 w-2.5 shrink-0 fill-current", className]}
+    viewBox="0 0 10 10"
+    role="img"
+    aria-label={label}
+>
+    <title>{label}</title>
+    {shape === "circle" && <circle cx="5" cy="5" r="4" />}
+    {shape === "square" && <rect x="1.4" y="1.4" width="7.2" height="7.2" />}
+    {shape === "triangle" && <polygon points="1,0 10,5 1,10" />}
+    {shape === "diamond" && <polygon points="5,0 10,5 5,10 0,5" />}
+</svg>

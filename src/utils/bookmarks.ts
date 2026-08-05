@@ -45,6 +45,29 @@ export function getTags(
         .sort((a, b) => b.count - a.count);
 }
 
+/**
+ * Bookmark types, marked by shape rather than colour: the stocks
+ * (utils/paper.ts) put a hue under them, and solid ink reads the same in
+ * every room. Shapes are sized for equal optical weight — see
+ * BookmarkTypeMark.astro — and only need to be distinct at 10px.
+ */
+export const bookmarkTypes = [
+    { key: "article", label: "Article", shape: "circle" },
+    { key: "website", label: "Website", shape: "square" },
+    { key: "video", label: "Video", shape: "triangle" },
+    { key: "misc", label: "Misc", shape: "diamond" },
+] as const;
+
+export type BookmarkShape = (typeof bookmarkTypes)[number]["shape"];
+
+/** The type entry for a bookmark; anything unrecognised or missing is Misc. */
+export function getBookmarkType(type: string | null | undefined) {
+    return (
+        bookmarkTypes.find((t) => t.key === type) ??
+        bookmarkTypes[bookmarkTypes.length - 1]
+    );
+}
+
 /** URL-safe slug for a tag. */
 export function tagSlug(tag: string): string {
     return tag

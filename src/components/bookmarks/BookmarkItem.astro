@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import BookmarkTag from "./BookmarkTag.astro";
+import BookmarkTypeMark from "./BookmarkTypeMark.astro";
 import { getCover, type Bookmark } from "../../utils/bookmarks";
 
 interface Props {
@@ -20,14 +21,6 @@ try {
 } catch {
     /* keep raw url */
 }
-
-// Type indicator dot — colors ported from v3 (green/blue/lilac/red).
-const typeColor =
-    {
-        article: "oklch(0.75 0.16 155)",
-        video: "oklch(0.7 0.13 255.5)",
-        website: "oklch(0.81 0.11 295)",
-    }[bookmark.type ?? ""] ?? "oklch(0.73 0.14 22.5)";
 
 const cover = getCover(bookmark.cover);
 ---
@@ -51,11 +44,7 @@ const cover = getCover(bookmark.cover);
             )
         }
         <div class="flex max-w-[80%] shrink-0 items-center gap-2">
-            <div
-                class="h-2 w-2 shrink-0 rounded-full"
-                style={`background-color: ${typeColor}`}
-            >
-            </div>
+            <BookmarkTypeMark type={bookmark.type} />
             <p class="mr-2 truncate font-mono text-sm">{bookmark.title}</p>
             {
                 bookmark.tags.length > 0 && (
@@ -88,15 +77,11 @@ const cover = getCover(bookmark.cover);
         href={bookmark.url}
         target="_blank"
         rel="noopener noreferrer"
-        class="flex flex-col gap-2 border-b border-ink/10 py-4"
+        class="flex flex-col gap-2 border-b border-dotted border-ink/30 py-4"
     >
         <div class="flex items-center justify-between gap-1">
             <div class="flex shrink items-center gap-2 overflow-x-auto">
-                <div
-                    class="h-2 w-2 shrink-0 rounded-full"
-                    style={`background-color: ${typeColor}`}
-                >
-                </div>
+                <BookmarkTypeMark type={bookmark.type} />
                 <p class="mr-2 truncate font-mono text-xs">{bookmark.title}</p>
             </div>
             <p class="shrink-0 text-right font-mono text-xs opacity-40">
