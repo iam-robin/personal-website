@@ -1,5 +1,14 @@
 import type { ImageMetadata } from "astro";
 
+// The fan prints, in fan order. Imported one by one on purpose: an eager glob
+// over the folder emits *every* photo into the build, including the seven no
+// page renders — ~74MB of untouched camera JPEGs in dist/.
+import photo12 from "../assets/photos/12.jpg";
+import photo11 from "../assets/photos/11.jpg";
+import photo10 from "../assets/photos/10.jpg";
+import photo02 from "../assets/photos/02.jpg";
+import photo03 from "../assets/photos/03.jpg";
+
 // Fan images shown for a project on hover — stacked in the homepage hero,
 // cursor-following on /projects. Poster filenames are number-prefixed to
 // control the fan order.
@@ -11,15 +20,7 @@ const matchprintPosters = Object.keys(posterModules)
     .sort()
     .map((key) => posterModules[key].default);
 
-// A hand-picked set of prints, in fan order.
-const FAN_PHOTO_IDS = ["12", "11", "10", "02", "03"];
-const photoModules = import.meta.glob<{ default: ImageMetadata }>(
-    "../assets/photos/*.{jpg,jpeg,png}",
-    { eager: true },
-);
-const fanPhotos = FAN_PHOTO_IDS.map(
-    (id) => photoModules[`../assets/photos/${id}.jpg`].default,
-);
+const fanPhotos = [photo12, photo11, photo10, photo02, photo03];
 
 // handcoded.art has the project id "geeenerated".
 const artModules = import.meta.glob<{ default: ImageMetadata }>(
