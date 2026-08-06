@@ -28,6 +28,13 @@ const NOT_INDEXED = [
 // https://astro.build/config
 export default defineConfig({
   site: 'https://iamrob.in',
+  /*
+    Astro caches optimized images here (default: node_modules/.astro). Nixpacks
+    mounts node_modules/.cache as the Docker build cache, so pointing the two
+    at the same place is what makes the cache survive between deploys —
+    otherwise every build re-encodes all ~97 images from cold.
+  */
+  cacheDir: './node_modules/.cache/astro',
   integrations: [
     db(),
     icon(),
