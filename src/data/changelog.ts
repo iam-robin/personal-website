@@ -21,8 +21,8 @@ export const changelog: Entry[] = [
     {
         version: "4.0.0",
         title: "🐦 A fresh start",
-        date: "2026-07-15",
-        body: "A ground-up rebuild. v3 had grown a little busy, so I started over with a clearer idea: keep the personal and the professional side by side without splitting who I am. Work lives on its own page now, the playful bits gather on the home page and About, and the whole thing is lighter and calmer. Rebuilt on Astro and Tailwind, still fed straight from my Obsidian vault — and there's a little robin watching over it all.",
+        date: "2026-08-06",
+        body: "A ground-up rebuild. v3 had grown a little busy, so I started over with a clearer idea: keep the personal and the professional side by side without splitting who I am. Work lives on its own page now, the playful bits gather on the home page, and the whole thing is lighter and calmer. Rebuilt on Astro and Tailwind, still fed straight from my Obsidian vault — and there's a little robin watching over it all.",
     },
     {
         version: "3.5.0",

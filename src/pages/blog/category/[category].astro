@@ -25,10 +25,7 @@ const posts = allPosts.filter((post) => post.data.category === category);
 const label = categoryLabel(category);
 ---
 
-<SubpageLayout
-    title="Blog"
-    documentTitle={`${label} — Blog — Robin Spielmann`}
->
+<SubpageLayout title="Blog" documentTitle={`${label} — Blog — Robin Spielmann`}>
     <BlogFilter categories={categories} active={category} />
     <div class="mt-12">
         <BlogPostList posts={posts} />
