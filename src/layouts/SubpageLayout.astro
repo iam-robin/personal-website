@@ -19,14 +19,23 @@ interface Props {
     documentTitle?: string;
     /** Drop the title/description hero; the page body starts right below the top bar. */
     hideHero?: boolean;
+    /** Keep the page out of search results. Used by the placeholder media logs. */
+    noindex?: boolean;
 }
 
-const { title, description, documentTitle, hideHero = false } = Astro.props;
+const {
+    title,
+    description,
+    documentTitle,
+    hideHero = false,
+    noindex = false,
+} = Astro.props;
 ---
 
 <Layout
     title={documentTitle ?? `${title} — Robin Spielmann`}
     description={description}
+    noindex={noindex}
 >
     <div
         class="@container mx-auto flex min-h-dvh max-w-shell flex-col px-gutter py-8"

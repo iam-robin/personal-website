@@ -21,7 +21,10 @@ const { Content } = await render(project);
 const { title, description, tags, year } = project.data;
 ---
 
-<Layout title={`${title} — Projects — Robin Spielmann`}>
+<Layout
+    title={`${title} — Projects — Robin Spielmann`}
+    description={description}
+>
     <a
         href="/projects"
         aria-label="Close"

@@ -4,11 +4,42 @@ import tailwindcss from '@tailwindcss/vite';
 import db from '@astrojs/db';
 import icon from 'astro-icon';
 import node from '@astrojs/node';
+import sitemap from '@astrojs/sitemap';
+
+/*
+  Routes kept out of the sitemap: the postcard form's utility pages (nothing to
+  index — a form, a receipt and an error), the two RSS feeds (they are not
+  pages), and the four media logs, which are still placeholders. The same list
+  is mirrored in public/robots.txt; the media logs additionally carry a
+  `noindex` from Layout.astro. Drop them from both places once they ship.
+*/
+const NOT_INDEXED = [
+  '/postcards/error',
+  '/postcards/success',
+  '/postcards/new',
+  '/blog-rss.xml',
+  '/bookmarks-rss.xml',
+  '/books',
+  '/movies',
+  '/series',
+  '/music',
+];
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://iamrob.in',
-  integrations: [db(), icon()],
+  integrations: [
+    db(),
+    icon(),
+    sitemap({
+      filter: (page) => {
+        // Compare on the path alone, and without the trailing slash Astro
+        // appends — otherwise every entry above would need two spellings.
+        const path = new URL(page).pathname.replace(/\/$/, '');
+        return !NOT_INDEXED.includes(path);
+      },
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

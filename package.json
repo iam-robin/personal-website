@@ -9,12 +9,14 @@
     "dev": "git submodule update --remote data && astro dev",
     "build": "astro build --remote",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate:icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@astrojs/db": "^0.21.3",
     "@astrojs/node": "^11.0.2",
     "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
     "@iconify-json/ph": "^1.2.2",
     "@tailwindcss/vite": "^4.3.2",
     "astro": "^7.0.5",

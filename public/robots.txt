@@ -1,0 +1,15 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Utility routes with nothing to index
+Disallow: /postcards/error
+Disallow: /postcards/success
+Disallow: /postcards/new
+
+# The four media logs are still placeholders. They are kept out with a
+# `noindex` on the pages themselves rather than a Disallow here: a disallowed
+# URL is never fetched, so the noindex would never be read, and the URL could
+# still be indexed bare if anything ever linked to it.
+
+Sitemap: https://iamrob.in/sitemap-index.xml
