@@ -217,13 +217,37 @@ if (Astro.request.method === "POST") {
         </div>
 
         <div class="flex flex-col pb-4">
-            <label class="mb-4 font-mono text-sm">Your Stamp</label>
+            <label class="mb-1 font-mono text-sm">Your Stamp</label>
+            <span class="mb-4 font-mono text-xs opacity-50"
+                >Two flavours. Hit regenerate until one feels like yours.</span
+            >
+
+            <div class="mb-4 flex w-fit gap-2">
+                <button
+                    type="button"
+                    data-stamp-variant="shapes"
+                    aria-pressed="true"
+                    class="variant-pill rounded-full bg-ink/5 px-3 py-1 font-mono text-sm text-ink/55 transition-colors hover:bg-ink/10 hover:text-ink"
+                >
+                    Shapes
+                </button>
+                <button
+                    type="button"
+                    data-stamp-variant="bird"
+                    aria-pressed="false"
+                    class="variant-pill rounded-full bg-ink/5 px-3 py-1 font-mono text-sm text-ink/55 transition-colors hover:bg-ink/10 hover:text-ink"
+                >
+                    Robin
+                </button>
+            </div>
+
             <div class="flex w-fit items-center gap-4">
                 <div
                     class="stamp relative inline-block h-[144px] w-[144px] bg-white p-[6px]"
                 >
                     <div class="h-full w-full bg-white">
                         <div id="stamp-preview"></div>
+                        <div id="stamp-preview-bird" hidden></div>
                     </div>
                 </div>
 
@@ -262,6 +286,12 @@ if (Astro.request.method === "POST") {
 </script>
 
 <style>
+    /* The picked variant flips to solid ink, same as an active FilterTag. */
+    .variant-pill[aria-pressed="true"] {
+        background-color: var(--color-ink);
+        color: var(--color-paper);
+    }
+
     .stamp {
         -webkit-filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.5));
         background: radial-gradient(
@@ -278,6 +308,7 @@ if (Astro.request.method === "POST") {
 <script>
     import p5 from "p5";
     import P5SVGExtension from "p5.js-svg";
+    import { generateBirdStamp } from "../../utils/stamps/birdStamp";
 
     if (typeof P5SVGExtension === "function") {
         P5SVGExtension(p5);
@@ -286,6 +317,25 @@ if (Astro.request.method === "POST") {
             "P5SVGExtension is not a function. SVG rendering might fail.",
         );
     }
+
+    // Two generators, one hidden input. Each keeps its own last result so
+    // switching back and forth restores exactly what's still on screen —
+    // neither preview is redrawn when it's only being revealed again.
+    type StampVariant = "shapes" | "bird";
+    let activeVariant: StampVariant = "shapes";
+    let shapesSvg = "";
+    let birdSvg = "";
+
+    const setStampSvgInput = (svg: string) => {
+        const hiddenInput = document.getElementById(
+            "stamp-svg",
+        ) as HTMLInputElement | null;
+        if (!hiddenInput) {
+            console.error("Hidden input #stamp-svg not found!");
+            return;
+        }
+        hiddenInput.value = svg;
+    };
 
     const sketch = (p: any) => {
         const CANVAS_WIDTH = 132;
@@ -503,32 +553,25 @@ if (Astro.request.method === "POST") {
         };
 
         const updateStampSvgInput = () => {
-            const hiddenInput = document.getElementById(
-                "stamp-svg",
-            ) as HTMLInputElement | null;
-            if (!hiddenInput) {
-                console.error("Hidden input #stamp-svg not found!");
-                return;
-            }
-
             if (
                 p5canvas &&
                 (p5canvas as any).svg &&
                 typeof (p5canvas as any).svg.outerHTML === "string"
             ) {
                 const svgString = (p5canvas as any).svg.outerHTML;
-                if (
+                shapesSvg =
                     svgString &&
                     svgString.length > 0 &&
                     svgString.startsWith("<svg")
-                ) {
-                    hiddenInput.value = svgString;
-                } else {
-                    hiddenInput.value = "";
-                }
+                        ? svgString
+                        : "";
             } else {
-                hiddenInput.value = "";
+                shapesSvg = "";
             }
+
+            // p5 draws on setup regardless of which variant is showing; only
+            // the active one owns the input.
+            if (activeVariant === "shapes") setStampSvgInput(shapesSvg);
         };
 
         p.setup = () => {
@@ -590,19 +633,58 @@ if (Astro.request.method === "POST") {
 
     const p5Instance = new p5(sketch);
 
+    const shapesPreview = document.getElementById("stamp-preview");
+    const birdPreview = document.getElementById("stamp-preview-bird");
+
+    const regenerateShapes = () => {
+        if (typeof (p5Instance as any).regenerate === "function") {
+            (p5Instance as any).regenerate();
+        } else {
+            console.error("p5 instance or regenerate function not available.");
+        }
+    };
+
+    const regenerateBird = () => {
+        birdSvg = generateBirdStamp();
+        if (birdPreview) birdPreview.innerHTML = birdSvg;
+        setStampSvgInput(birdSvg);
+    };
+
+    const setVariant = (variant: StampVariant) => {
+        activeVariant = variant;
+
+        for (const button of document.querySelectorAll<HTMLButtonElement>(
+            "[data-stamp-variant]",
+        )) {
+            button.setAttribute(
+                "aria-pressed",
+                String(button.dataset.stampVariant === variant),
+            );
+        }
+
+        shapesPreview?.toggleAttribute("hidden", variant !== "shapes");
+        birdPreview?.toggleAttribute("hidden", variant !== "bird");
+
+        // The revealed preview is still showing its last result, so hand the
+        // input that same string rather than drawing a new one.
+        if (variant === "bird" && !birdSvg) regenerateBird();
+        else setStampSvgInput(variant === "bird" ? birdSvg : shapesSvg);
+    };
+
+    for (const button of document.querySelectorAll<HTMLButtonElement>(
+        "[data-stamp-variant]",
+    )) {
+        button.addEventListener("click", () => {
+            const variant = button.dataset.stampVariant;
+            if (variant === "shapes" || variant === "bird") setVariant(variant);
+        });
+    }
+
     const regenerateButton = document.getElementById("regenerate-stamp");
     if (regenerateButton) {
         regenerateButton.addEventListener("click", () => {
-            if (
-                p5Instance &&
-                typeof (p5Instance as any).regenerate === "function"
-            ) {
-                (p5Instance as any).regenerate();
-            } else {
-                console.error(
-                    "p5 instance or regenerate function not available.",
-                );
-            }
+            if (activeVariant === "bird") regenerateBird();
+            else regenerateShapes();
         });
     } else {
         console.error("Regenerate button not found.");

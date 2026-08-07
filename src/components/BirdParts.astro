@@ -1,0 +1,35 @@
+---
+// One mood's worth of robin, painted in the current colour. Shared by every
+// state in Bird.astro so the paths live in exactly one place — see
+// src/data/birdShape.ts.
+import type { BirdPart } from "../data/birdShape";
+
+interface Props {
+    parts: readonly BirdPart[];
+}
+
+const { parts } = Astro.props;
+---
+
+{
+    parts.map((part) =>
+        part.strokeWidth ? (
+            <path
+                d={part.d}
+                stroke="currentColor"
+                stroke-width={part.strokeWidth}
+                stroke-linecap="round"
+            />
+        ) : (
+            <path
+                class={part.class}
+                d={part.d}
+                fill={
+                    part.role === "void"
+                        ? "var(--color-paper, white)"
+                        : "currentColor"
+                }
+            />
+        ),
+    )
+}

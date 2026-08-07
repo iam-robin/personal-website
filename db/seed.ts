@@ -1,4 +1,5 @@
 import { db, Postcard } from "astro:db";
+import { generateBirdStamp } from "../src/utils/stamps/birdStamp";
 
 // Four generative stamp SVGs (as produced by the /postcards/new p5 sketch),
 // reused across the mock postcards so each card looks complete.
@@ -11,7 +12,17 @@ const STAMP_BLUE =
 const STAMP_REDGREEN =
     '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="132" height="132" viewBox="0 0 132 132"><defs></defs><g><rect fill="rgb(255,255,255)" stroke="none" x="0" y="0" width="132" height="132" transform="matrix(1 0 0 1 0 0)" fill-opacity="1"></rect><path fill="rgb(236,240,241)" stroke="none" paint-order="stroke fill markers" d=" M 0 0 L 66 0 L 66 66 L 0 66 L 0 0 Z" fill-opacity="1"></path><path fill="rgb(52,152,219)" stroke="none" paint-order="stroke fill markers" d=" M 66 66 A 66 66 0 0 1 0 8.082668874372531e-15 L 66 0 Z" fill-opacity="1"></path><path fill="rgb(231,76,60)" stroke="none" paint-order="stroke fill markers" d=" M 0 66 L 66 66 L 66 132 L 0 132 L 0 66 Z" fill-opacity="1"></path><path fill="rgb(231,76,60)" stroke="none" paint-order="stroke fill markers" d=" M 66 99 A 33 33 0 1 1 65.99998350000138 98.96700000549998 Z" fill-opacity="1"></path><path fill="rgb(231,76,60)" stroke="none" paint-order="stroke fill markers" d=" M 52.8 99 A 19.8 19.8 0 1 1 52.79999010000083 98.98020000329998 Z" fill-opacity="1"></path><path fill="rgb(52,152,219)" stroke="none" paint-order="stroke fill markers" d=" M 66 0 L 132 0 L 132 66 L 66 66 L 66 0 Z" fill-opacity="1"></path><path fill="rgb(236,240,241)" stroke="none" paint-order="stroke fill markers" d=" M 132 0 A 66 66 0 0 1 66 66 L 66 0 Z" fill-opacity="1"></path><path fill="rgb(236,240,241)" stroke="none" paint-order="stroke fill markers" d=" M 66 66 L 132 66 L 132 132 L 66 132 L 66 66 Z" fill-opacity="1"></path><path fill="rgb(46,204,113)" stroke="none" paint-order="stroke fill markers" d=" M 66 66 L 132 66 L 132 132 L 66 132 L 66 66 Z" fill-opacity="1"></path></g></svg>';
 
-const STAMPS = [STAMP_PURPLE, STAMP_ORANGE, STAMP_BLUE, STAMP_REDGREEN];
+// Both kinds of stamp, so local dev shows them side by side. The robin ones
+// are drawn fresh on every seed — they're generative, so a new roll each time
+// is the point.
+const STAMPS = [
+    STAMP_PURPLE,
+    generateBirdStamp(),
+    STAMP_ORANGE,
+    STAMP_BLUE,
+    generateBirdStamp(),
+    STAMP_REDGREEN,
+];
 const PEN = ["#000000", "#0A3161", "#00356B", "#1F3A3D", "#2E5090", "#3B2F2F"];
 const PAPER = [
     "#FCFAF7",

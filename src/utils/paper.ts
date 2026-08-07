@@ -37,24 +37,59 @@ function hexToOklab(hex: string): [number, number, number] {
     ];
 }
 
-function oklabToHex([L, a, b]: [number, number, number]): string {
+/** The three sRGB channels, unclamped — so callers can tell in-gamut from not. */
+function oklabToSrgb([L, a, b]: [number, number, number]): [
+    number,
+    number,
+    number,
+] {
     const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
     const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
     const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+    return [
+        4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+        -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+        -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+    ].map(linearToSrgb) as [number, number, number];
+}
+
+function srgbToHex(rgb: [number, number, number]): string {
     return (
         "#" +
-        [
-            4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
-            -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
-            -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
-        ]
+        rgb
             .map((c) =>
-                Math.round(Math.min(1, Math.max(0, linearToSrgb(c))) * 255)
+                Math.round(Math.min(1, Math.max(0, c)) * 255)
                     .toString(16)
                     .padStart(2, "0"),
             )
             .join("")
     );
+}
+
+function oklabToHex(lab: [number, number, number]): string {
+    return srgbToHex(oklabToSrgb(lab));
+}
+
+/**
+ * oklch → hex, chroma-clamped rather than channel-clamped. The requested C is
+ * out of the sRGB gamut at many hues; clipping the channels there would shift
+ * the hue and flatten the colour, so instead the chroma is walked down until
+ * the whole triple fits. Same trick the stocks above were cut by hand with —
+ * this just does it at runtime, for the postcard stamps.
+ */
+export function oklchToHex(L: number, C: number, hue: number): string {
+    const rad = (hue * Math.PI) / 180;
+    const cos = Math.cos(rad);
+    const sin = Math.sin(rad);
+
+    for (let c = C; c > 0; c -= 0.003) {
+        const rgb = oklabToSrgb([L, c * cos, c * sin]);
+        // A hair of tolerance: the round-trip lands a touch outside on colours
+        // that are, for our purposes, exactly on the boundary.
+        if (rgb.every((v) => v >= -0.001 && v <= 1.001)) return srgbToHex(rgb);
+    }
+
+    return srgbToHex(oklabToSrgb([L, 0, 0]));
 }
 
 /**
