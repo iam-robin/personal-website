@@ -18,10 +18,20 @@ const TOTAL_COUNTRIES = 195;
 const countryFlags = Object.fromEntries(
     COUNTRIES.flatMap((country) => {
         const entries: [string, string][] = [[country.name, country.flag]];
-        country.aliases?.forEach((alias) => entries.push([alias, country.flag]));
+        country.aliases?.forEach((alias) =>
+            entries.push([alias, country.flag]),
+        );
         return entries;
     }),
 );
+
+const visitedLabels = visitedCountries.flatMap((name) => {
+    const country = COUNTRIES.find((c) => c.name === name);
+    const labels = country
+        ? [country.name, ...(country.aliases ?? [])]
+        : [name];
+    return labels.map((label) => label.toLowerCase());
+});
 ---
 
 <section>
@@ -50,16 +60,16 @@ const countryFlags = Object.fromEntries(
     }
 </style>
 
-<script define:vars={{ visitedCountries, countryFlags }}>
+<script define:vars={{ visitedLabels, countryFlags }}>
     function initWorldMap() {
         const paths = document.querySelectorAll(".world-map path");
         const tooltip = document.getElementById("map-tooltip");
         if (!tooltip || !paths.length) return;
 
         paths.forEach((path) => {
-            const name =
-                path.getAttribute("name") || path.getAttribute("class");
-            if (name && visitedCountries.includes(name)) {
+            const name = (path.dataset.country ??=
+                path.getAttribute("name") || path.getAttribute("class") || "");
+            if (name && visitedLabels.includes(name.toLowerCase())) {
                 path.classList.add("active");
             }
             path.addEventListener("mouseenter", () => {
