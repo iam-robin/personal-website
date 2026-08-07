@@ -106,6 +106,16 @@ const paper = papers[paperKey];
     <meta property="og:image:alt" content="Robin Spielmann — Design Engineer" />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <!-- Self-hosted Umami, same instance and site id as v3 so the numbers
+         carry over instead of restarting at zero. `data-domains` keeps dev
+         and preview builds out of the stats — the script no-ops anywhere
+         that isn't the live host. -->
+    <script
+      defer
+      src="https://umami.iamrob.in/script.js"
+      data-website-id="9e274244-e311-4ebe-8ff0-c691ce080455"
+      data-domains="iamrob.in"></script>
+
     <!-- The feeds also live in the RSS dropdown; these are what a reader
          pointed at the bare domain discovers. -->
     <link
