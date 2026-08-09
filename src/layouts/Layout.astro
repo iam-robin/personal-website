@@ -1,13 +1,13 @@
 ---
-import '../styles/global.css';
-import InkDefs from '../components/ui/InkDefs.astro';
-import { getPaperKey, papers } from '../utils/paper';
+import "../styles/global.css";
+import InkDefs from "../components/ui/InkDefs.astro";
+import { getPaperKey, papers } from "../utils/paper";
 
 interface Props {
-  title: string;
-  description?: string;
-  /** Keep the page out of search results. Used by the placeholder media logs. */
-  noindex?: boolean;
+    title: string;
+    description?: string;
+    /** Keep the page out of search results. Used by the placeholder media logs. */
+    noindex?: boolean;
 }
 
 /*
@@ -15,12 +15,12 @@ interface Props {
   pass one — this exists so none ever ships bare.
 */
 const DEFAULT_DESCRIPTION =
-  "Robin Spielmann — a design engineer at the intersection of code, design and art. My own little space on the internet.";
+    "Robin Spielmann — a design engineer at the intersection of code, design and art. My own little space on the internet.";
 
 const {
-  title,
-  description = DEFAULT_DESCRIPTION,
-  noindex = false,
+    title,
+    description = DEFAULT_DESCRIPTION,
+    noindex = false,
 } = Astro.props;
 
 /*
@@ -52,90 +52,108 @@ const paper = papers[paperKey];
 ---
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+    <head>
+        <meta charset="utf-8" />
 
-    <!-- SVG first: browsers that take it get the robin that inverts with the
+        <!-- SVG first: browsers that take it get the robin that inverts with the
          colour scheme. The rest fall back down the list. -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <link
-      rel="preload"
-      href="/fonts/apercu-regular-pro.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/apercu-bold-pro.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/fira-mono-v14-latin-regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="theme-color" content={paper.hex} />
-    <meta name="generator" content={Astro.generator} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+        />
+        <link rel="icon" href="/favicon.ico" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link
+            rel="preload"
+            href="/fonts/apercu-regular-pro.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+        <link
+            rel="preload"
+            href="/fonts/apercu-bold-pro.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+        <link
+            rel="preload"
+            href="/fonts/fira-mono-v14-latin-regular.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="theme-color" content={paper.hex} />
+        <meta name="generator" content={Astro.generator} />
 
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonical} />
+        {noindex && <meta name="robots" content="noindex, follow" />}
 
-    <!-- Per-page images can come later: add an `ogImage` prop and let it
+        <!-- Per-page images can come later: add an `ogImage` prop and let it
          override the constant above. -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="iamrobin" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Robin Spielmann — Design Engineer" />
-    <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="iamrobin" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+            property="og:image:alt"
+            content="Robin Spielmann — Design Engineer"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Self-hosted Umami, same instance and site id as v3 so the numbers
+        <!-- Self-hosted Umami, same instance and site id as v3 so the numbers
          carry over instead of restarting at zero. `data-domains` keeps dev
          and preview builds out of the stats — the script no-ops anywhere
-         that isn't the live host. -->
-    <script
-      defer
-      src="https://umami.iamrob.in/script.js"
-      data-website-id="9e274244-e311-4ebe-8ff0-c691ce080455"
-      data-domains="iamrob.in"></script>
+         that isn't the live host. The match is exact string equality against
+         location.hostname, so www has to be listed separately: the server
+         answers on both and doesn't redirect. -->
+        <script
+            defer
+            src="https://umami.iamrob.in/script.js"
+            data-website-id="9e274244-e311-4ebe-8ff0-c691ce080455"></script>
 
-    <!-- The feeds also live in the RSS dropdown; these are what a reader
+        <!-- The feeds also live in the RSS dropdown; these are what a reader
          pointed at the bare domain discovers. -->
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title="iamrobin — Blog"
-      href="/blog-rss.xml"
-    />
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title="iamrobin — Bookmarks"
-      href="/bookmarks-rss.xml"
-    />
-  </head>
-  <body
-    data-paper={paperKey}
-    style={`--paper: ${paper.hex}; --surface: ${paper.surface}`}
-  >
-    <InkDefs />
-    <slot />
-  </body>
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="iamrobin — Blog"
+            href="/blog-rss.xml"
+        />
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="iamrobin — Bookmarks"
+            href="/bookmarks-rss.xml"
+        />
+    </head>
+    <body
+        data-paper={paperKey}
+        style={`--paper: ${paper.hex}; --surface: ${paper.surface}`}
+    >
+        <InkDefs />
+        <slot />
+    </body>
 </html>
