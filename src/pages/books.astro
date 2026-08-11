@@ -1,12 +1,74 @@
 ---
 import SubpageLayout from "../layouts/SubpageLayout.astro";
-import Placeholder from "../components/ui/Placeholder.astro";
+import ShelfRow from "../components/books/ShelfRow.astro";
+import { getShelfYears } from "../utils/books";
+
+/*
+  "On the pile" — the paused and want-to-read books — is held back for now.
+  `getPile()` in utils/books.ts is still there; bring back the import, an
+  `<Eyebrow>` and a list to restore it.
+*/
+const years = await getShelfYears();
+
+const total = years.reduce((sum, year) => sum + year.books.length, 0);
+
+/*
+  Connecting an open book to its own line in the detail strip under the row.
+
+  This can't be an Astro scoped style: `.shelf-row` and `.shelf-detail` are
+  ShelfRow's, `details[open]` is BookSpine's, and a scoped selector gets its
+  own component's hash stamped on it — so the cross-component compound would
+  never match. Generated + `is:inline` is the house pattern for computed CSS
+  (see index.astro's hero panels).
+
+  Books and detail lines are emitted in the same order, so one rule per index
+  covers every row. Derived from the data so a bumper year can't outgrow it.
+
+  The line fades in behind the book — text arriving with the turn competes
+  with it — but hides immediately. `visibility` carries the delay because
+  opacity alone would leave the outgoing line catching the pointer.
+*/
+const maxBooks = Math.max(...years.map((year) => year.books.length));
+
+const detailCss = `
+.shelf-detail > span {
+    opacity: 0;
+    visibility: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .shelf-detail > span {
+        transition: opacity 160ms ease-out, visibility 0s 160ms;
+    }
+${Array.from(
+    { length: maxBooks },
+    (_, i) => `
+    .shelf-row:has(.shelf > li:nth-child(${i + 1}) details[open]) .shelf-detail > span:nth-child(${i + 1}) {
+        transition: opacity 220ms ease-out 380ms, visibility 0s 380ms;
+    }`,
+).join("")}
+}
+${Array.from(
+    { length: maxBooks },
+    (_, i) => `
+.shelf-row:has(.shelf > li:nth-child(${i + 1}) details[open]) .shelf-detail > span:nth-child(${i + 1}) {
+    opacity: 1;
+    visibility: visible;
+}`,
+).join("")}`;
 ---
 
 <SubpageLayout
-    noindex
     title="Books"
-    description="I keep track of the books I read in Obsidian, where I log and organize everything I've finished. To make this collection easier to browse, the data is automatically updated and displayed here on my website. It serves as a personal archive and a way to look back at my reading over time."
+    description="Every book I finish gets logged in Obsidian — title, cover, page count, even the colour of its spine. This page is that log, stood upright. Click a book to turn it around."
 >
-    <Placeholder label="Books shelf — coming soon" />
+    <div class="flex flex-col gap-16">
+        {years.map((year) => <ShelfRow year={year} />)}
+    </div>
+
+    <p class="mt-16 font-mono text-xs opacity-40">
+        {total} books on the shelf.
+    </p>
 </SubpageLayout>
+
+<style is:inline set:html={detailCss}></style>

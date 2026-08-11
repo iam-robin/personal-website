@@ -42,9 +42,21 @@ const linkAttrs = draft
 // A draft row is not a link, so it also drops .ink-row: the shared hover
 // (mark forward, title underlined) is the site's promise that a row leads
 // somewhere, and a row that doesn't must not make it.
+//
+// Three-column grid — mark · body · meta — rather than nested flex, so the
+// description and tags can span past the meta column below `sm`. Sharing a
+// column with "ongoing ↗" on a phone left them a ~40-character ribbon.
+const gridClass =
+    "grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 py-5 font-mono sm:gap-x-4";
 const rowClass = draft
-    ? "project-card is-draft flex items-start gap-4 py-5 font-mono cursor-not-allowed select-none"
-    : "project-card ink-row flex items-start gap-4 py-5 font-mono";
+    ? `project-card is-draft ${gridClass} cursor-not-allowed select-none`
+    : `project-card ink-row ${gridClass}`;
+
+// Description and tags: full width on a phone, boxed into the middle
+// column from `sm` up so they never run under the meta. Column *end*
+// lines, not `col-span-*` — the span utilities emit the `grid-column`
+// shorthand, which resets the start line back to auto.
+const bodySpan = "col-start-2 col-end-4 sm:col-end-3";
 
 const meta = (tags ?? []).join(" · ");
 ---
@@ -60,30 +72,48 @@ const meta = (tags ?? []).join(" · ");
         name={slug}
         class:list={[
             draft ? "opacity-20" : "ink-row-mark",
-            "mt-1 h-5 w-5 shrink-0",
+            "col-start-1 row-start-1 mt-1 h-5 w-5",
         ]}
     />
-    <div class="flex min-w-0 flex-1 flex-col gap-1">
-        <h3 class:list={["ink-row-title text-base", { "opacity-60": draft }]}>
-            {title}
-        </h3>
-        <p class:list={["text-sm", draft ? "opacity-40" : "opacity-70"]}>
-            {description}
-        </p>
-        {
-            draft ? (
-                <span class="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full border border-dotted border-ink/40 px-2.5 py-0.5 text-xs opacity-60">
-                    <span class="h-1.5 w-1.5 rounded-full bg-ink/40" />
-                    Coming soon
+    <h3
+        class:list={[
+            "ink-row-title col-start-2 row-start-1 text-base",
+            { "opacity-60": draft },
+        ]}
+    >
+        {title}
+    </h3>
+    <p
+        class:list={[
+            bodySpan,
+            "row-start-2 text-sm",
+            draft ? "opacity-40" : "opacity-70",
+        ]}
+    >
+        {description}
+    </p>
+    {
+        draft ? (
+            <span
+                class:list={[
+                    bodySpan,
+                    "row-start-3 mt-1 inline-flex w-fit items-center gap-1.5 rounded-full border border-dotted border-ink/40 px-2.5 py-0.5 text-xs opacity-60",
+                ]}
+            >
+                <span class="h-1.5 w-1.5 rounded-full bg-ink/40" />
+                Coming soon
+            </span>
+        ) : (
+            meta && (
+                <span class:list={[bodySpan, "row-start-3 text-sm opacity-40"]}>
+                    {meta}
                 </span>
-            ) : (
-                meta && <span class="text-sm opacity-40">{meta}</span>
             )
-        }
-    </div>
+        )
+    }
     <span
         class:list={[
-            "flex shrink-0 items-center gap-2 text-sm whitespace-nowrap",
+            "col-start-3 row-start-1 flex items-center gap-2 text-sm whitespace-nowrap",
             draft ? "opacity-30" : "ink-row-meta",
         ]}
     >

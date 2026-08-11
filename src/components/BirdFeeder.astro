@@ -1,6 +1,7 @@
 ---
 // Click the empty band next to the logo to drop a crumb; the bird hops over,
-// pecks it up and hops home. An undiscoverable easter egg — no cursor change.
+// pecks it up and hops home. The only hint: over the band, the (unchanged)
+// cursor carries a crumb at its tip — dropped on click, back on the next move.
 //
 // Two nested transforms so nothing fights over `transform`:
 //   [data-feeder-bird]  travel   — the hops (translate)
@@ -33,6 +34,7 @@ const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
     <div class="feeder-bird" data-feeder-bird>
         <Bird class="h-full w-auto" />
     </div>
+    <span class="cursor-crumb" data-cursor-crumb aria-hidden="true"></span>
 </div>
 
 <style>
@@ -42,11 +44,41 @@ const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
         overflow: visible;
     }
 
-    /* Explicitly not a pointer cursor — nothing should announce this. */
+    /* The native cursor, untouched — the hint is the carried crumb below,
+       not a pointer (that would promise navigation). */
     .feeder-field {
         position: absolute;
         inset: 0;
         cursor: default;
+    }
+
+    /* The carried crumb: rides the cursor tip while over the band. Absolute
+       within the feeder, not fixed — the hero's entrance animation transforms
+       an ancestor, and a transform re-anchors fixed descendants to it. Nudged
+       up-left so it hangs off the arrow's tip instead of vanishing under its
+       head. The tilt lives in the script's transform string, after the
+       translate — the independent `rotate` property would compose before
+       `transform` and swing the whole translation around this corner. */
+    .cursor-crumb {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 7px;
+        height: 5px;
+        background: currentColor;
+        border-radius: 60% 40% 55% 45% / 55% 60% 40% 45%;
+        opacity: 0;
+        pointer-events: none;
+        will-change: transform;
+    }
+    .cursor-crumb.is-carried {
+        opacity: 1;
+    }
+    /* No cursor, no carried crumb. */
+    @media (hover: none), (pointer: coarse) {
+        .cursor-crumb {
+            display: none;
+        }
     }
 
     .feeder-bird {
@@ -211,11 +243,18 @@ const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
 
     // Split out of initFeeders so the null checks land on parameters —
     // narrowing a captured const doesn't reach the hoisted declarations below.
+    // Where the carried crumb hangs relative to the pointer: its own size up
+    // and left, so its lower-right corner touches the cursor's tip.
+    const CARRY_DX = -6;
+    const CARRY_DY = -5;
+    const CARRY_TILT = -14; // deg — see the .cursor-crumb comment
+
     function attach(
         field: HTMLElement,
         travel: HTMLElement,
         bird: HTMLElement,
         pool: HTMLElement[],
+        carry: HTMLElement | null,
     ) {
         const reduce = matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -421,9 +460,31 @@ const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
             }
         }
 
+        // The carried crumb follows the pointer over the band. Mouse only —
+        // a touch point has no tip to hang it off.
+        if (carry) {
+            const follow = (event: PointerEvent) => {
+                if (event.pointerType !== "mouse") return;
+                // The rect is read per move so the crumb stays on the tip
+                // even while an entrance animation shifts the feeder.
+                const rect = field.getBoundingClientRect();
+                carry.style.transform = `translate3d(${event.clientX - rect.left + CARRY_DX}px,${event.clientY - rect.top + CARRY_DY}px,0) rotate(${CARRY_TILT}deg)`;
+                carry.classList.add("is-carried");
+            };
+            field.addEventListener("pointerenter", follow);
+            field.addEventListener("pointermove", follow);
+            field.addEventListener("pointerleave", () =>
+                carry.classList.remove("is-carried"),
+            );
+        }
+
         field.addEventListener("click", (event) => {
             const el = takeCrumb();
             if (!el) return;
+
+            // The carried crumb is the one that falls — it comes back with
+            // the next mouse move (`follow` re-shows it).
+            carry?.classList.remove("is-carried");
 
             const rect = field.getBoundingClientRect();
             if (!rect.width) return;
@@ -466,9 +527,13 @@ const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
             if (!field || !travel || !bird) continue;
 
             feeder.dataset.initialized = "true";
-            attach(field, travel, bird, [
-                ...feeder.querySelectorAll<HTMLElement>("[data-crumb]"),
-            ]);
+            attach(
+                field,
+                travel,
+                bird,
+                [...feeder.querySelectorAll<HTMLElement>("[data-crumb]")],
+                feeder.querySelector<HTMLElement>("[data-cursor-crumb]"),
+            );
         }
     }
 

@@ -9,8 +9,8 @@ import sitemap from '@astrojs/sitemap';
 /*
   Routes kept out of the sitemap: the postcard form's utility pages (nothing to
   index — a form, a receipt and an error), the two RSS feeds (they are not
-  pages), and the four media logs, which are still placeholders. The same list
-  is mirrored in public/robots.txt; the media logs additionally carry a
+  pages), and the three media logs that are still placeholders. The same list
+  is mirrored in public/robots.txt; those logs additionally carry a
   `noindex` from Layout.astro. Drop them from both places once they ship.
 */
 const NOT_INDEXED = [
@@ -19,7 +19,6 @@ const NOT_INDEXED = [
   '/postcards/new',
   '/blog-rss.xml',
   '/bookmarks-rss.xml',
-  '/books',
   '/movies',
   '/series',
   '/music',

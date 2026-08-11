@@ -23,7 +23,24 @@ const srgbToLinear = (c: number) =>
 const linearToSrgb = (c: number) =>
     c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055;
 
-function hexToOklab(hex: string): [number, number, number] {
+/**
+ * "#FFF" → "#ffffff". `hexToOklab` slices fixed byte offsets, so a short hex
+ * silently yields NaN rather than failing — and five book spines in the
+ * Obsidian export are written that way.
+ */
+export function normaliseHex(hex: string): string {
+    const raw = hex.trim().replace(/^#/, "");
+    const full =
+        raw.length === 3
+            ? raw
+                  .split("")
+                  .map((c) => c + c)
+                  .join("")
+            : raw;
+    return `#${full.toLowerCase()}`;
+}
+
+export function hexToOklab(hex: string): [number, number, number] {
     const [r, g, b] = [1, 3, 5].map((i) =>
         srgbToLinear(parseInt(hex.slice(i, i + 2), 16) / 255),
     );
@@ -128,15 +145,18 @@ const stocks = {
     /**
      * The neutral stock. Colour means you've gone somewhere, so the homepage
      * and /404 stay blank — and so do /garden and /postcards, whose content
-     * already arrives full of colour of its own.
+     * already arrives full of colour of its own. /books and /series are in
+     * that company: a wall of spines and covers is the loudest thing on the
+     * site, and a tinted stock underneath it just competes.
      */
     home: { hex: "#eae8e3", oklch: "oklch(93.12% 0.007 88.6)", name: "Blank" },
 
     work: { hex: "#f2e0c8", oklch: "oklch(91.5% 0.038 75)", name: "Sand" },
     projects: { hex: "#fbdbd2", oklch: "oklch(91.5% 0.038 35)", name: "Clay" },
     blog: { hex: "#d7e3fd", oklch: "oklch(91.5% 0.038 265)", name: "Periwinkle" },
-    bookmarks: { hex: "#ebdcf6", oklch: "oklch(91.5% 0.038 310)", name: "Lilac" },
-    shelf: { hex: "#c9ece4", oklch: "oklch(91.5% 0.038 180)", name: "Aqua" },
+    /** The whole shelf family: /shelf and the logs reached from it are one
+     * room, so they share a stock rather than taking one each. */
+    shelf: { hex: "#ebdcf6", oklch: "oklch(91.5% 0.038 310)", name: "Lilac" },
 
     /** Half chroma: the quietest room, and it keeps slate off periwinkle. */
     meta: { hex: "#dbe4ed", oklch: "oklch(91.5% 0.016 250)", name: "Slate" },
@@ -154,19 +174,22 @@ export const papers = Object.fromEntries(
 
 /**
  * First URL segment → stock, which covers every nested route with no special
- * cases. The media logs share one stock: they're one shelf, not four sections.
- * `garden` and `postcards` are absent on purpose — see `home` above.
+ * cases.
+ *
+ * The Lilac stock belongs to the hub and to the logs that carry no art of
+ * their own. The logs that do — `books`, `series` — are absent on purpose and
+ * fall through to `home`, as `garden` and `postcards` do. When `movies` and
+ * `music` grow real content they should follow them out.
  */
 const SECTIONS: Record<string, PaperKey> = {
     work: "work",
     projects: "projects",
     blog: "blog",
-    bookmarks: "bookmarks",
 
-    books: "shelf",
+    shelf: "shelf",
+    bookmarks: "shelf",
     movies: "shelf",
     music: "shelf",
-    series: "shelf",
 
     changelog: "meta",
     colophon: "meta",

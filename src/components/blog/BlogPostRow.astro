@@ -3,6 +3,9 @@
  * One blog post as a list row: date · title · Read →. Shared by the
  * homepage teaser and the /blog index. `showYear` off drops the year
  * from the date (used when the index groups rows under a year heading).
+ *
+ * Below `sm` the date moves above the title so the title gets the full
+ * row width instead of wrapping mid-word in a ~50% column.
  */
 import type { CollectionEntry } from "astro:content";
 import { categoryLabel } from "../../utils/blog";
@@ -26,14 +29,18 @@ const formatDate = (date: Date) =>
 
 <a
     href={`/blog/${post.id}`}
-    class="ink-row flex items-start gap-4 py-5 font-mono"
+    class="ink-row flex items-start gap-3 py-4 font-mono sm:gap-4 sm:py-5"
 >
-    <InkMark name="post" class="ink-row-mark mt-px h-5 w-5 shrink-0" />
-    <span class="shrink-0 whitespace-nowrap text-sm opacity-40">
-        {formatDate(post.data.date)}
-    </span>
-    <span class="ink-row-title min-w-0 flex-1 text-base">
-        {post.data.title}
+    <InkMark name="post" class="ink-row-mark h-5 w-5 shrink-0 sm:mt-px" />
+    <span
+        class="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-start sm:gap-4"
+    >
+        <span class="shrink-0 whitespace-nowrap text-xs opacity-40 sm:text-sm">
+            {formatDate(post.data.date)}
+        </span>
+        <span class="ink-row-title min-w-0 flex-1 text-base leading-snug">
+            {post.data.title}
+        </span>
     </span>
     {
         showCategory && post.data.category && (

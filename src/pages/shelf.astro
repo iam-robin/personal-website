@@ -1,0 +1,123 @@
+---
+/**
+ * One door onto the media logs, so they don't each need a slot in the nav.
+ * An index and nothing more — the logs carry their own content. Postcards
+ * isn't here on purpose: it's an invitation, not an archive, and lives with
+ * contact (see ContactSection).
+ */
+import SubpageLayout from "../layouts/SubpageLayout.astro";
+import Eyebrow from "../components/ui/Eyebrow.astro";
+import {
+    getCurrentBooks,
+    getCurrentSeries,
+    getShelfCounts,
+} from "../utils/shelf";
+import { formatAuthors } from "../utils/books";
+
+const [currentBooks, currentSeries, counts] = await Promise.all([
+    getCurrentBooks(),
+    getCurrentSeries(),
+    getShelfCounts(),
+]);
+
+const shelves = [
+    {
+        title: "Books",
+        href: "/books",
+        count: `${counts.books} finished`,
+        description:
+            "Everything I've read since 2018, plus the stack that's still waiting. A book gets logged the moment I turn the last page.",
+    },
+    /*
+      Held back until the series log is built — the hub shouldn't open a door
+      onto a placeholder. Uncommenting is all it takes: `counts.series` is
+      still gathered and /series keeps its URL and its `noindex`.
+    */
+    // {
+    //     title: "Series",
+    //     href: "/series",
+    //     count: `${counts.series} finished`,
+    //     description:
+    //         "What I've watched, season by season. I'm a lot slower at this than I am at reading.",
+    // },
+    {
+        title: "Bookmarks",
+        href: "/bookmarks",
+        count: `${counts.bookmarks} saved`,
+        description:
+            "Articles, essays and videos worth keeping. Tagged in my RSS reader, saved to Obsidian, and from there straight onto the page.",
+    },
+];
+
+// Only rendered when something is actually in progress; an empty "right now"
+// is worse than none at all.
+const current = [
+    ...currentBooks.map((book) => ({
+        label: "Reading",
+        title: book.data.title,
+        by: formatAuthors(book.data.author),
+    })),
+    ...currentSeries.map((series) => ({
+        label: "Watching",
+        title: series.data.title,
+        by: series.data.season ? `Season ${series.data.season}` : "",
+    })),
+];
+---
+
+<SubpageLayout
+    title="Shelf"
+    description="Everything I read, watch and save lands in my Obsidian vault first. This is that pile, tidied up a little. It's not a list of recommendations — just an honest record of what's had my attention."
+>
+    {
+        current.length > 0 && (
+            <section class="mb-20">
+                <Eyebrow>Right now</Eyebrow>
+                <ul class="mt-4 flex flex-col gap-2">
+                    {current.map((item, i) => (
+                        <li class="flex items-baseline gap-3 font-mono text-sm">
+                            {/* The label names the group, not the row: a second
+                                book under "Reading" leaves it blank. */}
+                            <span class="w-20 shrink-0 opacity-40">
+                                {current[i - 1]?.label === item.label
+                                    ? ""
+                                    : item.label}
+                            </span>
+                            <span>
+                                {item.title}
+                                {item.by && (
+                                    <span class="opacity-40"> — {item.by}</span>
+                                )}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        )
+    }
+
+    <ul>
+        {
+            shelves.map((shelf) => (
+                <li>
+                    <a
+                        href={shelf.href}
+                        class="group flex flex-col gap-2 border-b border-dotted border-ink/30 py-6"
+                    >
+                        <div class="flex items-baseline justify-between gap-4">
+                            <h2 class="text-lg font-bold underline-offset-4 group-hover:underline">
+                                {shelf.title}
+                            </h2>
+                            <span class="shrink-0 font-mono text-xs opacity-40">
+                                {shelf.count}
+                            </span>
+                        </div>
+                        <p class="max-w-xl font-mono text-sm opacity-70">
+                            {shelf.description}
+                        </p>
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</SubpageLayout>
