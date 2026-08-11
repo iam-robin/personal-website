@@ -5,10 +5,25 @@ on:
         - cron: "0 5 * * *" # 6:00 AM CET / 7:00 AM CEST
     workflow_dispatch: # manual trigger button in GitHub UI
 
+permissions:
+    contents: write
+
 jobs:
     rebuild:
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v4
+              with:
+                  submodules: true
+
+            - name: Bump data submodule
+              run: |
+                  git submodule update --remote data
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git commit -am "chore: update data submodule" || echo "no data changes"
+                  git push
+
             - name: Trigger Coolify deploy
               run: |
                   curl -X GET "${{ secrets.COOLIFY_DEPLOY_WEBHOOK }}" \
