@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 # claude code settings
 .claude/
+
+# agent instructions (CLAUDE.md is a symlink to this)
+AGENTS.md

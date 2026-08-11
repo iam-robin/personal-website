@@ -67,8 +67,21 @@ v4 separates personal and professional without splitting Robin's identity:
   directly in job applications): positioning, role & skills, clients worked
   with (names only, no client case studies — portfolio projects are side
   projects), selected side projects, CV/contact.
-- `/about` — the personal page and hub for the media logs (books, movies,
-  series, music), bookmarks, postcards, photos.
+- `/shelf` — the hub for the media logs: books, series, bookmarks (movies and
+  music once the Obsidian export covers them). An index and nothing more —
+  the logs carry their own content. There is deliberately **no `/about`**:
+  it would compete with `/work` for "the page where Robin explains himself",
+  and a recruiter clicking it would land in a reading list. The hub is named
+  after what it holds instead.
 - Top navigation is deliberately small (rank, not inventory):
-  Work · Projects · Blog · Garden · About. Media logs etc. keep their own
-  URLs but are reached through About, not the nav.
+  Work · Projects · Blog · Garden · Shelf · Postcards. Every item is a
+  distinct *kind* — professional case, portfolio, writing, notes,
+  collections, participation — so no two compete for the same click.
+  The individual media logs keep their own URLs but are reached through
+  Shelf, not the nav.
+- Postcards stays out of Shelf and keeps its nav slot: it's the one page a
+  visitor can add to, and a participation loop buried two clicks deep stops
+  being a loop. It belongs with contact (see `ContactSection`), not with the
+  archives.
+- Photos are not in Shelf either — `robins-photos` is a featured project with
+  its own hero fan, and duplicating it would dilute both.
