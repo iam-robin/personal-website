@@ -13,7 +13,7 @@ const items: { label: string; href: string; me?: boolean }[] = [
     { label: "Email", href: "mailto:hey@iamrob.in" },
     { label: "GitHub", href: "https://github.com/iam-robin" },
     { label: "Mastodon", href: "https://mastodon.social/@iamrobin", me: true },
-    { label: "Bluesky", href: "https://bsky.app/profile/iam-robin.bsky.social" },
+    { label: "Bluesky", href: "https://bsky.app/profile/iamrob.in" },
 ];
 ---
 
@@ -25,7 +25,9 @@ const items: { label: string; href: string; me?: boolean }[] = [
                 class="opacity-60 underline-offset-4 hover:underline hover:opacity-100"
                 {...(item.href.startsWith("http") && {
                     target: "_blank",
-                    rel: item.me ? "me noopener noreferrer" : "noopener noreferrer",
+                    rel: item.me
+                        ? "me noopener noreferrer"
+                        : "noopener noreferrer",
                 })}
             >
                 {item.label}

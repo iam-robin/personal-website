@@ -6,7 +6,13 @@
  */
 import InkMark from "./InkMark.astro";
 
-type Channel = { label: string; handle: string; href: string; me?: boolean; icon: string };
+type Channel = {
+    label: string;
+    handle: string;
+    href: string;
+    me?: boolean;
+    icon: string;
+};
 
 // <InkMark> glyphs rather than brand logos — the latter were the only filled
 // shapes on the page and read as borrowed assets.
@@ -33,7 +39,7 @@ const channels: Channel[] = [
     {
         label: "Bluesky",
         handle: "@iam-robin.bsky.social",
-        href: "https://bsky.app/profile/iam-robin.bsky.social",
+        href: "https://bsky.app/profile/iamrob.in",
         icon: "bluesky",
     },
 ];
@@ -43,7 +49,8 @@ const isExternal = (href: string) => href.startsWith("http");
 // The trailing glyph is about where the click lands, not the protocol: ↗ for
 // anything that hands you off, → for a link that stays here. So mailto: gets
 // the diagonal despite not opening a new tab.
-const leavesSite = (href: string) => isExternal(href) || href.startsWith("mailto:");
+const leavesSite = (href: string) =>
+    isExternal(href) || href.startsWith("mailto:");
 ---
 
 <style>
@@ -83,7 +90,8 @@ const leavesSite = (href: string) => isExternal(href) || href.startsWith("mailto
     <h2 class="text-sm font-bold">Contact</h2>
 
     <ul class="mt-4 flex flex-col border-t border-dotted border-ink/30">
-        {/*
+        {
+            /*
           Sending a postcard is just another way to reach me, so it sits as a
           plain channel row like the rest — same mark weight, same type, same
           spacing. Only the marker highlight sets it apart, because it's the one
@@ -91,7 +99,8 @@ const leavesSite = (href: string) => isExternal(href) || href.startsWith("mailto
           colour stamp illustration once: the only saturated thing on the page,
           and it read as a picture pasted into a column of quiet glyphs.) Links
           to the composer; sent cards land on /postcards.
-        */}
+        */
+        }
         <li class="border-b border-dotted border-ink/30">
             <a
                 href="/postcards/new"
