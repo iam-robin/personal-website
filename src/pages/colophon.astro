@@ -62,17 +62,6 @@ const typefaces = [
     },
 ];
 
-const thanks = [
-    {
-        label: "Palette",
-        html: 'The three greige neutrals, borrowed from <a href="https://www.terrain.com" target="_blank" rel="noopener noreferrer">terrain.com</a>.',
-    },
-    {
-        label: "Inspiration",
-        html: 'This page owes a nod to <a href="https://karolinaszczur.com/colophon" target="_blank" rel="noopener noreferrer">Karolina Szczur’s colophon</a>.',
-    },
-];
-
 const typeScale = [
     { cls: "text-4xl", token: "text-4xl" },
     { cls: "text-3xl", token: "text-3xl" },
@@ -217,8 +206,8 @@ const birds = [
                 The robin
             </h2>
             <p class="mb-8 max-w-xl font-mono text-sm opacity-70">
-                One bird, a few moods. It's the logo and the favicon. Click
-                the one in the corner.
+                One bird, a few moods. It's the logo and the favicon. Click the
+                one in the corner.
             </p>
             <!-- Six cards, so 2-up and 3-up both come out even. -->
             <div class="grid grid-cols-2 gap-8 sm:grid-cols-3">
@@ -241,7 +230,9 @@ const birds = [
                         </div>
                     ))
                 }
-                <div class="flex flex-col items-center gap-4 rounded-md border border-ink/10 bg-surface/40 p-6 text-center">
+                <div
+                    class="flex flex-col items-center gap-4 rounded-md border border-ink/10 bg-surface/40 p-6 text-center"
+                >
                     <Bird404 class="h-24 w-auto text-ink" />
                     <div class="font-mono text-sm">
                         <div>Dazed</div>
@@ -259,7 +250,9 @@ const birds = [
                 Signature details
             </h2>
             <div class="flex flex-col divide-y divide-dotted divide-ink/30">
-                <div class="flex flex-col gap-2 py-6 first:pt-0 sm:flex-row sm:items-center sm:gap-8">
+                <div
+                    class="flex flex-col gap-2 py-6 first:pt-0 sm:flex-row sm:items-center sm:gap-8"
+                >
                     <div class="shrink-0 font-mono text-sm opacity-50 sm:w-48">
                         .marker
                     </div>
@@ -268,36 +261,16 @@ const birds = [
                         and slightly rotated.
                     </p>
                 </div>
-                <div class="flex flex-col gap-2 py-6 last:pb-0 sm:flex-row sm:items-center sm:gap-8">
+                <div
+                    class="flex flex-col gap-2 py-6 last:pb-0 sm:flex-row sm:items-center sm:gap-8"
+                >
                     <div class="shrink-0 font-mono text-sm opacity-50 sm:w-48">
                         a:hover
                     </div>
                     <p class="font-mono text-base">
-                        Every <a href="/colophon">link tilts into italic</a> on
-                        hover.
+                        Every <a href="/colophon">link tilts into italic</a> on hover.
                     </p>
                 </div>
-            </div>
-        </section>
-
-        <!-- Thanks -->
-        <section>
-            <h2
-                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
-            >
-                Thanks
-            </h2>
-            <div class="flex flex-col divide-y divide-dotted divide-ink/30">
-                {
-                    thanks.map((t) => (
-                        <div class="flex flex-col gap-2 py-6 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-8">
-                            <div class="shrink-0 font-mono text-sm opacity-50 sm:w-48">
-                                {t.label}
-                            </div>
-                            <p class="font-mono text-base" set:html={t.html} />
-                        </div>
-                    ))
-                }
             </div>
         </section>
 
@@ -309,12 +282,11 @@ const birds = [
                 Built with
             </h2>
             <p class="max-w-xl font-mono text-base">
-                Version four, built with Astro and Tailwind CSS. Static
-                wherever it can be — the personal sections (books, films,
-                bookmarks, garden notes) come straight from my Obsidian vault.
-                Type is set in Apercu, Fira Mono and LiebeHeide. It lives at
-                iamrob.in, served by a small Node server on Hetzner via
-                Coolify.
+                Version four, built with Astro and Tailwind CSS. Static wherever
+                it can be — the personal sections (books, films, bookmarks,
+                garden notes) come straight from my Obsidian vault. Type is set
+                in Apercu, Fira Mono and LiebeHeide. It lives at iamrob.in,
+                served by a small Node server on Hetzner via Coolify.
             </p>
             <p class="mt-6 font-mono text-sm opacity-50">
                 Last updated {timeSince(new Date(latest.date))} —{" "}

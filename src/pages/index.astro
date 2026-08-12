@@ -73,8 +73,10 @@ const panelCss = heroPanels
     .join("\n");
 
 // Gated to lg: below it the hero stacks above the cards, where a tap's sticky
-// :hover would invisibly swap (or blank) the hero off-screen.
-const hoverCss = `@media (min-width: 64rem) {\n${hideDefaultCss}\n${panelCss}\n}`;
+// :hover would invisibly swap (or blank) the hero off-screen. And to pointers
+// that hover: a touch tablet clears the width but not the interaction, and
+// gets the cards' own static fans (MobileFan) instead.
+const hoverCss = `@media (min-width: 64rem) and (hover: hover) {\n${hideDefaultCss}\n${panelCss}\n}`;
 ---
 
 <Layout

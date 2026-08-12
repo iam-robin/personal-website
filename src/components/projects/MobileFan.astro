@@ -1,0 +1,149 @@
+---
+import { Image } from "astro:assets";
+import { getEntry } from "astro:content";
+import { getFanImages, getFirstBodyImage } from "../../utils/projectFans";
+
+interface Props {
+    projectId: string;
+    /**
+     * The breakpoint the caller's hover preview starts at — `lg` for the
+     * homepage hero panels, `md` for the cursor-following fan on /projects.
+     * The static fan stands down exactly where that preview takes over.
+     */
+    until: "md" | "lg";
+    class?: string;
+}
+
+// Projects with neither a fan nor a subpage asset render nothing at all —
+// no empty box, so the caller can put its spacing on this element.
+const { projectId, until, class: className } = Astro.props;
+
+// Touch has no hover, so neither the homepage hero panels nor the
+// cursor-following preview on /projects ever fire — the fans would simply
+// never be seen. This is their stand-in: a static row inside the card
+// itself. Three cards, not five: it sits in a list row on a phone, not in
+// half a viewport.
+const images = getFanImages(projectId)?.slice(0, 3);
+
+// Same fallback as the hover preview: the subpage's first asset. Drafts have
+// no subpage and show nothing.
+let single = null;
+if (!images) {
+    const entry = await getEntry("projects", projectId);
+    if (entry && !entry.data.draft) single = getFirstBodyImage(entry.body);
+}
+
+// Photos read as plain prints (square corners), everything else keeps the
+// slight rounding of the hero fans.
+const rounded = projectId !== "robins-photos";
+---
+
+{
+    images && (
+        <div
+            class:list={["mobile-fan", className]}
+            data-until={until}
+            aria-hidden="true"
+        >
+            {images.map((image) => (
+                <Image
+                    src={image}
+                    alt=""
+                    width={240}
+                    widths={[240]}
+                    sizes="6rem"
+                    class:list={["mobile-fan-card", { "is-rounded": rounded }]}
+                />
+            ))}
+        </div>
+    )
+}
+{
+    single && (
+        <div
+            class:list={["mobile-fan", className]}
+            data-until={until}
+            aria-hidden="true"
+        >
+            <Image
+                src={single}
+                alt=""
+                width={480}
+                widths={[480]}
+                sizes="12rem"
+                class="mobile-fan-single"
+            />
+        </div>
+    )
+}
+
+<style>
+    /*
+      Horizontal hand of prints: a fixed height so the mixed aspect ratios
+      (2:3 posters, square art) line up, overlapping to the left with the
+      hand-placed tilt of the hero fans. First card on top, like everywhere
+      else. padding-block absorbs the rotation so neighbouring rows don't clip.
+
+      Shown wherever the caller's hover preview can't be: on a pointer that
+      doesn't hover at all, or below the width that preview needs. Width alone
+      would strand a touch tablet — wide enough for the preview's breakpoint,
+      no hover to trigger it — and hover alone would leave a narrow desktop
+      window showing both. The rules live here rather than on utility classes
+      so nothing depends on which stylesheet lands last.
+    */
+    .mobile-fan {
+        display: none;
+        align-items: flex-end;
+        padding-block: 0.375rem;
+    }
+
+    @media (hover: none), (width < 48rem) {
+        .mobile-fan[data-until="md"] {
+            display: flex;
+        }
+    }
+
+    @media (hover: none), (width < 64rem) {
+        .mobile-fan[data-until="lg"] {
+            display: flex;
+        }
+    }
+
+    .mobile-fan-card {
+        position: relative;
+        height: 5.5rem;
+        width: auto;
+        flex: none;
+        border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+        transform-origin: bottom center;
+    }
+
+    .mobile-fan-card.is-rounded {
+        border-radius: 0.25rem;
+    }
+
+    /* The fallback is a landscape screenshot, not a print: no tilt, and a
+       lower height so it doesn't outweigh a fan of three at the same one. */
+    .mobile-fan-single {
+        height: 4.5rem;
+        width: auto;
+        max-width: 100%;
+        border-radius: 0.25rem;
+        border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    }
+
+    .mobile-fan-card:nth-child(1) {
+        z-index: 3;
+        transform: rotate(-3deg);
+    }
+    .mobile-fan-card:nth-child(2) {
+        z-index: 2;
+        margin-left: -1rem;
+        transform: translateY(-4%) rotate(2deg);
+    }
+    .mobile-fan-card:nth-child(3) {
+        z-index: 1;
+        margin-left: -1rem;
+        transform: rotate(4deg);
+    }
+</style>

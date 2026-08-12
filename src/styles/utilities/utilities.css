@@ -63,17 +63,22 @@ a.marker:hover {
     opacity: 0.4;
 }
 
-.ink-row:hover .ink-row-mark {
-    opacity: calc(var(--ink-row-mark) + 0.4);
-}
+/* Only where there's a pointer to hover with. On a touch device :hover
+   sticks after a tap, so the row a visitor last touched would stay woken
+   up — a highlight nobody asked for, on a page they've already left. */
+@media (hover: hover) {
+    .ink-row:hover .ink-row-mark {
+        opacity: calc(var(--ink-row-mark) + 0.4);
+    }
 
-.ink-row:hover .ink-row-meta {
-    opacity: 1;
-}
+    .ink-row:hover .ink-row-meta {
+        opacity: 1;
+    }
 
-.ink-row:hover .ink-row-title {
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    .ink-row:hover .ink-row-title {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
 }
 
 .hover-lift {

@@ -6,6 +6,15 @@
 const coverDistance = 32;
 const initialized = new WeakSet<Element>();
 
+// The whole effect — floating cover *and* the dimming that frames it — only
+// exists where the cover does: a pointer that can hover, on a viewport wide
+// enough for `md:group-hover:block` to fire. Without both, dimming nine rows
+// buys nothing and, on touch, latches (tap fires mouseover, never mouseout).
+// Checked per event rather than once at init so resizing a window across the
+// breakpoint takes effect immediately.
+const canPreview = () =>
+    window.matchMedia("(hover: hover) and (min-width: 48rem)").matches;
+
 function positionCover(event: MouseEvent, item: Element, cover: HTMLElement) {
     const rect = item.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -34,6 +43,7 @@ function initHoverEffect() {
                 !(cover.complete && cover.naturalWidth === 0));
 
         item.addEventListener("mouseover", (event) => {
+            if (!canPreview()) return;
             if (isCoverValid()) positionCover(event as MouseEvent, item, cover!);
             items.forEach((other) => {
                 if (other !== item) other.classList.add("opacity-20");
@@ -41,6 +51,7 @@ function initHoverEffect() {
         });
 
         item.addEventListener("mousemove", (event) => {
+            if (!canPreview()) return;
             if (isCoverValid()) positionCover(event as MouseEvent, item, cover!);
         });
 

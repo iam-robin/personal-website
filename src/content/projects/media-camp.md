@@ -22,7 +22,6 @@ The media.camp is a barcamp in the premises of the faculty «Digital Media» at 
 One of my first tasks was to revise the media.camp's coperate identity. In the course of this, the logo was simplified and the sans serif font «Lato» was introduced for a new typeface. In addition, the primary colors were revised, which should provide recognition in the use of color accents.
 
 ![Styleguide](../../assets/projects/media-camp/styleguide.png)
-![Poster designs of the barcamp](../../assets/projects/media-camp/poster2.png)
 
 ## Website
 
