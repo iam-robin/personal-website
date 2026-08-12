@@ -1,12 +1,61 @@
 ---
 import SubpageLayout from "../layouts/SubpageLayout.astro";
+import MovieYear from "../components/movies/MovieYear.astro";
+import Link from "../components/ui/Link.astro";
 import Placeholder from "../components/ui/Placeholder.astro";
+import { getFilmYears, FEED_LIMIT, PROFILE_URL } from "../utils/movies";
+
+/*
+  One sentence, two renderings: the hero paragraph links the word "Letterboxd"
+  to the profile the feed comes from, while the <meta> description needs the
+  same sentence flat. Cut in three so the two can't drift apart.
+*/
+const intro = {
+    before: "Films go into ",
+    linked: "Letterboxd",
+    after: " rather than my Obsidian vault, so this log comes straight from there — pulled in fresh every time the site rebuilds. Hover a title and its poster comes up.",
+};
+
+const years = await getFilmYears();
+const total = years.reduce((sum, year) => sum + year.films.length, 0);
+
+// The feed stops at FEED_LIMIT entries, so the last year on the page is only
+// as complete as the feed reaches — said out loud rather than left to look
+// like a year in which I watched eight films.
+const oldest = years.at(-1)?.label;
 ---
 
 <SubpageLayout
-    noindex
     title="Movies"
-    description="I keep track of the films I watch on Letterboxd, where I log and organize everything I've seen. To make this collection easier to browse, the data is automatically updated and displayed here on my website. It serves as a personal archive and a way to look back at my movie watching over time."
+    description={`${intro.before}${intro.linked}${intro.after}`}
 >
-    <Placeholder label="Movies log — coming soon" />
+    <Fragment slot="description">
+        {intro.before}<Link href={PROFILE_URL} external class="text-base"
+            >{intro.linked}</Link
+        >{intro.after}
+    </Fragment>
+
+    {
+        years.length > 0 ? (
+            <>
+                <div class="flex flex-col gap-16">
+                    {years.map((year) => (
+                        <MovieYear year={year} />
+                    ))}
+                </div>
+
+                <p class="mt-16 max-w-xl font-mono text-xs opacity-40">
+                    {total} films. Letterboxd only hands out the last{" "}
+                    {FEED_LIMIT} entries, so {oldest} stops where the feed does
+                    — everything before it is over there, not here.
+                </p>
+            </>
+        ) : (
+            /* Letterboxd was unreachable at build time (utils/movies.ts logs
+               the reason). The next rebuild picks the log back up. */
+            <Placeholder label="Couldn't reach Letterboxd — check back soon" />
+        )
+    }
 </SubpageLayout>
+
+<script src="../scripts/listHoverPreview.ts"></script>

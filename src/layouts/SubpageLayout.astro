@@ -68,9 +68,9 @@ const {
                         <h1 class="text-3xl font-bold">{title}</h1>
                         <slot name="cta" />
                     </div>
-                    {description && (
+                    {(description || Astro.slots.has("description")) && (
                         <p class="font-mono text-base md:col-span-3 md:pt-2">
-                            {description}
+                            <slot name="description">{description}</slot>
                         </p>
                     )}
                 </div>
@@ -80,11 +80,13 @@ const {
         <main class="mt-16 flex-1">
             <slot />
         </main>
-        {/* Twice the 96px (`gap-24`) rhythm the pages use between their own
+        {
+            /* Twice the 96px (`gap-24`) rhythm the pages use between their own
             sections. It has to clear that rhythm by a clear factor or the
             footer reads as one more section rather than the end of the page —
             at 1.33x it did. Keyed to `gap-24`: if that rhythm changes, this
-            moves with it. */}
+            moves with it. */
+        }
         <FooterColumns class="mt-48" />
         <MobileMenu />
     </div>

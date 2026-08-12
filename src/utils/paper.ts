@@ -150,10 +150,13 @@ const stocks = {
      * site, and a tinted stock underneath it just competes.
      */
     home: { hex: "#eae8e3", oklch: "oklch(93.12% 0.007 88.6)", name: "Blank" },
-
     work: { hex: "#f2e0c8", oklch: "oklch(91.5% 0.038 75)", name: "Sand" },
     projects: { hex: "#fbdbd2", oklch: "oklch(91.5% 0.038 35)", name: "Clay" },
-    blog: { hex: "#d7e3fd", oklch: "oklch(91.5% 0.038 265)", name: "Periwinkle" },
+    blog: {
+        hex: "#d7e3fd",
+        oklch: "oklch(91.5% 0.038 265)",
+        name: "Periwinkle",
+    },
     /** The whole shelf family: /shelf and the logs reached from it are one
      * room, so they share a stock rather than taking one each. */
     shelf: { hex: "#ebdcf6", oklch: "oklch(91.5% 0.038 310)", name: "Lilac" },
@@ -177,9 +180,9 @@ export const papers = Object.fromEntries(
  * cases.
  *
  * The Lilac stock belongs to the hub and to the logs that carry no art of
- * their own. The logs that do — `books`, `series` — are absent on purpose and
- * fall through to `home`, as `garden` and `postcards` do. When `movies` and
- * `music` grow real content they should follow them out.
+ * their own. The logs that do — `books`, `series`, `movies` — are absent on
+ * purpose and fall through to `home`, as `garden` and `postcards` do. When
+ * `music` grows real content it should follow them out.
  */
 const SECTIONS: Record<string, PaperKey> = {
     work: "work",
@@ -188,7 +191,6 @@ const SECTIONS: Record<string, PaperKey> = {
 
     shelf: "shelf",
     bookmarks: "shelf",
-    movies: "shelf",
     music: "shelf",
 
     changelog: "meta",

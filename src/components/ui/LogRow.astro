@@ -1,0 +1,68 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    title: string;
+    /** Dim qualifier after the title: "S2" on /series, the film's year on /movies. */
+    chip?: string | number | null;
+    /** The heart /books puts at the head of a spine. Decorative — whatever it
+        stands for (a rating of 4+, a Letterboxd like) is in the meta or implied. */
+    favourite?: boolean;
+    /** The right-hand line: "★ 4.5 · 23 Feb". */
+    meta?: string;
+    /** Remote poster URL. Absent is fine — the row just has nothing to show. */
+    cover?: string | null;
+}
+
+const { title, chip, favourite = false, meta = "", cover } = Astro.props;
+---
+
+<li
+    class="list-item-image-hover-effect group relative border-b border-dotted border-ink/15 py-3 md:border-0 md:py-2"
+>
+    <div class="flex items-center justify-between gap-4">
+        {
+            cover && (
+                <img
+                    class="cover-image pointer-events-none absolute z-10 hidden w-36 rounded-sm shadow-lg md:group-hover:block"
+                    src={cover}
+                    alt=""
+                    width="400"
+                    height="600"
+                    loading="lazy"
+                    decoding="async"
+                    referrerpolicy="no-referrer"
+                    onerror="this.style.display='none'"
+                />
+            )
+        }
+
+        {
+            /* Two different squeezes. Below md there's no hairline, so the title
+            shrinks against the meta and truncates. From md the hairline's
+            `grow` would eat it down to an ellipsis instead, so it holds its
+            width there and the cap keeps the longest title off the meta. */
+        }
+        <div class="flex min-w-0 items-center gap-2 md:max-w-[75%] md:shrink-0">
+            <p class="truncate font-mono text-sm">{title}</p>
+            {
+                chip && (
+                    <span class="shrink-0 font-mono text-xs opacity-40">
+                        {chip}
+                    </span>
+                )
+            }
+            {
+                favourite && (
+                    <span class="shrink-0 opacity-40" aria-hidden="true">
+                        <Icon name="ph:heart-fill" width={11} />
+                    </span>
+                )
+            }
+        </div>
+
+        <div class="hidden h-px w-full grow bg-ink/10 md:block"></div>
+
+        {meta && <p class="shrink-0 font-mono text-xs opacity-40">{meta}</p>}
+    </div>
+</li>

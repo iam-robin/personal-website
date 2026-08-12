@@ -1,0 +1,52 @@
+---
+/**
+ * One year of the series log. The markup is LogYear/LogRow, shared with
+ * /movies; this only says which field of a season is the chip, the heart and
+ * the meta.
+ */
+import LogYear from "../ui/LogYear.astro";
+import LogRow from "../ui/LogRow.astro";
+import type { SeasonYear } from "../../utils/series";
+
+interface Props {
+    year: SeasonYear;
+}
+
+const { year } = Astro.props;
+
+// Finished only, as /books counts a shelf: the season in progress is in the
+// list but hasn't been watched yet.
+const count = year.seasons.filter((season) => !season.watching).length;
+
+// Day and month only — the year is the heading above the list.
+const shortDate = (iso: string) =>
+    iso
+        ? new Date(iso).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "short",
+          })
+        : "";
+---
+
+<LogYear label={year.label} count={count} noun="season">
+    {
+        year.seasons.map((season) => (
+            <LogRow
+                title={season.title}
+                chip={season.season && `S${season.season}`}
+                favourite={season.favourite}
+                meta={
+                    season.watching
+                        ? "Watching"
+                        : [
+                              season.rating && `★ ${season.rating}`,
+                              shortDate(season.finished),
+                          ]
+                              .filter(Boolean)
+                              .join(" · ")
+                }
+                cover={season.cover}
+            />
+        ))
+    }
+</LogYear>

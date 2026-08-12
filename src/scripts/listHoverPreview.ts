@@ -22,13 +22,16 @@ function initHoverEffect() {
         initialized.add(item);
 
         const cover = item.querySelector<HTMLElement>(".cover-image");
-        // Images only count once they actually loaded (a broken cover
-        // sets display:none via its onerror handler); other elements
-        // just need to exist.
+        // A cover counts unless it's a broken one: display:none from its own
+        // onerror handler, or finished loading with nothing in it. An image
+        // still in flight is fine to place — /series loads its posters lazily,
+        // so the first hover is always the one that fetches, and skipping it
+        // would leave that poster sitting at its static position.
         const isCoverValid = () =>
             !!cover &&
             cover.style.display !== "none" &&
-            (!(cover instanceof HTMLImageElement) || cover.naturalWidth > 0);
+            (!(cover instanceof HTMLImageElement) ||
+                !(cover.complete && cover.naturalWidth === 0));
 
         item.addEventListener("mouseover", (event) => {
             if (isCoverValid()) positionCover(event as MouseEvent, item, cover!);

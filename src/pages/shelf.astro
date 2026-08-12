@@ -28,18 +28,24 @@ const shelves = [
         description:
             "Everything I've read since 2018, plus the stack that's still waiting. A book gets logged the moment I turn the last page.",
     },
-    /*
-      Held back until the series log is built — the hub shouldn't open a door
-      onto a placeholder. Uncommenting is all it takes: `counts.series` is
-      still gathered and /series keeps its URL and its `noindex`.
-    */
-    // {
-    //     title: "Series",
-    //     href: "/series",
-    //     count: `${counts.series} finished`,
-    //     description:
-    //         "What I've watched, season by season. I'm a lot slower at this than I am at reading.",
-    // },
+    {
+        title: "Series",
+        href: "/series",
+        // Seasons, not shows: the vault logs one entry per season, and /series
+        // counts the same way.
+        count: `${counts.series} seasons`,
+        description:
+            "What I've watched, season by season. I'm a lot slower at this than I am at reading.",
+    },
+    {
+        title: "Movies",
+        href: "/movies",
+        // Not a total: Letterboxd's feed only reaches back 50 entries, and the
+        // page itself says as much.
+        count: `last ${counts.movies}`,
+        description:
+            "Films live in Letterboxd, not in my vault. This is the recent stretch of that diary, posters and all.",
+    },
     {
         title: "Bookmarks",
         href: "/bookmarks",

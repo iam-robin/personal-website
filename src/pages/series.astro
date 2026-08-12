@@ -1,12 +1,65 @@
 ---
 import SubpageLayout from "../layouts/SubpageLayout.astro";
-import Placeholder from "../components/ui/Placeholder.astro";
+import Eyebrow from "../components/ui/Eyebrow.astro";
+import SeriesYear from "../components/series/SeriesYear.astro";
+import { getSeasonYears, getWatchlist } from "../utils/series";
+
+const [years, watchlist] = await Promise.all([
+    getSeasonYears(),
+    getWatchlist(),
+]);
+
+// Finished only, so the total agrees with the year headers and with the count
+// /shelf shows. Seasons is the honest unit — the log records one per season —
+// but a list with Ozark on it four times needs the second number to be read
+// properly.
+const seasons = years
+    .flatMap((year) => year.seasons)
+    .filter((season) => !season.watching);
+const shows = new Set(seasons.map((season) => season.title)).size;
 ---
 
 <SubpageLayout
-    noindex
     title="Series"
-    description="I keep track of the series I watch in Obsidian, where I log and organize everything I've seen. To make this collection easier to browse, the data is automatically updated and displayed here on my website. It serves as a personal archive and a way to look back at my watching over time."
+    description="Every season I finish gets logged in Obsidian — poster, cast, the year I got through it. This page is that log, year by year."
 >
-    <Placeholder label="Series log — coming soon" />
+    <div class="flex flex-col gap-16">
+        {years.map((year) => <SeriesYear year={year} />)}
+    </div>
+
+    <p class="mt-16 font-mono text-xs opacity-40">
+        {seasons.length} seasons across {shows} shows.
+    </p>
+
+    {
+        watchlist.length > 0 && (
+            <section class="mt-24">
+                <Eyebrow>On the list</Eyebrow>
+                <ul class="mt-4 flex flex-col gap-2">
+                    {watchlist.map((item, i) => (
+                        <li class="flex items-baseline gap-3 font-mono text-sm">
+                            {/* The label names the group, not the row — the
+                                same list /shelf uses for "Right now". */}
+                            <span class="w-32 shrink-0 opacity-40">
+                                {watchlist[i - 1]?.label === item.label
+                                    ? ""
+                                    : item.label}
+                            </span>
+                            <span>
+                                {item.title}
+                                {item.season && (
+                                    <span class="opacity-40">
+                                        {" "}
+                                        — Season {item.season}
+                                    </span>
+                                )}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        )
+    }
 </SubpageLayout>
+
+<script src="../scripts/listHoverPreview.ts"></script>

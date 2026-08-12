@@ -1,0 +1,40 @@
+---
+/**
+ * One year of the film log. The markup is LogYear/LogRow, shared with
+ * /series; this only says which field of a film is the chip, the heart and
+ * the meta. The heart is Letterboxd's own like, where /series has to work it
+ * out from a rating — same mark, first-hand here.
+ */
+import LogYear from "../ui/LogYear.astro";
+import LogRow from "../ui/LogRow.astro";
+import type { FilmYear } from "../../utils/movies";
+
+interface Props {
+    year: FilmYear;
+}
+
+const { year } = Astro.props;
+
+// Day and month only — the year is the heading above the list.
+const shortDate = (iso: string) =>
+    new Date(iso).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+    });
+---
+
+<LogYear label={year.label} count={year.films.length} noun="film">
+    {
+        year.films.map((film) => (
+            <LogRow
+                title={film.title}
+                chip={film.year}
+                favourite={film.liked}
+                meta={[film.rating && `★ ${film.rating}`, shortDate(film.watched)]
+                    .filter(Boolean)
+                    .join(" · ")}
+                cover={film.cover}
+            />
+        ))
+    }
+</LogYear>

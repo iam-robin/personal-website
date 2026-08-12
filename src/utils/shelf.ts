@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from "astro:content";
+import { getFilms } from "./movies";
 
 export type Book = CollectionEntry<"books">;
 export type Series = CollectionEntry<"series">;
@@ -20,22 +21,27 @@ export async function getCurrentSeries(): Promise<Series[]> {
 
 /**
  * Counts for the shelf rows. Books and series count what's *finished*: the
- * collections also hold watchlist and paused entries.
+ * collections also hold watchlist and paused entries. Films are the odd one
+ * out — they come from Letterboxd's feed, which only reaches back 50 entries,
+ * so that row counts what the feed reached (see utils/movies.ts).
  */
 export async function getShelfCounts(): Promise<{
     books: number;
     series: number;
+    movies: number;
     bookmarks: number;
 }> {
-    const [books, series, bookmarks] = await Promise.all([
+    const [books, series, films, bookmarks] = await Promise.all([
         getCollection("books", ({ data }) => data.group === "abgeschlossen"),
         getCollection("series", ({ data }) => data.group === "abgeschlossen"),
+        getFilms(),
         getCollection("bookmarks"),
     ]);
 
     return {
         books: books.length,
         series: series.length,
+        movies: films.length,
         bookmarks: bookmarks.length,
     };
 }
