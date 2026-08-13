@@ -7,17 +7,20 @@
  */
 import SubpageLayout from "../layouts/SubpageLayout.astro";
 import Eyebrow from "../components/ui/Eyebrow.astro";
+import ShelfFan from "../components/shelf/ShelfFan.astro";
 import {
     getCurrentBooks,
     getCurrentSeries,
     getShelfCounts,
+    getShelfFans,
 } from "../utils/shelf";
 import { formatAuthors } from "../utils/books";
 
-const [currentBooks, currentSeries, counts] = await Promise.all([
+const [currentBooks, currentSeries, counts, fans] = await Promise.all([
     getCurrentBooks(),
     getCurrentSeries(),
     getShelfCounts(),
+    getShelfFans(),
 ]);
 
 const shelves = [
@@ -104,26 +107,46 @@ const current = [
 
     <ul>
         {
-            shelves.map((shelf) => (
-                <li>
-                    <a
-                        href={shelf.href}
-                        class="group flex flex-col gap-2 border-b border-dotted border-ink/30 py-6"
-                    >
-                        <div class="flex items-baseline justify-between gap-4">
-                            <h2 class="text-lg font-bold underline-offset-4 group-hover:underline">
-                                {shelf.title}
-                            </h2>
-                            <span class="shrink-0 font-mono text-xs opacity-40">
-                                {shelf.count}
-                            </span>
-                        </div>
-                        <p class="max-w-xl font-mono text-sm opacity-70">
-                            {shelf.description}
-                        </p>
-                    </a>
-                </li>
-            ))
+            shelves.map((shelf) => {
+                const fan = fans[shelf.href];
+                return (
+                    <li class="list-item-image-hover-effect group relative">
+                        <a
+                            href={shelf.href}
+                            class="flex flex-col gap-2 border-b border-dotted border-ink/30 py-6"
+                        >
+                            {fan && (
+                                <ShelfFan
+                                    covers={fan.covers}
+                                    shape={fan.shape}
+                                    variant="hover"
+                                />
+                            )}
+                            <div class="flex items-baseline justify-between gap-4">
+                                <h2 class="text-lg font-bold underline-offset-4 group-hover:underline">
+                                    {shelf.title}
+                                </h2>
+                                <span class="shrink-0 font-mono text-xs opacity-40">
+                                    {shelf.count}
+                                </span>
+                            </div>
+                            <p class="max-w-xl font-mono text-sm opacity-70">
+                                {shelf.description}
+                            </p>
+                            {fan && (
+                                <ShelfFan
+                                    covers={fan.covers}
+                                    shape={fan.shape}
+                                    variant="static"
+                                    class="mt-1"
+                                />
+                            )}
+                        </a>
+                    </li>
+                );
+            })
         }
     </ul>
 </SubpageLayout>
+
+<script src="../scripts/listHoverPreview.ts"></script>

@@ -1,0 +1,156 @@
+---
+import { Image } from "astro:assets";
+import type { ShelfCover } from "../../utils/shelf";
+
+interface Props {
+    covers: ShelfCover[];
+    /** Posters stand upright; bookmark covers are wide og images. */
+    shape: "poster" | "wide";
+    /**
+     * `hover` is the cursor-following preview (positioned by
+     * scripts/listHoverPreview.ts, which needs the `.cover-image` class);
+     * `static` is its stand-in wherever that preview can't fire.
+     */
+    variant: "hover" | "static";
+    class?: string;
+}
+
+const { covers, shape, variant, class: className } = Astro.props;
+
+// Five is what the fan has slots for, but only next to the cursor: inside a
+// row on a phone it's a hand of three, the same call MobileFan makes.
+const shown =
+    variant === "hover" && shape === "poster" ? covers : covers.slice(0, 3);
+---
+
+{
+    shown.length > 0 && (
+        <div
+            class:list={[
+                "shelf-fan",
+                `is-${shape}`,
+                variant === "hover"
+                    ? "cover-image is-hover pointer-events-none absolute z-10"
+                    : "is-static",
+                className,
+            ]}
+            aria-hidden="true"
+        >
+            {shown.map((cover) =>
+                typeof cover === "string" ? (
+                    /* Remote poster — nothing local for astro:assets to
+                       optimise, same as on /series and /movies. */
+                    <img
+                        class="shelf-fan-card"
+                        src={cover}
+                        alt=""
+                        width="400"
+                        height="600"
+                        loading="lazy"
+                        decoding="async"
+                        referrerpolicy="no-referrer"
+                        onerror="this.style.display='none'"
+                    />
+                ) : (
+                    <Image
+                        class="shelf-fan-card"
+                        src={cover}
+                        alt=""
+                        width={300}
+                        widths={[300]}
+                        sizes="8rem"
+                    />
+                ),
+            )}
+        </div>
+    )
+}
+
+<style>
+    .shelf-fan {
+        display: none;
+        align-items: flex-end;
+    }
+
+    @media (hover: hover) and (width >= 48rem) {
+        :global(.list-item-image-hover-effect):hover .shelf-fan.is-hover {
+            display: flex;
+        }
+    }
+
+    @media (hover: none), (width < 48rem) {
+        .shelf-fan.is-static {
+            display: flex;
+            /* Absorbs the rotation so the row below doesn't clip it. */
+            padding-block: 0.375rem;
+        }
+    }
+
+    .shelf-fan-card {
+        position: relative;
+        width: auto;
+        flex: none;
+        border-radius: 0.25rem;
+        border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+        transform-origin: bottom center;
+    }
+
+    .is-hover.is-poster .shelf-fan-card {
+        height: 11rem;
+    }
+
+    .is-hover.is-wide .shelf-fan-card {
+        height: 7rem;
+    }
+
+    .is-static.is-poster .shelf-fan-card {
+        height: 5.5rem;
+    }
+
+    /* Shorter than the poster fan rather than as tall: three og images side by
+       side are three times as wide, and at 4rem the last one sat on the page
+       margin of a 320px phone. */
+    .is-static.is-wide .shelf-fan-card {
+        height: 3.5rem;
+    }
+
+    /* Overlap is cut to the card's own width — a poster hides about a quarter
+       of the one behind it, a wide cover the same share of a wider card. On
+       the following cards only, so the fan starts on the text's left edge. */
+    .is-hover.is-poster .shelf-fan-card + .shelf-fan-card {
+        margin-left: -2rem;
+    }
+
+    .is-hover.is-wide .shelf-fan-card + .shelf-fan-card {
+        margin-left: -3rem;
+    }
+
+    .is-static.is-poster .shelf-fan-card + .shelf-fan-card {
+        margin-left: -1rem;
+    }
+
+    .is-static.is-wide .shelf-fan-card + .shelf-fan-card {
+        margin-left: -1.75rem;
+    }
+
+    .shelf-fan-card:nth-child(1) {
+        z-index: 5;
+        transform: rotate(-3deg);
+    }
+    .shelf-fan-card:nth-child(2) {
+        z-index: 4;
+        transform: translateY(-4%) rotate(2deg);
+    }
+    .shelf-fan-card:nth-child(3) {
+        z-index: 3;
+        transform: rotate(4deg);
+    }
+    .shelf-fan-card:nth-child(4) {
+        z-index: 2;
+        transform: translateY(-3%) rotate(-1.5deg);
+    }
+    .shelf-fan-card:nth-child(5) {
+        z-index: 1;
+        transform: rotate(3deg);
+    }
+</style>
