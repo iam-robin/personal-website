@@ -1,7 +1,11 @@
 ---
 import { Image } from "astro:assets";
 import { getEntry } from "astro:content";
-import { getFanImages, getFirstBodyImage } from "../../utils/projectFans";
+import {
+    getFanImages,
+    getFirstBodyImage,
+    isPhotoFan,
+} from "../../utils/projectFans";
 
 interface Props {
     projectId: string;
@@ -35,7 +39,7 @@ if (!images) {
 
 // Photos read as plain prints (square corners), everything else keeps the
 // slight rounding of the hero fans.
-const rounded = projectId !== "robins-photos";
+const rounded = !isPhotoFan(projectId);
 ---
 
 {

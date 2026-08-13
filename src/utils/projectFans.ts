@@ -31,14 +31,32 @@ const handcodedArt = Object.keys(artModules)
     .sort()
     .map((key) => artModules[key].default);
 
+// The 365 folder holds nothing but its fan, so an eager glob is safe here —
+// unlike ../assets/photos, where most of the folder never renders.
+const dailyModules = import.meta.glob<{ default: ImageMetadata }>(
+    "../assets/projects/365/*.{jpg,jpeg,webp}",
+    { eager: true },
+);
+const dailyPhotos = Object.keys(dailyModules)
+    .sort()
+    .map((key) => dailyModules[key].default);
+
 const fansByProject: Record<string, ImageMetadata[]> = {
     matchprint: matchprintPosters,
     "robins-photos": fanPhotos,
     geeenerated: handcodedArt,
+    "365": dailyPhotos,
 };
 
+/** Photo fans print square; drawn and rendered work keeps a slight rounding. */
+export const isPhotoFan = (projectId: string): boolean =>
+    projectId === "robins-photos" || projectId === "365";
+
 export function getFanImages(projectId: string): ImageMetadata[] | null {
-    return fansByProject[projectId] ?? null;
+    // An empty array would still read as "has a fan" and render a bare box —
+    // the glob-backed fans are empty until their folder is filled.
+    const fan = fansByProject[projectId];
+    return fan?.length ? fan : null;
 }
 
 // Fallback for projects without a curated fan: the first image in the
