@@ -121,6 +121,10 @@ const tagProps: Record<string, string> = interactive
         line-height: 0;
         -webkit-tap-highlight-color: transparent;
     }
+    /* Busy eating — the click handler ignores it, so don't offer the pointer. */
+    .bird.is-feeding {
+        cursor: default;
+    }
     .bird svg {
         height: 100%;
         width: auto;
@@ -195,6 +199,11 @@ const tagProps: Record<string, string> = interactive
         let streakTimer: ReturnType<typeof setTimeout>;
         let streak = 0;
         btn.addEventListener("click", () => {
+            // While the feeder has the bird working a crumb it owns the
+            // expression (.is-eating). A click state would paint the happy or
+            // angry bird on top of it, and the reset timer below would then
+            // clear it mid-meal — so clicks are inert until the bird is home.
+            if (btn.classList.contains("is-feeding")) return;
             streak++;
             clearTimeout(visualTimer);
             clearTimeout(streakTimer);

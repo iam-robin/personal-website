@@ -426,6 +426,12 @@ const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
         async function run() {
             if (busy) return;
             busy = true;
+            // Hand the bird's expression over to the feeder for the round:
+            // .is-feeding makes Bird.astro's click handler inert, and any
+            // click state still showing from just before is dropped so it
+            // can't sit under the love state.
+            bird.classList.add("is-feeding");
+            bird.classList.remove("is-clicked", "is-angry");
             try {
                 while (queue.length) {
                     // Nearest first, re-decided each time, so crumbs dropped
@@ -457,6 +463,7 @@ const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
                 // it stands rather than fighting for it.
             } finally {
                 busy = false;
+                bird.classList.remove("is-feeding");
             }
         }
 
