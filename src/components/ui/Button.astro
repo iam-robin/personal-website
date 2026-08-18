@@ -1,36 +1,108 @@
 ---
-/**
- * The site's one button style: a mono pill, sized for a real tap target.
- * - `primary` is the filled ink pill — one per view, at most
- * - `secondary` is the soft chip, matching FilterTag's inactive state
- * External links open in a new tab and get an ↗.
- */
-interface Props {
-    href: string;
-    variant?: "primary" | "secondary";
-    external?: boolean;
-    class?: string;
-}
+import type { HTMLAttributes } from "astro/types";
+
+// Both element's attribute sets, so id / title / rel / data-* pass through and
+// are still type-checked. `type` and `href` are ours to define.
+type Props = Omit<HTMLAttributes<"a">, "type" | "href"> &
+    Omit<HTMLAttributes<"button">, "type" | "href"> & {
+        /** Present → renders <a>. Absent → renders <button>. */
+        href?: string;
+        /** <button> only. Defaults to "button" so a stray button never submits. */
+        type?: "button" | "submit";
+        variant?: "primary" | "secondary" | "outline" | "ghost" | "plain";
+        size?: "sm" | "md" | "lg";
+        shape?: "pill" | "box";
+        /** Opens in a new tab and appends ↗. */
+        external?: boolean;
+        /** <button> only. */
+        disabled?: boolean;
+        /** Toggle buttons: sets aria-pressed. Deliberately semantic only — the
+         *  toggles on this site flip aria-pressed from JS, so styling the pressed
+         *  look from a server-rendered prop would freeze it at its initial value.
+         *  Style the pressed state with an [aria-pressed="true"] rule instead. */
+        pressed?: boolean;
+        /** Marks the <a> for the page you're already on. */
+        current?: boolean;
+        /** Square padding for a button whose whole content is an icon. Needs a
+         *  label, since there's no text for a screen reader to fall back on. */
+        iconOnly?: boolean;
+        label?: string;
+        class?: string;
+    };
 
 const {
     href,
+    type = "button",
     variant = "secondary",
+    size = "md",
+    shape = "pill",
     external = false,
+    disabled = false,
+    pressed,
+    current = false,
+    iconOnly = false,
+    label,
     class: className = "",
+    // id, rel, data-*, title and friends pass straight through.
+    ...rest
 } = Astro.props;
 
 const base =
-    "inline-flex items-center gap-1.5 rounded-full px-4 py-2 font-mono text-sm transition-colors";
-const styles = {
+    "inline-flex items-center justify-center gap-1.5 font-mono transition-colors";
+
+const sizes = {
+    sm: iconOnly ? "p-1.5 text-sm" : "px-3 py-1 text-sm",
+    md: iconOnly ? "p-2 text-sm" : "px-4 py-2 text-sm",
+    lg: iconOnly ? "h-12 w-12 text-base" : "px-6 py-3 text-base",
+};
+
+const shapes = { pill: "rounded-full", box: "rounded-md" };
+
+// Hover moves the fill, never the opacity: fading an ink pill fades the paper
+// text with it, so the label goes grey exactly when it's being pointed at.
+const variants = {
     primary: "bg-ink text-paper hover:bg-ink/85 active:bg-ink/70",
     secondary: "bg-ink/5 text-ink hover:bg-ink/10 active:bg-ink/20",
+    outline:
+        "border border-ink bg-paper hover:bg-ink hover:text-paper active:bg-ink/85",
+    ghost: "hover:bg-ink/5 active:bg-ink/15",
+    // No fill and no hover of its own — for buttons sitting on a surface that
+    // isn't paper, where the hover has to go lighter rather than darker. The
+    // caller supplies the interaction; everything else (states, focus, shape)
+    // still comes from here.
+    plain: "",
 };
+
+const classes = [
+    base,
+    shapes[shape],
+    sizes[size],
+    variants[variant],
+    disabled && "disabled:cursor-not-allowed disabled:opacity-55",
+    className,
+];
+
+const Tag = href ? "a" : "button";
 ---
 
-<a
-    href={href}
-    class:list={[base, styles[variant], className]}
-    {...external && { target: "_blank", rel: "noopener noreferrer" }}
+<Tag
+    class:list={classes}
+    aria-label={label}
+    {...href
+        ? {
+              href,
+              ...(current && { "aria-current": "page" }),
+              ...(external && {
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+              }),
+          }
+        : {
+              type,
+              ...(disabled && { disabled: true }),
+              ...(pressed !== undefined && { "aria-pressed": pressed }),
+          }}
+    {...rest}
 >
     <slot />{external && " ↗"}
-</a>
+</Tag>

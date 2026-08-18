@@ -1,6 +1,7 @@
 ---
 import { db, Postcard, eq, and, gt } from "astro:db";
 import SubpageLayout from "../../layouts/SubpageLayout.astro";
+import Button from "../../components/ui/Button.astro";
 import { sendPostcardNotification } from "../../utils/email";
 
 export const prerender = false;
@@ -223,22 +224,22 @@ if (Astro.request.method === "POST") {
             >
 
             <div class="mb-4 flex w-fit gap-2">
-                <button
-                    type="button"
+                <Button
                     data-stamp-variant="shapes"
-                    aria-pressed="true"
-                    class="variant-pill rounded-full bg-ink/5 px-3 py-1 font-mono text-sm text-ink/55 transition-colors hover:bg-ink/10 hover:text-ink focus-visible:text-ink active:bg-ink/20"
+                    pressed={true}
+                    size="sm"
+                    class="variant-pill"
                 >
                     Shapes
-                </button>
-                <button
-                    type="button"
+                </Button>
+                <Button
                     data-stamp-variant="bird"
-                    aria-pressed="false"
-                    class="variant-pill rounded-full bg-ink/5 px-3 py-1 font-mono text-sm text-ink/55 transition-colors hover:bg-ink/10 hover:text-ink focus-visible:text-ink active:bg-ink/20"
+                    pressed={false}
+                    size="sm"
+                    class="variant-pill"
                 >
                     Robin
-                </button>
+                </Button>
             </div>
 
             <div class="flex w-fit items-center gap-4">
@@ -251,23 +252,21 @@ if (Astro.request.method === "POST") {
                     </div>
                 </div>
 
-                <button
-                    type="button"
+                <Button
                     id="regenerate-stamp"
-                    class="shrink-0 rounded-full border border-ink bg-paper px-3 py-1 font-mono text-xs hover:bg-ink hover:text-paper active:bg-ink/85"
+                    variant="outline"
+                    size="sm"
+                    class="shrink-0 text-xs"
                 >
                     Regenerate
-                </button>
+                </Button>
             </div>
             <input type="hidden" id="stamp-svg" name="stamp-svg" value="" />
         </div>
 
-        <button
-            type="submit"
-            class="submit-btn rounded-md bg-ink px-6 py-3 font-mono text-base text-paper transition-opacity hover:opacity-90 active:opacity-80 disabled:cursor-not-allowed disabled:opacity-55"
-        >
+        <Button type="submit" variant="primary" size="lg" shape="box" class="submit-btn">
             Send Postcard
-        </button>
+        </Button>
         <p class="mt-2 text-center font-mono text-xs opacity-50">
             Only the information you provide above is stored in a database.<br
             />No IP addresses or any other personal data is collected.

@@ -1,4 +1,6 @@
 ---
+import Button from "./Button.astro";
+
 /**
  * Compact numbered pagination. Page 1 lives at `baseHref`; page n at
  * `baseHref/n`. Shows first, last, and a window around the current page,
@@ -34,13 +36,9 @@ for (const n of shown) {
 >
     {
         currentPage > 1 && (
-            <a
-                href={href(currentPage - 1)}
-                rel="prev"
-                class="rounded-md px-3 py-1 transition-colors hover:bg-ink/5 active:bg-ink/15"
-            >
+            <Button href={href(currentPage - 1)} rel="prev" variant="ghost" size="sm" shape="box">
                 ← Prev
-            </a>
+            </Button>
         )
     }
     {
@@ -48,30 +46,23 @@ for (const n of shown) {
             n === null ? (
                 <span class="px-1 opacity-40">…</span>
             ) : (
-                <a
+                <Button
                     href={href(n)}
-                    aria-current={n === currentPage ? "page" : undefined}
-                    class:list={[
-                        "rounded-md px-3 py-1 transition-colors",
-                        n === currentPage
-                            ? "bg-ink text-paper active:bg-ink/85"
-                            : "hover:bg-ink/5 active:bg-ink/15",
-                    ]}
+                    current={n === currentPage}
+                    variant={n === currentPage ? "primary" : "ghost"}
+                    size="sm"
+                    shape="box"
                 >
                     {n}
-                </a>
+                </Button>
             ),
         )
     }
     {
         currentPage < lastPage && (
-            <a
-                href={href(currentPage + 1)}
-                rel="next"
-                class="rounded-md px-3 py-1 transition-colors hover:bg-ink/5 active:bg-ink/15"
-            >
+            <Button href={href(currentPage + 1)} rel="next" variant="ghost" size="sm" shape="box">
                 Next →
-            </a>
+            </Button>
         )
     }
 </nav>

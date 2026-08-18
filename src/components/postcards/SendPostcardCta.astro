@@ -1,10 +1,8 @@
 ---
 /** "Send a postcard" button, slotted into the subpage hero below the description. */
+import Button from "../ui/Button.astro";
 ---
 
-<a
-    href="/postcards/new"
-    class="inline-flex items-center gap-2 rounded-md bg-ink px-5 py-3 font-mono text-base text-paper transition-opacity hover:opacity-90"
->
+<Button href="/postcards/new" variant="primary" size="lg" shape="box">
     Send a postcard
-</a>
+</Button>

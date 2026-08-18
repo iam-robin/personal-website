@@ -1,5 +1,6 @@
 ---
 import SubpageLayout from "../../layouts/SubpageLayout.astro";
+import Button from "../../components/ui/Button.astro";
 ---
 
 <SubpageLayout
@@ -8,12 +9,9 @@ import SubpageLayout from "../../layouts/SubpageLayout.astro";
     description="There was an error submitting your postcard. Please try again, or get in touch if the problem persists."
 >
     <div class="flex flex-col items-start gap-4">
-        <a
-            href="/postcards/new"
-            class="inline-block rounded-md bg-ink px-6 py-3 font-mono text-base text-paper transition-opacity hover:opacity-90"
-        >
+        <Button href="/postcards/new" variant="primary" size="lg" shape="box">
             Try again
-        </a>
+        </Button>
         <a
             href="/postcards"
             class="font-mono text-sm underline underline-offset-4 opacity-60 hover:opacity-100"
