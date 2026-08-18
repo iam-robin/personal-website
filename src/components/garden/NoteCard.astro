@@ -51,7 +51,7 @@ const editedDay = note.edited ? formatDate(note.edited) : null;
     style={transformStyles}
 >
     <div
-        class={`corner-shadow-effect hover:before:opacity-0 before:transition-all before:duration-300 ${shadowClass}`}
+        class={`corner-shadow-effect hover:before:opacity-0 before:transition-opacity before:duration-300 ${shadowClass}`}
         data-rotation={randomRotation}
     >
         <a

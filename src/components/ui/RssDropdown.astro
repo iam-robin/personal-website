@@ -31,7 +31,7 @@ const rssFeeds = [
         </div>
         {
             rssFeeds.map((feed) => (
-                <div class="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-ink/5">
+                <div class="flex items-center gap-2 rounded px-3 py-2 transition-colors hover:bg-ink/5">
                     <Icon
                         name="ph:rss-simple-bold"
                         size={16}
@@ -48,12 +48,18 @@ const rssFeeds = [
                         title="Copy feed URL"
                         label={`Copy ${feed.label} RSS feed URL`}
                     >
-                        <Icon name="ph:copy-bold" size={14} class="copy-icon" />
-                        <Icon
-                            name="ph:check-bold"
-                            size={14}
-                            class="check-icon hidden text-green-700"
-                        />
+                        <span class="icon-swap">
+                            <Icon
+                                name="ph:copy-bold"
+                                size={14}
+                                class="copy-icon"
+                            />
+                            <Icon
+                                name="ph:check-bold"
+                                size={14}
+                                class="check-icon"
+                            />
+                        </span>
                     </Button>
                     <Button
                         href={feed.url}
@@ -78,6 +84,54 @@ const rssFeeds = [
     summary::-webkit-details-marker {
         display: none;
     }
+
+    /*
+      Copy -> check confirmation. This swap is the only signal the clipboard
+      write landed, so it cross-fades rather than cutting: both icons stay in
+      the DOM, stacked, and trade opacity/scale/blur. `display` can't
+      transition, which is why the old .hidden toggle had no motion at either
+      end. The state class sits on this span rather than the <Button> so the
+      rule never depends on scoping reaching another component's root.
+
+      No green: the check inherits currentColor like every other icon here,
+      and the palette in theme/colors.css is ink, paper and surface only.
+    */
+    .icon-swap {
+        position: relative;
+        display: inline-flex;
+        width: 14px;
+        height: 14px;
+    }
+
+    .icon-swap :global(svg) {
+        position: absolute;
+        inset: 0;
+        transition-property: opacity, scale, filter;
+        transition-duration: 300ms;
+        transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .icon-swap :global(.copy-icon),
+    .icon-swap.is-copied :global(.check-icon) {
+        opacity: 1;
+        scale: 1;
+        filter: blur(0);
+    }
+
+    .icon-swap :global(.check-icon),
+    .icon-swap.is-copied :global(.copy-icon) {
+        opacity: 0;
+        scale: 0.25;
+        filter: blur(4px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .icon-swap :global(svg) {
+            transition-property: opacity;
+            scale: 1;
+            filter: none;
+        }
+    }
 </style>
 
 <script>
@@ -95,6 +149,12 @@ const rssFeeds = [
 
         // Copy feed URL to clipboard
         dropdown.querySelectorAll(".rss-copy-btn").forEach((button) => {
+            const swap = button.querySelector(".icon-swap");
+            // Per button: a second click while the check is still showing has
+            // to restart the two seconds, not inherit the first click's
+            // deadline and reset early.
+            let resetTimer: ReturnType<typeof setTimeout>;
+
             button.addEventListener("click", async (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -106,14 +166,12 @@ const rssFeeds = [
                     await navigator.clipboard.writeText(
                         `${window.location.origin}${url}`,
                     );
-                    const copyIcon = button.querySelector(".copy-icon");
-                    const checkIcon = button.querySelector(".check-icon");
-                    copyIcon?.classList.add("hidden");
-                    checkIcon?.classList.remove("hidden");
-                    setTimeout(() => {
-                        copyIcon?.classList.remove("hidden");
-                        checkIcon?.classList.add("hidden");
-                    }, 2000);
+                    swap?.classList.add("is-copied");
+                    clearTimeout(resetTimer);
+                    resetTimer = setTimeout(
+                        () => swap?.classList.remove("is-copied"),
+                        2000,
+                    );
                 } catch (err) {
                     console.error("Failed to copy:", err);
                 }

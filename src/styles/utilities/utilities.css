@@ -84,13 +84,42 @@ a.marker:hover {
     }
 }
 
+/* Scale and filter, not `all`: those are the only two properties the hover
+   changes, and `all` would put this 600ms overshoot spring on every colour
+   and decoration change the card's anchor inherits too. */
 .hover-lift {
-    @apply transition-all duration-600 ease-spring-playful;
+    @apply duration-600 ease-spring-playful;
+    transition-property: scale, filter;
 }
 
 .hover-lift:hover {
     @apply scale-102;
     filter: drop-shadow(0px 14px 18px rgba(0, 0, 0, 0.1));
+}
+
+/*
+  The cursor-following list preview (scripts/listHoverPreview.ts). Two rules
+  the script depends on, kept here because the rows that opt in are spread
+  across LogRow, BookmarkItem, /shelf and /projects.
+*/
+
+/* Hovering one row dims the other 56. Without a transition all of them snap
+   1 -> 0.2 and back on every entry and exit, which reads as a flicker rather
+   than a focus. Opacity composites, so 150ms is free. */
+.list-item-image-hover-effect {
+    transition: opacity 150ms ease-out;
+}
+
+/* A lazily-loaded cover is only fetched once the hover reveals it, so the
+   first hover of a row would otherwise place an empty frame and hold it for
+   the length of the request. The script gates the fade on the load event and
+   only sets the attribute once it runs — without it, covers stay visible. */
+.cover-image {
+    transition: opacity 150ms ease-out;
+}
+
+.cover-image[data-preview-ready="false"] {
+    opacity: 0;
 }
 
 /* Postcard corner shadows (from v3) */

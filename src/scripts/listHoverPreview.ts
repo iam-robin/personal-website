@@ -42,6 +42,42 @@ function initHoverEffect() {
             (!(cover instanceof HTMLImageElement) ||
                 !(cover.complete && cover.naturalWidth === 0));
 
+        // Placing an in-flight image is right (see above), but showing it is
+        // not: every preview here is lazy and sits behind `display: none`, so
+        // nothing is fetched until the hover reveals it and the first hover of
+        // a row would put an empty frame under the cursor until it lands.
+        // Gate the fade on load instead — position from the first mousemove,
+        // paint once there are pixels.
+        //
+        // The cover is either the <img> itself (a poster on /series) or a
+        // wrapper around the fan's <Image>s (/projects), and the wrapper is
+        // only ready once all of them are: the fan draws a bordered card per
+        // image, so a partial fan is a row of empty frames.
+        if (cover) {
+            const images =
+                cover instanceof HTMLImageElement
+                    ? [cover]
+                    : [...cover.querySelectorAll("img")];
+            const pending = images.filter(
+                (img) => !(img.complete && img.naturalWidth > 0),
+            );
+            let remaining = pending.length;
+            cover.dataset.previewReady = String(remaining === 0);
+
+            // `error` settles too, or one broken image in a fan of five would
+            // hold the whole preview at opacity 0 forever.
+            pending.forEach((img) => {
+                let settled = false;
+                const settle = () => {
+                    if (settled) return;
+                    settled = true;
+                    if (--remaining <= 0) cover.dataset.previewReady = "true";
+                };
+                img.addEventListener("load", settle, { once: true });
+                img.addEventListener("error", settle, { once: true });
+            });
+        }
+
         item.addEventListener("mouseover", (event) => {
             if (!canPreview()) return;
             if (isCoverValid()) positionCover(event as MouseEvent, item, cover!);

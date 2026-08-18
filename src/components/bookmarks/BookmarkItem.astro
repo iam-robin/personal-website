@@ -36,7 +36,7 @@ const cover = getCover(bookmark.cover);
         {
             cover && (
                 <img
-                    class="cover-image pointer-events-none absolute z-10 hidden max-h-40 max-w-64 rounded-sm shadow-lg md:group-hover:block"
+                    class="cover-image pointer-events-none absolute z-10 hidden max-h-40 max-w-64 rounded-sm shadow-lg outline outline-1 -outline-offset-1 outline-black/10 md:group-hover:block"
                     src={cover.src}
                     alt=""
                     onerror="this.style.display='none'"

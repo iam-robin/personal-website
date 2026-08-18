@@ -24,7 +24,7 @@ const { title, chip, favourite = false, meta = "", cover } = Astro.props;
         {
             cover && (
                 <img
-                    class="cover-image pointer-events-none absolute z-10 hidden w-36 rounded-sm shadow-lg md:group-hover:block"
+                    class="cover-image pointer-events-none absolute z-10 hidden w-36 rounded-sm shadow-lg outline outline-1 -outline-offset-1 outline-black/10 md:group-hover:block"
                     src={cover}
                     alt=""
                     width="400"

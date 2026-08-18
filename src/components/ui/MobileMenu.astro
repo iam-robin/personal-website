@@ -23,8 +23,10 @@ const isActive = (href: string) =>
         <summary
             class="flex h-12 cursor-pointer list-none items-center justify-center gap-2 rounded-xl bg-ink font-mono text-sm text-paper shadow-lg"
         >
-            <Icon name="ph:list-bold" size={16} class="menu-icon" />
-            <Icon name="ph:x-bold" size={16} class="close-icon hidden" />
+            <span class="icon-swap">
+                <Icon name="ph:list-bold" size={16} class="menu-icon" />
+                <Icon name="ph:x-bold" size={16} class="close-icon" />
+            </span>
             Menu
         </summary>
 
@@ -37,7 +39,7 @@ const isActive = (href: string) =>
                         <a
                             href={item.href}
                             class:list={[
-                                "block rounded-lg px-4 py-3 underline-offset-4 transition-colors hover:bg-paper/10",
+                                "block rounded px-4 py-3 underline-offset-4 transition-colors hover:bg-paper/10",
                                 isActive(item.href)
                                     ? "underline"
                                     : "opacity-60",
@@ -74,11 +76,45 @@ const isActive = (href: string) =>
         outline-color: var(--color-paper);
     }
 
-    details[open] .menu-icon {
-        display: none;
+    /* List -> x. Both icons stay in the DOM, stacked, and trade
+       opacity/scale/blur — `display` can't transition, so the old toggle cut
+       between them with no motion at either end. Driven straight off
+       [open], so the pill needs no JS to animate. */
+    .icon-swap {
+        position: relative;
+        display: inline-flex;
+        width: 16px;
+        height: 16px;
     }
+
+    .icon-swap :global(svg) {
+        position: absolute;
+        inset: 0;
+        transition-property: opacity, scale, filter;
+        transition-duration: 300ms;
+        transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .menu-icon,
     details[open] .close-icon {
-        display: block;
+        opacity: 1;
+        scale: 1;
+        filter: blur(0);
+    }
+
+    .close-icon,
+    details[open] .menu-icon {
+        opacity: 0;
+        scale: 0.25;
+        filter: blur(4px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .icon-swap :global(svg) {
+            transition-property: opacity;
+            scale: 1;
+            filter: none;
+        }
     }
 </style>
 

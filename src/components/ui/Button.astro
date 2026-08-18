@@ -47,8 +47,12 @@ const {
     ...rest
 } = Astro.props;
 
+// The fill is the only thing that moves on press, and under a cursor
+// `bg-ink/85` on the primary variant is nearly invisible. A 0.96 squeeze gives
+// the press a second, tactile channel. Scale joins the colour list explicitly
+// rather than via `transition-all` — those are the only properties that change.
 const base =
-    "inline-flex items-center justify-center gap-1.5 font-mono transition-colors";
+    "inline-flex items-center justify-center gap-1.5 font-mono transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-96 motion-reduce:active:scale-100";
 
 const sizes = {
     sm: iconOnly ? "p-1.5 text-sm" : "px-3 py-1 text-sm",
