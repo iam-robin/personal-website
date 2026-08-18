@@ -71,13 +71,13 @@ const year = new Date().getFullYear();
             {
                 columns.map((col) => (
                     <nav class="flex flex-col gap-3 font-mono text-sm">
-                        <span class="mb-1 text-xs tracking-widest uppercase opacity-50">
+                        <span class="mb-1 text-xs tracking-widest text-ink-muted uppercase">
                             {col.title}
                         </span>
                         {col.links.map((link) => (
                             <a
                                 href={link.href}
-                                class="opacity-60 underline-offset-4 hover:underline hover:opacity-100"
+                                class="text-ink-muted underline-offset-4 hover:underline hover:text-ink"
                                 {...(isExternal(link.href) && {
                                     target: "_blank",
                                     rel: link.me
@@ -94,8 +94,11 @@ const year = new Date().getFullYear();
         </div>
     </div>
 
+    {/* The rule is border-ink/30 like every other dotted rule on the site. It
+        used to render at ~ink/12 because the opacity-40 on this div leaked onto
+        its own border — an accident of dimming the text with opacity. */}
     <div
-        class="mt-12 border-t border-dotted border-ink/30 pt-6 font-mono text-sm opacity-40"
+        class="mt-12 border-t border-dotted border-ink/30 pt-6 font-mono text-sm text-ink-muted"
     >
         © {year} Robin Spielmann
     </div>

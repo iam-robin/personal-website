@@ -175,15 +175,6 @@ export const papers = Object.fromEntries(
     ]),
 ) as Record<PaperKey, ResolvedPaper>;
 
-/**
- * First URL segment → stock, which covers every nested route with no special
- * cases.
- *
- * The Lilac stock belongs to the hub and to the logs that carry no art of
- * their own. The logs that do — `books`, `series`, `movies` — are absent on
- * purpose and fall through to `home`, as `garden` and `postcards` do. When
- * `music` grows real content it should follow them out.
- */
 const SECTIONS: Record<string, PaperKey> = {
     work: "work",
     projects: "projects",
@@ -192,18 +183,47 @@ const SECTIONS: Record<string, PaperKey> = {
     shelf: "shelf",
     bookmarks: "shelf",
     music: "shelf",
+    series: "shelf",
+    movies: "shelf",
 
     changelog: "meta",
     colophon: "meta",
     legal: "meta",
 };
 
-export function getPaperKey(pathname: string): PaperKey {
-    // Both ends: the same route arrives as "/work" or "/work/", and a leading
-    // empty segment would send every page to `home`.
-    const segment = pathname.replace(/^\/+|\/+$/g, "").split("/")[0];
+/**
+ * Sections whose individual items read as standalone pages rather than as part
+ * of the section: a blog post and a project write-up each stand on their own,
+ * so the tint marks the index and the item itself falls back to Blank. `work`
+ * has no item pages, and `shelf` keeps its stock throughout because the logs
+ * beneath it are the section rather than pieces of it.
+ */
+const ARTICLE_SECTIONS = new Set(["blog", "projects"]);
 
-    return SECTIONS[segment] ?? "home";
+/**
+ * Second segments that are still the index, only filtered — `/blog/category/x`
+ * is the blog, not a post — so they keep the section's stock.
+ */
+const INDEX_VARIANTS = new Set(["category", "tag", "country"]);
+
+export function getPaperKey(pathname: string): PaperKey {
+    // Trim both ends: the same route arrives as "/work" or "/work/", and a
+    // leading empty segment would send every page to `home`.
+    const segments = pathname
+        .replace(/^\/+|\/+$/g, "")
+        .split("/")
+        .filter(Boolean);
+    const [section, second] = segments;
+
+    if (
+        segments.length > 1 &&
+        ARTICLE_SECTIONS.has(section) &&
+        !INDEX_VARIANTS.has(second)
+    ) {
+        return "home";
+    }
+
+    return SECTIONS[section] ?? "home";
 }
 
 export function getPaper(pathname: string): ResolvedPaper {

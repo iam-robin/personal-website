@@ -21,7 +21,7 @@ const base =
 // right padding in to keep the pill balanced.
 const state = active
     ? `bg-ink text-paper active:bg-ink/85 ${count !== undefined ? "pr-1.5 pl-3" : "px-3"}`
-    : "bg-ink/5 px-3 text-ink/55 hover:bg-ink/10 hover:text-ink focus-visible:text-ink active:bg-ink/20";
+    : "bg-ink/5 px-3 text-ink-muted hover:bg-ink/10 hover:text-ink focus-visible:text-ink active:bg-ink/20";
 ---
 
 <a href={href} class:list={[base, state]}>
@@ -30,7 +30,7 @@ const state = active
         count !== undefined && (
             <span
                 class:list={[
-                    active ? "rounded-full bg-paper/20 px-1.5 py-px" : "opacity-50",
+                    active ? "rounded-full bg-paper/20 px-1.5 py-px" : "text-ink-muted",
                 ]}
             >
                 {count}

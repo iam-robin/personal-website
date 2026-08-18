@@ -49,7 +49,7 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
         class="flex items-baseline justify-between gap-4 border-b border-dotted border-ink/30 pb-4"
     >
         <h2 class="text-sm font-bold">{year.year}</h2>
-        <p class="font-mono text-xs opacity-40">
+        <p class="font-mono text-xs text-ink-muted">
             {year.books.length} books{pages > 0 && ` · ${pages.toLocaleString("en-GB")} pages`}
         </p>
     </div>
@@ -206,7 +206,10 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
     .shelf-detail i {
         display: block;
         font-style: normal;
-        opacity: 0.45;
+        /* Authors, page count, rating, date — real content, so a colour at AA
+           rather than an opacity. The wrapper is aria-hidden (the data is in
+           the row above), but it is what a sighted reader actually reads. */
+        color: var(--color-ink-muted);
     }
 
     /*

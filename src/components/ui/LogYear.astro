@@ -20,7 +20,7 @@ const { label, count, noun } = Astro.props;
         class="flex items-baseline justify-between gap-4 border-b border-dotted border-ink/30 pb-4"
     >
         <h2 class="text-sm font-bold">{label}</h2>
-        <p class="font-mono text-xs opacity-40">
+        <p class="font-mono text-xs text-ink-muted">
             {`${count} ${count === 1 ? noun : `${noun}s`}`}
         </p>
     </div>

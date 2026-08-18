@@ -66,7 +66,7 @@ const rowClass = draft
 // shorthand, which resets the start line back to auto.
 const bodySpan = "col-start-2 col-end-4 sm:col-end-3";
 
-const meta = (tags ?? []).join(" · ");
+const tagList = tags ?? [];
 ---
 
 <Tag
@@ -79,14 +79,13 @@ const meta = (tags ?? []).join(" · ");
     <InkMark
         name={slug}
         class:list={[
-            draft ? "opacity-20" : "ink-row-mark",
+            draft ? "opacity-55" : "ink-row-mark",
             "col-start-1 row-start-1 mt-1 h-5 w-5",
         ]}
     />
     <h3
         class:list={[
             "ink-row-title col-start-2 row-start-1 text-base",
-            { "opacity-60": draft },
         ]}
     >
         {title}
@@ -94,8 +93,7 @@ const meta = (tags ?? []).join(" · ");
     <p
         class:list={[
             bodySpan,
-            "row-start-2 text-sm",
-            draft ? "opacity-40" : "opacity-70",
+            "row-start-2 text-sm text-ink-muted",
         ]}
     >
         {description}
@@ -105,16 +103,33 @@ const meta = (tags ?? []).join(" · ");
             <span
                 class:list={[
                     bodySpan,
-                    "row-start-3 mt-1 inline-flex w-fit items-center gap-1.5 rounded-full border border-dotted border-ink/40 px-2.5 py-0.5 text-xs opacity-60",
+                    /* border and dot carried the opacity too — at ink/40 x 0.6.
+                       Set to ink/25 so the chip keeps its weight now that the
+                       text is a colour rather than a dimmed layer. */
+                    "row-start-3 mt-1 inline-flex w-fit items-center gap-1.5 rounded-full border border-dotted border-ink/25 px-2.5 py-0.5 text-xs text-ink-muted",
                 ]}
             >
-                <span class="h-1.5 w-1.5 rounded-full bg-ink/40" />
+                <span class="h-1.5 w-1.5 rounded-full bg-ink/25" />
                 Coming soon
             </span>
         ) : (
-            meta && (
-                <span class:list={[bodySpan, "row-start-3 text-sm opacity-40"]}>
-                    {meta}
+            tagList.length > 0 && (
+                /* Chips rather than a dimmed line of prose: the contrast floor
+                   leaves ink only two steps, so the tags step back by being a
+                   different kind of object instead of a lighter grey. Filled,
+                   not dotted — the "Coming soon" chip above is a dotted pill,
+                   and a status and a topic shouldn't read as the same thing. */
+                <span
+                    class:list={[
+                        bodySpan,
+                        "row-start-3 mt-1 flex flex-wrap gap-1.5",
+                    ]}
+                >
+                    {tagList.map((tag) => (
+                        <span class="rounded-full bg-ink/10 px-2 py-0.5 text-xs">
+                            {tag}
+                        </span>
+                    ))}
                 </span>
             )
         )
@@ -131,7 +146,7 @@ const meta = (tags ?? []).join(" · ");
     <span
         class:list={[
             "col-start-3 row-start-1 flex items-center gap-2 text-sm whitespace-nowrap",
-            draft ? "opacity-30" : "ink-row-meta",
+            draft ? "text-ink-muted" : "ink-row-meta",
         ]}
     >
         {year}

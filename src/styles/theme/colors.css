@@ -12,6 +12,7 @@
     --color-ink: #1a1919; /* terrain dark-500 — warm near-black */
     --color-paper: #eae8e3; /* terrain light-400 — warm off-white */
     --color-surface: #d2d1ca; /* terrain light-200 — soft card greige */
+    --color-ink-muted: #1a1919b3;
 }
 
 /*

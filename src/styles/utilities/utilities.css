@@ -45,22 +45,25 @@ a.marker:hover {
   .ink-row-{mark,title,meta}; anything unmarked stays put.
 */
 .ink-row {
-    --ink-row-mark: 0.4;
-}
-
-.ink-row-mark,
-.ink-row-meta {
-    transition: opacity 150ms ease-out;
+    /* 0.55, not 0.4: the marks are icons, so the bar is 3:1 rather than 4.5:1,
+       and 0.55 ink measures 3.44:1 on the tightest stock. Still an opacity
+       because it dials a stroke's weight, not a text colour. */
+    --ink-row-mark: 0.55;
 }
 
 .ink-row-mark {
     /* A variable rather than a constant so a row whose mark carries more ink
        than a 1.5px stroke can dial itself back to read at the same weight. */
     opacity: var(--ink-row-mark);
+    transition: opacity 150ms ease-out;
 }
 
 .ink-row-meta {
-    opacity: 0.4;
+    transition: color 150ms ease-out;
+    /* Colour, not opacity: this column carries real content — contact handles,
+       project years, "leave a note →" — so it has to clear 4.5:1, and opacity
+       would drag any border or icon inside it down too. */
+    color: var(--color-ink-muted);
 }
 
 /* Only where there's a pointer to hover with. On a touch device :hover
@@ -68,11 +71,11 @@ a.marker:hover {
    up — a highlight nobody asked for, on a page they've already left. */
 @media (hover: hover) {
     .ink-row:hover .ink-row-mark {
-        opacity: calc(var(--ink-row-mark) + 0.4);
+        opacity: 1;
     }
 
     .ink-row:hover .ink-row-meta {
-        opacity: 1;
+        color: var(--color-ink);
     }
 
     .ink-row:hover .ink-row-title {

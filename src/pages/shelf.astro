@@ -81,13 +81,15 @@ const current = [
     {
         current.length > 0 && (
             <section class="mb-20">
-                <Eyebrow>Right now</Eyebrow>
+                <Eyebrow class="border-b border-dotted border-ink/30 pb-4">
+                    Right now
+                </Eyebrow>
                 <ul class="mt-4 flex flex-col gap-2">
                     {current.map((item, i) => (
                         <li class="flex items-baseline gap-3 font-mono text-sm">
                             {/* The label names the group, not the row: a second
                                 book under "Reading" leaves it blank. */}
-                            <span class="w-20 shrink-0 opacity-40">
+                            <span class="w-20 shrink-0 text-xs tracking-widest text-ink-muted uppercase">
                                 {current[i - 1]?.label === item.label
                                     ? ""
                                     : item.label}
@@ -95,7 +97,10 @@ const current = [
                             <span>
                                 {item.title}
                                 {item.by && (
-                                    <span class="opacity-40"> — {item.by}</span>
+                                    <span class="text-ink-muted">
+                                        {" "}
+                                        — {item.by}
+                                    </span>
                                 )}
                             </span>
                         </li>
@@ -126,11 +131,11 @@ const current = [
                                 <h2 class="text-lg font-bold underline-offset-4 group-hover:underline">
                                     {shelf.title}
                                 </h2>
-                                <span class="shrink-0 font-mono text-xs opacity-40">
+                                <span class="shrink-0 font-mono text-xs text-ink-muted">
                                     {shelf.count}
                                 </span>
                             </div>
-                            <p class="max-w-xl font-mono text-sm opacity-70">
+                            <p class="max-w-xl font-mono text-sm text-ink-muted">
                                 {shelf.description}
                             </p>
                             {fan && (

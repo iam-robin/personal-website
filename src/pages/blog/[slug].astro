@@ -58,7 +58,7 @@ const showRail = sections.length >= 2;
                 <SectionRail sections={sections} variant="rail" />
                 {/* Date and category stack rather than joining with a "·" —
                     at 13rem the joined form wraps mid-line. */}
-                <div class="font-mono text-xs opacity-50">
+                <div class="font-mono text-xs text-ink-muted">
                     <p>{formattedDate}</p>
                     {category && <p class="mt-1">{category}</p>}
                 </div>
@@ -71,7 +71,7 @@ const showRail = sections.length >= 2;
             <h1 class="text-2xl font-bold">{post.data.title}</h1>
             {
                 post.data.subtitle && (
-                    <p class="mt-4 font-mono text-base opacity-60">
+                    <p class="mt-4 font-mono text-base text-ink-muted">
                         {post.data.subtitle}
                     </p>
                 )
@@ -79,7 +79,7 @@ const showRail = sections.length >= 2;
             {/* Steps aside once the rail is carrying it */}
             <p
                 class:list={[
-                    "mt-6 font-mono text-sm opacity-40",
+                    "mt-6 font-mono text-sm text-ink-muted",
                     showRail && "lg:hidden",
                 ]}
             >

@@ -58,7 +58,7 @@ const cover = getCover(bookmark.cover);
         </div>
         <div class="hidden h-px w-full grow bg-ink/15 md:block"></div>
         <p
-            class="shrink-0 text-right font-mono text-xs opacity-40 group-hover:hidden"
+            class="shrink-0 text-right font-mono text-xs text-ink-muted group-hover:hidden"
         >
             {formattedDate}
         </p>
@@ -84,7 +84,7 @@ const cover = getCover(bookmark.cover);
                 <BookmarkTypeMark type={bookmark.type} />
                 <p class="mr-2 truncate font-mono text-xs">{bookmark.title}</p>
             </div>
-            <p class="shrink-0 text-right font-mono text-xs opacity-40">
+            <p class="shrink-0 text-right font-mono text-xs text-ink-muted">
                 {formattedDate}
             </p>
         </div>
@@ -98,7 +98,7 @@ const cover = getCover(bookmark.cover);
                     </div>
                 )
             }
-            <div class="flex shrink-0 items-center gap-2 font-mono opacity-40">
+            <div class="flex shrink-0 items-center gap-2 font-mono text-ink-muted">
                 <p class="text-xs">{domain}</p>
                 <Icon name="ph:arrow-up-right-bold" width={12} />
             </div>

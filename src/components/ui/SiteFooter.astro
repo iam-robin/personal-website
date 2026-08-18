@@ -27,12 +27,12 @@ const year = new Date().getFullYear();
             items.map((item) => (
                 <a
                     href={item.href}
-                    class="opacity-60 underline-offset-4 hover:underline hover:opacity-100"
+                    class="text-ink-muted underline-offset-4 hover:underline hover:text-ink"
                 >
                     {item.label}
                 </a>
             ))
         }
     </nav>
-    <span class="opacity-40">© {year} Robin Spielmann</span>
+    <span class="text-ink-muted">© {year} Robin Spielmann</span>
 </div>

@@ -94,11 +94,11 @@ const birds = [
         <!-- Colours -->
         <section>
             <h2
-                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+                class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
             >
                 Colours
             </h2>
-            <p class="mb-8 max-w-xl font-mono text-sm opacity-70">
+            <p class="mb-8 max-w-xl font-mono text-sm">
                 Three tokens. Ink never moves. The paper changes per section,
                 and the surface is mixed from whatever paper it lands on — so
                 every card, hairline and code chip follows the room it's in.
@@ -115,15 +115,15 @@ const birds = [
                             />
                             <div class="font-mono text-sm">
                                 <div>{c.role}</div>
-                                <div class="opacity-50">{c.name}</div>
-                                <div class="opacity-50">{c.value}</div>
+                                <div class="text-ink-muted">{c.name}</div>
+                                <div class="text-ink-muted">{c.value}</div>
                             </div>
                         </div>
                     ))
                 }
             </div>
 
-            <p class="mt-12 mb-6 max-w-xl font-mono text-sm opacity-70">
+            <p class="mt-12 mb-6 max-w-xl font-mono text-sm">
                 The stocks. The tinted ones sit at the same lightness and the
                 same chroma — only the hue moves — so no section shouts louder
                 than another. Home, the garden and the postcards keep the blank
@@ -140,7 +140,7 @@ const birds = [
                             />
                             <div class="font-mono text-xs">
                                 <div>{stock.name}</div>
-                                <div class="opacity-50">{stock.hex}</div>
+                                <div class="text-ink-muted">{stock.hex}</div>
                             </div>
                         </div>
                     ))
@@ -151,7 +151,7 @@ const birds = [
         <!-- Typefaces -->
         <section>
             <h2
-                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+                class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
             >
                 Typefaces
             </h2>
@@ -161,9 +161,9 @@ const birds = [
                         <div class="flex flex-col gap-3 py-8 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-8">
                             <div class="shrink-0 font-mono text-sm sm:w-48">
                                 <div>{t.name}</div>
-                                <div class="opacity-50">{t.token}</div>
-                                <div class="opacity-50">{t.role}</div>
-                                <div class="opacity-50">{t.foundry}</div>
+                                <div class="text-ink-muted">{t.token}</div>
+                                <div class="text-ink-muted">{t.role}</div>
+                                <div class="text-ink-muted">{t.foundry}</div>
                             </div>
                             <p class:list={[t.cls, "text-lg"]}>{t.sample}</p>
                         </div>
@@ -175,18 +175,18 @@ const birds = [
         <!-- Type scale -->
         <section>
             <h2
-                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+                class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
             >
                 Type scale
             </h2>
-            <p class="mb-8 max-w-xl font-mono text-sm opacity-70">
+            <p class="mb-8 max-w-xl font-mono text-sm">
                 A fluid scale tuned to the container width, not the viewport.
             </p>
             <div class="flex flex-col divide-y divide-dotted divide-ink/30">
                 {
                     typeScale.map((s) => (
                         <div class="flex items-baseline gap-6 py-4 first:pt-0 last:pb-0">
-                            <span class="w-20 shrink-0 font-mono text-xs opacity-50">
+                            <span class="w-20 shrink-0 font-mono text-xs text-ink-muted">
                                 {s.token}
                             </span>
                             <span class:list={[s.cls, "font-sans font-bold"]}>
@@ -201,11 +201,11 @@ const birds = [
         <!-- The bird -->
         <section>
             <h2
-                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+                class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
             >
                 The robin
             </h2>
-            <p class="mb-8 max-w-xl font-mono text-sm opacity-70">
+            <p class="mb-8 max-w-xl font-mono text-sm">
                 One bird, a few moods. It's the logo and the favicon. Click the
                 one in the corner.
             </p>
@@ -225,7 +225,7 @@ const birds = [
                             />
                             <div class="font-mono text-sm">
                                 <div>{b.label}</div>
-                                <div class="opacity-50">{b.note}</div>
+                                <div class="text-ink-muted">{b.note}</div>
                             </div>
                         </div>
                     ))
@@ -236,7 +236,7 @@ const birds = [
                     <Bird404 class="h-24 w-auto text-ink" />
                     <div class="font-mono text-sm">
                         <div>Dazed</div>
-                        <div class="opacity-50">You found a 404</div>
+                        <div class="text-ink-muted">You found a 404</div>
                     </div>
                 </div>
             </div>
@@ -245,7 +245,7 @@ const birds = [
         <!-- Signature details -->
         <section>
             <h2
-                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+                class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
             >
                 Signature details
             </h2>
@@ -253,7 +253,7 @@ const birds = [
                 <div
                     class="flex flex-col gap-2 py-6 first:pt-0 sm:flex-row sm:items-center sm:gap-8"
                 >
-                    <div class="shrink-0 font-mono text-sm opacity-50 sm:w-48">
+                    <div class="shrink-0 font-mono text-sm text-ink-muted sm:w-48">
                         .marker
                     </div>
                     <p class="font-mono text-base">
@@ -264,7 +264,7 @@ const birds = [
                 <div
                     class="flex flex-col gap-2 py-6 last:pb-0 sm:flex-row sm:items-center sm:gap-8"
                 >
-                    <div class="shrink-0 font-mono text-sm opacity-50 sm:w-48">
+                    <div class="shrink-0 font-mono text-sm text-ink-muted sm:w-48">
                         a:hover
                     </div>
                     <p class="font-mono text-base">
@@ -277,7 +277,7 @@ const birds = [
         <!-- Built with -->
         <section>
             <h2
-                class="mb-8 font-mono text-xs tracking-widest uppercase opacity-50"
+                class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
             >
                 Built with
             </h2>
@@ -288,7 +288,7 @@ const birds = [
                 in Apercu, Fira Mono and LiebeHeide. It lives at iamrob.in,
                 served by a small Node server on Hetzner via Coolify.
             </p>
-            <p class="mt-6 font-mono text-sm opacity-50">
+            <p class="mt-6 font-mono text-sm text-ink-muted">
                 Last updated {timeSince(new Date(latest.date))} —{" "}
                 <a href="/changelog">v{latest.version}</a>
             </p>

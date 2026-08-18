@@ -47,14 +47,14 @@ const { title, chip, favourite = false, meta = "", cover } = Astro.props;
             <p class="truncate font-mono text-sm">{title}</p>
             {
                 chip && (
-                    <span class="shrink-0 font-mono text-xs opacity-40">
+                    <span class="shrink-0 font-mono text-xs text-ink-muted">
                         {chip}
                     </span>
                 )
             }
             {
                 favourite && (
-                    <span class="shrink-0 opacity-40" aria-hidden="true">
+                    <span class="shrink-0 opacity-55" aria-hidden="true">
                         <Icon name="ph:heart-fill" width={11} />
                     </span>
                 )
@@ -63,6 +63,6 @@ const { title, chip, favourite = false, meta = "", cover } = Astro.props;
 
         <div class="hidden h-px w-full grow bg-ink/10 md:block"></div>
 
-        {meta && <p class="shrink-0 font-mono text-xs opacity-40">{meta}</p>}
+        {meta && <p class="shrink-0 font-mono text-xs text-ink-muted">{meta}</p>}
     </div>
 </li>

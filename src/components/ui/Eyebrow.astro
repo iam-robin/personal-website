@@ -10,6 +10,6 @@ interface Props {
 const { class: className = "" } = Astro.props;
 ---
 
-<p class={`font-mono text-sm tracking-wide opacity-50 ${className}`}>
+<p class={`font-mono text-sm tracking-wide text-ink-muted ${className}`}>
     <slot />
 </p>

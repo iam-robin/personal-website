@@ -22,7 +22,7 @@ const items: { label: string; href: string; me?: boolean }[] = [
         items.map((item) => (
             <a
                 href={item.href}
-                class="opacity-60 underline-offset-4 hover:underline hover:opacity-100"
+                class="text-ink-muted underline-offset-4 hover:underline hover:text-ink"
                 {...(item.href.startsWith("http") && {
                     target: "_blank",
                     rel: item.me

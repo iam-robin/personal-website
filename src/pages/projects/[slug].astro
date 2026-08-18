@@ -45,7 +45,7 @@ const { title, description, tags, year } = project.data;
     <article class="mx-auto w-full max-w-prose px-gutter py-16 md:py-24">
         <header>
             <h1 class="text-3xl font-bold md:text-4xl">{title}</h1>
-            <p class="mt-2 text-lg text-ink/70">{description}</p>
+            <p class="mt-2 text-lg">{description}</p>
             {
                 tags && tags.length > 0 && (
                     <div class="mt-5 flex flex-wrap gap-2">
@@ -57,9 +57,7 @@ const { title, description, tags, year } = project.data;
                     </div>
                 )
             }
-            <!-- /65 rather than /60: on the clay stock 60% ink is 4.2:1,
-                 under AA. -->
-            {year && <p class="mt-4 font-mono text-sm text-ink/65">{year}</p>}
+            {year && <p class="mt-4 font-mono text-sm text-ink-muted">{year}</p>}
         </header>
 
         <div class="blog-prose mt-12">

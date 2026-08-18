@@ -14,7 +14,7 @@ const rssFeeds = [
 
 <details id="rss-dropdown" class="relative">
     <summary
-        class="cursor-pointer list-none p-2 opacity-60 transition-opacity hover:opacity-100"
+        class="cursor-pointer list-none p-2 text-ink-muted transition-colors hover:text-ink"
         aria-label="RSS Feeds"
         title="Subscribe to RSS"
     >
@@ -25,7 +25,7 @@ const rssFeeds = [
         class="absolute right-0 z-50 mt-2 w-64 rounded-xl border border-ink/15 bg-surface p-2 shadow-lg"
     >
         <div class="mb-1 border-b border-dotted border-ink/30 px-3 py-2">
-            <h3 class="font-mono text-xs tracking-wide uppercase opacity-50">
+            <h3 class="font-mono text-xs tracking-wide text-ink-muted uppercase">
                 RSS Feeds
             </h3>
         </div>
@@ -35,7 +35,7 @@ const rssFeeds = [
                     <Icon
                         name="ph:rss-simple-bold"
                         size={16}
-                        class="shrink-0 opacity-50"
+                        class="shrink-0 opacity-55"
                     />
                     <span class="flex-1 text-sm">{feed.label}</span>
                     <Button

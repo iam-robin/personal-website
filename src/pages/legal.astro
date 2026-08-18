@@ -38,11 +38,11 @@ const sections: { title: string; body: string }[] = [
         <section class="grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2">
             <div>
                 <h2
-                    class="mb-4 font-mono text-xs tracking-widest uppercase opacity-50"
+                    class="mb-4 font-mono text-xs tracking-widest text-ink-muted uppercase"
                 >
                     Editor
                 </h2>
-                <ul class="flex flex-col gap-1 font-mono text-base opacity-80">
+                <ul class="flex flex-col gap-1 font-mono text-base">
                     <li>Robin Spielmann</li>
                     <li>hey@iamrob.in</li>
                     <li>www.iamrob.in</li>
@@ -50,11 +50,11 @@ const sections: { title: string; body: string }[] = [
             </div>
             <div>
                 <h2
-                    class="mb-4 font-mono text-xs tracking-widest uppercase opacity-50"
+                    class="mb-4 font-mono text-xs tracking-widest text-ink-muted uppercase"
                 >
                     Contact
                 </h2>
-                <ul class="flex flex-col gap-1 font-mono text-base opacity-80">
+                <ul class="flex flex-col gap-1 font-mono text-base">
                     <li>Robin Spielmann</li>
                     <li>Pelkovenstr. 70</li>
                     <li>80992 München</li>
@@ -67,10 +67,10 @@ const sections: { title: string; body: string }[] = [
             {
                 sections.map((s) => (
                     <section class="py-10 first:pt-0">
-                        <h2 class="mb-4 font-mono text-xs tracking-widest uppercase opacity-50">
+                        <h2 class="mb-4 font-mono text-xs tracking-widest text-ink-muted uppercase">
                             {s.title}
                         </h2>
-                        <p class="max-w-2xl font-mono text-base opacity-80">
+                        <p class="max-w-2xl font-mono text-base">
                             {s.body}
                         </p>
                     </section>
@@ -80,11 +80,11 @@ const sections: { title: string; body: string }[] = [
             <!-- Postcard data collection -->
             <section class="py-10 last:pb-0">
                 <h2
-                    class="mb-4 font-mono text-xs tracking-widest uppercase opacity-50"
+                    class="mb-4 font-mono text-xs tracking-widest text-ink-muted uppercase"
                 >
                     Postcard data collection
                 </h2>
-                <div class="flex max-w-2xl flex-col gap-4 font-mono text-base opacity-80">
+                <div class="flex max-w-2xl flex-col gap-4 font-mono text-base">
                     <p>
                         When you send a postcard through the postcard feature, I
                         store the following in my database (Astro DB, built on

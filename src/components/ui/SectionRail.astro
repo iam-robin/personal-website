@@ -39,7 +39,7 @@ const show = sections.length >= 2;
     show &&
         (variant === "rail" ? (
             <nav aria-label={label} data-rail-root class={className}>
-                <p class="font-mono text-xs tracking-wide opacity-40">
+                <p class="font-mono text-xs tracking-wide text-ink-muted">
                     {label}
                 </p>
                 <ul class="mt-4 flex flex-col gap-2 font-sans text-sm">
@@ -60,7 +60,7 @@ const show = sections.length >= 2;
             <details data-rail-root class={`rail-details group text-sm ${className}`}>
                 <summary
                     aria-label={label}
-                    class="inline-flex cursor-pointer items-center gap-2 font-mono opacity-40 transition-opacity hover:opacity-70"
+                    class="inline-flex cursor-pointer items-center gap-2 font-mono text-ink-muted transition-colors hover:text-ink"
                 >
                     <span aria-hidden="true" class="caret inline-block">
                         ›
@@ -104,20 +104,28 @@ const show = sections.length >= 2;
        every entry there would make it look disabled rather than waiting. */
     .rail-link {
         position: relative;
-        opacity: 1;
-        transition: opacity 200ms ease;
+        color: var(--color-ink);
+        transition: color 200ms var(--ease-out, ease-out);
     }
 
     /* Once a section is under way the others step back. A short dash marks the
        current one, so the rail carries no permanent chrome. */
+    /* Colour rather than opacity: these are links, so the stepped-back state
+       still has to clear 4.5:1. */
     [data-rail-reading] .rail-link {
-        opacity: 0.45;
+        color: var(--color-ink-muted);
     }
-    [data-rail-reading] .rail-link:hover {
-        opacity: 0.8;
-    }
+    [data-rail-reading] .rail-link:hover,
     [data-rail-reading] .rail-link[aria-current] {
-        opacity: 1;
+        color: var(--color-ink);
+    }
+
+    /* Weight, not just colour: with the contrast floor the stepped-back entries
+       can only go down to ink/70, which is too small a gap to read as "you are
+       here" on its own. The dash alone doesn't help either — it marks the row
+       without changing how the text scans. */
+    .rail-link[aria-current] {
+        font-weight: 700;
     }
     .rail-link[aria-current]::before {
         content: "";

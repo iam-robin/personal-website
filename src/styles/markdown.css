@@ -121,9 +121,10 @@
 
 /* Blockquotes */
 .blog-prose blockquote {
-    border-left: 2px dotted color-mix(in srgb, var(--color-ink) 40%, transparent);
+    /* Quoted copy is body copy — full ink. The 0.8 opacity used to drag this
+       border down to ~32% too, so it drops to match. */
+    border-left: 2px dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
     padding-left: 1rem;
-    opacity: 0.8;
 }
 
 /* Rules */
@@ -163,8 +164,9 @@
 }
 .blog-prose th {
     font-weight: 400;
-    opacity: 0.5;
-    border-bottom-color: color-mix(in srgb, var(--color-ink) 50%, transparent);
+    color: var(--color-ink-muted);
+    /* Was 50% ink dimmed by the 0.5 opacity above — ~25% rendered. */
+    border-bottom-color: color-mix(in srgb, var(--color-ink) 25%, transparent);
 }
 .blog-prose tbody tr:last-child :is(th, td) {
     border-bottom: 0;
@@ -175,7 +177,7 @@
     /* Pull up against the image's own bottom margin */
     margin-top: -1.25rem;
     font-size: var(--text-sm);
-    opacity: 0.5;
+    color: var(--color-ink-muted);
 }
 
 /* Ported from v3, where they sat in the margin. */
@@ -184,7 +186,7 @@
     margin-top: 0.5em;
     font-size: 0.85em;
     line-height: var(--leading-normal);
-    opacity: 0.55;
+    color: var(--color-ink-muted);
 }
 .blog-prose .margin-toggle {
     display: none;
@@ -194,7 +196,8 @@
 .blog-prose .footnotes {
     margin-top: 3em;
     padding-top: 1.5em;
-    border-top: 1px dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
+    /* Was 30% ink dimmed by the 0.7 below — ~21% rendered. */
+    border-top: 1px dotted color-mix(in srgb, var(--color-ink) 20%, transparent);
     font-size: var(--text-sm);
-    opacity: 0.7;
+    color: var(--color-ink-muted);
 }

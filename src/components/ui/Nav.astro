@@ -29,8 +29,8 @@ const isActive = (href: string) =>
                 class:list={[
                     "underline-offset-4",
                     isActive(item.href)
-                        ? "underline opacity-100"
-                        : "opacity-60 hover:underline hover:opacity-100",
+                        ? "underline"
+                        : "text-ink-muted hover:underline hover:text-ink",
                 ]}
                 {...(item.external && {
                     target: "_blank",

@@ -27,20 +27,25 @@ const shows = new Set(seasons.map((season) => season.title)).size;
         {years.map((year) => <SeriesYear year={year} />)}
     </div>
 
-    <p class="mt-16 font-mono text-xs opacity-40">
+    <p class="mt-16 font-mono text-xs text-ink-muted">
         {seasons.length} seasons across {shows} shows.
     </p>
 
     {
         watchlist.length > 0 && (
             <section class="mt-24">
-                <Eyebrow>On the list</Eyebrow>
+                <Eyebrow class="border-b border-dotted border-ink/30 pb-4">
+                    On the list
+                </Eyebrow>
                 <ul class="mt-4 flex flex-col gap-2">
                     {watchlist.map((item, i) => (
                         <li class="flex items-baseline gap-3 font-mono text-sm">
                             {/* The label names the group, not the row — the
                                 same list /shelf uses for "Right now". */}
-                            <span class="w-32 shrink-0 opacity-40">
+                            {/* The label register — uppercase + tracking — carries the column,
+                                since the contrast floor leaves ink only two steps
+                                and the muted one is already spent on the author. */}
+                            <span class="w-32 shrink-0 text-xs tracking-widest text-ink-muted uppercase">
                                 {watchlist[i - 1]?.label === item.label
                                     ? ""
                                     : item.label}
@@ -48,7 +53,7 @@ const shows = new Set(seasons.map((season) => season.title)).size;
                             <span>
                                 {item.title}
                                 {item.season && (
-                                    <span class="opacity-40">
+                                    <span class="text-ink-muted">
                                         {" "}
                                         — Season {item.season}
                                     </span>
