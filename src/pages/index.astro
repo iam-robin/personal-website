@@ -215,10 +215,7 @@ const hoverCss = `@media (min-width: 64rem) and (hover: hover) {\n${hideDefaultC
                                     </>
                                 )}
                                 {project.id === "robins-photos" && (
-                                    <div
-                                        class="photo-fan"
-                                        aria-hidden="true"
-                                    >
+                                    <div class="photo-fan" aria-hidden="true">
                                         {fanPhotos.map((photo) => (
                                             <Image
                                                 src={photo}
@@ -226,17 +223,15 @@ const hoverCss = `@media (min-width: 64rem) and (hover: hover) {\n${hideDefaultC
                                                 width={600}
                                                 widths={[300, 600]}
                                                 sizes="18vw"
-                                                loading="eager"
+                                                loading="lazy"
+                                                fetchpriority="low"
                                                 class="photo-fan-card"
                                             />
                                         ))}
                                     </div>
                                 )}
                                 {project.id === "matchprint" && (
-                                    <div
-                                        class="poster-fan"
-                                        aria-hidden="true"
-                                    >
+                                    <div class="poster-fan" aria-hidden="true">
                                         {matchprintPosters.map((poster) => (
                                             <Image
                                                 src={poster}
@@ -244,7 +239,8 @@ const hoverCss = `@media (min-width: 64rem) and (hover: hover) {\n${hideDefaultC
                                                 width={600}
                                                 widths={[300, 600]}
                                                 sizes="18vw"
-                                                loading="eager"
+                                                loading="lazy"
+                                                fetchpriority="low"
                                                 class="poster-fan-card"
                                             />
                                         ))}
@@ -259,7 +255,8 @@ const hoverCss = `@media (min-width: 64rem) and (hover: hover) {\n${hideDefaultC
                                                 width={600}
                                                 widths={[300, 600]}
                                                 sizes="16vw"
-                                                loading="eager"
+                                                loading="lazy"
+                                                fetchpriority="low"
                                                 class="art-fan-card"
                                             />
                                         ))}
@@ -270,33 +267,42 @@ const hoverCss = `@media (min-width: 64rem) and (hover: hover) {\n${hideDefaultC
                     })
                 }
 
-                {/* Swaps in when the contact section's "Send a postcard" row
-                    is hovered (see hoverCss + data-hero-panel). */}
+                {
+                    /* Swaps in when the contact section's "Send a postcard" row
+                    is hovered (see hoverCss + data-hero-panel). */
+                }
                 <div
                     data-panel="postcards"
                     class="pointer-events-none invisible absolute inset-0 flex flex-col justify-center px-gutter opacity-0 lg:px-gutter-lg"
                 >
-                    {/* The handwriting's distortion filter must be in the DOM
-                        or the filtered text is not rendered. */}
+                    {
+                        /* The handwriting's distortion filter must be in the DOM
+                        or the filtered text is not rendered. */
+                    }
                     <svg class="hidden" aria-hidden="true">
                         <defs>
                             <filter id="distort-xl">
-                                <feTurbulence baseFrequency="1 1" numOctaves="1" />
-                                <feDisplacementMap in="SourceGraphic" scale="1.3" />
+                                <feTurbulence baseFrequency="1 1" numOctaves="1"
+                                ></feTurbulence>
+                                <feDisplacementMap
+                                    in="SourceGraphic"
+                                    scale="1.3"></feDisplacementMap>
                             </filter>
                         </defs>
                     </svg>
                     <div class="postcard-fan" aria-hidden="true">
-                        {newestPostcards.map((postcard) => (
-                            <div class="postcard-fan-card">
-                                <PostcardItem
-                                    {...toPostcardProps(postcard)}
-                                    distorted={false}
-                                    hoverEffect={false}
-                                    rotation={0}
-                                />
-                            </div>
-                        ))}
+                        {
+                            newestPostcards.map((postcard) => (
+                                <div class="postcard-fan-card">
+                                    <PostcardItem
+                                        {...toPostcardProps(postcard)}
+                                        distorted={false}
+                                        hoverEffect={false}
+                                        rotation={0}
+                                    />
+                                </div>
+                            ))
+                        }
                     </div>
                 </div>
             </div>
@@ -326,7 +332,9 @@ const hoverCss = `@media (min-width: 64rem) and (hover: hover) {\n${hideDefaultC
         <div class="entrance-cover" aria-hidden="true"></div>
 
         <!-- Mobile-only: stands in for the hero's SiteFooter. -->
-        <FooterColumns class="border-t border-dotted border-ink/30 px-gutter py-12 lg:hidden" />
+        <FooterColumns
+            class="border-t border-dotted border-ink/30 px-gutter py-12 lg:hidden"
+        />
 
         <MobileMenu />
     </div>
@@ -510,6 +518,14 @@ const hoverCss = `@media (min-width: 64rem) and (hover: hover) {\n${hideDefaultC
             transition:
                 opacity 0.15s ease-out 0.1s,
                 visibility 0s 0.1s;
+        }
+
+        @media not all and (min-width: 64rem), (hover: none) {
+            .photo-fan,
+            .poster-fan,
+            .art-fan {
+                display: none;
+            }
         }
 
         /* Loose two-row stack of 2:3 cards, like prints laid out on a table.

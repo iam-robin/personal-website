@@ -166,7 +166,7 @@ if (Astro.request.method === "POST") {
                 id="author"
                 name="author"
                 required
-                class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink focus:outline-none"
+                class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink"
             />
         </div>
 
@@ -178,7 +178,7 @@ if (Astro.request.method === "POST") {
                 rows="6"
                 required
                 maxlength="270"
-                class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink focus:outline-none"
+                class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink"
             ></textarea>
             <span class="mt-1 font-mono text-xs opacity-50"
                 >Max. 270 characters, line breaks allowed</span
@@ -193,7 +193,7 @@ if (Astro.request.method === "POST") {
                 id="country"
                 name="country"
                 maxlength="18"
-                class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink focus:outline-none"
+                class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink"
             />
             <span class="mt-1 font-mono text-xs opacity-50"
                 >It's just used to include a cute stamp from your country</span
@@ -209,7 +209,7 @@ if (Astro.request.method === "POST") {
                 name="websiteUrl"
                 type="url"
                 placeholder="https://example.com"
-                class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink focus:outline-none"
+                class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink"
             />
             <span class="mt-1 font-mono text-xs opacity-50"
                 >Make your postcard linked to your website</span
@@ -227,7 +227,7 @@ if (Astro.request.method === "POST") {
                     type="button"
                     data-stamp-variant="shapes"
                     aria-pressed="true"
-                    class="variant-pill rounded-full bg-ink/5 px-3 py-1 font-mono text-sm text-ink/55 transition-colors hover:bg-ink/10 hover:text-ink"
+                    class="variant-pill rounded-full bg-ink/5 px-3 py-1 font-mono text-sm text-ink/55 transition-colors hover:bg-ink/10 hover:text-ink focus-visible:text-ink active:bg-ink/20"
                 >
                     Shapes
                 </button>
@@ -235,7 +235,7 @@ if (Astro.request.method === "POST") {
                     type="button"
                     data-stamp-variant="bird"
                     aria-pressed="false"
-                    class="variant-pill rounded-full bg-ink/5 px-3 py-1 font-mono text-sm text-ink/55 transition-colors hover:bg-ink/10 hover:text-ink"
+                    class="variant-pill rounded-full bg-ink/5 px-3 py-1 font-mono text-sm text-ink/55 transition-colors hover:bg-ink/10 hover:text-ink focus-visible:text-ink active:bg-ink/20"
                 >
                     Robin
                 </button>
@@ -254,7 +254,7 @@ if (Astro.request.method === "POST") {
                 <button
                     type="button"
                     id="regenerate-stamp"
-                    class="shrink-0 rounded-full border border-ink bg-paper px-3 py-1 font-mono text-xs hover:bg-ink hover:text-paper"
+                    class="shrink-0 rounded-full border border-ink bg-paper px-3 py-1 font-mono text-xs hover:bg-ink hover:text-paper active:bg-ink/85"
                 >
                     Regenerate
                 </button>
@@ -264,7 +264,7 @@ if (Astro.request.method === "POST") {
 
         <button
             type="submit"
-            class="submit-btn rounded-md bg-ink px-6 py-3 font-mono text-base text-paper transition-opacity hover:opacity-90"
+            class="submit-btn rounded-md bg-ink px-6 py-3 font-mono text-base text-paper transition-opacity hover:opacity-90 active:opacity-80 disabled:cursor-not-allowed disabled:opacity-55"
         >
             Send Postcard
         </button>
@@ -278,10 +278,12 @@ if (Astro.request.method === "POST") {
 <script is:inline>
     document.querySelector("form").addEventListener("submit", function () {
         const btn = document.querySelector(".submit-btn");
+        // The native `disabled` attribute is the whole mechanism: it blocks the
+        // second click, and `disabled:` styling carries the look. Setting
+        // opacity and pointer-events inline did the same job in a way no
+        // stylesheet could see or override.
         btn.disabled = true;
-        btn.textContent = "Sending...";
-        btn.style.opacity = "0.6";
-        btn.style.pointerEvents = "none";
+        btn.textContent = "Sending…";
     });
 </script>
 

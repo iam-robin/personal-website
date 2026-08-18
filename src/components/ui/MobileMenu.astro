@@ -66,6 +66,14 @@ const isActive = (href: string) =>
         display: none;
     }
 
+    /* The one ink-filled surface with focusable children, where global.css's
+       ink ring would disappear. Set at rest, like the global one, so the ring
+       never has a colour to transition. The summary pill is excluded on
+       purpose: it sits on the page, so its ink ring is correct. */
+    ul :global(a) {
+        outline-color: var(--color-paper);
+    }
+
     details[open] .menu-icon {
         display: none;
     }

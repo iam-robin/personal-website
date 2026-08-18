@@ -12,8 +12,26 @@
         overscroll-behavior: none;
     }
 
+    html,
+    body {
+        overflow-x: clip;
+    }
+
     body {
         background-color: var(--color-paper);
         color: var(--color-ink);
     }
+
+    *,
+    ::before,
+    ::after {
+        outline-color: var(--color-ink);
+    }
+}
+
+:focus-visible {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-offset: 2px;
+    opacity: 1;
 }

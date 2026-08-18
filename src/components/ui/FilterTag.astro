@@ -20,8 +20,8 @@ const base =
 // The knockout slot brings its own side padding, so the active chip pulls its
 // right padding in to keep the pill balanced.
 const state = active
-    ? `bg-ink text-paper ${count !== undefined ? "pr-1.5 pl-3" : "px-3"}`
-    : "bg-ink/5 px-3 text-ink/55 hover:bg-ink/10 hover:text-ink";
+    ? `bg-ink text-paper active:bg-ink/85 ${count !== undefined ? "pr-1.5 pl-3" : "px-3"}`
+    : "bg-ink/5 px-3 text-ink/55 hover:bg-ink/10 hover:text-ink focus-visible:text-ink active:bg-ink/20";
 ---
 
 <a href={href} class:list={[base, state]}>

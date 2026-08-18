@@ -149,9 +149,6 @@ const scattered = postcards.map((postcard) => {
 
     /* Tailwind's `lg` — the width at which a second card fits per row. */
     @media (width >= 64rem) {
-        /* `left: 50%` centres against the subpage shell, which is `mx-auto`,
-           so this lands on the viewport centre. A postcards page therefore
-           can't move to ArticleLayout's rail grid, which isn't centred. */
         .pc-bleed {
             position: relative;
             left: 50%;

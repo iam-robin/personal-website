@@ -9,7 +9,10 @@ import "../../styles/markdown.css";
 
 export async function getStaticPaths() {
     const posts = await getCollection("blog");
-    return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+    return posts.map((post) => ({
+        params: { slug: post.id },
+        props: { post },
+    }));
 }
 
 const { post } = Astro.props;
@@ -33,14 +36,16 @@ const sections = getTocHeadings(headings).map((heading) => ({
 const showRail = sections.length >= 2;
 ---
 
-{/* From `lg` up a sticky rail holds the contents list; below that the
+{
+    /* From `lg` up a sticky rail holds the contents list; below that the
   collapsed inline version takes over. The column and the rail grid come
   from ArticleLayout — passing the `rail` slot turns the sidebar on.
 
   `description` before `subtitle`: ArticleLayout hides the hero, so that prop
   only feeds the meta tag and og:description, and a subtitle is written to
   follow the title ("and Where It's Made") — on its own in a search result or
-  a link preview it reads as a fragment. */}
+  a link preview it reads as a fragment. */
+}
 <ArticleLayout
     title={post.data.title}
     description={post.data.description ?? post.data.subtitle}
@@ -89,6 +94,8 @@ const showRail = sections.length >= 2;
                     alt=""
                     widths={[672, 1344]}
                     sizes="(min-width: 672px) 672px, 100vw"
+                    loading="eager"
+                    fetchpriority="high"
                     class="mt-12 w-full rounded-lg"
                 />
             )

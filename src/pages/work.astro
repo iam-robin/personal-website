@@ -102,6 +102,8 @@ const sectionHeading = "scroll-mt-8 text-lg font-bold";
                 alt="Black-and-white portrait of Robin Spielmann in profile"
                 widths={[160, 320]}
                 sizes="(min-width: 768px) 160px, 40vw"
+                loading="eager"
+                fetchpriority="high"
                 class="order-first w-[130px] rotate-4 mt-12 border-4 border-white sm:w-40 md:order-0"
             />
             <p class="max-w-lead text-prose leading-relaxed">
@@ -214,9 +216,6 @@ const sectionHeading = "scroll-mt-8 text-lg font-bold";
                 </div>
             </section>
 
-            {
-                /* Names only — the work belongs to the agencies. */
-            }
             <section>
                 <h2 id="companies" class={sectionHeading}>
                     Companies I've worked with
