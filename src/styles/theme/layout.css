@@ -28,10 +28,12 @@
        based because the rail grid needs a track it can do arithmetic on.
 
        Standalone prose pages that align to nothing — project detail, garden
-       notes — use Tailwind's built-in `max-w-prose` (65ch) instead. It's the
-       same measure said a different way: 42rem lands at ~66 characters at the
-       article's body size, and those pages set a different body size, so `ch`
-       keeps them honest where a fixed rem value wouldn't. */
+       notes — use Tailwind's built-in `max-w-prose` (65ch) instead. Same
+       measure, said a different way: 42rem lands at ~73 characters at
+       --text-prose's top, and those pages set a different body size, so `ch`
+       keeps them honest where a fixed rem value wouldn't. The character count
+       is what's fixed here, not the rem value — if --text-prose moves, this
+       column's measure moves with it. */
     --container-reading: 42rem; /* 672px */
 
     /* The sticky contents column, and the space beside it. */

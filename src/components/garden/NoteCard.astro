@@ -66,7 +66,7 @@ const editedDay = note.edited ? formatDate(note.edited) : null;
                 <div>
                     <ul class="flex gap-2">
                         <li
-                            class="mb-2 inline-block rounded-full border border-black/60 px-2 py-[2px] text-[11px]"
+                            class="mb-2 inline-block rounded-full border border-black/60 px-2 py-[2px] text-2xs"
                         >
                             {note.thema}
                         </li>
@@ -79,7 +79,7 @@ const editedDay = note.edited ? formatDate(note.edited) : null;
                             <Divider isBlack />
                             <div style="filter: url(#distort);">
                                 <p
-                                    class="line-clamp-3 py-1 font-decorative text-md leading-[1.1]"
+                                    class="line-clamp-3 py-1 font-decorative text-md leading-[1.4]"
                                     style={`transform: translateY(${randomTypeMarginBottom}px) translateX(${randomTypeMarginRight}px) rotate(${randomTypeRotation}deg); opacity: 0.9;`}
                                 >
                                     {note.description}
@@ -89,7 +89,7 @@ const editedDay = note.edited ? formatDate(note.edited) : null;
                     )
                 }
                 <Divider isBlack />
-                <div class="text-[12px]">
+                <div class="text-2xs">
                     <p>
                         <span class="inline-block min-w-[72px]">created:</span>
                         {createdDay}

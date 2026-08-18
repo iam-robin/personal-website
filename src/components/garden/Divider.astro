@@ -8,9 +8,13 @@ interface Props {
 const { isBlack, class: className = "" } = Astro.props;
 ---
 
+{/* The line is 204 literal hyphens, so it has to be hidden from assistive
+    tech and kept out of selections — otherwise copying a note card lands 204
+    hyphens in the clipboard and a screen reader reads every one of them. */}
 <div
+    aria-hidden="true"
     class:list={[
-        "w-full truncate font-mono tracking-widest text-clip",
+        "w-full select-none overflow-hidden font-mono tracking-widest whitespace-nowrap text-clip",
         isBlack ? "text-black" : "text-black/20",
         className,
     ]}

@@ -38,7 +38,7 @@
 
 @font-face {
     font-family: "LiebeHeide";
-    src: url("/fonts/LiebeHeide-FinelinerBold.otf") format("opentype");
+    src: url("/fonts/LiebeHeide-FinelinerBold.woff2") format("woff2");
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -58,8 +58,6 @@
         "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
     /* Line Height */
-    --leading-xs: 0.8;
-    --leading-sm: 0.9;
     --leading-none: 1;
     --leading-tight: 1.25;
     --leading-snug: 1.375;
@@ -77,6 +75,9 @@
 
     /* Font Size */
     --text-*: initial;
+    /* The floor. Below this text stops being readable rather than just small,
+       so nothing on the site goes under it. */
+    --text-2xs: 0.75rem;
     --text-xs: 0.8125rem;
 
     --text-sm: clamp(0.875rem, 0.1vi + 0.82rem, 0.9375rem);
@@ -85,10 +86,17 @@
     --text-base: clamp(1rem, 0.21vi + 0.9rem, 1.125rem);
     --text-base: clamp(1rem, 0.42cqi + 0.9rem, 1.125rem);
 
-    /* Long-form body copy, between base and md: Apercu at 17–19px reads at
-       the size mono needs 16–17px to match. */
-    --text-prose: clamp(1.0625rem, 0.25vi + 1rem, 1.1875rem);
-    --text-prose: clamp(1.0625rem, 0.5cqi + 0.95rem, 1.1875rem);
+    /* Long-form body copy, between base and md: Apercu at 17–21px reads at
+       the size mono needs 16–17px to match.
+
+       The top of the ramp is set by the measure, not by taste. The reading
+       column is a fixed 42rem, so the only lever on characters-per-line is
+       the type size: at 18.5px it ran to ~82 characters, well past the 60–75
+       a line can be tracked comfortably. 20.8px at the full column lands at
+       ~73. The ramp is calibrated to hit exactly that at 672px, which is
+       where the column stops growing. */
+    --text-prose: clamp(1.0625rem, 0.55vi + 0.86rem, 1.3rem);
+    --text-prose: clamp(1.0625rem, 1.1cqi + 0.8375rem, 1.3rem);
 
     --text-md: clamp(1.15rem, 0.33vi + 0.98rem, 1.35rem);
     --text-md: clamp(1.15rem, 0.67cqi + 0.98rem, 1.35rem);
@@ -109,6 +117,7 @@
     --text-4xl: clamp(2.6rem, 6cqi + 1.1rem, 5.5rem);
 
     /* Line Height per size */
+    --text-2xs--line-height: var(--leading-normal);
     --text-xs--line-height: var(--leading-relaxed);
     --text-sm--line-height: var(--leading-relaxed);
     --text-base--line-height: var(--leading-relaxed);
@@ -116,6 +125,14 @@
     --text-lg--line-height: var(--leading-tight);
     --text-xl--line-height: var(--leading-tight);
     --text-2xl--line-height: var(--leading-tight);
-    --text-3xl--line-height: var(--leading-none);
-    --text-4xl--line-height: var(--leading-none);
+    /* Not `--leading-none`: these sizes wrap — the homepage statement runs to
+       four lines — and at 1.0 a descender lands on the cap-line below it. */
+    --text-3xl--line-height: 1.08;
+    --text-4xl--line-height: 1.05;
+
+    /* Letter Spacing. Only the display end: Apercu's default fit is drawn for
+       text sizes and reads loose once it's set at 45px and up. Body sizes
+       stay at their designed fit. */
+    --text-3xl--letter-spacing: -0.02em;
+    --text-4xl--letter-spacing: -0.025em;
 }

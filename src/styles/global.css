@@ -20,6 +20,10 @@
     body {
         background-color: var(--color-paper);
         color: var(--color-ink);
+        /* macOS renders both faces heavier than they're drawn — most visibly
+           on the bold headings. Once, at the root. */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 
     *,

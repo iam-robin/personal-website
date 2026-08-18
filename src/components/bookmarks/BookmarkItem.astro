@@ -45,7 +45,9 @@ const cover = getCover(bookmark.cover);
         }
         <div class="flex max-w-[80%] shrink-0 items-center gap-2">
             <BookmarkTypeMark type={bookmark.type} />
-            <p class="mr-2 truncate font-mono text-sm">{bookmark.title}</p>
+            <p class="mr-2 truncate font-mono text-sm" title={bookmark.title}>
+                {bookmark.title}
+            </p>
             {
                 bookmark.tags.length > 0 && (
                     <div class="flex gap-1">
@@ -82,7 +84,9 @@ const cover = getCover(bookmark.cover);
         <div class="flex items-center justify-between gap-1">
             <div class="flex shrink items-center gap-2 overflow-x-auto">
                 <BookmarkTypeMark type={bookmark.type} />
-                <p class="mr-2 truncate font-mono text-xs">{bookmark.title}</p>
+                <p class="mr-2 truncate font-mono text-xs" title={bookmark.title}>
+                    {bookmark.title}
+                </p>
             </div>
             <p class="shrink-0 text-right font-mono text-xs text-ink-muted">
                 {formattedDate}

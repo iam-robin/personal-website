@@ -44,7 +44,7 @@ const { title, chip, favourite = false, meta = "", cover } = Astro.props;
             width there and the cap keeps the longest title off the meta. */
         }
         <div class="flex min-w-0 items-center gap-2 md:max-w-[75%] md:shrink-0">
-            <p class="truncate font-mono text-sm">{title}</p>
+            <p class="truncate font-mono text-sm" title={title}>{title}</p>
             {
                 chip && (
                     <span class="shrink-0 font-mono text-xs text-ink-muted">
