@@ -48,12 +48,8 @@
     margin-top: 0.75em;
 }
 
-/* Neither face ships an italic, so `font-style: italic` would be the browser
-   shearing uprights. Emphasis becomes a change of voice instead. */
 .blog-prose em {
-    font-family: var(--font-mono);
-    font-style: normal;
-    font-size: 0.94em;
+    font-style: italic;
 }
 
 /* The global `a:hover { font-style: italic }` is a nav gesture; in a
@@ -109,7 +105,200 @@
     line-height: var(--leading-normal);
 }
 
-/* Images */
+/* Inline SVG figures. Drawn rather than exported so they inherit the ink and
+   sit on whatever paper the section has — a flat PNG would carry its own
+   background into a tinted stock. Labels are mono, matching the chrome. */
+.blog-prose .figure-block {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+/* A drawing that carries one idea rather than a set of examples doesn't need
+   the full measure. Flush left with the prose, so it hangs off the text column
+   rather than floating in the middle of it. */
+.blog-prose .figure-block--sm {
+    /* The svg is cropped to its own drawing, so this width is the drawing's
+       width — 26.79rem keeps the circles the size they were when the box still
+       carried padding. */
+    max-width: 26.75rem;
+}
+.blog-prose svg.figure {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--color-ink);
+}
+/* Inside a figure the caption follows the svg directly, so it needs the gap
+   the image rule pulls back against rather than a negative margin. */
+.blog-prose .figure-block figcaption {
+    margin-top: 0.75rem;
+}
+.blog-prose svg.figure text {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    fill: currentColor;
+}
+.blog-prose svg.figure text.dim {
+    fill: color-mix(in srgb, currentColor 55%, transparent);
+}
+
+/* Interactive demo — a 3x3 grid where tapping a tile opens it. The two grids
+   are independent (one radio group each) so you can work them separately and
+   compare. The only difference between them is the transition. No JS: radios
+   keep it keyboard-operable, labels make the tiles hit-able. */
+.blog-prose .demo {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+.blog-prose .demo-filter {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+/* Focusable, not display:none — that would drop them out of tab order. */
+.blog-prose .demo-radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+.blog-prose .demo-screens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+}
+.blog-prose .demo-cap {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-ink-muted);
+    margin-bottom: 0.6rem;
+}
+.blog-prose .demo-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 56px);
+    grid-auto-rows: 46px;
+    gap: 8px;
+    width: max-content;
+}
+.blog-prose .demo-radio:focus-visible ~ .demo-screens .demo-grid {
+    outline: 2px solid currentColor;
+    outline-offset: 8px;
+}
+
+/* The box is drawn by ::before so the wobble filter never touches the number.
+   Same reason the Venn on /work keeps its labels outside the filter. */
+.blog-prose .demo-cell {
+    --cell-bg: color-mix(in srgb, currentColor 8%, transparent);
+    position: relative;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transform-origin: 0 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-ink-muted);
+}
+.blog-prose .demo-cell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid currentColor;
+    border-radius: 4px;
+    background-color: var(--cell-bg);
+    filter: url(#demo-scribble);
+}
+.blog-prose .demo-cell:hover {
+    --cell-bg: color-mix(in srgb, currentColor 16%, transparent);
+}
+.blog-prose .demo-num {
+    position: relative;
+}
+
+/* Anything open dims the tiles it covers. :where() zeroes the id's specificity
+   so the "which tile is open" rules below still win. */
+.blog-prose
+    .demo-radio-a:not(:where(#a-none)):checked
+    ~ .demo-screens
+    .demo-grid--snap
+    .demo-cell,
+.blog-prose
+    .demo-radio-b:not(:where(#b-none)):checked
+    ~ .demo-screens
+    .demo-grid--anim
+    .demo-cell {
+    opacity: 0.18;
+}
+.blog-prose #a0:checked ~ .demo-screens .demo-grid--snap .cell-0,
+.blog-prose #a1:checked ~ .demo-screens .demo-grid--snap .cell-1,
+.blog-prose #a2:checked ~ .demo-screens .demo-grid--snap .cell-2,
+.blog-prose #a3:checked ~ .demo-screens .demo-grid--snap .cell-3,
+.blog-prose #a4:checked ~ .demo-screens .demo-grid--snap .cell-4,
+.blog-prose #a5:checked ~ .demo-screens .demo-grid--snap .cell-5,
+.blog-prose #a6:checked ~ .demo-screens .demo-grid--snap .cell-6,
+.blog-prose #a7:checked ~ .demo-screens .demo-grid--snap .cell-7,
+.blog-prose #a8:checked ~ .demo-screens .demo-grid--snap .cell-8,
+.blog-prose #b0:checked ~ .demo-screens .demo-grid--anim .cell-0,
+.blog-prose #b1:checked ~ .demo-screens .demo-grid--anim .cell-1,
+.blog-prose #b2:checked ~ .demo-screens .demo-grid--anim .cell-2,
+.blog-prose #b3:checked ~ .demo-screens .demo-grid--anim .cell-3,
+.blog-prose #b4:checked ~ .demo-screens .demo-grid--anim .cell-4,
+.blog-prose #b5:checked ~ .demo-screens .demo-grid--anim .cell-5,
+.blog-prose #b6:checked ~ .demo-screens .demo-grid--anim .cell-6,
+.blog-prose #b7:checked ~ .demo-screens .demo-grid--anim .cell-7,
+.blog-prose #b8:checked ~ .demo-screens .demo-grid--anim .cell-8 {
+    /* Solid, not a wash — it has to hide the dimmed tiles underneath it. */
+    --cell-bg: var(--color-surface);
+    opacity: 1;
+    z-index: 2;
+    color: var(--color-ink);
+    transform: translate(calc(var(--c) * -64px), calc(var(--r) * -54px))
+        scale(3.2857, 3.3478);
+}
+/* The only difference between the two grids. */
+.blog-prose .demo-grid--anim .demo-cell {
+    transition:
+        transform 340ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 200ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+    .blog-prose .demo-grid--anim .demo-cell {
+        transition: none;
+    }
+}
+
+/* The shared figcaption rule pulls up by -1.25rem to sit against an image's
+   bottom margin. There's no image here, so it would ride over the grid. */
+.blog-prose .demo figcaption {
+    margin-top: 0.9rem;
+}
+
+/* Clicking the open tile closes it. A radio can't be unchecked by clicking it
+   again, so this label for the "nothing open" radio covers the grid and only
+   takes pointer events while a tile is open. The open tile fills the grid, so
+   the overlay lands exactly on top of it. */
+.blog-prose .demo-close {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    cursor: pointer;
+    pointer-events: none;
+}
+.blog-prose
+    .demo-radio-a:not(:where(#a-none)):checked
+    ~ .demo-screens
+    .demo-grid--snap
+    .demo-close,
+.blog-prose
+    .demo-radio-b:not(:where(#b-none)):checked
+    ~ .demo-screens
+    .demo-grid--anim
+    .demo-close {
+    pointer-events: auto;
+}
+
+/* Images */ /* Images */ /* Images */ /* Images */
 .blog-prose img {
     display: block;
     width: 100%;
@@ -119,12 +308,18 @@
     margin-bottom: 2rem;
 }
 
-/* Blockquotes */
+/* Blockquotes — also used as the standfirst line under a section heading.
+   Quoted copy is body copy, so it keeps full ink and the dotted rule stays
+   quiet. What marks it out is the short measure: the block stops well before
+   the column does, so it reads as set apart rather than indented. */
 .blog-prose blockquote {
-    /* Quoted copy is body copy — full ink. The 0.8 opacity used to drag this
-       border down to ~32% too, so it drops to match. */
-    border-left: 2px dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
-    padding-left: 1rem;
+    border-left: 2px dotted
+        color-mix(in srgb, var(--color-ink) 30%, transparent);
+    padding-left: 1.25rem;
+    /* Body size, short measure: the narrower block is what marks it out, not
+       a size bump. (Sizing note: --text-md is not a step up from --text-prose
+       here — its clamp grows more slowly and crosses below at wide columns.) */
+    max-width: 42ch;
 }
 
 /* Rules */
@@ -136,34 +331,64 @@
 }
 
 /* Hairline rows, no boxes. Posts wrap wide tables in a .table-container so
-   they scroll instead of squeezing the reading column. */
+   they scroll instead of squeezing the reading column.
+
+   `table-layout: fixed` rather than auto: the article that has tables has six
+   of them stacked under one another, and auto sizes each from its own content,
+   so the columns stepped left and right down the page. Fixed makes every table
+   share one grid — and the widths below are that grid, tuned for the
+   name / description / place / flag shape those tables have. A table with a
+   different number of columns just splits the width evenly, which is fine. */
 .blog-prose .table-container {
     overflow-x: auto;
+    /* Mono needs the room; below this the fixed columns start breaking words */
+    --table-min-width: 34rem;
 }
 .blog-prose .table-container table {
-    /* Columns stay legible; the container scrolls instead */
-    min-width: 30rem;
+    min-width: var(--table-min-width);
 }
 .blog-prose table {
     /* Equal advance widths make columns line up down the page */
     font-family: var(--font-mono);
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
-    font-size: var(--text-sm);
+    /* Fixed, not the fluid --text-sm: mono at 15px runs ~10 characters wider
+       per column than the reading column can give it, and every cell wrapped. */
+    font-size: var(--text-xs);
     line-height: var(--leading-normal);
     text-align: left;
 }
+.blog-prose thead th:nth-child(1) {
+    width: 22%;
+}
+.blog-prose thead th:nth-child(2) {
+    width: 35%;
+}
+.blog-prose thead th:nth-child(3) {
+    width: 29%;
+}
 .blog-prose :is(th, td) {
-    padding: 0.7em 1.25em 0.7em 0;
+    padding: 0.85em 1em 0.85em 0;
     text-align: left;
     vertical-align: top;
-    border-bottom: 1px dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
+    border-bottom: 1px dotted
+        color-mix(in srgb, var(--color-ink) 30%, transparent);
+    /* Fixed layout cannot widen for a long word, so let one break rather
+       than run under the next column. */
+    overflow-wrap: break-word;
 }
 .blog-prose :is(th, td):last-child {
     padding-right: 0;
 }
+/* Column labels, not data: smaller, spaced out and set in caps so the eye
+   reads them as the header band and moves on. */
 .blog-prose th {
     font-weight: 400;
+    font-size: var(--text-2xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding-bottom: 0.6em;
     color: var(--color-ink-muted);
     /* Was 50% ink dimmed by the 0.5 opacity above — ~25% rendered. */
     border-bottom-color: color-mix(in srgb, var(--color-ink) 25%, transparent);
@@ -180,16 +405,26 @@
     color: var(--color-ink-muted);
 }
 
-/* Ported from v3, where they sat in the margin. */
-.blog-prose .sidenote {
-    display: block;
-    margin-top: 0.5em;
-    font-size: 0.85em;
-    line-height: var(--leading-normal);
+/* Footnote markers. GFM wraps the reference in a <sup>; left alone it reads as
+   a stray digit stuck to the word. Mono and dimmed makes it a mark rather than
+   a character of the sentence — including inside a table cell, where several
+   of them sit next to a yes/no glyph. */
+.blog-prose sup:has(a[data-footnote-ref]) {
+    /* Not the UA's `smaller`, but not far under it either — inside a table
+       cell the marker is already sitting on 13px type. */
+    font-size: 0.8em;
+    line-height: 0;
+}
+.blog-prose a[data-footnote-ref] {
+    font-family: var(--font-mono);
+    text-decoration: none;
+    /* Vertical padding is hit area, not layout — the line box ignores it. */
+    padding: 0.4em 0.2em 0.4em 0.15em;
     color: var(--color-ink-muted);
 }
-.blog-prose .margin-toggle {
-    display: none;
+.blog-prose a[data-footnote-ref]:hover {
+    color: var(--color-ink);
+    text-decoration: underline;
 }
 
 /* Footnotes (GFM) — quieter, set off by a rule */
@@ -200,4 +435,21 @@
     border-top: 1px dotted color-mix(in srgb, var(--color-ink) 20%, transparent);
     font-size: var(--text-sm);
     color: var(--color-ink-muted);
+}
+.blog-prose .footnotes li {
+    /* Jumped to from the marker — don't land it against the viewport edge */
+    scroll-margin-top: 2rem;
+}
+.blog-prose .footnotes li + li {
+    margin-top: 0.75em;
+}
+/* The ↩ back to the sentence: an affordance, not part of the note. U+21A9 has
+   an emoji presentation, and the sans stack ends in the colour emoji fonts —
+   left alone it comes out as a blue glyph. Mono first, plus the explicit
+   text presentation for browsers that honour it. */
+.blog-prose a[data-footnote-backref] {
+    font-family: var(--font-mono);
+    font-variant-emoji: text;
+    text-decoration: none;
+    padding-left: 0.3em;
 }

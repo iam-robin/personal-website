@@ -4,7 +4,6 @@ subtitle: "Relevant Posts Only"
 image: "../../assets/blog/reddit-to-rss.png"
 date: 2025-08-15
 category: "digital minimalism"
-ogImageName: "reddit-rss.jpg"
 description: "Using RSS to Follow Subreddits – Relevant Posts Only"
 mastodonId: "115033223757952479"
 ---
@@ -48,13 +47,13 @@ https://www.reddit.com/r/dataisbeautiful+explainlikeimfive/top/.rss?sort=top&t=d
 
 ```
 
-#### ✅ Advantages
+#### Advantages
 
 -   **No extra setup** – works instantly, no tool, coding experience or API keys needed.
 -   **Customizable** – combine multiple subreddits, change t=day to week or month, adjust limit to
     your preferred number of posts.
 
-#### ❌ Disadvantages
+#### Disadvantages
 
 -   **The feed is _live_** – it always shows the current top posts for the chosen time range. If you
     check it in the morning and again in the evening, the content may have changed.
@@ -78,13 +77,13 @@ timeframes, and more.
 
 It then outputs its own RSS feed, which you can add to your reader.
 
-#### ✅ Advantages
+#### Advantages
 
 -   **Advanced filtering** – set minimum upvotes, block specific keywords, choose exact time ranges.
 -   **Custom scoring** – sort by metrics you care about, not just Reddit’s defaults.
 -   **Enrichment** – can fetch linked article text or media previews.
 
-#### ❌ Disadvantages
+#### Disadvantages
 
 -   **Requires hosting** (you need a PHP server).
 -   Needs some **initial setup**, including API keys for Reddit.

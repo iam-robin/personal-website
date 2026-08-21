@@ -18,6 +18,10 @@ interface Props {
     description?: string;
     /** Override the <title> tag; defaults to "<title> — Robin Spielmann". */
     documentTitle?: string;
+    /** This page's own link preview card. See Layout.astro. */
+    ogImage?: string;
+    ogImageAlt?: string;
+    ogType?: "website" | "article";
     /**
      * Show the sticky sidebar. A prop and not `Astro.slots.has("rail")`: a
      * conditionally-rendered slot still registers as present when the
@@ -26,13 +30,24 @@ interface Props {
     rail?: boolean;
 }
 
-const { title, description, documentTitle, rail = false } = Astro.props;
+const {
+    title,
+    description,
+    documentTitle,
+    ogImage,
+    ogImageAlt,
+    ogType,
+    rail = false,
+} = Astro.props;
 ---
 
 <SubpageLayout
     title={title}
     description={description}
     documentTitle={documentTitle}
+    ogImage={ogImage}
+    ogImageAlt={ogImageAlt}
+    ogType={ogType}
     hideHero
 >
     <div

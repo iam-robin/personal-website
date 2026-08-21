@@ -1,0 +1,78 @@
+---
+/**
+ * One reply from a post's Mastodon thread: who wrote it, when, and what they
+ * said. Used by MastodonComments for both a branch's opening reply and the
+ * follow-ups indented beneath it.
+ *
+ * `reply.html` is already sanitized by utils/mastodon.ts — see the note there
+ * on why `class` never survives that step.
+ */
+import type { MastodonReply } from "../../utils/mastodon";
+
+interface Props {
+    reply: MastodonReply;
+    /**
+     * Show the full `@user@instance`. On a follow-up the handle is already
+     * established by the reply above it, and repeating it crowds the line.
+     */
+    showAcct?: boolean;
+}
+
+const { reply, showAcct = false } = Astro.props;
+
+/** "Apr 11, 2025" — the site's locale, shortened to sit on a meta line. */
+const date = reply.date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+});
+---
+
+<p class="flex flex-wrap items-baseline gap-x-2 font-mono text-xs">
+    <a
+        href={reply.authorUrl}
+        target="_blank"
+        rel="nofollow ugc noopener noreferrer"
+        class="text-ink underline-offset-4 hover:underline"
+    >
+        {reply.authorName}
+    </a>
+    {
+        showAcct && (
+            <span class="break-all text-ink-muted">@{reply.authorAcct}</span>
+        )
+    }
+    <span aria-hidden="true" class="text-ink-muted">·</span>
+    <a
+        href={reply.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-ink-muted underline-offset-4 hover:underline"
+    >
+        <time datetime={reply.date.toISOString()}>{date}</time>
+    </a>
+    {reply.isAuthor && <span class="text-ink-muted">· me</span>}
+</p>
+
+{
+    /* A content warning keeps its role: the body stays folded away behind the
+       warning text, using <details> so it costs no JS. */
+    reply.spoiler ? (
+        <details class="mt-2">
+            <summary class="cursor-pointer font-mono text-xs text-ink-muted">
+                {reply.spoiler}
+            </summary>
+            <div
+                class="mastodon-reply mt-2 text-sm"
+                lang={reply.language}
+                set:html={reply.html}
+            />
+        </details>
+    ) : (
+        <div
+            class="mastodon-reply mt-2 text-sm"
+            lang={reply.language}
+            set:html={reply.html}
+        />
+    )
+}

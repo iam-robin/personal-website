@@ -6,6 +6,15 @@ import { getPaperKey, papers } from "../utils/paper";
 interface Props {
     title: string;
     description?: string;
+    /**
+     * Site-root-relative path to this page's link preview card, e.g.
+     * "/og/blog/my-post.png". Omit it and the shared hand-drawn card is used.
+     */
+    ogImage?: string;
+    /** Alt text for that card. Only worth setting alongside `ogImage`. */
+    ogImageAlt?: string;
+    /** "article" for a single post, "website" for everything else. */
+    ogType?: "website" | "article";
     /** Keep the page out of search results. Used by the placeholder media logs. */
     noindex?: boolean;
 }
@@ -20,6 +29,9 @@ const DEFAULT_DESCRIPTION =
 const {
     title,
     description = DEFAULT_DESCRIPTION,
+    ogImage: ogImagePath,
+    ogImageAlt = "Robin Spielmann — Design Engineer",
+    ogType = "website",
     noindex = false,
 } = Astro.props;
 
@@ -32,11 +44,13 @@ const {
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 /*
-  One shared card for the whole site, drawn by hand and dropped into public/.
-  If it is ever re-cut at a different size, the width/height below have to move
-  with it — several scrapers trust those over the file.
+  The shared card, drawn by hand and dropped into public/, is the fallback for
+  every page that doesn't bring its own. Blog posts do: they point at the
+  generated card from /og/blog/. Either way it is 1200×630 — if one is ever
+  re-cut at a different size, the width/height below have to move with it,
+  since several scrapers trust those over the file.
 */
-const ogImage = new URL("/opengraph.png", Astro.site).href;
+const ogImage = new URL(ogImagePath ?? "/opengraph.png", Astro.site).href;
 
 /*
   The section's paper stock, resolved from the URL rather than threaded through
@@ -107,9 +121,7 @@ const paper = papers[paperKey];
         <link rel="canonical" href={canonical} />
         {noindex && <meta name="robots" content="noindex, follow" />}
 
-        <!-- Per-page images can come later: add an `ogImage` prop and let it
-         override the constant above. -->
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={ogType} />
         <meta property="og:site_name" content="iamrobin" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
@@ -117,10 +129,7 @@ const paper = papers[paperKey];
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta
-            property="og:image:alt"
-            content="Robin Spielmann — Design Engineer"
-        />
+        <meta property="og:image:alt" content={ogImageAlt} />
         <meta name="twitter:card" content="summary_large_image" />
 
         <!-- Self-hosted Umami, same instance and site id as v3 so the numbers

@@ -224,8 +224,23 @@ const blog = defineCollection({
             description: z.string().optional(),
             date: z.date(),
             category: z.string().optional(),
+            /**
+             * The toot announcing this post. Its replies are mirrored under
+             * the post by MastodonComments. Either the status id or the whole
+             * toot URL works — normalizeStatusId in utils/mastodon.ts takes
+             * both, so this can be pasted straight from the address bar.
+             * Left unset, the post simply carries no replies section.
+             */
             mastodonId: z.string().optional(),
-            ogImageName: z.string().optional(),
+            /**
+             * Escape hatch for a hand-made link preview card, as a path under
+             * public/ (e.g. "/og/my-post.png"). Left unset — which is the
+             * normal case — the card is generated from the post's own title
+             * by src/pages/og/blog/[slug].png.ts.
+             */
+            ogImage: z.string().optional(),
+            /** Opt-in authorship note for posts written with AI assistance. */
+            aiDisclosure: z.boolean().optional(),
         }),
 });
 

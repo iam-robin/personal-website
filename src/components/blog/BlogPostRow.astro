@@ -35,7 +35,9 @@ const formatDate = (date: Date) =>
     <span
         class="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-start sm:gap-4"
     >
-        <span class="shrink-0 whitespace-nowrap text-xs text-ink-muted sm:text-sm">
+        <span
+            class="shrink-0 whitespace-nowrap text-xs text-ink-muted sm:text-sm"
+        >
             {formatDate(post.data.date)}
         </span>
         <span class="ink-row-title min-w-0 flex-1 text-base leading-snug">
@@ -49,7 +51,10 @@ const formatDate = (date: Date) =>
             </span>
         )
     }
-    <span class="ink-row-meta shrink-0 text-base" aria-hidden="true">
+    <span
+        class="ink-row-meta shrink-0 -translate-y-px text-base leading-snug"
+        aria-hidden="true"
+    >
         →
     </span>
 </a>

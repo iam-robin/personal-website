@@ -4,8 +4,8 @@
   The shell is not a chosen width. It is exactly wide enough to hold a sticky
   rail, a gap, and a reading column, inside its own gutters:
 
-       16rem  rail
-     +  3rem  rail gap
+       13rem  rail
+     +  6rem  rail gap
      + 42rem  reading column
      +  3rem  gutters (2 x 1.5rem)
      = 64rem  shell
@@ -36,9 +36,13 @@
        column's measure moves with it. */
     --container-reading: 42rem; /* 672px */
 
-    /* The sticky contents column, and the space beside it. */
-    --container-rail: 16rem; /* 256px */
-    --spacing-rail: 3rem; /* 48px */
+    /* The sticky contents column, and the space beside it. Narrow rail, wide
+       gap: the two are traded against each other so their sum — and therefore
+       --container-shell, and therefore the `lg:` breakpoint grid-rail depends
+       on — stays put. Move one without the other and the shell drifts out
+       from under the header. */
+    --container-rail: 13rem; /* 208px */
+    --spacing-rail: 6rem; /* 96px */
 
     /* Short display lines rather than body copy — /work's opening statement
        and the lead under it. Sized so the statement and the portrait beside

@@ -17,6 +17,10 @@ interface Props {
     description?: string;
     /** Override the <title> tag; defaults to "<title> — Robin Spielmann". */
     documentTitle?: string;
+    /** This page's own link preview card. See Layout.astro. */
+    ogImage?: string;
+    ogImageAlt?: string;
+    ogType?: "website" | "article";
     /** Drop the title/description hero; the page body starts right below the top bar. */
     hideHero?: boolean;
     /** Keep the page out of search results. Used by the placeholder media logs. */
@@ -27,6 +31,9 @@ const {
     title,
     description,
     documentTitle,
+    ogImage,
+    ogImageAlt,
+    ogType,
     hideHero = false,
     noindex = false,
 } = Astro.props;
@@ -35,6 +42,9 @@ const {
 <Layout
     title={documentTitle ?? `${title} — Robin Spielmann`}
     description={description}
+    ogImage={ogImage}
+    ogImageAlt={ogImageAlt}
+    ogType={ogType}
     noindex={noindex}
 >
     <div
@@ -77,7 +87,13 @@ const {
             )
         }
 
-        <main class="mt-16 flex-1">
+        {
+            /* An article page hides the hero, so this gap is the only thing
+            between the top bar and the post's own title — 64px of it reads as
+            a void on a phone. Pages that keep the hero already open with
+            `mt-24` on it and don't need the same relief. */
+        }
+        <main class:list={["flex-1", hideHero ? "mt-10 md:mt-16" : "mt-16"]}>
             <slot />
         </main>
         {

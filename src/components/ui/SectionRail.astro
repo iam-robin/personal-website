@@ -57,17 +57,20 @@ const show = sections.length >= 2;
                 </ul>
             </nav>
         ) : (
-            <details data-rail-root class={`rail-details group text-sm ${className}`}>
+            <details
+                data-rail-root
+                class={`rail-details group text-sm ${className}`}
+            >
                 <summary
                     aria-label={label}
-                    class="inline-flex cursor-pointer items-center gap-2 font-mono text-ink-muted transition-colors hover:text-ink"
+                    class="inline-flex cursor-pointer items-center gap-2 py-2 font-mono text-ink-muted transition-colors hover:text-ink"
                 >
                     <span aria-hidden="true" class="caret inline-block">
                         ›
                     </span>
                     {label} ({sections.length})
                 </summary>
-                <ul class="mt-4 flex flex-col gap-1.5 font-sans">
+                <ul class="mt-2 flex flex-col gap-1.5 font-sans">
                     {sections.map((section) => (
                         <li class:list={[section.nested && "pl-5"]}>
                             <a
@@ -105,7 +108,17 @@ const show = sections.length >= 2;
     .rail-link {
         position: relative;
         color: var(--color-ink);
-        transition: color 200ms var(--ease-out, ease-out);
+        /* Apercu has no variable axis: font-weight:700 swaps to a wider file
+           and re-wraps the entry inside the fixed rail. A stroke thickens the
+           same glyphs, so advance widths — and the line count — stay put. It
+           sits on every link at a constant width, transparent until active, so
+           only the colour ever changes. */
+        -webkit-text-stroke-width: 0.4px;
+        -webkit-text-stroke-color: transparent;
+        paint-order: stroke fill;
+        transition:
+            color 200ms var(--ease-out, ease-out),
+            -webkit-text-stroke-color 200ms var(--ease-out, ease-out);
     }
 
     /* Once a section is under way the others step back. A short dash marks the
@@ -123,9 +136,10 @@ const show = sections.length >= 2;
     /* Weight, not just colour: with the contrast floor the stepped-back entries
        can only go down to ink/70, which is too small a gap to read as "you are
        here" on its own. The dash alone doesn't help either — it marks the row
-       without changing how the text scans. */
+       without changing how the text scans. Faked with a stroke rather than the
+       bold face — see .rail-link — so activating an entry never moves its wrap. */
     .rail-link[aria-current] {
-        font-weight: 700;
+        -webkit-text-stroke-color: currentColor;
     }
     .rail-link[aria-current]::before {
         content: "";

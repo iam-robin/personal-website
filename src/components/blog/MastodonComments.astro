@@ -1,0 +1,212 @@
+---
+/**
+ * The Mastodon thread for a post, mirrored under it.
+ *
+ * The conversation about these posts already happens on Mastodon, and it's
+ * invisible here. This brings it over rather than starting a second one: no
+ * comment database, no moderation queue, no client-side JS. The replies are
+ * fetched while the page builds, so they're as old as the last deploy — the
+ * daily rebuild is what keeps them current.
+ *
+ * A post with no `mastodonId` renders nothing at all. There's no empty comment
+ * box waiting to be filled, and no "discuss this" link pointing at a profile
+ * instead of a thread.
+ *
+ * Everything about safety — sanitizing, filtering, the denylist — lives in
+ * utils/mastodon.ts. What arrives here is already safe to print.
+ */
+import { getMastodonThread } from "../../utils/mastodon";
+import InkMark from "../ui/InkMark.astro";
+import Link from "../ui/Link.astro";
+import MastodonReply from "./MastodonReply.astro";
+
+interface Props {
+    /** The post's `mastodonId` — a status id or the toot's URL. */
+    mastodonId?: string;
+}
+
+const { mastodonId } = Astro.props;
+
+// null for a missing or unusable id, so this one check covers both.
+const thread = await getMastodonThread(mastodonId);
+
+/* When the API is unreachable the thread comes back empty, which lands on the
+   same markup as a post nobody has replied to yet. That's deliberate: the link
+   is built from the id alone, so it still points at the right thread, and a
+   reader has no reason to care which of the two happened. */
+const hasReplies = thread !== null && thread.branches.length > 0;
+
+/* What's actually on the page, which is what the summary can honestly count —
+   not the thread's total, and not `replies_count`, which counts only direct
+   replies (10 against 21 descendants on the what-I-use thread). */
+const shownCount = thread
+    ? thread.branches.reduce((total, b) => total + 1 + b.children.length, 0)
+    : 0;
+---
+
+{/* Same card as AiDisclosure, for the same reason its own note gives: a post
+    ends in footnotes, and anything small and muted that follows them reads as
+    more apparatus to skim past. These are other people talking, so they get a
+    container rather than a rule — and the two blocks are siblings under a
+    post, so they should look like it. */}
+{
+    thread && (
+        <section
+            aria-labelledby="mastodon-replies"
+            class="mt-16 rounded-lg border border-dotted border-ink/25 bg-surface/60 px-6 py-5"
+        >
+            {hasReplies ? (
+                /* Folded away by default. A long thread is the tallest thing
+                   on the page after the post itself, and it stands between the
+                   reader and the end of the article — but the count in the
+                   summary still says a conversation happened, which is the
+                   part worth advertising. <details> so it costs no JS, the
+                   same reason SectionRail's inline variant uses one. */
+                <details class="replies">
+                    {/* The heading wraps everything rather than sitting
+                        beside the caret: <summary> takes either phrasing
+                        content or a single heading element, not a mix of
+                        both. */}
+                    {/* py-3 for a comfortable tap target — the heading line
+                        alone is 23px, under the 24px floor. -my-3 cancels it
+                        again on both sides, so the hit area grows without
+                        moving anything: cancel only the top and the label
+                        sits high in the card, with the leftover padding
+                        pooling underneath it. */}
+                    <summary class="-my-3 cursor-pointer py-3">
+                        <h2 class="flex items-center gap-2 font-mono text-xs font-bold tracking-wide transition-colors hover:text-ink-muted">
+                            <span aria-hidden="true" class="caret inline-block">
+                                ›
+                            </span>
+                            <span aria-hidden="true" class="inline-flex">
+                                <InkMark name="mastodon" class="h-4 w-4" />
+                            </span>
+                            <span id="mastodon-replies">
+                                Replies ({shownCount})
+                            </span>
+                        </h2>
+                    </summary>
+
+                    <ul class="mt-9 flex flex-col gap-8">
+                        {thread.branches.map((reply) => (
+                            <li>
+                                <MastodonReply reply={reply} showAcct />
+
+                                {reply.children.length > 0 && (
+                                    /* One level, never more. Follow-ups from
+                                       any depth are already flattened in here,
+                                       and the real threads run four deep — a
+                                       faithful tree would leave the last reply
+                                       a few characters wide. */
+                                    <ul class="mt-6 flex flex-col gap-6 border-l border-dotted border-ink/30 pl-4">
+                                        {reply.children.map((child) => (
+                                            <li>
+                                                <MastodonReply reply={child} />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+
+                    <p class="mt-10 font-mono text-sm text-ink-muted">
+                        {thread.hiddenCount > 0 && (
+                            <>
+                                {thread.hiddenCount} more{" "}
+                                {thread.hiddenCount === 1 ? "reply" : "replies"}{" "}
+                                over there.{" "}
+                            </>
+                        )}
+                        <Link href={thread.url} external class="text-sm">
+                            Join in on Mastodon
+                        </Link>
+                    </p>
+                </details>
+            ) : (
+                /* Nothing to fold away here, and folding the ask itself away
+                   would defeat it. */
+                <>
+                    <h2
+                        id="mastodon-replies"
+                        class="flex items-center gap-2 font-mono text-xs font-bold tracking-wide"
+                    >
+                        <span aria-hidden="true" class="inline-flex">
+                            <InkMark name="mastodon" class="h-4 w-4" />
+                        </span>
+                        Join in
+                    </h2>
+                    <p class="mt-4 text-sm text-ink-muted">
+                        This one's over on Mastodon too. That's where I'd love
+                        to hear what you make of it.{" "}
+                        <Link href={thread.url} external class="text-sm">
+                            Reply on Mastodon
+                        </Link>
+                    </p>
+                </>
+            )}
+        </section>
+    )
+}
+
+<style>
+    /* Drop the native disclosure triangle in favour of the caret span, the
+       same way SectionRail's inline variant does. */
+    .replies > summary {
+        list-style: none;
+    }
+    .replies > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .caret {
+        transition: transform 150ms ease;
+    }
+    .replies[open] > summary .caret {
+        transform: rotate(90deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .caret {
+            transition: none;
+        }
+    }
+</style>
+
+<style is:global>
+    /* Reply bodies arrive as HTML through set:html, so Tailwind classes can't
+       reach inside them — this is the one thing here that has to be CSS.
+       Global because the markup is rendered by MastodonReply, so Astro's
+       scoping attribute lands on a different component's elements. */
+
+    /* The reading column is min-w-0, so one unbroken URL in a reply would
+       otherwise prise the article grid open and pull it out of line with the
+       header. `anywhere` rather than `break-word`: break-word declines to
+       break a long token that is the only thing on its line. */
+    .mastodon-reply {
+        overflow-wrap: anywhere;
+    }
+
+    .mastodon-reply p + p {
+        margin-top: 0.75em;
+    }
+
+    .mastodon-reply a {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .mastodon-reply a:hover {
+        text-decoration: none;
+    }
+
+    /* A code block in a reply scrolls itself rather than widening the column. */
+    .mastodon-reply pre {
+        overflow-x: auto;
+    }
+
+    .mastodon-reply blockquote {
+        border-left: 1px dotted var(--color-ink);
+        padding-left: 0.75rem;
+    }
+</style>

@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import ArticleLayout from "../layouts/ArticleLayout.astro";
 import Button from "../components/ui/Button.astro";
+import Link from "../components/ui/Link.astro";
 import RoleDiagram from "../components/work/RoleDiagram.astro";
 import InkMark from "../components/ui/InkMark.astro";
 import portrait from "../assets/robin-portrait.avif";
@@ -174,6 +175,13 @@ const sectionHeading = "scroll-mt-8 text-lg font-bold";
                     teams ship faster than ever, which means more chances to
                     pull it out of shape. Holding it together is what this role
                     is for.
+                </p>
+                <p class="mt-6 text-prose leading-relaxed">
+                    I went into this in more detail over on the blog: <Link
+                        href="/blog/2026_08_18-role-of-a-design-engineer"
+                        class="text-prose"
+                        arrow>My View on Design Engineering</Link
+                    >
                 </p>
                 <RoleDiagram class="mt-12 w-full max-w-[320px] text-ink" />
             </section>
