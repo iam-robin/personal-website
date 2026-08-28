@@ -1,12 +1,14 @@
 import { defineCollection } from "astro:content";
 import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { linkdingLoader } from "./loaders/linkding";
 
 /**
- * All personal data (books, bookmarks, garden notes, series, timeline)
- * comes from the Obsidian export repo, mounted as git submodule at `data/`.
- * The loaders below read the exported JSON directly — no sync scripts,
- * no GitHub fetching.
+ * Personal data (books, garden notes, series, timeline) comes from the
+ * Obsidian export repo, mounted as git submodule at `data/`. The loaders
+ * below read the exported JSON directly — no sync scripts, no GitHub
+ * fetching. Bookmarks are the exception: they live in my self-hosted
+ * linkding and come in over its API — see loaders/linkding.ts.
  *
  * Date fields are kept as strings on purpose: the exports mix ISO dates,
  * plain years, empty strings and even negative years (timeline). Parse
@@ -123,16 +125,12 @@ const series = defineCollection({
     }),
 });
 
+/**
+ * `cover` is a bare filename in src/generated/bookmark-covers, put there by
+ * the loader; utils/bookmarks.ts resolves it to an optimisable image.
+ */
 const bookmarks = defineCollection({
-    loader: file("data/output/bookmarks.json", {
-        parser: (text) => {
-            const uniqueId = uniqueIdFactory();
-            return JSON.parse(text).items.map((item: { title: string }) => ({
-                ...item,
-                id: uniqueId(item.title),
-            }));
-        },
-    }),
+    loader: linkdingLoader(),
     schema: z.object({
         title: z.string(),
         url: z.string(),
@@ -140,7 +138,6 @@ const bookmarks = defineCollection({
         cover: z.string().nullable().optional(),
         description: z.string().optional(),
         tags: z.array(z.string()).default([]),
-        type: z.string().optional(),
     }),
 });
 

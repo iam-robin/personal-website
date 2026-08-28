@@ -1,7 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
 import BookmarkTag from "./BookmarkTag.astro";
-import BookmarkTypeMark from "./BookmarkTypeMark.astro";
 import { getCover, type Bookmark } from "../../utils/bookmarks";
 
 interface Props {
@@ -44,7 +43,6 @@ const cover = getCover(bookmark.cover);
             )
         }
         <div class="flex max-w-[80%] shrink-0 items-center gap-2">
-            <BookmarkTypeMark type={bookmark.type} />
             <p class="mr-2 truncate font-mono text-sm" title={bookmark.title}>
                 {bookmark.title}
             </p>
@@ -83,8 +81,7 @@ const cover = getCover(bookmark.cover);
     >
         <div class="flex items-center justify-between gap-1">
             <div class="flex shrink items-center gap-2 overflow-x-auto">
-                <BookmarkTypeMark type={bookmark.type} />
-                <p class="mr-2 truncate font-mono text-xs" title={bookmark.title}>
+                    <p class="mr-2 truncate font-mono text-xs" title={bookmark.title}>
                     {bookmark.title}
                 </p>
             </div>

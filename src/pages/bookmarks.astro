@@ -2,8 +2,7 @@
 import SubpageLayout from "../layouts/SubpageLayout.astro";
 import BookmarkItem from "../components/bookmarks/BookmarkItem.astro";
 import BookmarkFilter from "../components/bookmarks/BookmarkFilter.astro";
-import BookmarkTypeMark from "../components/bookmarks/BookmarkTypeMark.astro";
-import { getBookmarks, getTags, bookmarkTypes } from "../utils/bookmarks";
+import { getBookmarks, getTags } from "../utils/bookmarks";
 
 const bookmarks = await getBookmarks();
 const tags = getTags(bookmarks);
@@ -11,25 +10,9 @@ const tags = getTags(bookmarks);
 
 <SubpageLayout
     title="Bookmarks"
-    description="Daily I receive new articles, videos, essays, etc. in the RSS reader of my choice, Unread. The ones I love I tag and save into my Obsidian vault — and from there they flow straight onto this page."
+    description="Daily I receive new articles, videos, essays, etc. in the RSS reader of my choice, Unread. The ones I love I tag and save into linkding, my own little bookmark box on a server in Germany. From there they flow straight onto this page."
 >
-    <!-- The legend is the only place the shapes are named, so it carries more
-         weight than it did when the marks were colour-coded and the colours
-         were roughly guessable. Keep it above the filter, not below. -->
-    <ul class="flex flex-wrap items-center gap-4 font-mono text-xs text-ink-muted">
-        {
-            bookmarkTypes.map((type) => (
-                <li class="flex items-center gap-1.5">
-                    <BookmarkTypeMark type={type.key} />
-                    {type.label}
-                </li>
-            ))
-        }
-    </ul>
-
-    <div class="mt-10">
-        <BookmarkFilter tags={tags} total={bookmarks.length} />
-    </div>
+    <BookmarkFilter tags={tags} total={bookmarks.length} />
 
     <ul class="mt-10 md:mt-8">
         {bookmarks.map((bookmark) => <BookmarkItem bookmark={bookmark.data} />)}
