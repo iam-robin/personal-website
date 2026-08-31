@@ -20,12 +20,20 @@ import type { Loader } from "astro/loaders";
  * bookmark is the gate, the way `favorite: true` was in the vault. Archived
  * bookmarks never reach the API endpoint we ask, so they can't leak.
  *
- * Two caches sit under node_modules/.cache — the directory Coolify mounts as
- * the Docker build cache (see `cacheDir` in astro.config.mjs), so both survive
- * between deploys:
+ * When linkding can't be reached, the build falls back to a snapshot of the
+ * last good response — committed, at src/data/bookmarks.snapshot.json. It
+ * lives in git on purpose: the Dockerfile nixpacks generates runs the build
+ * as a bare `RUN npm run build` with no cache mount, so anything written
+ * under node_modules/.cache is gone by the next deploy. The fallback was
+ * therefore empty every single time it was needed, and a transient DNS
+ * failure on the build host took two deploys down with it (2026-08-29/30).
+ * Any local dev run or build refreshes the file; commit it like any other
+ * change.
  *
- *   linkding/bookmarks.json  the last good API response, mapped
- *   linkding/covers/         preview images, downloaded once
+ * Covers stay out of git — 6.5 MB of binaries that would churn on every
+ * deploy for a hover preview. They're cached under
+ * node_modules/.cache/linkding/covers, which means a fallback build ships
+ * bookmarks without preview images. A soft dependency, deliberately.
  *
  * Covers are then mirrored into src/generated/bookmark-covers, because
  * `import.meta.glob` in utils/bookmarks.ts has to see them inside src/ for
@@ -37,9 +45,17 @@ const PAGE_SIZE = 100;
 /** A stop for the pagination loop — 10k bookmarks is far past anything real. */
 const MAX_PAGES = 100;
 const TIMEOUT_MS = 15_000;
+/**
+ * One blip shouldn't cost a deploy. Containers on the build host resolve
+ * through an external nameserver, and a lookup that goes unanswered costs
+ * glibc 10s (timeout:5 × attempts:2) before it gives up.
+ */
+const ATTEMPTS = 3;
+const RETRY_BACKOFF_MS = 1_000;
 
 const CACHE_DIR = path.join("node_modules", ".cache", "linkding");
-const SNAPSHOT_FILE = path.join(CACHE_DIR, "bookmarks.json");
+/** Tracked in git — see the note above on why the cache can't be trusted. */
+const SNAPSHOT_FILE = path.join("src", "data", "bookmarks.snapshot.json");
 const COVER_CACHE_DIR = path.join(CACHE_DIR, "covers");
 /** Mirrored here so the glob in utils/bookmarks.ts can reach them. */
 const COVER_OUT_DIR = path.join("src", "generated", "bookmark-covers");
@@ -149,21 +165,53 @@ function coverFilename(url: string): string | null {
     return safe;
 }
 
-async function fetchJson(url: string, token: string): Promise<any> {
-    const response = await fetch(url, {
-        headers: { Authorization: `Token ${token}` },
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-    });
-    if (!response.ok) {
-        throw new Error(`${response.status} ${response.statusText} for ${url}`);
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** A 4xx means the token or the endpoint is wrong; retrying only burns time. */
+class NonRetryableError extends Error {}
+
+async function fetchJson(
+    url: string,
+    token: string,
+    logger: { warn: (message: string) => void },
+): Promise<any> {
+    let last: Error = new Error(`No attempt made for ${url}`);
+
+    for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+        try {
+            const response = await fetch(url, {
+                headers: { Authorization: `Token ${token}` },
+                signal: AbortSignal.timeout(TIMEOUT_MS),
+            });
+            if (!response.ok) {
+                const message = `${response.status} ${response.statusText} for ${url}`;
+                if (response.status >= 400 && response.status < 500) {
+                    throw new NonRetryableError(message);
+                }
+                throw new Error(message);
+            }
+            return await response.json();
+        } catch (error) {
+            if (error instanceof NonRetryableError) throw error;
+            last = error as Error;
+            if (attempt < ATTEMPTS) {
+                const wait = RETRY_BACKOFF_MS * 2 ** (attempt - 1);
+                logger.warn(
+                    `linkding attempt ${attempt}/${ATTEMPTS} failed (${last.message}) — retrying in ${wait}ms`,
+                );
+                await sleep(wait);
+            }
+        }
     }
-    return response.json();
+
+    throw last;
 }
 
 /** Every page of the (unarchived) bookmarks endpoint. */
 async function fetchAll(
     base: string,
     token: string,
+    logger: { warn: (message: string) => void },
 ): Promise<LinkdingBookmark[]> {
     const items: LinkdingBookmark[] = [];
     let next: string | null = new URL(
@@ -172,7 +220,7 @@ async function fetchAll(
     ).href;
 
     for (let page = 0; next && page < MAX_PAGES; page++) {
-        const data = await fetchJson(next, token);
+        const data = await fetchJson(next, token, logger);
         items.push(...(data.results ?? []));
         // linkding returns an absolute `next`; resolve against the base anyway
         // so an instance behind a proxy that rewrites the host still walks.
@@ -204,7 +252,14 @@ async function syncCovers(
         const cached = path.join(COVER_CACHE_DIR, file);
 
         if (!(await exists(cached))) {
-            if (!url) continue;
+            if (!url) {
+                // Cache-only mode. A mirror left from an earlier build is as
+                // good as the cache here — the glob only ever looks there.
+                if (await exists(path.join(COVER_OUT_DIR, file))) {
+                    available.add(file);
+                }
+                continue;
+            }
             try {
                 const response = await fetch(url, {
                     headers: { Authorization: `Token ${token}` },
@@ -266,7 +321,7 @@ export function linkdingLoader(): Loader {
                 );
             } else {
                 try {
-                    const shared = (await fetchAll(base, token)).filter(
+                    const shared = (await fetchAll(base, token, logger)).filter(
                         (item) => item.shared === true && !item.is_archived,
                     );
 
@@ -299,7 +354,9 @@ export function linkdingLoader(): Loader {
                         })
                         .sort((a, b) => b.added.localeCompare(a.added));
 
-                    await mkdir(CACHE_DIR, { recursive: true });
+                    await mkdir(path.dirname(SNAPSHOT_FILE), {
+                        recursive: true,
+                    });
                     await writeFile(
                         SNAPSHOT_FILE,
                         JSON.stringify(entries, null, 2),
@@ -318,13 +375,15 @@ export function linkdingLoader(): Loader {
                     // No API and no cache: an empty bookmarks page would ship
                     // silently, so stop here instead.
                     throw new Error(
-                        "Could not reach linkding and no cached bookmarks exist. Set LINKDING_URL and LINKDING_TOKEN.",
+                        `Could not reach linkding and ${SNAPSHOT_FILE} is missing. Set LINKDING_URL and LINKDING_TOKEN, or restore the snapshot.`,
                     );
                 }
-                logger.info(`Using ${entries.length} cached bookmarks`);
+                logger.info(
+                    `Using ${entries.length} bookmarks from ${SNAPSHOT_FILE}`,
+                );
                 // The mirror is gitignored, so a fresh checkout has no covers
                 // even when the cache does — refill it from the cache.
-                await syncCovers(
+                const covers = await syncCovers(
                     new Map(
                         entries
                             .filter((entry) => entry.cover)
@@ -332,6 +391,14 @@ export function linkdingLoader(): Loader {
                     ),
                     token ?? "",
                     logger,
+                );
+                // On the build host that cache is always cold, so most covers
+                // won't be there. Drop the ones nothing can resolve instead of
+                // pointing the page at files the glob will never find.
+                entries = entries.map((entry) =>
+                    entry.cover && !covers.has(entry.cover)
+                        ? { ...entry, cover: null }
+                        : entry,
                 );
             }
 

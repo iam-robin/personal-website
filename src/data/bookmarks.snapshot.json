@@ -1,0 +1,810 @@
+[
+  {
+    "id": "786",
+    "title": "The CSS lh unit",
+    "url": "https://ishadeed.com/article/lh-unit/",
+    "added": "2026-08-29T18:53:52.176266Z",
+    "description": "A look at the CSS line height unit and how it works.",
+    "tags": [
+      "css"
+    ],
+    "cover": "74089b9166eb8e58f5db774da8a3ee78.jpg"
+  },
+  {
+    "id": "1",
+    "title": "I miss thinking hard.",
+    "url": "https://www.jernesto.com/articles/thinking_hard",
+    "added": "2026-08-23T00:00:00Z",
+    "description": "AI has changed the experience of being an engineer, starving my Thinker side while satisfying the Builder ...",
+    "tags": [
+      "ai",
+      "software"
+    ],
+    "cover": null
+  },
+  {
+    "id": "2",
+    "title": "Tapir Emoji Proposal · Frank Rausch",
+    "url": "https://frankrausch.com/tapir-emoji/",
+    "added": "2026-08-22T00:00:00Z",
+    "description": "I think we need a tapir emoji.",
+    "tags": [
+      "design",
+      "icons"
+    ],
+    "cover": "dcd3d5b1da6a568160eff5e2e1682468.jpg"
+  },
+  {
+    "id": "4",
+    "title": "I believe in files",
+    "url": "https://gregwolanski.com/files/",
+    "added": "2026-08-11T00:00:00Z",
+    "description": "It’s possible I believe in files partly because I know how things are built in the cloud. Building things on clouds even sounds bad.",
+    "tags": [
+      "software",
+      "technology",
+      "try-it-later"
+    ],
+    "cover": "2536181e30785906a19afcc94d40ab8f.png"
+  },
+  {
+    "id": "57",
+    "title": "That's AI (2026) - Short Film",
+    "url": "https://www.youtube.com/watch?v=mEVl0NS0vu8",
+    "added": "2026-02-13T00:00:00Z",
+    "description": "No AI was used in the process of making this film.Shot on ARRI ALEXA 35.Written and Directed bySebastian Lopezhttps://www.instagram.com/harteliuslopez/Execut...",
+    "tags": [
+      "ai"
+    ],
+    "cover": null
+  },
+  {
+    "id": "61",
+    "title": "Tim Cook sold Apple's soul",
+    "url": "https://www.loopwerk.io/articles/2026/tim-cook-sold-apples-soul/",
+    "added": "2026-02-03T00:00:00Z",
+    "description": "Apple used to stand for something. Now Tim Cook gifts golden statues to Trump, removes apps at the administration's request, and cozies up to accused rapists at White House screenings. The company I once admired has become morally bankrupt, but leaving the ecosystem feels almost impossible.",
+    "tags": [
+      "technology"
+    ],
+    "cover": null
+  },
+  {
+    "id": "64",
+    "title": "CSS Stats",
+    "url": "https://cssstats.com/",
+    "added": "2026-01-21T00:00:00Z",
+    "description": "CSS Stats for www.iamrob.in: 114.4 KB, 1,686 rules, 88 colors",
+    "tags": [
+      "css",
+      "webdev"
+    ],
+    "cover": null
+  },
+  {
+    "id": "73",
+    "title": "Your Name in Landsat 🛰️",
+    "url": "https://science.nasa.gov/specials/your-name-in-landsat/",
+    "added": "2026-01-04T00:00:00Z",
+    "description": "Type your name and see it spelled out in stunning Landsat satellite imagery. Explore Earth from space, letter by letter, with NASA and USGS Landsat images.",
+    "tags": [
+      "typography"
+    ],
+    "cover": null
+  },
+  {
+    "id": "75",
+    "title": "A Website To End All Websites",
+    "url": "https://henry.codes/writing/a-website-to-destroy-all-websites/",
+    "added": "2026-01-02T00:00:00Z",
+    "description": "How to win the war for the soul of the internet, and build the Web We Want.",
+    "tags": [
+      "internet"
+    ],
+    "cover": "bb7ab69d0a547f8a6988766f82b3a905.png"
+  },
+  {
+    "id": "79",
+    "title": "GenCup – Generative posters from FIFA Women's World Cup",
+    "url": "https://www.gencup.art/",
+    "added": "2025-12-31T00:00:00Z",
+    "description": "Art project that combines graphic design, football, and data vizualization. Using the statics of FIFA World Cup games to generate abstract compositions. Every match a new poster.",
+    "tags": [
+      "data-visualization",
+      "football"
+    ],
+    "cover": "13b790c0cdc17f21b11f2783d18fd9c6.jpg"
+  },
+  {
+    "id": "81",
+    "title": "Techno Tuesday",
+    "url": "https://technotuesday.com/",
+    "added": "2025-12-23T00:00:00Z",
+    "tags": [
+      "webcomic"
+    ],
+    "cover": null
+  },
+  {
+    "id": "92",
+    "title": "Dithering - Part 1",
+    "url": "https://visualrambling.space/dithering-part-1/",
+    "added": "2025-11-02T00:00:00Z",
+    "description": "Understanding how dithering works, visually.",
+    "tags": [
+      "art",
+      "creative-coding"
+    ],
+    "cover": "40dffcadf24a53d44f8f01fec822926f.png"
+  },
+  {
+    "id": "113",
+    "title": "A cartoonist's review of AI art - The Oatmeal",
+    "url": "https://theoatmeal.com/comics/ai_art",
+    "added": "2025-10-08T00:00:00Z",
+    "description": "This is a comic about AI art.",
+    "tags": [
+      "ai"
+    ],
+    "cover": "47feb3f74240da194ceff0c895f45bb8.png"
+  },
+  {
+    "id": "137",
+    "title": "Butterick's Practical Typography",
+    "url": "https://practicaltypography.com/",
+    "added": "2025-08-29T00:00:00Z",
+    "tags": [
+      "typography"
+    ],
+    "cover": "1b69dcbc999644fb261f767c61f8c72d.jpg"
+  },
+  {
+    "id": "138",
+    "title": "The Ritual - running 5km a day for an entire year.",
+    "url": "https://www.youtube.com/watch?v=cKhYJjrhKnk",
+    "added": "2025-08-28T00:00:00Z",
+    "description": "I started 2024 with one simple rule: Run 5 kilometres, every single day. No excuses.  Here's how it went…",
+    "tags": [
+      "running"
+    ],
+    "cover": null
+  },
+  {
+    "id": "143",
+    "title": "OKLCH Color Picker, Generator and Converter",
+    "url": "https://oklch.fyi/",
+    "added": "2025-08-25T00:00:00Z",
+    "description": "Convert, generate and explore OKLCH colors with oklch.fyi – a powerful tool to build unique and uniform color palettes. Preview on UI components, export CSS or Tailwind variables, and learn why OKLCH outperforms RGB and HSL.",
+    "tags": [
+      "design"
+    ],
+    "cover": "f9dd217a29eda1e3163e17307eb4796c.png"
+  },
+  {
+    "id": "145",
+    "title": "Logoipsum",
+    "url": "https://logoipsum.com/",
+    "added": "2025-08-20T00:00:00Z",
+    "description": "Logoipsum offers free, SVG placeholder logos in a variety of styles for use in design projects and mockups. Easily copy or download logos for your design.",
+    "tags": [
+      "branding"
+    ],
+    "cover": "353b5c07864a85fd5145b2b36d2d04fa.png"
+  },
+  {
+    "id": "153",
+    "title": "Fields of Chess",
+    "url": "https://fieldsofchess.com/",
+    "added": "2025-08-12T00:00:00Z",
+    "description": "Generative chess posters based on the moves of each game",
+    "tags": [
+      "data-visualization"
+    ],
+    "cover": "5e4955c0225b97130b6bcb4efc438512.png"
+  },
+  {
+    "id": "154",
+    "title": "The Type Wunderkammer",
+    "url": "https://typewunderkammer.vercel.app/",
+    "added": "2025-08-11T00:00:00Z",
+    "description": "A simple online archive of type related objects",
+    "tags": [
+      "typography"
+    ],
+    "cover": null
+  },
+  {
+    "id": "166",
+    "title": "Taste Is the New Intelligence",
+    "url": "https://wildbarestepf.substack.com/p/taste-is-the-new-intelligence",
+    "added": "2025-07-03T00:00:00Z",
+    "description": "Why curation, discernment, and restraint matter more than ever",
+    "tags": [
+      "design"
+    ],
+    "cover": "9642f6ebdabbf2bd95d9eefbe16f51ec.jpg"
+  },
+  {
+    "id": "198",
+    "title": "Aspect Ratios with Sinners Director Ryan Coogler",
+    "url": "https://www.youtube.com/watch?v=78Ru62uFM0s",
+    "added": "2025-05-08T00:00:00Z",
+    "description": "Watch Ryan Coogler, the director of Black Panther and Creed, break down the range of ways to view Sinners on the big screen.",
+    "tags": [
+      "analog",
+      "movies"
+    ],
+    "cover": null
+  },
+  {
+    "id": "201",
+    "title": "Simplifying how I work with photos – Gosha Tcherednitchenko",
+    "url": "https://gosha.net/2025/photo-workflow/",
+    "added": "2025-05-04T00:00:00Z",
+    "description": "I really do not need to cosplay as a Real Professional Photographer",
+    "tags": [
+      "photography"
+    ],
+    "cover": "5e9d501931e9dfdba9f66bc61022cd40.jpg"
+  },
+  {
+    "id": "215",
+    "title": "Giving a Small Sandwich Shop a BIG Rebrand...For Free",
+    "url": "https://www.youtube.com/watch?v=-2uwy4MDZ_M",
+    "added": "2025-04-14T00:00:00Z",
+    "description": "I've designed for Apple, Nike, Google: some of the biggest and most influential companies in the world.",
+    "tags": [
+      "design"
+    ],
+    "cover": null
+  },
+  {
+    "id": "236",
+    "title": "Shaders | Dan Hollick",
+    "url": "https://typefully.com/DanHollick/shaders-gpnhhud",
+    "added": "2025-03-18T00:00:00Z",
+    "description": "Ever heard of a shader but too afraid to ask what it even means at this point?",
+    "tags": [
+      "webdev"
+    ],
+    "cover": "c1b6a647087e887baf23d7fbeedcf388.png"
+  },
+  {
+    "id": "238",
+    "title": "Web Design Museum - Discover old websites apps and software",
+    "url": "https://www.webdesignmuseum.org/",
+    "added": "2025-03-17T00:00:00Z",
+    "description": "Web Design Museum exhibits thousands of websites that chronicle forgotten trends in web design from its beginnings in the 1990s to the mid-00s.",
+    "tags": [
+      "internet"
+    ],
+    "cover": null
+  },
+  {
+    "id": "244",
+    "title": "Building Websites With LLMS – (L)ots of (L)ittle ht(M)l page(S)",
+    "url": "https://blog.jim-nielsen.com/2025/lots-of-little-html-pages/",
+    "added": "2025-03-05T00:00:00Z",
+    "description": "Writing about the big beautiful mess that is making things for the world wide web.",
+    "tags": [
+      "frontend",
+      "html",
+      "webdev"
+    ],
+    "cover": null
+  },
+  {
+    "id": "252",
+    "title": "RSS is (not) dead (yet)",
+    "url": "https://audmcname.com/comics/rss-is-not-dead-yet/",
+    "added": "2025-02-16T00:00:00Z",
+    "tags": [
+      "internet",
+      "rss",
+      "webcomic"
+    ],
+    "cover": null
+  },
+  {
+    "id": "266",
+    "title": "Sidenotes In Web Design",
+    "url": "https://gwern.net/sidenote",
+    "added": "2025-01-15T00:00:00Z",
+    "description": "In typography/design, 'sidenotes' place footnotes/endnotes in the margins for easier reading.",
+    "tags": [
+      "css",
+      "design",
+      "frontend"
+    ],
+    "cover": "afca3f20e1953af81a1724e1c2a09655.png"
+  },
+  {
+    "id": "267",
+    "title": "Love Hotel – Francois Prost",
+    "url": "http://francoisprost.com/portfolio-item/love-hotel/",
+    "added": "2025-01-15T00:00:00Z",
+    "tags": [
+      "photography"
+    ],
+    "cover": null
+  },
+  {
+    "id": "271",
+    "title": "European Alternatives",
+    "url": "https://european-alternatives.eu/",
+    "added": "2025-01-08T00:00:00Z",
+    "description": "We help you find European alternatives for digital service and products, like cloud services and SaaS products.",
+    "tags": [
+      "software",
+      "sustainability"
+    ],
+    "cover": "7c471b4e2039aba23ab267d0265d361f.png"
+  },
+  {
+    "id": "275",
+    "title": "The lowwwcarbon website showcase",
+    "url": "https://lowwwcarbon.com/",
+    "added": "2025-01-03T00:00:00Z",
+    "description": "Examples of low-carbon, sustainable, web design and development.",
+    "tags": [
+      "internet",
+      "sustainability"
+    ],
+    "cover": "01dc5e47551fc223c48543ed8304796d.jpg"
+  },
+  {
+    "id": "278",
+    "title": "The Originals Museum",
+    "url": "https://theoriginals.renault.com/de",
+    "added": "2025-01-02T00:00:00Z",
+    "description": "The Originals Museum: ein Rückblick auf die alten Renault-Modelle",
+    "tags": [
+      "cars",
+      "design"
+    ],
+    "cover": "70979c73fae1b872fed9e3de86de5cb2.png"
+  },
+  {
+    "id": "280",
+    "title": "Stream of Consciousness",
+    "url": "https://www.youtube.com/watch?v=D75EugMrWnw",
+    "added": "2025-01-01T00:00:00Z",
+    "tags": [
+      "short-film"
+    ],
+    "cover": null
+  },
+  {
+    "id": "295",
+    "title": "Wall of Wally",
+    "url": "https://wallofwally.tumblr.com/",
+    "added": "2024-11-28T00:00:00Z",
+    "description": "An illustrated celebration of Wally Olins CBE 1930 - 2014",
+    "tags": [
+      "art"
+    ],
+    "cover": null
+  },
+  {
+    "id": "327",
+    "title": "Japanese web design - weird but it works. Here's why",
+    "url": "https://www.youtube.com/watch?v=vi8pyS076a8",
+    "added": "2024-10-11T00:00:00Z",
+    "description": "Japanese website design looks weird. But, they work just as well as other websites around the world. Why is that?",
+    "tags": [
+      "design",
+      "internet"
+    ],
+    "cover": null
+  },
+  {
+    "id": "329",
+    "title": "The Disappearance of an Internet Domain",
+    "url": "https://every.to/p/the-disappearance-of-an-internet-domain",
+    "added": "2024-10-10T00:00:00Z",
+    "description": "How geopolitics can alter digital infrastructure",
+    "tags": [
+      "internet"
+    ],
+    "cover": null
+  },
+  {
+    "id": "331",
+    "title": "AI Art is The New Stock Image",
+    "url": "https://ia.net/topics/ai-art-is-the-new-stock-image",
+    "added": "2024-09-28T00:00:00Z",
+    "description": "Critique of the pure AI image.",
+    "tags": [
+      "ai",
+      "design"
+    ],
+    "cover": "291e9c3b029e0ae36e5d717532506311.webp"
+  },
+  {
+    "id": "332",
+    "title": "Scrollbars",
+    "url": "https://modem.io/blog/scrollbars/",
+    "added": "2024-09-28T00:00:00Z",
+    "description": "A guide on overriding native scroll behavior to provide your own objectively better experience.",
+    "tags": [
+      "internet"
+    ],
+    "cover": "3cc54eba0fe334832b743c9d83346947.png"
+  },
+  {
+    "id": "337",
+    "title": "The Monospace Web",
+    "url": "https://owickstrom.github.io/the-monospace-web/",
+    "added": "2024-09-18T00:00:00Z",
+    "tags": [
+      "webdev"
+    ],
+    "cover": null
+  },
+  {
+    "id": "338",
+    "title": "Why I Finally Quit Spotify",
+    "url": "https://www.newyorker.com/culture/infinite-scroll/why-i-finally-quit-spotify",
+    "added": "2024-09-16T00:00:00Z",
+    "description": "The platform interface has gradually made it harder to find the music I want to listen to.",
+    "tags": [
+      "music",
+      "software"
+    ],
+    "cover": "79d412be6e6f0c67e7b9ef3f5d2b2c50.jpg"
+  },
+  {
+    "id": "339",
+    "title": "Public Work by Cosmos",
+    "url": "https://public.work/",
+    "added": "2024-09-13T00:00:00Z",
+    "description": "Public Work is a visual search engine for public domain content. Explore 100,000+ copyright-free images from The MET, New York Public Library, and other sources",
+    "tags": [
+      "art"
+    ],
+    "cover": null
+  },
+  {
+    "id": "359",
+    "title": "AIAIAI",
+    "url": "https://vanschneider.com/blog/aiaiai/",
+    "added": "2024-08-04T00:00:00Z",
+    "description": "How tired are we collectively about AI? Are we over it yet? Can you even hear about it anymore?",
+    "tags": [
+      "ai",
+      "design"
+    ],
+    "cover": "cf5ea311ac9ce759e2f9f720cf89f033.png"
+  },
+  {
+    "id": "364",
+    "title": "Internet Phone Book",
+    "url": "https://internetphonebook.net/",
+    "added": "2024-07-24T00:00:00Z",
+    "description": "A physical directory for exploring the vast poetic web",
+    "tags": [
+      "internet"
+    ],
+    "cover": null
+  },
+  {
+    "id": "367",
+    "title": "A quick beginner's guide to animation",
+    "url": "https://ralphammer.com/a-quick-beginners-guide-to-animation/",
+    "added": "2024-07-17T00:00:00Z",
+    "description": "Get started with animation with these 5 exercises. They are fun and teach you how to imagine in time.",
+    "tags": [
+      "design",
+      "motion"
+    ],
+    "cover": "f0ffd83fa05d8938aebf6916bbc40e64.gif"
+  },
+  {
+    "id": "377",
+    "title": "Not By AI – Add the Badge to Your Human-Created Content",
+    "url": "https://notbyai.fyi/",
+    "added": "2024-07-10T00:00:00Z",
+    "description": "Download and add the Not By AI badge to showcase your AI-free & human-first approach to content creation",
+    "tags": [
+      "ai"
+    ],
+    "cover": null
+  },
+  {
+    "id": "378",
+    "title": "The Human Made Mark",
+    "url": "https://humanmademark.com/index.html#about",
+    "added": "2024-07-10T00:00:00Z",
+    "description": "When you see this logo on any artwork, whether painting, poetry, or prose, you know that it was made by a human just like you.",
+    "tags": [
+      "ai"
+    ],
+    "cover": null
+  },
+  {
+    "id": "380",
+    "title": "Tiny Awards",
+    "url": "https://tinyawards.net/",
+    "added": "2024-07-09T00:00:00Z",
+    "description": "Tiny awards, tiny prize, tiny trophy, big love",
+    "tags": [
+      "internet"
+    ],
+    "cover": null
+  },
+  {
+    "id": "381",
+    "title": "A Call for Coding Designers",
+    "url": "https://timrodenbroeker.de/a-call-for-coding-designers/",
+    "added": "2024-07-08T00:00:00Z",
+    "description": "This is a call for coding designers. It aims to serve as a proposal and a provocation for creative work.",
+    "tags": [
+      "design"
+    ],
+    "cover": "33961b2dd379ffb0eb5d05839a287578.gif"
+  },
+  {
+    "id": "392",
+    "title": "No Web Without Women",
+    "url": "https://nowebwithoutwomen.com/",
+    "added": "2024-06-13T00:00:00Z",
+    "description": "An educational website featuring a collection of innovations by women in the fields of computer science and technology.",
+    "tags": [
+      "internet"
+    ],
+    "cover": "4fafe424bcc32f27f5f33630b3c35f46.png"
+  },
+  {
+    "id": "393",
+    "title": "Dark Mode App Icons",
+    "url": "https://lmnt.me/blog/dark-mode-app-icons.html",
+    "added": "2024-06-12T00:00:00Z",
+    "tags": [
+      "design"
+    ],
+    "cover": "60464f05b6b4e070c4857cdd0c4d5dd7.webp"
+  },
+  {
+    "id": "394",
+    "title": "The Cheap Web",
+    "url": "https://potato.cheap/",
+    "added": "2024-06-11T00:00:00Z",
+    "description": "The cheap web is a solarpunk philosophy of web design.",
+    "tags": [
+      "cheap-web",
+      "sustainability",
+      "webdev"
+    ],
+    "cover": null
+  },
+  {
+    "id": "403",
+    "title": "Generative AI is for the idea guys",
+    "url": "https://rachsmith.com/ai-is-for-the-idea-guys/",
+    "added": "2024-05-26T00:00:00Z",
+    "description": "When I started working in tech in the early 2010s I began running in to idea guys.",
+    "tags": [
+      "ai"
+    ],
+    "cover": "bcccdc5a5b7aa0685dabaaf4bf19bd48.jpg"
+  },
+  {
+    "id": "409",
+    "title": "The Expanding Dark Forest and Generative AI",
+    "url": "https://maggieappleton.com/ai-dark-forest",
+    "added": "2024-05-16T00:00:00Z",
+    "description": "Proving you're a human on a web flooded with generative AI content",
+    "tags": [
+      "ai",
+      "culture",
+      "internet"
+    ],
+    "cover": "140458968f9f7da7d14e181d0a80e799.png"
+  },
+  {
+    "id": "410",
+    "title": "The Seven Phases of Madness",
+    "url": "https://www.youtube.com/watch?v=4xdStqElHp4",
+    "added": "2024-05-15T00:00:00Z",
+    "tags": [
+      "bike"
+    ],
+    "cover": null
+  },
+  {
+    "id": "411",
+    "title": "Images of Australian criminals in the 1920s",
+    "url": "https://bendaubney.blog/2024/05/13/images-of-australian.html",
+    "added": "2024-05-14T00:00:00Z",
+    "tags": [
+      "photography"
+    ],
+    "cover": null
+  },
+  {
+    "id": "412",
+    "title": "Heat Death of the Internet",
+    "url": "https://www.takahe.org.nz/heat-death-of-the-internet/",
+    "added": "2024-05-03T00:00:00Z",
+    "description": "You want to order from a local restaurant, but you need to download a third-party delivery app, even though you plan to pick it up yourself.",
+    "tags": [
+      "internet"
+    ],
+    "cover": null
+  },
+  {
+    "id": "415",
+    "title": "Choosing the perfect icons for your typeface",
+    "url": "https://blog.streamlinehq.com/choosing-the-perfect-icons-for-your-typeface/",
+    "added": "2024-04-26T00:00:00Z",
+    "description": "A simple guide on how to pair icons and typefaces to create a consistent visual language.",
+    "tags": [
+      "design",
+      "icons",
+      "typography"
+    ],
+    "cover": "bb8f71a0a4a106913f486e5cc02c213a.png"
+  },
+  {
+    "id": "416",
+    "title": "Become a better UX-designer with these three words",
+    "url": "https://www.antonsten.com/articles/become-a-better-ux-designer-with-these-three-words/",
+    "added": "2024-04-19T00:00:00Z",
+    "description": "Getting older has taught me that the more you know, the more you realize how little you actually know.",
+    "tags": [
+      "design",
+      "ux"
+    ],
+    "cover": "5c8f5bdcbd9f2ecd5733bc4077481bbe.webp"
+  },
+  {
+    "id": "418",
+    "title": "De-Atomization is the Secret to Happiness",
+    "url": "https://blog.nateliason.com/p/de-atomization-is-the-secret-to-happiness",
+    "added": "2024-04-16T00:00:00Z",
+    "description": "It may be that simple",
+    "tags": [
+      "mental-health",
+      "personal-development"
+    ],
+    "cover": "7ea9dc37c6c655b641fc947915cd1448.jpg"
+  },
+  {
+    "id": "424",
+    "title": "Here lies the internet murdered by generative AI",
+    "url": "https://www.theintrinsicperspective.com/p/here-lies-the-internet-murdered-by",
+    "added": "2024-04-03T00:00:00Z",
+    "description": "Corruption everywhere, even in YouTube's kids content",
+    "tags": [
+      "ai",
+      "internet"
+    ],
+    "cover": "0e5ee26653d1199e71d90d1b2012ad88.jpg"
+  },
+  {
+    "id": "486",
+    "title": "A Global Design System",
+    "url": "https://bradfrost.com/blog/post/a-global-design-system",
+    "added": "2024-01-10T00:00:00Z",
+    "description": "TL;DR: This is a call to action to create a Global Design System that provides the world's web designers & developers a library of common UI components.",
+    "tags": [
+      "design-system"
+    ],
+    "cover": null
+  },
+  {
+    "id": "568",
+    "title": "Can There Be Too Many Cafes in Paris?",
+    "url": "https://www.nytimes.com/2023/08/21/world/europe/paris-cafes-summer-terraces.html",
+    "added": "2023-08-23T00:00:00Z",
+    "description": "The neighbors may complain about the noise, but outdoor spaces that bloomed under a pandemic program are now a permanent and vibrant fixture of city life.",
+    "tags": [
+      "urban-development"
+    ],
+    "cover": null
+  },
+  {
+    "id": "576",
+    "title": "Nibble and your appetite will grow",
+    "url": "https://stephanango.com/nibble",
+    "added": "2023-07-24T00:00:00Z",
+    "description": "The most reliable way to create motivation is to start doing the thing. Actions precede feelings, not the other way around.",
+    "tags": [
+      "personal-development",
+      "procrastination"
+    ],
+    "cover": "d731e842c47656d5c5492d872bf24bb3.png"
+  },
+  {
+    "id": "661",
+    "title": "Beware of Free Software",
+    "url": "https://goodenough.us/blog/2023-06-01-beware-of-free-software",
+    "added": "2023-06-03T00:00:00Z",
+    "description": "Beware of free pizza. If I want a slice of pizza, I don't expect it to be free.",
+    "tags": [
+      "money",
+      "software"
+    ],
+    "cover": "1f49d18074aaaa4e23a72ab4d9e3295a.png"
+  },
+  {
+    "id": "665",
+    "title": "Small Technology Foundation",
+    "url": "https://small-tech.org",
+    "added": "2023-05-19T00:00:00Z",
+    "description": "Hello! We're a tiny and independent two-person not-for-profit based in Ireland. We are building the Small Web.",
+    "tags": [
+      "sustainability",
+      "web0",
+      "webdev"
+    ],
+    "cover": null
+  },
+  {
+    "id": "668",
+    "title": "The Longest Serving Royal Photographer",
+    "url": "https://www.youtube.com/watch?v=AvgsB_meAbI",
+    "added": "2023-05-14T00:00:00Z",
+    "description": "The larger than life story behind the British Royal Family's longest serving photographer.",
+    "tags": [
+      "photography"
+    ],
+    "cover": null
+  },
+  {
+    "id": "675",
+    "title": "The age of average",
+    "url": "https://www.alexmurrell.co.uk/articles/the-age-of-average",
+    "added": "2023-04-07T00:00:00Z",
+    "description": "In the early 1990s, two Russian artists named Vitaly Komar and Alexander Melamid hired a market research firm to survey the public on what they wanted in a work of art.",
+    "tags": [
+      "culture",
+      "design"
+    ],
+    "cover": "62f3b81f00f6c7fd5c1fe6aab6eb9e45.jpg"
+  },
+  {
+    "id": "682",
+    "title": "1 dataset. 100 visualizations.",
+    "url": "https://100.datavizproject.com",
+    "added": "2023-02-28T00:00:00Z",
+    "tags": [
+      "data-visualization"
+    ],
+    "cover": null
+  },
+  {
+    "id": "683",
+    "title": "How to Build a Low-tech Website?",
+    "url": "https://solar.lowtechmagazine.com/2018/09/how-to-build-a-lowtech-website.html",
+    "added": "2023-02-22T00:00:00Z",
+    "description": "Our new website is designed to radically reduce the energy use associated with accessing our content.",
+    "tags": [
+      "sustainability",
+      "webdev"
+    ],
+    "cover": "6e39578d805aa7a6ef63fbd6b63a85de.png"
+  },
+  {
+    "id": "684",
+    "title": "Work doesn't love us",
+    "url": "https://www.sarahesterman.com/posts/work-doesnt-love-us",
+    "added": "2023-02-21T00:00:00Z",
+    "description": "It's been layoff season for awhile, so it's time to remember work doesn't love us back.",
+    "tags": [
+      "work"
+    ],
+    "cover": "86eec1582bd1892f7bb0aaf5356654b0.png"
+  },
+  {
+    "id": "694",
+    "title": "How Farming Saved Me From Developer Burnout with Anselm Hannemann",
+    "url": "https://www.youtube.com/watch?v=uwKTRv2ZDV0",
+    "added": "2023-02-15T00:00:00Z",
+    "tags": [
+      "mental-health",
+      "work"
+    ],
+    "cover": null
+  }
+]
