@@ -17,6 +17,8 @@ interface Props {
     ogType?: "website" | "article";
     /** Keep the page out of search results. Used by the placeholder media logs. */
     noindex?: boolean;
+    /** JSON-LD structured data for search engines. */
+    structuredData?: unknown;
 }
 
 /*
@@ -33,6 +35,7 @@ const {
     ogImageAlt = "Robin Spielmann — Design Engineer",
     ogType = "website",
     noindex = false,
+    structuredData,
 } = Astro.props;
 
 /*
@@ -63,6 +66,10 @@ const ogImage = new URL(ogImagePath ?? "/opengraph.png", Astro.site).href;
 */
 const paperKey = getPaperKey(Astro.url.pathname);
 const paper = papers[paperKey];
+
+const serializedStructuredData = structuredData
+    ? JSON.stringify(structuredData).replace(/</g, "\\u003c")
+    : null;
 ---
 
 <html lang="en">
@@ -131,6 +138,15 @@ const paper = papers[paperKey];
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={ogImageAlt} />
         <meta name="twitter:card" content="summary_large_image" />
+        {
+            serializedStructuredData && (
+                <script
+                    is:inline
+                    type="application/ld+json"
+                    set:html={serializedStructuredData}
+                />
+            )
+        }
 
         <!-- Self-hosted Umami, same instance and site id as v3 so the numbers
          carry over instead of restarting at zero. `data-domains` keeps dev

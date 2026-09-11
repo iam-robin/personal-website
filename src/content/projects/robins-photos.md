@@ -1,6 +1,6 @@
 ---
 title: "robins.photos"
-description: "I have been enjoying using a camera to capture visually appealing moments for over a decade now."
+description: "A separate home for my photography, collected from years of walking around with a camera."
 thumbnail: "/projects/robinsphotos.svg"
 thumbnailWidth: "50px"
 tags: ["Photography"]

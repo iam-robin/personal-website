@@ -1,6 +1,6 @@
 ---
 title: "oh my"
-description: "A browser extension visualizing your web habits and helping you manage online time."
+description: "My master thesis browser extension in Vue.js, visualizing browsing habits and limiting distracting sites."
 thumbnail: "/projects/ohmy.svg"
 tags: ["Master Thesis", "Data viz"]
 year: "2018"
@@ -9,7 +9,7 @@ bgColor: "#F59E0B"
 
 ![](../../assets/projects/oh-my/Bildschirmfoto_2024-07-04_um_13.21.17.png)
 
-In the course of my master thesis I developed «oh my», a browser extension based on Vue.js, which records the personal usage behavior in the browser and visualizes it on the new tab page. In addition, the user is offered the possibility to actively regulate his usage behavior by blocking individual pages after a specific duration of use or number of calls.
+For my master thesis, I built «oh my», a Vue.js browser extension that records browsing habits and visualizes them on the new tab page. It also lets people limit distracting sites after a set amount of time or number of visits.
 
 ### Concept
 During the conception phase, wireframes were created for the user interface of the main application as well as for the pop-up window of the browser extension. Starting with pen and paper, the developed structure was then digitized and unified. Based on the static wireframes, an interactive prototype was then created with Figma.

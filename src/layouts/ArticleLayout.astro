@@ -22,6 +22,8 @@ interface Props {
     ogImage?: string;
     ogImageAlt?: string;
     ogType?: "website" | "article";
+    /** JSON-LD structured data for search engines. */
+    structuredData?: unknown;
     /**
      * Show the sticky sidebar. A prop and not `Astro.slots.has("rail")`: a
      * conditionally-rendered slot still registers as present when the
@@ -37,6 +39,7 @@ const {
     ogImage,
     ogImageAlt,
     ogType,
+    structuredData,
     rail = false,
 } = Astro.props;
 ---
@@ -48,6 +51,7 @@ const {
     ogImage={ogImage}
     ogImageAlt={ogImageAlt}
     ogType={ogType}
+    structuredData={structuredData}
     hideHero
 >
     <div

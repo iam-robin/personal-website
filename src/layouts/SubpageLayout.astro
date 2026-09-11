@@ -25,6 +25,8 @@ interface Props {
     hideHero?: boolean;
     /** Keep the page out of search results. Used by the placeholder media logs. */
     noindex?: boolean;
+    /** JSON-LD structured data for search engines. */
+    structuredData?: unknown;
 }
 
 const {
@@ -36,6 +38,7 @@ const {
     ogType,
     hideHero = false,
     noindex = false,
+    structuredData,
 } = Astro.props;
 ---
 
@@ -46,6 +49,7 @@ const {
     ogImageAlt={ogImageAlt}
     ogType={ogType}
     noindex={noindex}
+    structuredData={structuredData}
 >
     <div
         class="@container mx-auto flex min-h-dvh max-w-shell flex-col px-gutter py-8"

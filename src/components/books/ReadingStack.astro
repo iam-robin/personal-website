@@ -20,7 +20,7 @@ const { books } = Astro.props;
             books.map((book) => (
                 <li
                     class="reading-book"
-                    style={`--ts: ${book.thicknessRatio.toFixed(4)}; --hs: ${book.heightRatio.toFixed(4)}; --spine: ${book.spineColor}; --text: ${book.textColor}`}
+                    style={`--ts: ${book.thicknessRatio.toFixed(4)}; --hs: ${book.heightRatio.toFixed(4)}; --spine: ${book.spineColor}; --text: ${book.textColor}; --title-lines: ${book.titleLines}`}
                 >
                     <span class="reading-title">{book.spineTitle}</span>
                 </li>
@@ -76,10 +76,12 @@ const { books } = Astro.props;
     }
 
     .reading-title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: var(--title-lines, 1);
+        overflow: hidden;
         font-family: var(--font-mono);
         font-size: var(--text-xs);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        line-height: 1.35;
     }
 </style>

@@ -1,6 +1,6 @@
 ---
 title: "notion budget"
-description: "A web app leveraging the Notion API to analyze and display personal financial data from a Notion-based budget planner"
+description: "A React and Express app that reads a Notion budget database and turns personal finance data into charts."
 thumbnail: "/projects/notionbudget.png"
 tags: ["Data viz", "React", "Express"]
 year: "2021"
@@ -9,9 +9,9 @@ bgColor: "#18181B"
 
 ![](../../assets/projects/notion-budget/002.png)
 
-I've tracked my private financial expenses in a budget planner built with [Notion](https://www.notion.so/personal) for over a year. The release of the official Notion API enabled me to visualize this data in the form of a small web application to better analyze and evaluate the collected data.
+I tracked my private expenses in a [Notion](https://www.notion.so/personal) budget planner for over a year. When the official Notion API came out, I built a small React and Express app around that database, mostly to see my own spending patterns more clearly.
 
-The data shown in the following are all just for demonstation reason and do not reflect my real income and expenses.
+The data shown here is demo data. It does not reflect my real income or expenses.
 
 ### Data
 I tracked all my expenses in Notion over a year to get a better overview of my finances. I distinguished between fixed costs and variable costs. Fixed costs, such as rent, electricity, Spotify and other digital subscriptions consist of a start date, the monthly cost and if canceled an end date. Variable costs such as food, clothes, leisure activities were entered manually with the amount of the expense and a label for categorization. Also included in the table are my fixed and variable incomes for each month.
