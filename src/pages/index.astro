@@ -16,6 +16,7 @@ import PostcardItem from "../components/postcards/PostcardItem.astro";
 import { getFeaturedProjects } from "../utils/projects";
 import { getFanImages } from "../utils/projectFans";
 import { getNewestPostcards, toPostcardProps } from "../utils/postcards";
+import { graphSchema, personSchema, websiteSchema } from "../utils/schema";
 
 const projects = await getFeaturedProjects();
 
@@ -77,11 +78,13 @@ const panelCss = heroPanels
 // that hover: a touch tablet clears the width but not the interaction, and
 // gets the cards' own static fans (MobileFan) instead.
 const hoverCss = `@media (min-width: 64rem) and (hover: hover) {\n${hideDefaultCss}\n${panelCss}\n}`;
+const structuredData = graphSchema([personSchema, websiteSchema]);
 ---
 
 <Layout
-    title="Robin Spielmann — Design Engineer"
-    description="Design engineer at the intersection of code, design and art. My own little space on the internet: side projects, writing, photography and postcards."
+    title="Robin Spielmann — Design Engineer and Frontend Developer"
+    description="I'm Robin Spielmann, a design engineer and frontend developer in Munich. This is where I keep projects, writing, photos and postcards."
+    structuredData={structuredData}
 >
     <script is:inline>
         /**

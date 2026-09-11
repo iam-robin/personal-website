@@ -93,9 +93,40 @@ const formatDate = (dateString: string) => {
 
 const showEdited =
     !!note.edited && formatDate(note.created) !== formatDate(note.edited);
+
+function plainText(markdown: string): string {
+    return markdown
+        .replace(/```[\s\S]*?```/g, " ")
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+        .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/[#>*_`~\-[\]]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function metaDescription(note: GardenNote["data"]): string {
+    const base = note.description?.trim() || plainText(note.content);
+    const withContext =
+        base.length >= 50
+            ? base
+            : `${base || note.title}. A garden note about ${note.thema.toLowerCase()} from Robin Spielmann's Obsidian vault.`;
+
+    if (withContext.length <= 155) return withContext;
+
+    const clipped = withContext.slice(0, 152);
+    return `${clipped.slice(0, clipped.lastIndexOf(" "))}...`;
+}
+
+const noteDescription = metaDescription(note);
+const gardenTitleSuffix = " — Garden note";
+const documentTitle =
+    note.title.length + gardenTitleSuffix.length > 65
+        ? note.title
+        : `${note.title}${gardenTitleSuffix}`;
 ---
 
-<Layout title={`${note.title} — Garden — Robin Spielmann`}>
+<Layout title={documentTitle} description={noteDescription}>
     <!-- SVG distortion filter for the handwritten metadata -->
     <svg class="hidden" aria-hidden="true">
         <defs>

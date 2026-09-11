@@ -1,6 +1,6 @@
 ---
 title: "Lumon"
-description: "A recreation of the strange desktop interface from Apple TV's Severance, built as a small web experiment."
+description: "A web recreation of the strange desktop interface from Apple TV+'s Severance."
 thumbnail: "/projects/lumon.png"
 thumbnailWidth: "128px"
 tags: ["Website", "UI Imitation"]
@@ -10,7 +10,7 @@ bgColor: "#1E3A8A"
 
 ![](../../assets/projects/lumon/1.png)
 
-After watching the first season of [Severance](https://tv.apple.com/de/show/severance/umc.cmc.1srk2goyh2q2zdxcx605w8vtx), I recreated the fictional Lumon desktop interface as a small web experiment. The show never really explains what the software does. That was part of the fun. I cared about the strange grid, the motion, and the slightly uncomfortable feeling of using it.
+After watching the first season of [Severance](https://tv.apple.com/de/show/severance/umc.cmc.1srk2goyh2q2zdxcx605w8vtx), I rebuilt the fictional Lumon desktop interface for the web. The show never really explains what the software does. That was part of the fun. I cared about the strange grid, the motion, and the slightly uncomfortable feeling of using it.
 
 ### The TV show
 

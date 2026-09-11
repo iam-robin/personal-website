@@ -23,11 +23,12 @@ const allNotes = await getGardenNotes();
 const categories = getCategories(allNotes);
 const colorMap = getCategoryColorMap(allNotes);
 const notes = allNotes.filter((note) => note.data.thema === categoryName);
+const description = `Notes about ${categoryName.toLowerCase()} from my Obsidian vault. Small and unfinished on purpose.`;
 ---
 
 <SubpageLayout
     title="Garden"
-    description="A collection of notes, ideas, and thoughts that I cultivate over time. Unlike blog posts, these notes are living documents that grow and evolve as I learn and explore new topics."
+    description={description}
     documentTitle={`${categoryName} — Garden — Robin Spielmann`}
 >
     <GardenFilter

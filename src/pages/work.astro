@@ -6,6 +6,12 @@ import Link from "../components/ui/Link.astro";
 import RoleDiagram from "../components/work/RoleDiagram.astro";
 import InkMark from "../components/ui/InkMark.astro";
 import portrait from "../assets/robin-portrait.avif";
+import {
+    graphSchema,
+    personSchema,
+    profilePageSchema,
+    websiteSchema,
+} from "../utils/schema";
 
 // Used on the page and in the meta description below — declared once.
 const headline =
@@ -14,7 +20,8 @@ const focus =
     "Focus on scalable interfaces and a close collaboration between design and development.";
 
 // ArticleLayout passes hideHero, so this only reaches the meta tag.
-const metaDescription = `${headline} ${focus}`;
+const metaDescription =
+    "I'm a design engineer in Munich, working on frontend, design systems and web applications after 8+ years in product teams.";
 
 const facets: { icon: string; title: string; body: string }[] = [
     {
@@ -72,13 +79,23 @@ const clients: { name: string; logo: string }[] = [
 ];
 
 const sectionHeading = "scroll-mt-8 text-lg font-bold";
+const structuredData = graphSchema([
+    personSchema,
+    websiteSchema,
+    profilePageSchema(new URL(Astro.url.pathname, Astro.site).href, metaDescription),
+]);
 ---
 
 {
     /* No rail: too few sections for a contents list to be navigation rather
     than furniture. */
 }
-<ArticleLayout title="Work" description={metaDescription}>
+<ArticleLayout
+    title="Work"
+    documentTitle="Frontend Design Engineer in Munich — Robin Spielmann"
+    description={metaDescription}
+    structuredData={structuredData}
+>
     <div class="mt-4">
         {
             /* The statement sits on the lead measure, which is what makes the

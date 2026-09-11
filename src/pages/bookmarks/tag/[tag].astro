@@ -17,11 +17,12 @@ const { tagName } = Astro.props;
 const allBookmarks = await getBookmarks();
 const tags = getTags(allBookmarks);
 const bookmarks = allBookmarks.filter((b) => b.data.tags.includes(tagName));
+const description = `Bookmarks I saved about ${tagName}. Articles, essays, videos and small internet finds from my linkding.`;
 ---
 
 <SubpageLayout
     title="Bookmarks"
-    description="Daily I receive new articles, videos, essays, etc. in the RSS reader of my choice, Unread. The ones I love I tag and save into linkding, my own little bookmark box on a server in Germany. From there they flow straight onto this page."
+    description={description}
     documentTitle={`#${tagName} — Bookmarks — Robin Spielmann`}
 >
     <BookmarkFilter tags={tags} total={allBookmarks.length} active={tagName} />

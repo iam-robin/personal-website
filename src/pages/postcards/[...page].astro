@@ -16,6 +16,8 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
+const description =
+    "My tiny guestbook for this website. Send me a postcard, say hello, or read what other visitors left behind.";
 ---
 
 <SubpageLayout
@@ -23,7 +25,8 @@ const { page } = Astro.props;
     documentTitle={page.currentPage > 1
         ? `Postcards (page ${page.currentPage}) — Robin Spielmann`
         : undefined}
-    description="This website is mostly me talking. This postcard gives you a chance to talk back — even just a line. Drop me a postcard. Tell me what you're thinking, where you're visiting from, or simply that you stopped by. I'd love to hear from you."
+    description={description}
+    noindex={page.currentPage > 1}
 >
     <SendPostcardCta slot="cta" />
     <PostcardsView page={page} />

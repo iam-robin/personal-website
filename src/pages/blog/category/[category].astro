@@ -23,9 +23,14 @@ const allPosts = await getBlogPosts();
 const categories = getCategories(allPosts);
 const posts = allPosts.filter((post) => post.data.category === category);
 const label = categoryLabel(category);
+const description = `Posts I filed under ${label.toLowerCase()}. Mostly notes on design, code, software and making things for the web.`;
 ---
 
-<SubpageLayout title="Blog" documentTitle={`${label} — Blog — Robin Spielmann`}>
+<SubpageLayout
+    title="Blog"
+    description={description}
+    documentTitle={`${label} — Blog — Robin Spielmann`}
+>
     <BlogFilter categories={categories} active={category} />
     <div class="mt-12">
         <BlogPostList posts={posts} />

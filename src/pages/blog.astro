@@ -8,7 +8,10 @@ const posts = await getBlogPosts();
 const categories = getCategories(posts);
 ---
 
-<SubpageLayout title="Blog">
+<SubpageLayout
+    title="Blog"
+    description="Things I write about design engineering, frontend work, RSS, software and maintaining a personal website."
+>
     <BlogFilter categories={categories} />
     <div class="mt-12">
         <BlogPostList posts={posts} showCategory />

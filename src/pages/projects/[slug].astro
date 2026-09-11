@@ -3,6 +3,12 @@ import Button from "../../components/ui/Button.astro";
 import { getCollection, render } from "astro:content";
 import { Icon } from "astro-icon/components";
 import Layout from "../../layouts/Layout.astro";
+import {
+    creativeWorkSchema,
+    graphSchema,
+    personSchema,
+    websiteSchema,
+} from "../../utils/schema";
 import "../../styles/markdown.css";
 
 // Only for projects the cards link to internally — the rest open their own
@@ -20,11 +26,34 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const { title, description, tags, year } = project.data;
+
+const projectDocumentTitles: Record<string, string> = {
+    lumon: "Lumon — Severance interface recreation",
+    "meaningful-animations": "Meaningful animations — UX motion thesis",
+    "media-camp": "media.camp — Student barcamp website",
+    "notion-budget": "Notion budget dashboard",
+    "oh-my": "oh my — Browser extension for web habits",
+};
+
+const documentTitle = projectDocumentTitles[project.id] ?? `${title} — Project`;
+
+const structuredData = graphSchema([
+    personSchema,
+    websiteSchema,
+    creativeWorkSchema({
+        url: new URL(Astro.url.pathname, Astro.site).href,
+        title,
+        description,
+        keywords: tags,
+        dateCreated: year,
+    }),
+]);
 ---
 
 <Layout
-    title={`${title} — Projects — Robin Spielmann`}
+    title={documentTitle}
     description={description}
+    structuredData={structuredData}
 >
     <Button
         href="/projects"
