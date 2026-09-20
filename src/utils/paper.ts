@@ -1,7 +1,6 @@
 /**
- * Per-section paper stock. This file changes exactly one of the palette's
- * three tokens — the paper — per top-level section, and the surface, every
- * ink/NN wash, the code chip and the logo knockout follow it for free.
+ * Per-section paper stock. This file changes the paper per top-level section,
+ * and derives its lifted surface and recessed inset so both follow it.
  *
  * The tinted stocks share oklch L 91.5% and C 0.038, differing only in hue, so
  * no section reads louder than another. Those numbers aren't free: chroma is
@@ -15,8 +14,11 @@
 /** Kept in sync with --color-ink by hand; it is the one value that never moves. */
 const INK = "#1a1919";
 
-/** How much ink goes over the paper to make the card surface. See mixOklab. */
-const SURFACE_INK = 0.1;
+/** How much white goes over the paper to make lifted card surfaces. */
+const SURFACE_WHITE = 0.42;
+/** How much ink goes over the paper to make recessed/inset wells. */
+const INSET_INK = 0.1;
+const WHITE = "#ffffff";
 
 const srgbToLinear = (c: number) =>
     c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
@@ -110,13 +112,10 @@ export function oklchToHex(L: number, C: number, hue: number): string {
 }
 
 /**
- * The card surface: `amount` of ink over the stock, in oklab. Same result as
- * CSS `color-mix(in oklab, …)`, computed here because Lightning CSS
- * constant-folds that function at build time and would freeze every page's
- * surface at the default stock.
- *
- * 10% holds the paper→surface lightness step steady (0.072 blank, 0.070 on a
- * tint), so a card looks equally raised in every room.
+ * A stock-derived companion colour: `amount` of `over` mixed over the paper,
+ * in oklab. Same result as CSS `color-mix(in oklab, …)`, computed here because
+ * Lightning CSS constant-folds that function at build time and would freeze
+ * every page's derived colours at the default stock.
  */
 function mixOklab(hex: string, over: string, amount: number): string {
     const a = hexToOklab(hex);
@@ -137,8 +136,26 @@ export interface Paper {
 }
 
 export interface ResolvedPaper extends Paper {
-    /** Cards, code chips, the world map's land — ink 10% over the stock. */
+    /** Lifted cards and popovers — white mixed over the stock. */
     surface: string;
+    /** Recessed wells and embedded trays — ink mixed over the stock. */
+    inset: string;
+    /** Stronger stock shades for small folder silhouettes on the homepage. */
+    folderFront: string;
+    folderBack: string;
+}
+
+function folderShades(hex: string): Pick<ResolvedPaper, "folderFront" | "folderBack"> {
+    const [, a, b] = hexToOklab(hex);
+    const hue = Math.atan2(b, a) * 180 / Math.PI;
+    const chroma = Math.hypot(a, b) * 1.8;
+    // These decorative silhouettes keep the airy stock colors. The adjacent
+    // link labels and focus rings carry the accessible interaction cues.
+    // A darker back separates the fold without muddying the front.
+    return {
+        folderFront: oklchToHex(0.75, chroma, hue),
+        folderBack: oklchToHex(0.68, chroma, hue),
+    };
 }
 
 const stocks = {
@@ -167,11 +184,16 @@ const stocks = {
 
 export type PaperKey = keyof typeof stocks;
 
-/** Adding a section means adding one hex above — the surface follows. */
+/** Adding a section means adding one hex above — surface and inset follow. */
 export const papers = Object.fromEntries(
     Object.entries(stocks).map(([key, stock]) => [
         key,
-        { ...stock, surface: mixOklab(stock.hex, INK, SURFACE_INK) },
+        {
+            ...stock,
+            surface: mixOklab(stock.hex, WHITE, SURFACE_WHITE),
+            inset: mixOklab(stock.hex, INK, INSET_INK),
+            ...folderShades(stock.hex),
+        },
     ]),
 ) as Record<PaperKey, ResolvedPaper>;
 

@@ -1,0 +1,81 @@
+---
+import Layout from "./Layout.astro";
+import Bird from "../components/Bird.astro";
+import LabSections from "../components/lab/LabSections.astro";
+import { labSections, type LabSection } from "../data/lab";
+
+interface Props {
+    current: LabSection;
+    title: string;
+    description: string;
+    meta?: string;
+    sections?: { id: string; label: string; count?: number }[];
+}
+const { current, title, description, meta, sections = [] } = Astro.props;
+const currentSection = labSections.find((section) => section.id === current);
+const breadcrumbLabel = current === "overview" ? "Overview" : currentSection?.purpose ?? "Reference";
+---
+
+<Layout title={`${title} · Lab · Robin Spielmann`} description={description} noindex>
+    <a class="lab-skip" href="#lab-content">Skip to content</a>
+    <header class="lab-header">
+        <a class="lab-brand" href="/lab"><Bird interactive={false} class="h-8 w-auto" /><span>Website lab</span></a>
+        <a class="website-link" href="/">Back to my website <span aria-hidden="true">↗</span></a>
+    </header>
+    <div class="lab-shell">
+        <aside class="lab-navigation">
+            <LabSections current={current} />
+            <p class="navigation-note">My website, taken apart.<br />References and experiments live here.</p>
+        </aside>
+        <main id="lab-content" class="lab-content" tabindex="-1" aria-label={title}>
+            <header class="lab-page-heading">
+                <p class="lab-breadcrumb">Lab <span aria-hidden="true">/</span> {breadcrumbLabel}</p>
+                <h1>{title}</h1>
+                <p class="lab-description">{description}</p>
+                {meta && <p class="lab-meta">{meta}</p>}
+            </header>
+            {sections.length > 0 && <details class="lab-page-index" data-lab-page-nav>
+                <summary>Jump to a section <span>{sections.length}</span></summary>
+                <nav aria-label="On this page">
+                    {sections.map((section) => <a href={`#${section.id}`}>{section.label}{section.count !== undefined && <span>{section.count}</span>}</a>)}
+                </nav>
+            </details>}
+            <slot />
+            <footer class="lab-page-footer"><a href="/lab">Lab overview</a><a href="#lab-content">Back to top ↑</a></footer>
+        </main>
+    </div>
+</Layout>
+
+<style>
+    /* Shared lab shell. Preview documents never use this layout. */
+    .lab-skip { position: fixed; inset-block-start: .5rem; inset-inline-start: .5rem; z-index: 100; padding: .75rem 1rem; background: var(--color-ink); color: var(--color-paper); transform: translateY(-200%); }
+    .lab-skip:focus { transform: none; }
+    .lab-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem 1.5rem; padding: 1rem clamp(1rem, 3vw, 2.5rem); border-block-end: 1px solid var(--color-inset); }
+    .lab-brand { display: inline-flex; align-items: center; gap: .75rem; min-block-size: 2.75rem; font-weight: 700; }
+    .website-link { display: inline-flex; align-items: center; gap: .375rem; min-block-size: 2.75rem; font: .75rem/1.5 var(--font-mono); text-decoration: underline; text-underline-offset: .25rem; }
+    .lab-shell { display: grid; grid-template-columns: 14rem minmax(0, 1fr); max-inline-size: 104rem; margin-inline: auto; align-items: start; }
+    .lab-navigation { position: sticky; inset-block-start: 1rem; padding: 1.5rem 1rem; max-block-size: calc(100dvh - 2rem); overflow-y: auto; }
+    .navigation-note { margin: 2rem 1rem 0; font-size: .8125rem; line-height: 1.65; color: var(--color-ink-muted); }
+    .lab-content { --lab-anchor-offset: 2rem; min-inline-size: 0; padding: 2.5rem clamp(1rem, 3vw, 3rem) 3rem; border-inline-start: 1px solid var(--color-inset); scroll-margin-block-start: var(--lab-anchor-offset); }
+    .lab-page-heading { margin-block-end: 2rem; max-inline-size: 48rem; }
+    .lab-breadcrumb, .lab-meta { font: .8125rem/1.6 var(--font-mono); color: var(--color-ink-muted); }
+    .lab-breadcrumb { display: flex; gap: .75rem; }
+    h1 { margin-block: .875rem 1rem; font-size: clamp(2.25rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.1; letter-spacing: -.03em; overflow-wrap: anywhere; }
+    .lab-description { max-inline-size: 65ch; font-size: 1.0625rem; line-height: 1.65; text-wrap: pretty; }
+    .lab-meta { margin-block-start: 1rem; }
+    .lab-page-index { margin-block-end: 2rem; border-block: 1px solid var(--color-inset); }
+    .lab-page-index summary { padding-block: .875rem; cursor: pointer; font: .8125rem/1.5 var(--font-mono); }
+    .lab-page-index summary span { margin-inline-start: .5rem; color: var(--color-ink-muted); }
+    .lab-page-index nav { display: flex; flex-wrap: wrap; column-gap: 1.5rem; padding-block-end: .75rem; }
+    .lab-page-index nav a { display: inline-flex; align-items: center; gap: .5rem; min-block-size: 2.75rem; font: .8125rem/1.5 var(--font-mono); text-decoration: underline; text-underline-offset: .25rem; }
+    .lab-page-index nav span { color: var(--color-ink-muted); }
+    .lab-page-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-block-start: 4rem; padding-block-start: 1rem; border-block-start: 1px solid var(--color-inset); font: .8125rem/1.5 var(--font-mono); }
+    .lab-page-footer a { display: inline-flex; align-items: center; min-block-size: 2.75rem; text-decoration: underline; text-underline-offset: .25rem; }
+    @media (max-width: 60rem) {
+        .lab-shell { display: block; }
+        .lab-navigation { inset-block-start: 0; z-index: 20; padding: .5rem 1rem; background: var(--color-paper); border-block-end: 1px solid var(--color-inset); max-block-size: none; overflow: visible; }
+        .navigation-note { display: none; }
+        .lab-content { --lab-anchor-offset: 5rem; border-inline-start: 0; padding-block-start: 2rem; }
+    }
+    @media (max-width: 34rem) { .lab-content { --lab-anchor-offset: 8rem; } }
+</style>

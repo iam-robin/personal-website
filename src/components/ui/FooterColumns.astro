@@ -1,11 +1,11 @@
 ---
 /**
- * Expanded footer for subpages: a large robin on the left, then columns of
- * link lists on the right, closing with a copyright line. The compact
- * single-row SiteFooter is used on the homepage's sticky hero instead —
- * there's no room for this layout in that column.
+ * Footer shared by the homepage and subpages: a large robin, columns of
+ * links and a copyright line. Destinations live in data/links and data/navigation.
  */
 import Bird from "../Bird.astro";
+import { contactChannels, siteLinks, type SiteLink } from "../../data/links";
+import { navItems } from "../../data/navigation";
 
 interface Props {
     class?: string;
@@ -13,44 +13,10 @@ interface Props {
 
 const { class: className = "" } = Astro.props;
 
-type Link = { label: string; href: string; me?: boolean };
-
-const columns: { title: string; links: Link[] }[] = [
-    {
-        title: "Explore",
-        links: [
-            { label: "Work", href: "/work" },
-            { label: "Projects", href: "/projects" },
-            { label: "Blog", href: "/blog" },
-            { label: "Garden", href: "/garden" },
-            { label: "Shelf", href: "/shelf" },
-            { label: "Postcards", href: "/postcards" },
-        ],
-    },
-    {
-        title: "Elsewhere",
-        links: [
-            { label: "Email", href: "mailto:hey@iamrob.in" },
-            { label: "GitHub", href: "https://github.com/iam-robin" },
-            {
-                label: "Mastodon",
-                href: "https://mastodon.social/@iamrobin",
-                me: true,
-            },
-            {
-                label: "Bluesky",
-                href: "https://bsky.app/profile/iamrob.in",
-            },
-        ],
-    },
-    {
-        title: "Site",
-        links: [
-            { label: "Changelog", href: "/changelog" },
-            { label: "Legal notice", href: "/legal" },
-            { label: "Colophon", href: "/colophon" },
-        ],
-    },
+const columns: { title: string; links: readonly SiteLink[] }[] = [
+    { title: "Explore", links: navItems.flatMap<SiteLink>((item) => item.children ?? [item]) },
+    { title: "Elsewhere", links: contactChannels },
+    { title: "Site", links: siteLinks },
 ];
 
 const isExternal = (href: string) => href.startsWith("http");

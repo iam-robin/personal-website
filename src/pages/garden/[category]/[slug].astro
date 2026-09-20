@@ -288,7 +288,7 @@ const documentTitle =
         content: "";
         width: 50%;
         top: 80%;
-        box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow-corner-soft);
         transform: rotate(3deg);
         bottom: 16px;
         right: 0.5em;
@@ -353,12 +353,13 @@ const documentTitle =
         display: none;
     }
 
-    .markdown :global(.image-gallery) {
+    /* Image-only paragraphs form galleries without a client-side class scan. */
+    .markdown :global(p:has(> img):not(:has(> :not(img)))) {
         display: flex;
         gap: 16px;
     }
 
-    .markdown :global(.image-gallery) :global(img) {
+    .markdown :global(p:has(> img):not(:has(> :not(img))) > img) {
         display: block;
     }
 
@@ -433,20 +434,6 @@ const documentTitle =
 </style>
 
 <script>
-    function initImageGallery() {
-        const paragraphs = document.querySelectorAll(".markdown p");
-        paragraphs.forEach((p) => {
-            const images = p.querySelectorAll("img");
-            const elementNodes = Array.from(p.childNodes).filter(
-                (node) => node.nodeType === Node.ELEMENT_NODE,
-            );
-            if (images.length > 0 && images.length === elementNodes.length) {
-                p.classList.add("image-gallery");
-            }
-        });
-    }
-    initImageGallery();
-
     // Arrow keys move between notes
     document.addEventListener("keydown", (e) => {
         if (

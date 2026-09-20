@@ -86,7 +86,7 @@
 /* Inline code */
 .blog-prose :not(pre) > code {
     font-family: var(--font-mono);
-    background-color: var(--color-surface);
+    background-color: var(--color-inset);
     padding: 0.1em 0.35em;
     border-radius: 0.25rem;
     font-size: 0.9em;
@@ -249,7 +249,7 @@
 .blog-prose #b7:checked ~ .demo-screens .demo-grid--anim .cell-7,
 .blog-prose #b8:checked ~ .demo-screens .demo-grid--anim .cell-8 {
     /* Solid, not a wash — it has to hide the dimmed tiles underneath it. */
-    --cell-bg: var(--color-surface);
+    --cell-bg: var(--color-inset);
     opacity: 1;
     z-index: 2;
     color: var(--color-ink);

@@ -20,7 +20,7 @@ const isMajor = (version: string) => /\.0\.0$/.test(version);
                                 "w-fit rounded-full px-3 py-1 font-mono text-xs",
                                 isMajor(entry.version)
                                     ? "bg-ink text-paper"
-                                    : "bg-surface/60 text-ink/70",
+                                    : "bg-inset/60 text-ink/70",
                             ]}
                         >
                             v{entry.version}

@@ -1,0 +1,121 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import Button from "../../../../components/ui/Button.astro";
+import Link from "../../../../components/ui/Link.astro";
+import FilterBar from "../../../../components/ui/FilterBar.astro";
+import FilterTag from "../../../../components/ui/FilterTag.astro";
+import InkMark from "../../../../components/ui/InkMark.astro";
+import LogRow from "../../../../components/ui/LogRow.astro";
+import LogYear from "../../../../components/ui/LogYear.astro";
+import SectionRail from "../../../../components/ui/SectionRail.astro";
+import { componentCatalog } from "../../../../utils/componentCatalog";
+import { contactLinks } from "../../../../data/links";
+import { getCollection } from "astro:content";
+import { getSeasonYears } from "../../../../utils/series";
+
+export function getStaticPaths() {
+    return componentCatalog.filter((entry) => entry.preview).map((entry) => ({
+        params: { component: entry.id }, props: { entry },
+    }));
+}
+const { entry } = Astro.props;
+const name = entry.name;
+// Lazy component imports: cataloguing an entry does not render it or fetch data.
+const modules = import.meta.glob<typeof import("../../../../components/Bird.astro")>("../../../../components/**/*.astro");
+const { default: Component } = await modules[`../../../../components/${entry.relative}`]();
+const props: Record<string, unknown> = {};
+let available = true;
+
+const posts = ["BlogFilter", "BlogPostList", "BlogPostRow"].includes(name)
+    ? (await getCollection("blog")).sort((a, b) => b.data.date.getTime() - a.data.date.getTime()) : [];
+if (name === "BlogFilter") props.categories = [...new Set(posts.flatMap((post) => post.data.category ? [post.data.category] : []))];
+if (name === "BlogPostList") Object.assign(props, { posts: posts.slice(0, 3), showCategory: true });
+if (name === "BlogPostRow") { props.post = posts[0]; available = !!posts[0]; }
+
+if (["BookmarkFilter", "BookmarkItem", "BookmarkTag"].includes(name)) {
+    const bookmarks = (await getCollection("bookmarks")).sort((a, b) => b.data.added.localeCompare(a.data.added));
+    const counts = new Map<string, number>();
+    for (const bookmark of bookmarks) for (const tag of bookmark.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    if (name === "BookmarkFilter") Object.assign(props, { total: bookmarks.length, tags: [...counts].slice(0, 8).map(([name, count]) => ({ name, count })) });
+    if (name === "BookmarkItem") { props.bookmark = bookmarks[0]?.data; available = !!bookmarks[0]; }
+    if (name === "BookmarkTag") { props.tag = [...counts.keys()][0]; available = counts.size > 0; }
+}
+if (["GardenFilter", "NoteCard"].includes(name)) {
+    const notes = await getCollection("garden");
+    const names = [...new Set(notes.map((note) => note.data.category))].sort();
+    if (name === "GardenFilter") Object.assign(props, {
+        categories: names.map((name) => ({ name, count: notes.filter((note) => note.data.category === name).length })),
+        colorMap: Object.fromEntries(names.map((name, index) => [name, index])), total: notes.length,
+    });
+    if (name === "NoteCard") { props.note = notes[0]?.data; available = !!notes[0]; }
+}
+if (name === "ProjectCard" || name === "FeaturedProjectCard") {
+    const project = (await getCollection("projects")).filter((project) => !project.data.draft)
+        .sort((a, b) => a.data.order - b.data.order)[0];
+    available = !!project;
+    if (project) {
+        if (name === "FeaturedProjectCard") props.project = project;
+        else Object.assign(props, project.data, { slug: project.id });
+    }
+}
+if (name === "Bird" || name === "Bird404") props.class = "h-40 w-auto";
+if (name === "RoleDiagram") props.class = "mx-auto max-w-xl";
+if (name === "Pagination") Object.assign(props, { currentPage: 2, lastPage: 8, baseHref: "#sample-page" });
+if (name === "TeaserSection") Object.assign(props, { title: "On my website", link: { href: "/", text: "Back home" } });
+
+const seasonYears = ["LogRow", "LogYear"].includes(name) ? await getSeasonYears() : [];
+const season = seasonYears[0]?.seasons[0];
+const row = season ? { title: season.title, chip: season.season ? `S${season.season}` : null, favourite: season.favourite, meta: season.watching ? "Watching" : season.rating ? `★ ${season.rating}` : "", cover: season.cover } : null;
+const sections = [{ id: "sample-design", text: "Design" }, { id: "sample-code", text: "Code" }, { id: "sample-product", text: "Product" }];
+const glyphs = ["post", "project", "365", "robins-photos", "matchprint", "geeenerated", "lumon", "email", "github", "mastodon", "bluesky"];
+---
+
+<Layout title={`${name} · Component lab · Robin Spielmann`} description={`An isolated preview of ${entry.source}.`} noindex>
+    <main class="specimen @container" data-component-preview={name} aria-label={`${name} preview`}>
+        {name !== "HomeHero" && <h1 class="sr-only">{name} component preview</h1>}
+        {["ProjectCard", "FeaturedProjectCard", "NoteCard"].includes(name) && <h2 class="sr-only">Card example</h2>}
+        {name === "Nav" && <p class="nav-hint sample-label">The desktop navigation is hidden below 768px. Widen this preview to see it.</p>}
+        {name === "Button" ? <>
+            <p class="sample-label">Variants · demo buttons, no saved actions</p>
+            <div class="sample-row">{(["primary", "secondary", "outline", "ghost", "plain"] as const).map((variant) => <Button variant={variant}>{variant}</Button>)}</div>
+            <p class="sample-label">Sizes</p><div class="sample-row">{(["sm", "md", "lg"] as const).map((size) => <Button size={size}>{size}</Button>)}</div>
+            <p class="sample-label">Shape & states</p><div class="sample-row"><Button shape="box">Box</Button><Button disabled>Disabled</Button><Button iconOnly label="Email example"><InkMark name="email" class="h-4 w-4" /></Button><Button href="/lab/components">Link button</Button></div>
+        </> : name === "Link" ? <div class="sample-row"><Link href="/">Home</Link><Link href="/projects" arrow>My projects</Link><Link href={contactLinks.github.href} external>{contactLinks.github.label}</Link></div>
+        : name === "FilterBar" || name === "FilterTag" ? <FilterBar><FilterTag href="/lab/components" active count={componentCatalog.length}>All components</FilterTag><FilterTag href="/lab/components?area=ui" count={componentCatalog.filter((item) => item.group === "ui").length}>Shared UI</FilterTag><FilterTag href="/lab/components?area=home">Homepage</FilterTag></FilterBar>
+        : name === "InkMark" ? <div class="glyph-grid">{glyphs.map((name) => <div><InkMark name={name} class="h-8 w-8" /><span>{name}</span></div>)}</div>
+        : name === "LogRow" || name === "LogYear" ? row ? name === "LogRow" ? <ul><LogRow {...row} /></ul> : <LogYear label={seasonYears[0].label} count={1} noun="season"><LogRow {...row} /></LogYear> : <p>No series entries are available for this preview.</p>
+        : name === "SectionRail" ? <>
+            <SectionRail sections={sections} variant="inline" label="Contents, inline" />
+            <div class="rail-sample"><SectionRail sections={sections} variant="rail" label="Contents, sidebar" /><div class="sample-sections"><h2 id="sample-design">Design</h2><h2 id="sample-code">Code</h2><h2 id="sample-product">Product</h2></div></div>
+        </>
+        : name === "BookmarkItem" ? available ? <ul><Component {...props} /></ul> : <p>No published bookmarks are available for this preview.</p>
+        : name === "Pagination" ? <><p class="sample-label" id="sample-page">Example page numbers. These links stay in this preview.{Array.from({ length: 7 }, (_, index) => <span id={`sample-page/${index + 2}`}></span>)}</p><Component {...props} /></>
+        : name === "Eyebrow" ? <Component>Robin Spielmann · Cologne</Component>
+        : name === "TeaserSection" ? <Component {...props}><p class="slot-sample">This is the content slot. The heading and link come from TeaserSection.</p></Component>
+        : available ? <Component {...props} /> : <p>No published content is available for this preview.</p>}
+    </main>
+</Layout>
+
+<style>
+    .specimen { display: flow-root; max-inline-size: 70rem; margin-inline: auto; padding: 2rem clamp(1rem, 4vw, 3rem); min-block-size: 10rem; }
+    .sample-label { font: .75rem/1.6 var(--font-mono); color: var(--color-ink-muted); margin-block: 0 .875rem; }
+    .sample-label:not(:first-of-type) { margin-block-start: 2rem; }
+    .sample-row { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .glyph-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: 1.5rem; }
+    .glyph-grid > div { display: flex; flex-direction: column; align-items: start; gap: .75rem; font: .75rem/1.5 var(--font-mono); }
+    .slot-sample { padding-block: 1.5rem; font-family: var(--font-mono); }
+    .rail-sample { display: grid; grid-template-columns: minmax(6rem, 1fr) 2fr; gap: 2rem; margin-block-start: 2rem; }
+    .sample-sections { display: grid; gap: 2rem; }
+    .sample-sections h2 { font-size: 1.5rem; font-weight: 700; }
+    @media (min-width: 48rem) { .nav-hint { display: none; } }
+</style>
+
+<script>
+    // Keep real destination links useful without nesting the whole site in an
+    // iframe. Local section anchors remain inside the specimen.
+    if (window.parent !== window) {
+        document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((link) => {
+            if (!link.getAttribute("href")?.startsWith("#") && !link.target) link.target = "_top";
+        });
+    }
+</script>

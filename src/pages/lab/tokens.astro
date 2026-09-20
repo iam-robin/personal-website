@@ -1,0 +1,254 @@
+---
+import LabLayout from "../../layouts/LabLayout.astro";
+import { papers } from "../../utils/paper";
+import {
+    designTokens, tokenSources, paletteTokens, fontTokens, typeTokens,
+    leadingTokens, spacingTokens, containerTokens, shadowTokens, easingTokens,
+    specimenTokens, easingPath, loadedWeights,
+} from "../../utils/designTokens";
+
+const roles: Record<string, string> = {
+    "--color-ink": "Text and drawings",
+    "--color-paper": "Page background",
+    "--color-surface": "Lifted cards",
+    "--color-inset": "Recessed wells",
+    "--color-ink-muted": "Secondary text",
+};
+const fonts: Record<string, { name: string; description: string }> = {
+    "--font-sans": { name: "Apercu Pro", description: 'My main typeface. Registered as “apercu” in CSS.' },
+    "--font-mono": { name: "Fira Mono", description: "For my introductions, navigation and lists." },
+    "--font-decorative": { name: "LiebeHeide", description: "A handwritten voice for postcards." },
+};
+const sections = [
+    ["colours", "Colours & paper"], ["typography", "Typography"],
+    ["layout", "Spacing & layout"], ["shadows", "Shadows"], ["motion", "Motion"], ["source", "Source declarations"],
+];
+---
+
+<LabLayout current="tokens" title="Design tokens" description="The colours, type, spacing, shadows and motion I build with. These samples use the real definitions, so they change when my theme does." meta={`${designTokens.length} custom tokens · ${tokenSources.length} theme files · Read-only reference`} sections={sections.map(([id, label]) => ({ id, label }))}>
+    <div id="tokens" data-token-lab style={specimenTokens}>
+
+            <section id="colours" aria-labelledby="colours-title">
+                <div class="section-heading"><h2 id="colours-title">Colours & paper</h2><code>theme/colors.css · utils/paper.ts</code></div>
+                <p class="section-intro">Ink, paper, lifted surfaces and recessed insets. I give some sections their own paper stock rather than adding more accents.</p>
+                <h3>CSS defaults</h3>
+                <div class="palette-grid">
+                    {paletteTokens.map((token) => (
+                        <article class="palette-item">
+                            <div class="colour-swatch" style={`background:${token.value};color:${token.name === "--color-ink" || token.name === "--color-ink-muted" ? "var(--color-paper)" : "var(--color-ink)"}`} aria-hidden="true">Aa</div>
+                            <div class="swatch-caption"><code>{token.name}</code><span>{roles[token.name]}</span><code>{token.value}</code></div>
+                            <button class="copy" type="button" data-copy-value={`var(${token.name})`} hidden aria-label={`Copy var(${token.name})`}>Copy variable</button>
+                        </article>
+                    ))}
+                </div>
+                <p class="small-note">These are the declared defaults. On each page, <code>Layout.astro</code> overrides paper, surface and inset with the stock below. Muted ink includes alpha and is shown over this page’s paper.</p>
+                <h3 class="subsection-heading">Section paper stocks</h3>
+                <div class="paper-grid">
+                    {Object.entries(papers).map(([key, paper]) => (
+                        <article class="paper-stock" style={`background:${paper.hex};--stock-surface:${paper.surface};--stock-inset:${paper.inset}`}>
+                            <div class="stock-top"><span class="eyebrow">{key}</span><span class="stock-surface">Surface</span><span class="stock-inset">Inset</span></div>
+                            <h4>{paper.name}</h4>
+                            <dl><div><dt>Paper</dt><dd><code>{paper.hex}</code></dd></div><div><dt>Surface</dt><dd><code>{paper.surface}</code></dd></div><div><dt>Inset</dt><dd><code>{paper.inset}</code></dd></div></dl>
+                            <code class="stock-oklch">{paper.oklch}</code>
+                        </article>
+                    ))}
+                </div>
+                <p class="small-note">Surface is derived by mixing white into each paper in Oklab; inset is the old darker mix with 10% ink. The route mapping in <code>utils/paper.ts</code> decides which stock a page gets.</p>
+            </section>
+
+            <section id="typography" aria-labelledby="typography-title">
+                <div class="section-heading"><h2 id="typography-title">Typography</h2><code>theme/typography.css</code></div>
+                <div class="font-grid">
+                    {fontTokens.map((token) => (
+                        <article class="font-card">
+                            <div class="font-specimen" style={`font-family:var(${token.name});font-weight:${token.name === "--font-decorative" ? "700" : "400"}`} aria-hidden="true">Hello, world.</div>
+                            <h3>{fonts[token.name]?.name ?? token.name}</h3>
+                            <code>{token.name}</code>
+                            <p>{fonts[token.name]?.description}</p>
+                            <span class="weights">Loaded weights: {loadedWeights(token)}</span>
+                            <details><summary>Font stack</summary><code class="expression">{token.value}</code></details>
+                        </article>
+                    ))}
+                </div>
+
+                <div class="type-controls" data-enhancement hidden>
+                    <div><label for="type-width">Type container</label><select id="type-width"><option value="400">400px</option><option value="672">672px · reading width</option><option value="880" selected>880px</option></select></div>
+                    <output for="type-width" data-type-width>Fits available space</output>
+                </div>
+                <p class="small-note">The fluid scale follows the <em>container</em>, not the viewport. Samples share one container, capped to available space on small screens. Pixel readouts show the rendered size; formulas remain the source of truth.</p>
+                <div class="type-stage" data-type-stage>
+                    {typeTokens.map((token) => (
+                        <article class="type-row">
+                            <div class="type-meta"><code>{token.name}</code><output data-type-value={token.name}>Fluid CSS sample</output></div>
+                            <p class="type-sample" data-type-sample={token.name} style={`font-size:var(${token.name});line-height:var(${token.name}--line-height, var(--leading-normal));letter-spacing:var(${token.name}--letter-spacing, normal);font-weight:${["--text-2xl", "--text-3xl", "--text-4xl"].includes(token.name) ? "700" : "400"}`}>Code, design &amp; art.</p>
+                            <details><summary>Definition</summary><code class="expression">{token.value}</code>{token.fallbacks.map((value) => <p class="small-note">Viewport fallback: <code class="expression">{value}</code></p>)}</details>
+                        </article>
+                    ))}
+                </div>
+                <h3 class="subsection-heading">Line height</h3>
+                <div class="leading-grid">
+                    {leadingTokens.map((token) => (
+                        <article><div class="leading-meta"><code>{token.name}</code><code>{token.value}</code></div><p style={`line-height:var(${token.name})`}>A little space<br />between the lines.</p></article>
+                    ))}
+                </div>
+                <details class="token-details"><summary>Per-size line height & letter spacing</summary><dl class="definition-list">{designTokens.filter((token) => token.name.includes("--line-height") || token.name.includes("--letter-spacing")).map((token) => <div><dt><code>{token.name}</code></dt><dd><code>{token.value}</code></dd></div>)}</dl></details>
+            </section>
+
+            <section id="layout" aria-labelledby="layout-title">
+                <div class="section-heading"><h2 id="layout-title">Spacing & layout</h2><code>theme/layout.css</code></div>
+                <p class="section-intro">My shell follows the reading column, rail and gutters. I keep those dimensions in one place rather than choosing a new width for each page.</p>
+                <h3>Named spacing</h3>
+                <div class="dimension-list">
+                    {spacingTokens.map((token) => (
+                        <article><div class="dimension-meta"><code>{token.name}</code><span><code>{token.value}</code><output data-length-value={token.name}></output></span></div><div class="space-track" aria-hidden="true"><div style={`inline-size:min(100%, var(${token.name}))`}></div></div></article>
+                    ))}
+                </div>
+                <h3 class="subsection-heading">Content widths</h3>
+                <div class="dimension-list">
+                    {containerTokens.map((token) => (
+                        <article><div class="dimension-meta"><code>{token.name}</code><output data-length-value={token.name}></output></div><div class="width-track" aria-hidden="true"><div style={`inline-size:min(100%, var(${token.name}))`}></div></div><code class="expression">{token.value}</code></article>
+                    ))}
+                </div>
+                <p class="small-note">Bars are capped to the space on this page. Pixel values are resolved by the browser at your current root font size, not hard-coded conversions.</p>
+            </section>
+
+            <section id="shadows" aria-labelledby="shadows-title">
+                <div class="section-heading"><h2 id="shadows-title">Shadows</h2><code>theme/shadows.css</code></div>
+                <p class="section-intro">A small set on purpose: paper lift, popovers, handmade paper corners and tiny hairline stamp shadows.</p>
+                <div class="shadow-grid">
+                    {shadowTokens.map((token) => (
+                        <article class="shadow-card">
+                            <div class="shadow-sample" style={`box-shadow:var(${token.name})`} aria-hidden="true"></div>
+                            <h3><code>{token.name}</code></h3>
+                            <code class="expression">{token.value}</code>
+                        </article>
+                    ))}
+                </div>
+            </section>
+
+            <section id="motion" aria-labelledby="motion-title">
+                <div class="section-heading"><h2 id="motion-title">Motion</h2><code>theme/transitions.css</code></div>
+                <p class="section-intro">Three spring curves, from a small settle to a more playful bounce. The plots are drawn from their actual <code>linear()</code> stops.</p>
+                <div class="motion-actions" data-enhancement hidden><button type="button" class="replay" data-replay>Play curves</button><p data-motion-note>900ms preview for comparison. Duration is not a theme token.</p></div>
+                <div class="motion-grid">
+                    {easingTokens.map((token) => (
+                        <article class="motion-card">
+                            <h3><code>{token.name}</code></h3>
+                            <svg viewBox="0 0 320 120" role="img" aria-label={`${token.name} easing curve`}>
+                                <path d="M12 34H308M12 106H308" class="curve-guide" />
+                                <path d={easingPath(token.value)} class="curve-line" />
+                            </svg>
+                            <div class="motion-track" aria-hidden="true"><span class="motion-dot" data-easing={token.name}></span></div>
+                            <details><summary>CSS curve</summary><code class="expression">{token.value}</code></details>
+                        </article>
+                    ))}
+                </div>
+            </section>
+
+            <section id="source" aria-labelledby="source-title">
+                <div class="section-heading"><h2 id="source-title">Source declarations</h2><span class="eyebrow">{tokenSources.length} theme files</span></div>
+                <p class="section-intro">Read directly from the custom <code>@theme</code> blocks. Earlier fallback declarations are preserved here. Wildcard resets aren’t counted as tokens.</p>
+                {tokenSources.map((source) => (
+                    <details class="source-file"><summary><code>{source.path}</code><span>{source.tokens.length} tokens</span></summary><pre><code>{source.tokens.map((token) => [...token.fallbacks, token.value].map((value) => `${token.name}: ${value};`).join("\n")).join("\n")}</code></pre></details>
+                ))}
+                <p class="small-note">Paper stock values come from <code>src/utils/paper.ts</code>. This overview doesn’t write to your theme files.</p>
+            </section>
+        <p class="small-note">Custom tokens only. Tailwind's built-in scale and component-specific styles aren't listed as my own tokens.</p>
+        <p class="copy-status" role="status" data-copy-status></p>
+    </div>
+</LabLayout>
+
+<script src="../../scripts/designTokens.ts"></script>
+
+<style>
+    .eyebrow { font:0.75rem/1.5 var(--font-mono); color:var(--color-ink-muted); }
+    section { margin-block-start:3rem; scroll-margin-block-start:var(--lab-anchor-offset); }
+    section:first-child { margin-block-start:0; }
+    .section-heading { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:0.75rem; padding-block-end:1rem; border-block-end:1px dotted var(--color-ink-muted); margin-block-end:1.5rem; }
+    h2 { font-size:1.5rem; line-height:1.25; font-weight:700; }
+    .section-heading > code { color:var(--color-ink-muted); }
+    h3 { font-size:1rem; line-height:1.5; font-weight:700; }
+    .section-intro { line-height:1.6; max-inline-size:65ch; margin-block-end:1.5rem; }
+    code { font-family:var(--font-mono); font-size:0.8125rem; overflow-wrap:anywhere; }
+    .small-note { font-size:0.8125rem; line-height:1.65; color:var(--color-ink-muted); margin-block-start:1rem; max-inline-size:78ch; }
+    .subsection-heading { margin-block:2rem 1rem; }
+    .palette-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1rem; margin-block-start:1rem; }
+    .palette-item { min-inline-size:0; }
+    .colour-swatch { block-size:7rem; display:flex; align-items:end; padding:1rem; font-size:2rem; line-height:1; outline:1px solid var(--color-ink-muted); outline-offset:-1px; }
+    .swatch-caption { display:flex; flex-direction:column; gap:0.5rem; padding-block-start:1rem; }
+    .swatch-caption > span { font-size:0.875rem; }
+    .swatch-caption > code:last-child { color:var(--color-ink-muted); }
+    .copy { font:0.75rem/1.5 var(--font-mono); min-block-size:2.75rem; text-decoration:underline; text-underline-offset:0.25rem; cursor:pointer; }
+    .paper-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+    .paper-stock { padding:1.25rem; outline:1px solid var(--color-ink-muted); outline-offset:-1px; }
+    .stock-top { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.5rem; }
+    .stock-surface, .stock-inset { padding:0.25rem 0.5rem; font:0.75rem/1.5 var(--font-mono); }
+    .stock-surface { background:var(--stock-surface); }
+    .stock-inset { background:var(--stock-inset); }
+    h4 { font-size:1.5rem; font-weight:700; margin-block:1.5rem; }
+    .paper-stock dl { font-size:0.8125rem; }
+    .paper-stock dl > div { display:flex; justify-content:space-between; gap:0.5rem; margin-block-start:0.5rem; }
+    .stock-oklch { display:block; font-size:0.75rem; margin-block-start:1rem; }
+    .font-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.5rem; }
+    .font-card { min-inline-size:0; }
+    .font-specimen { font-size:clamp(1.5rem,2.5vw,2.25rem); line-height:1.3; min-block-size:5rem; overflow-wrap:anywhere; }
+    .font-card p { margin-block:0.75rem; font-size:0.9375rem; line-height:1.6; }
+    .weights { display:block; font:0.75rem/1.6 var(--font-mono); color:var(--color-ink-muted); }
+    details summary { cursor:pointer; padding-block:0.75rem; font-size:0.8125rem; }
+    .expression { display:block; white-space:normal; line-height:1.75; color:var(--color-ink-muted); }
+    .type-controls { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; margin-block-start:2rem; padding:1rem; background:var(--color-inset); }
+    .type-controls > div { display:flex; align-items:center; flex-wrap:wrap; gap:0.75rem; }
+    .type-controls label { font-size:0.875rem; }
+    select { font-size:1rem; min-block-size:2.75rem; padding:0.5rem; border:1px solid var(--color-ink-muted); border-radius:0.25rem; background:var(--color-paper); max-inline-size:100%; }
+    output { font:0.75rem/1.5 var(--font-mono); font-variant-numeric:tabular-nums; color:var(--color-ink-muted); }
+    .type-stage { container-type:inline-size; inline-size:100%; max-inline-size:880px; margin-block-start:1.5rem; }
+    .type-row { padding-block:1.25rem; border-block-start:1px dotted var(--color-ink-muted); }
+    .type-meta { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:space-between; align-items:baseline; }
+    .type-sample { margin-block:0.75rem; overflow-wrap:anywhere; }
+    .leading-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+    .leading-grid article { padding:1rem; background:var(--color-inset); }
+    .leading-meta { display:flex; flex-wrap:wrap; justify-content:space-between; gap:0.5rem; }
+    .leading-grid p { font-size:1rem; margin-block-start:1.25rem; }
+    .token-details { margin-block-start:1rem; }
+    .definition-list > div { display:flex; flex-wrap:wrap; justify-content:space-between; gap:0.5rem; border-block-end:1px dotted var(--color-ink-muted); padding-block:0.75rem; }
+    .dimension-list article { padding-block:1rem; border-block-end:1px dotted var(--color-ink-muted); }
+    .dimension-meta { display:flex; flex-wrap:wrap; justify-content:space-between; gap:0.5rem; align-items:baseline; }
+    .dimension-meta > span { display:flex; flex-wrap:wrap; gap:0.75rem; }
+    .space-track, .width-track { background:var(--color-inset); margin-block:0.75rem; }
+    .space-track > div { block-size:1.5rem; background:var(--color-ink); }
+    .width-track > div { block-size:0.5rem; background:var(--color-ink); }
+    .shadow-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.5rem; }
+    .shadow-card { min-inline-size:0; }
+    .shadow-sample { block-size:7rem; margin-block-end:1rem; border:1px solid var(--color-inset); border-radius:0.75rem; background:var(--color-surface); }
+    .shadow-card h3 { margin-block-end:0.75rem; }
+    .motion-actions { display:flex; flex-wrap:wrap; gap:1rem; align-items:center; margin-block-end:1.5rem; }
+    .motion-actions p { font-size:0.8125rem; line-height:1.6; color:var(--color-ink-muted); }
+    .replay { background:var(--color-ink); color:var(--color-paper); padding:0.75rem 1rem; min-block-size:2.75rem; border-radius:0.25rem; cursor:pointer; font-size:0.875rem; }
+    .replay:disabled { cursor:not-allowed; opacity:0.7; }
+    .motion-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.5rem; }
+    .motion-card { min-inline-size:0; }
+    .motion-card h3 { min-block-size:3rem; }
+    .motion-card svg { inline-size:100%; block-size:auto; }
+    .curve-guide { fill:none; stroke:var(--color-ink-muted); stroke-dasharray:2 4; stroke-width:0.5; }
+    .curve-line { fill:none; stroke:var(--color-ink); stroke-width:2; }
+    .motion-track { position:relative; margin:1rem 1.5rem 1rem 0; block-size:1.5rem; border-block-end:1px dotted var(--color-ink-muted); }
+    .motion-dot { display:block; position:absolute; inset-inline-start:0; inline-size:0.75rem; block-size:0.75rem; border-radius:50%; background:var(--color-ink); }
+    .source-file { border-block-end:1px dotted var(--color-ink-muted); }
+    .source-file summary { padding-block:1rem; }
+    .source-file summary > span { font:0.75rem/1.5 var(--font-mono); color:var(--color-ink-muted); margin-inline-start:1rem; white-space:nowrap; }
+    pre { white-space:pre-wrap; overflow-wrap:anywhere; padding:1rem; background:var(--color-inset); max-block-size:28rem; overflow:auto; line-height:1.75; }
+    [hidden] { display:none; }
+    .copy-status:not(:empty) { position:fixed; inset-block-end:1rem; inset-inline:1rem; margin-inline:auto; max-inline-size:28rem; padding:1rem; background:var(--color-ink); color:var(--color-paper); font:0.875rem/1.5 var(--font-mono); z-index:3; }
+    @media (max-width:1100px) {
+        .palette-grid, .paper-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        .font-grid, .shadow-grid, .motion-grid { grid-template-columns:1fr; }
+        .font-card { padding-block-end:1rem; border-block-end:1px dotted var(--color-ink-muted); }
+        .font-specimen { min-block-size:0; margin-block-end:1rem; }
+        .motion-card svg { max-inline-size:25rem; }
+        .leading-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width:399px) {
+        .paper-grid, .leading-grid { grid-template-columns:1fr; }
+        .palette-grid { gap:1rem 0.75rem; }
+    }
+</style>

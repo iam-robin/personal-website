@@ -1,3 +1,5 @@
+import { contactChannels } from "../data/links";
+
 const SITE_URL = "https://iamrob.in";
 const PERSON_ID = `${SITE_URL}/#person`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
@@ -18,11 +20,9 @@ export const personSchema = {
         addressLocality: "Munich",
         addressCountry: "DE",
     },
-    sameAs: [
-        "https://github.com/iam-robin",
-        "https://mastodon.social/@iamrobin",
-        "https://bsky.app/profile/iamrob.in",
-    ],
+    sameAs: contactChannels
+        .filter((link) => link.href.startsWith("https://"))
+        .map((link) => link.href),
 };
 
 export const websiteSchema = {

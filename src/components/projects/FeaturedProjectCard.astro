@@ -1,0 +1,129 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import InkMark from "../ui/InkMark.astro";
+import { getFanImages, getFirstBodyImage, isPhotoFan } from "../../utils/projectFans";
+
+interface Props {
+    project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { title, description, year, tags = [], draft, externalUrl } = project.data;
+const fan = getFanImages(project.id)?.slice(0, 3) ?? [];
+const primary = fan[0] ?? getFirstBodyImage(project.body);
+const rounded = !isPhotoFan(project.id);
+const isExternal = !!externalUrl;
+// Drafts retain the same card layout, but are not links to unpublished pages.
+const Tag = draft ? "article" : "a";
+const linkAttributes = draft ? {} : {
+    href: externalUrl || `/projects/${project.id}`,
+    target: isExternal ? "_blank" : undefined,
+    rel: isExternal ? "noopener noreferrer" : undefined,
+};
+---
+
+<Tag {...linkAttributes} class="project-card-slot relative block rounded-xl border border-dashed border-inset">
+    <span class="project-card relative grid h-full origin-center grid-rows-[auto_1fr] gap-6 overflow-visible rounded-xl bg-surface p-5 pr-12 transition-[transform,background-color,box-shadow] duration-180 ease-out">
+        {!draft && (
+            <InkMark
+                name={isExternal ? "arrow-external" : "arrow-internal"}
+                class="absolute right-4 top-4 h-5 w-5 transition-transform duration-180 ease-out"
+            />
+        )}
+        <span class="fan-card-preview flex min-h-23 items-end pt-1 pb-2 transition-transform duration-180 ease-out" aria-hidden="true">
+            {fan.length > 0 ? fan.map((image) => (
+                <Image
+                    src={image}
+                    alt=""
+                    width={260}
+                    widths={[260]}
+                    sizes="6rem"
+                    class:list={[
+                        "fan-card-image relative h-22 w-auto flex-none origin-bottom border border-ink/15 shadow-[var(--shadow-raised)] transition-[transform,box-shadow] duration-180 ease-out",
+                        { rounded },
+                    ]}
+                />
+            )) : primary && (
+                <Image
+                    src={primary}
+                    alt=""
+                    width={420}
+                    widths={[420]}
+                    sizes="8rem"
+                    class="h-auto max-h-23 w-auto max-w-34 rounded border border-ink/15"
+                />
+            )}
+        </span>
+        <span class="grid grid-rows-[auto_1fr_auto] gap-3">
+            <span class="grid min-h-17 content-start gap-1 pr-8">
+                <span class="font-mono text-xs leading-relaxed text-ink-muted">{year}</span>
+                <strong class="text-lg font-bold leading-tight tracking-[-0.02em]">{title}</strong>
+            </span>
+            <span class="self-start text-[0.9375rem] leading-relaxed text-ink-muted">{description}</span>
+            <span class="flex min-h-7 flex-wrap gap-1.5 self-end">
+                {tags.map((tag) => (
+                    <span class="inline-flex min-h-7 items-center rounded-full bg-ink/10 px-3 text-xs leading-none">{tag}</span>
+                ))}
+                {draft && (
+                    <span class="inline-flex min-h-7 w-fit items-center rounded-full border border-ink/15 px-3 text-xs text-ink-muted">Coming soon</span>
+                )}
+            </span>
+        </span>
+        {isExternal && !draft && (
+            <span class="sr-only">Opens on an external site in a new tab</span>
+        )}
+    </span>
+</Tag>
+
+<style>
+    /* Keep the coordinated card and fan transforms together. */
+    .fan-card-image:nth-child(1) {
+        z-index: 3;
+        transform: rotate(-5deg);
+    }
+
+    .fan-card-image:nth-child(2) {
+        z-index: 2;
+        margin-inline-start: -1.15rem;
+        transform: translateY(-5%) rotate(1deg);
+    }
+
+    .fan-card-image:nth-child(3) {
+        z-index: 1;
+        margin-inline-start: -1.15rem;
+        transform: rotate(5deg);
+    }
+
+    @media (hover: hover) {
+        .project-card-slot:hover {
+            z-index: 3;
+        }
+
+        .project-card-slot:hover .project-card {
+            transform: translateY(-0.7rem) translateX(0.2rem) rotate(-2deg);
+            background: var(--color-surface);
+            box-shadow: var(--shadow-lifted);
+        }
+
+        .project-card-slot:hover .project-card :global(.ink-mark) {
+            transform: translate(0.125rem, -0.125rem) rotate(6deg);
+        }
+
+        .project-card-slot:hover .fan-card-preview {
+            transform: translateY(-0.45rem) rotate(1deg);
+        }
+
+        .project-card-slot:hover .fan-card-image:nth-child(1) {
+            transform: translateX(-0.45rem) translateY(-0.15rem) rotate(-10deg) scale(1.12);
+        }
+
+        .project-card-slot:hover .fan-card-image:nth-child(2) {
+            transform: translateY(-14%) rotate(0deg) scale(1.12);
+        }
+
+        .project-card-slot:hover .fan-card-image:nth-child(3) {
+            transform: translateX(0.45rem) rotate(10deg) scale(1.12);
+        }
+    }
+</style>

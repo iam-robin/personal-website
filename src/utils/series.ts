@@ -1,10 +1,9 @@
-import { getCollection } from "astro:content";
-import type { Series } from "./shelf";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+type Series = CollectionEntry<"series">;
 
 /**
- * Everything /series needs, resolved at build time. `shelf.ts` answers only
- * "what's on the shelves and how much" for the hub page; the real reading of
- * the collection lives here, the way `books.ts` serves /books.
+ * Everything /series needs, resolved at build time.
  *
  * One entry is one *season*, not one show — that's how the Obsidian export
  * logs it, and folding the seasons back into shows would throw away the year

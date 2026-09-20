@@ -1,0 +1,43 @@
+---
+import LabLayout from "../../layouts/LabLayout.astro";
+import { labSections } from "../../data/lab";
+import { designTokens } from "../../utils/designTokens";
+import { componentCatalog } from "../../utils/componentCatalog";
+const counts: Record<string, string> = {
+    tokens: `${designTokens.length} custom tokens`,
+    components: `${componentCatalog.length} components`,
+};
+---
+
+<LabLayout current="overview" title="Website lab" description="A place to understand how my website is built and try what might come next. Start with the references, or head straight to an experiment.">
+    <section aria-labelledby="browse-title">
+        <h2 id="browse-title">Browse the lab</h2>
+        <div class="destinations">
+            {labSections.filter((section) => section.id !== "overview").map((section) => (
+                <a href={section.href} class="destination" aria-labelledby={`name-${section.id}`} aria-describedby={`description-${section.id}`}>
+                    <div><p class="destination-kind">{section.purpose}</p><h3 id={`name-${section.id}`}>{section.name}</h3><p id={`description-${section.id}`} class="destination-description">{section.description}</p></div>
+                    <span class="destination-count">{counts[section.id]}</span><span class="destination-arrow" aria-hidden="true">→</span>
+                </a>
+            ))}
+        </div>
+    </section>
+    <aside class="overview-note" aria-label="About the lab"><h2>Real code, room to try things</h2><p>The references use my site's actual fonts, tokens and components. Experiments are separate from the live layout. Switching a preview changes nothing on my website; editing shared source files still does.</p></aside>
+</LabLayout>
+
+<style>
+    h2 { font-size: 1rem; font-weight: 700; line-height: 1.5; }
+    .destinations { margin-block-start: 1rem; border-block-start: 1px solid var(--color-inset); }
+    .destination { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 1.5rem; padding-block: 1.75rem; border-block-end: 1px solid var(--color-inset); }
+    .destination-kind, .destination-count { font: .75rem/1.6 var(--font-mono); color: var(--color-ink-muted); }
+    h3 { font-size: 1.5rem; font-weight: 700; line-height: 1.25; margin-block: .375rem .625rem; }
+    .destination-description { max-inline-size: 55ch; font-size: .9375rem; line-height: 1.6; }
+    .destination-arrow { font-size: 1.25rem; }
+    .overview-note { max-inline-size: 65ch; margin-block-start: 2.5rem; }
+    .overview-note p { margin-block-start: .5rem; font-size: .875rem; line-height: 1.65; color: var(--color-ink-muted); }
+    @media (hover: hover) { .destination:hover h3 { text-decoration: underline; text-underline-offset: .25rem; } }
+    @media (max-width: 45rem) {
+        .destination { grid-template-columns: minmax(0, 1fr) auto; gap: .75rem; padding-block: 1.5rem; }
+        .destination-count { grid-column: 1; grid-row: 2; }
+        .destination-arrow { grid-column: 2; grid-row: 1 / 3; }
+    }
+</style>

@@ -61,8 +61,8 @@ const ogImage = new URL(ogImagePath ?? "/opengraph.png", Astro.site).href;
   section a page belongs to.
 
   See utils/paper.ts for the stocks and theme/colors.css for what derives from
-  them. `data-paper` is only a DevTools hook; the inline custom property is the
-  mechanism.
+  them. `data-paper` is only a DevTools hook; the inline custom properties are
+  the mechanism.
 */
 const paperKey = getPaperKey(Astro.url.pathname);
 const paper = papers[paperKey];
@@ -176,7 +176,7 @@ const serializedStructuredData = structuredData
     </head>
     <body
         data-paper={paperKey}
-        style={`--paper: ${paper.hex}; --surface: ${paper.surface}`}
+        style={`--paper: ${paper.hex}; --surface: ${paper.surface}; --inset: ${paper.inset}`}
     >
         <InkDefs />
         <slot />

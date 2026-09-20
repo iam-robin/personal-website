@@ -1,93 +1,53 @@
 ---
-/**
- * World map highlighting the countries postcards have arrived from.
- * Ported from v3 (WorldMapDetail): countries in `visitedCountries` get the
- * `.active` class; hovering any country shows a flag + name tooltip.
- */
-import { COUNTRIES } from "../../utils/countries";
 import WorldMapSvg from "./WorldMapSvg.astro";
 
 interface Props {
     visitedCountries?: string[];
 }
 const { visitedCountries = [] } = Astro.props;
-
 const TOTAL_COUNTRIES = 195;
-
-// name (and every alias) → flag, so the tooltip resolves whatever the path uses
-const countryFlags = Object.fromEntries(
-    COUNTRIES.flatMap((country) => {
-        const entries: [string, string][] = [[country.name, country.flag]];
-        country.aliases?.forEach((alias) =>
-            entries.push([alias, country.flag]),
-        );
-        return entries;
-    }),
-);
-
-const visitedLabels = visitedCountries.flatMap((name) => {
-    const country = COUNTRIES.find((c) => c.name === name);
-    const labels = country
-        ? [country.name, ...(country.aliases ?? [])]
-        : [name];
-    return labels.map((label) => label.toLowerCase());
-});
 ---
 
-<section>
+<section data-world-map>
     <h2 class="mb-6 font-mono text-xs tracking-widest text-ink-muted uppercase">
         Where postcards came from ({visitedCountries.length}/{TOTAL_COUNTRIES})
     </h2>
     <div class="relative">
-        <WorldMapSvg />
-        <div id="map-tooltip" class="hidden"></div>
+        <WorldMapSvg visitedCountries={visitedCountries} />
+        <div
+            data-map-tooltip
+            aria-hidden="true"
+            class="pointer-events-none fixed z-10 hidden rounded bg-ink px-2 py-1 font-mono text-2xs leading-normal whitespace-nowrap text-paper"
+        ></div>
     </div>
 </section>
 
-<style>
-    #map-tooltip {
-        position: fixed;
-        background-color: var(--color-ink);
-        color: var(--color-paper);
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-family: var(--font-mono);
-        font-size: var(--text-2xs);
-        line-height: var(--leading-normal);
-        pointer-events: none;
-        white-space: nowrap;
-        z-index: 10;
-    }
-</style>
+<script>
+    // Highlighting and country metadata are already in the HTML. Only following
+    // the pointer needs JavaScript; one delegated listener handles every path.
+    function initWorldMaps() {
+        document.querySelectorAll<HTMLElement>("[data-world-map]").forEach((root) => {
+            if (root.dataset.initialized) return;
+            root.dataset.initialized = "true";
+            const map = root.querySelector("svg");
+            const tooltip = root.querySelector<HTMLElement>("[data-map-tooltip]");
+            if (!map || !tooltip) return;
 
-<script define:vars={{ visitedLabels, countryFlags }}>
-    function initWorldMap() {
-        const paths = document.querySelectorAll(".world-map path");
-        const tooltip = document.getElementById("map-tooltip");
-        if (!tooltip || !paths.length) return;
-
-        paths.forEach((path) => {
-            const name = (path.dataset.country ??=
-                path.getAttribute("name") || path.getAttribute("class") || "");
-            if (name && visitedLabels.includes(name.toLowerCase())) {
-                path.classList.add("active");
-            }
-            path.addEventListener("mouseenter", () => {
-                if (!name) return;
-                const flag = countryFlags[name] || "";
-                tooltip.textContent = `${flag} ${name}`.trim();
+            map.addEventListener("pointermove", (event) => {
+                const path = event.target instanceof Element
+                    ? event.target.closest<SVGPathElement>("path[data-country]") : null;
+                if (event.pointerType === "touch" || !path?.dataset.country) {
+                    tooltip.classList.add("hidden");
+                    return;
+                }
+                tooltip.textContent = `${path.dataset.flag ?? ""} ${path.dataset.country}`.trim();
                 tooltip.classList.remove("hidden");
+                tooltip.style.left = `${Math.max(8, Math.min(event.clientX + 15, innerWidth - tooltip.offsetWidth - 8))}px`;
+                tooltip.style.top = `${Math.max(8, Math.min(event.clientY + 15, innerHeight - tooltip.offsetHeight - 8))}px`;
             });
-            path.addEventListener("mousemove", (e) => {
-                tooltip.style.left = `${e.clientX + 15}px`;
-                tooltip.style.top = `${e.clientY + 15}px`;
-            });
-            path.addEventListener("mouseleave", () => {
-                tooltip.classList.add("hidden");
-            });
+            map.addEventListener("pointerleave", () => tooltip.classList.add("hidden"));
         });
     }
-
-    initWorldMap();
-    document.addEventListener("astro:page-load", initWorldMap);
+    initWorldMaps();
+    document.addEventListener("astro:page-load", initWorldMaps);
 </script>

@@ -30,7 +30,7 @@ const tagProps: Record<string, string> = interactive
     : {};
 ---
 
-<Tag class:list={["bird", className]} {...tagProps}>
+<Tag class:list={["bird", interactive && "is-interactive", className]} {...tagProps}>
     <svg
         width="139"
         height="162"
@@ -62,14 +62,14 @@ const tagProps: Record<string, string> = interactive
                 <BirdParts parts={BIRD_MOODS.resting.parts} />
             </g>
 
-            <!-- Clicked (happy) state. The transform carries a jump offset
+            <!-- Startled state. The transform carries a jump offset
                  (+12 right, -20 up) on top of the alignment, so the bird looks
-                 like it hops up and to the right when clicked. -->
+                 like it hops up and to the right when surprised. -->
             <g
-                class="bird-state bird-clicked"
-                transform={BIRD_MOODS.happy.logoTransform}
+                class="bird-state bird-startled"
+                transform={BIRD_MOODS.startled.logoTransform}
             >
-                <BirdParts parts={BIRD_MOODS.happy.parts} />
+                <BirdParts parts={BIRD_MOODS.startled.parts} />
             </g>
 
             <!-- Love state (easter egg: the bird has just eaten a crumb —
@@ -128,99 +128,63 @@ const tagProps: Record<string, string> = interactive
     .bird svg {
         height: 100%;
         width: auto;
-        /* The scaled-up clicked state's tail tip reaches a few px past the
+        /* The scaled-up startled state's tail tip reaches a few px past the
            left edge; let it paint into the surrounding whitespace. */
         overflow: visible;
     }
-    /* Swap between states. Resting shows the default; .is-clicked shows the
-       happy state; .is-angry shows the angry state. Instant — no transition.
-       The angry rules come last so they win when both classes are briefly
-       present.
+    /* Swap between states. Resting shows the default; hover / .is-startled
+       shows the startled state; .is-angry shows the angry state. Instant — no
+       transition. The angry rules come last so a click wins over hover.
 
        .is-eating shows the love state; BirdFeeder sets it while the bird
-       swallows a crumb. It gets its own class rather than borrowing
-       .is-clicked because the click handler below owns that one and clears it
-       on its own timer, which would cut a meal short. */
-    .bird-clicked,
+       swallows a crumb. It gets its own class because the click handler below
+       owns .is-angry and clears it on its own timer, which would cut a meal
+       short. */
+    .bird-startled,
     .bird-love,
     .bird-angry {
         opacity: 0;
     }
-    .bird.is-clicked .bird-default {
+    .bird.is-interactive:not(.is-feeding):not(.is-eating):not(.is-angry):hover .bird-default,
+    .bird.is-startled .bird-default {
         opacity: 0;
     }
-    .bird.is-clicked .bird-clicked {
+    .bird.is-interactive:not(.is-feeding):not(.is-eating):not(.is-angry):hover .bird-startled,
+    .bird.is-startled .bird-startled {
         opacity: 1;
     }
-    .bird.is-eating .bird-default {
+    .bird.is-eating .bird-default,
+    .bird.is-eating .bird-startled {
         opacity: 0;
     }
     .bird.is-eating .bird-love {
         opacity: 1;
     }
     .bird.is-angry .bird-default,
-    .bird.is-angry .bird-clicked,
+    .bird.is-angry .bird-startled,
     .bird.is-angry .bird-love {
         opacity: 0;
     }
     .bird.is-angry .bird-angry {
         opacity: 1;
     }
-    /* Hover: same resting bird, but the pupil dilates and the tail lifts.
-       Static swap — no transition. .is-hovered pins that state without a
-       pointer, so the colophon can stand it next to the resting bird as its
-       own specimen. */
-    .bird-pupil {
-        transform-box: fill-box;
-        transform-origin: center;
-    }
-    .bird-tail {
-        transform-box: view-box;
-        transform-origin: 50px 120px;
-    }
-    .bird:hover .bird-pupil,
-    .bird.is-hovered .bird-pupil {
-        transform: scale(1.2);
-    }
-    .bird:hover .bird-tail,
-    .bird.is-hovered .bird-tail {
-        transform: rotate(8deg);
-    }
 </style>
 
 <script>
-    // Two timers on purpose: the bird returns to default shortly after each
-    // click, but the streak that triggers the angry state lives on a longer
-    // window, so it survives the bird resetting in between.
     const VISUAL_RESET = 900;
-    const STREAK_WINDOW = 3000;
     for (const btn of document.querySelectorAll<HTMLButtonElement>("button.bird")) {
         let visualTimer: ReturnType<typeof setTimeout>;
-        let streakTimer: ReturnType<typeof setTimeout>;
-        let streak = 0;
         btn.addEventListener("click", () => {
             // While the feeder has the bird working a crumb it owns the
-            // expression (.is-eating). A click state would paint the happy or
-            // angry bird on top of it, and the reset timer below would then
-            // clear it mid-meal — so clicks are inert until the bird is home.
+            // expression (.is-eating). An angry state would paint on top of it,
+            // and the reset timer below would then clear it mid-meal — so
+            // clicks are inert until the bird is home.
             if (btn.classList.contains("is-feeding")) return;
-            streak++;
             clearTimeout(visualTimer);
-            clearTimeout(streakTimer);
-            if (streak >= 3) {
-                btn.classList.remove("is-clicked");
-                btn.classList.add("is-angry");
-                streak = 0;
-            } else {
-                btn.classList.remove("is-angry");
-                btn.classList.add("is-clicked");
-            }
+            btn.classList.add("is-angry");
             visualTimer = setTimeout(() => {
-                btn.classList.remove("is-clicked", "is-angry");
+                btn.classList.remove("is-angry");
             }, VISUAL_RESET);
-            streakTimer = setTimeout(() => {
-                streak = 0;
-            }, STREAK_WINDOW);
         });
     }
 </script>

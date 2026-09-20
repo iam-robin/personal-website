@@ -1,0 +1,67 @@
+---
+/** A quiet geometric stamp for the postcard contact action. */
+---
+
+<span class="postcard-stamp-preview" aria-hidden="true" inert>
+    <span class="postcard-stamp-inner">
+        <svg viewBox="0 0 100 100" role="presentation">
+            <rect width="50" height="50" fill="var(--color-inset)" />
+            <circle cx="25" cy="25" r="25" fill="var(--color-surface)" />
+
+            <rect x="50" width="50" height="50" fill="var(--color-surface)" />
+            <path d="M50 0h50L50 50z" fill="var(--color-paper)" />
+
+            <rect y="50" width="50" height="50" fill="var(--color-surface)" />
+            <path d="M0 100V50l50 50z" fill="var(--color-inset)" />
+
+            <rect x="50" y="50" width="50" height="50" fill="var(--color-paper)" />
+            <circle cx="75" cy="75" r="25" fill="var(--color-inset)" />
+        </svg>
+    </span>
+</span>
+
+<style>
+    .postcard-stamp-preview {
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-end: 1.375rem;
+        display: grid;
+        place-items: center;
+        inline-size: 3.5rem;
+        aspect-ratio: 1;
+        padding: 0.28rem;
+        background-color: var(--color-surface);
+        background-image:
+            radial-gradient(circle at 50% 0, var(--color-paper) 0 0.14rem, transparent 0.15rem),
+            radial-gradient(circle at 50% 100%, var(--color-paper) 0 0.14rem, transparent 0.15rem),
+            radial-gradient(circle at 0 50%, var(--color-paper) 0 0.14rem, transparent 0.15rem),
+            radial-gradient(circle at 100% 50%, var(--color-paper) 0 0.14rem, transparent 0.15rem);
+        background-position: top left, bottom left, top left, top right;
+        background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+        background-size: 0.5rem 0.5rem;
+        transform: translateY(-50%);
+        transform-origin: center;
+        transition: transform 180ms ease-out, filter 180ms ease-out;
+    }
+
+    .postcard-stamp-inner {
+        display: block;
+        inline-size: 100%;
+        block-size: 100%;
+        padding: 0.08rem;
+        background: var(--color-surface);
+    }
+
+    .postcard-stamp-preview svg {
+        display: block;
+        inline-size: 100%;
+        block-size: 100%;
+    }
+
+    @media (hover: hover) {
+        :global(.postcard-action-wrap:hover) .postcard-stamp-preview {
+            filter: drop-shadow(var(--shadow-raised));
+            transform: translateY(-50%) rotate(6deg) scale(1.12);
+        }
+    }
+</style>

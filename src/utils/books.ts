@@ -1,12 +1,11 @@
-import { getCollection } from "astro:content";
-import type { Book } from "./shelf";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+type Book = CollectionEntry<"books">;
 import { hexToOklab, normaliseHex } from "./paper";
 import { createSeededRandom } from "./seededRandom";
 
 /**
- * Everything /books needs, resolved at build time. `shelf.ts` answers only
- * "what's on the shelves and how much" for the hub page; the real reading of
- * the collection lives here, the way `bookmarks.ts` serves /bookmarks.
+ * Everything /books needs, resolved at build time.
  */
 
 // Imported eagerly so each cover can be looked up by filename (the `cover`

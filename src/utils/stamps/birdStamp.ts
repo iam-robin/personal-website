@@ -13,7 +13,7 @@ const GROUND_TONE = { l: 0.84, c: 0.13 };
 const GROUND_TONE_PALE = { l: 0.9, c: 0.08 };
 const PALE_GROUND_CHANCE = 0.45;
 
-const MOODS: BirdMoodKey[] = ["resting", "resting", "happy", "smitten"];
+const MOODS: BirdMoodKey[] = ["resting", "resting", "startled", "smitten"];
 
 type Layout = "portrait" | "closeup" | "tile22" | "tile21" | "tile12";
 const LAYOUTS: Layout[] = [

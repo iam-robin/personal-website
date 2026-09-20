@@ -1,0 +1,28 @@
+---
+import BirdFeeder from "../BirdFeeder.astro";
+---
+
+<section
+    aria-labelledby="home-title"
+    class="mt-20 grid gap-8 md:mt-24 md:grid-cols-12 md:items-end"
+>
+    <div class="min-w-0 md:col-span-full">
+        <BirdFeeder />
+    </div>
+    <div class="min-w-0 md:col-span-7">
+        <h1 id="home-title" class="text-3xl font-bold">
+            Robin&nbsp;Spielmann —<br />
+            a <a href="/work" class="marker whitespace-nowrap">design engineer</a> at<br />
+            the intersection of<br />
+            code, design&nbsp;&amp;&nbsp;art.
+        </h1>
+    </div>
+    <div class="min-w-0 md:col-span-5 md:pb-1">
+        <p class="max-w-reading font-mono text-base text-pretty">
+            This website is my own little space on the internet — a place to share my
+            work, interests and passions without pleasing the algorithms of social
+            media platforms. I hope you enjoy exploring my digital living room as much
+            as I enjoyed building it.
+        </p>
+    </div>
+</section>

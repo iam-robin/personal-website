@@ -1,0 +1,9 @@
+@theme static {
+    /* One small elevation language, named by visual role rather than component. */
+    --shadow-raised: 0 0.5rem 1rem color-mix(in oklch, var(--color-ink) 10%, transparent);
+    --shadow-lifted: -0.2rem 0.9rem 1.8rem color-mix(in oklch, var(--color-ink) 12%, transparent);
+    --shadow-floating: 0 0.75rem 1.5rem color-mix(in oklch, var(--color-ink) 14%, transparent);
+    --shadow-corner: 0 1em 0.5em rgba(0, 0, 0, 0.3);
+    --shadow-corner-soft: 0 1em 0.5em rgba(0, 0, 0, 0.1);
+    --shadow-hairline: 0 0 1px rgba(0, 0, 0, 0.3);
+}

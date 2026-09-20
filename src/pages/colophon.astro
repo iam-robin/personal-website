@@ -8,9 +8,8 @@ import { papers } from "../utils/paper";
 
 const latest = changelog[0];
 
-// The swatches use bg-ink/bg-paper/bg-surface, so they render *this* page's
-// stock. Two labels therefore describe how the value is derived rather than
-// quoting a hex the swatch beside them would contradict.
+// The swatches use colour utilities, so they render *this* page's stock. Labels
+// describe how derived values are made rather than quoting a stale hex.
 const colors = [
     {
         name: "--color-ink",
@@ -26,9 +25,15 @@ const colors = [
     },
     {
         name: "--color-surface",
-        value: "ink 10% over paper",
-        role: "Cards & surfaces — derived",
+        value: "white mixed over paper",
+        role: "Lifted cards — derived",
         swatch: "bg-surface",
+    },
+    {
+        name: "--color-inset",
+        value: "ink 10% over paper",
+        role: "Recessed wells — derived",
+        swatch: "bg-inset",
     },
 ];
 
@@ -74,13 +79,12 @@ const typeScale = [
     { cls: "text-xs", token: "text-xs" },
 ];
 
-// Every mood is its own specimen, hover included — one box can't show the
-// logo at rest and change under the cursor.
+// Every mood is its own specimen. One box can't show the logo at rest and
+// change under the cursor.
 const birds = [
     { label: "Resting", note: "The logo", cls: "" },
-    { label: "Curious", note: "On hover", cls: "is-hovered" },
-    { label: "Happy", note: "One click", cls: "is-clicked" },
-    { label: "Angry", note: "Three clicks", cls: "is-angry" },
+    { label: "Startled", note: "On hover", cls: "is-startled" },
+    { label: "Angry", note: "On click", cls: "is-angry" },
     // The note is the whole clue on purpose.
     { label: "Smitten", note: "Fed a crumb", cls: "is-eating" },
 ];
@@ -99,11 +103,12 @@ const birds = [
                 Colours
             </h2>
             <p class="mb-8 max-w-xl font-mono text-sm">
-                Three tokens. Ink never moves. The paper changes per section,
-                and the surface is mixed from whatever paper it lands on — so
-                every card, hairline and code chip follows the room it's in.
+                Four tokens. Ink never moves. The paper changes per section,
+                and both the lifted surface and recessed inset are mixed from
+                whatever paper they land on — so every card, well and code chip
+                follows the room it's in.
             </p>
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {
                     colors.map((c) => (
                         <div class="flex flex-col gap-3">
@@ -206,14 +211,14 @@ const birds = [
                 The robin
             </h2>
             <p class="mb-8 max-w-xl font-mono text-sm">
-                One bird, a few moods. It's the logo and the favicon. Click the
-                one in the corner.
+                One bird, a few moods. It's the logo and the favicon. Hover the
+                one in the corner to startle it. Click it to make it angry.
             </p>
-            <!-- Six cards, so 2-up and 3-up both come out even. -->
+            <!-- Five cards: the four logo moods, plus the 404 bird. -->
             <div class="grid grid-cols-2 gap-8 sm:grid-cols-3">
                 {
                     birds.map((b) => (
-                        <div class="flex flex-col items-center gap-4 rounded-md border border-ink/10 bg-surface/40 p-6 text-center">
+                        <div class="flex flex-col items-center gap-4 rounded-md border border-ink/10 bg-inset/40 p-6 text-center">
                             {/* Inert: each specimen is pinned to one mood,
                                 so the resting bird can't perk up on hover. */}
                             <Bird
@@ -231,7 +236,7 @@ const birds = [
                     ))
                 }
                 <div
-                    class="flex flex-col items-center gap-4 rounded-md border border-ink/10 bg-surface/40 p-6 text-center"
+                    class="flex flex-col items-center gap-4 rounded-md border border-ink/10 bg-inset/40 p-6 text-center"
                 >
                     <Bird404 class="h-24 w-auto text-ink" />
                     <div class="font-mono text-sm">

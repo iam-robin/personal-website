@@ -27,7 +27,7 @@ export interface BirdMood {
     parts: readonly BirdPart[];
     /** Aligned on the resting bird's body centre — the framing stamps use. */
     transform?: string;
-    /** What Bird.astro emits. Same as `transform`, except the happy bird hops. */
+    /** What Bird.astro emits. Same as `transform`, except the startled bird hops. */
     logoTransform?: string;
     /** Extent of the drawn bird after `transform`, for the portrait framing. */
     bbox: { x: number; y: number; w: number; h: number };
@@ -39,7 +39,7 @@ export interface BirdMood {
     closeup: { x: number; y: number; w: number; h: number };
 }
 
-export type BirdMoodKey = "resting" | "happy" | "smitten";
+export type BirdMoodKey = "resting" | "startled" | "smitten";
 
 export const BIRD_MOODS: Record<BirdMoodKey, BirdMood> = {
     resting: {
@@ -93,9 +93,9 @@ export const BIRD_MOODS: Record<BirdMoodKey, BirdMood> = {
      * The export is drawn ~5% smaller than the resting state; the scale matches
      * the two body sizes. `transform` aligns on the body centre; the logo adds
      * a jump offset (+12 right, −20 up) on top, so the bird looks like it hops
-     * up and to the right when clicked. A stamp wants it standing still.
+     * up and to the right when startled. A stamp wants it standing still.
      */
-    happy: {
+    startled: {
         transform: "translate(-10.01 2.6) scale(1.0539)",
         logoTransform: "translate(1.99 -17.4) scale(1.0539)",
         bbox: { x: -7, y: 2.6, w: 144, h: 155 },

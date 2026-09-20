@@ -1,0 +1,38 @@
+---
+/** Native light-dismiss panel, anchored to a button with anchor-name: --{id}. */
+interface Props {
+    id: string;
+    class?: string;
+}
+const { id, class: className } = Astro.props;
+---
+
+<div
+    id={id}
+    popover="auto"
+    class:list={["popover-panel rounded-xl border border-ink/15 bg-surface p-2 text-ink shadow-[var(--shadow-floating)]", className]}
+    style={{ "position-anchor": `--${id}` }}
+>
+    <slot />
+</div>
+
+<style>
+    .popover-panel {
+        /* Usable viewport-edge placement in browsers without CSS anchors. */
+        position: fixed;
+        inset: 5rem 1.5rem auto auto;
+        margin: 0;
+        max-width: calc(100vw - 3rem);
+        max-height: calc(100dvh - 6.5rem);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    @supports (top: anchor(bottom)) {
+        .popover-panel {
+            top: calc(anchor(bottom) + 0.5rem);
+            right: anchor(right);
+            position-try-fallbacks: flip-inline;
+        }
+    }
+</style>

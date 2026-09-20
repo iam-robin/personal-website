@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import { contactLinks } from "../data/links";
 import ArticleLayout from "../layouts/ArticleLayout.astro";
 import Button from "../components/ui/Button.astro";
 import Link from "../components/ui/Link.astro";
@@ -132,7 +133,7 @@ const structuredData = graphSchema([
         </header>
 
         <div class="mt-8 flex flex-wrap gap-3">
-            <Button href="mailto:hey@iamrob.in" variant="primary">
+            <Button href={contactLinks.email.href} variant="primary">
                 Get in touch
             </Button>
             <Button href="https://cv.iamrob.in" external>View CV</Button>

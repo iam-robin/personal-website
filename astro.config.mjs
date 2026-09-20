@@ -44,7 +44,8 @@ export default defineConfig({
                     /^\/postcards\/\d+$/.test(path) ||
                     /^\/postcards\/country\//.test(path);
 
-                return !NOT_INDEXED.includes(path) && !isPostcardArchive;
+                const isLab = path === "/lab" || path.startsWith("/lab/");
+                return !NOT_INDEXED.includes(path) && !isPostcardArchive && !isLab;
             },
         }),
     ],

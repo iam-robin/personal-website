@@ -19,33 +19,38 @@ const isActive = (href: string) =>
 <div class="h-24 md:hidden" aria-hidden="true"></div>
 
 <nav class="fixed inset-x-6 bottom-6 z-50 md:hidden" aria-label="Site menu">
-    <details id="mobile-menu">
-        <summary
-            class="flex h-12 cursor-pointer list-none items-center justify-center gap-2 rounded-xl bg-ink font-mono text-sm text-paper shadow-lg"
+        <button
+            type="button"
+            popovertarget="mobile-menu"
+            class="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-ink font-mono text-sm text-paper shadow-[var(--shadow-floating)]"
         >
-            <span class="icon-swap">
+            <span class="icon-swap relative inline-flex size-4">
                 <Icon name="ph:list-bold" size={16} class="menu-icon" />
                 <Icon name="ph:x-bold" size={16} class="close-icon" />
             </span>
             Menu
-        </summary>
+        </button>
 
-        <ul
-            class="absolute inset-x-0 bottom-14 flex flex-col rounded-xl bg-ink p-2 font-mono text-sm text-paper shadow-lg"
+        <div
+            id="mobile-menu"
+            popover="auto"
+            class="fixed inset-x-6 top-auto bottom-20 m-0 max-h-[calc(100dvh-7rem)] w-auto overflow-y-auto overscroll-contain rounded-xl border-0 bg-ink p-2 font-mono text-sm text-paper shadow-[var(--shadow-floating)] md:hidden"
+        >
+        <ul class="flex flex-col"
         >
             {
                 items.map((item) => (
                     <li>
-                        <a
+                        {!item.children && <a
                             href={item.href}
                             class:list={[
-                                "block rounded px-4 py-3 underline-offset-4 transition-colors hover:bg-paper/10",
+                                "block rounded px-4 py-3 outline-paper! underline-offset-4 transition-colors hover:bg-paper/10",
                                 isActive(item.href)
                                     ? "underline"
                                     : "opacity-60",
                             ]}
                             aria-current={
-                                isActive(item.href) ? "page" : undefined
+                                path === item.href ? "page" : undefined
                             }
                             {...(item.external && {
                                 target: "_blank",
@@ -54,39 +59,38 @@ const isActive = (href: string) =>
                         >
                             {item.label}
                             {item.external && " ↗"}
-                        </a>
+                        </a>}
+                        {item.children && (
+                            <>
+                            <span class="block px-4 pt-3 pb-1 text-xs text-paper/60">{item.label}</span>
+                            <ul class="mb-2 ml-4 border-l border-paper/20 pl-2">
+                                {item.children.map((child) => (
+                                    <li>
+                                        <a
+                                            href={child.href}
+                                            class:list={[
+                                                "block rounded px-4 py-3 outline-paper! underline-offset-4 hover:bg-paper/10",
+                                                isActive(child.href) ? "underline" : "opacity-60",
+                                            ]}
+                                            aria-current={path === child.href ? "page" : undefined}
+                                        >{child.label}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                            </>
+                        )}
                     </li>
                 ))
             }
         </ul>
-    </details>
+        </div>
 </nav>
 
 <style>
-    summary::marker,
-    summary::-webkit-details-marker {
-        display: none;
-    }
-
-    /* The one ink-filled surface with focusable children, where global.css's
-       ink ring would disappear. Set at rest, like the global one, so the ring
-       never has a colour to transition. The summary pill is excluded on
-       purpose: it sits on the page, so its ink ring is correct. */
-    ul :global(a) {
-        outline-color: var(--color-paper);
-    }
-
     /* List -> x. Both icons stay in the DOM, stacked, and trade
        opacity/scale/blur — `display` can't transition, so the old toggle cut
        between them with no motion at either end. Driven straight off
-       [open], so the pill needs no JS to animate. */
-    .icon-swap {
-        position: relative;
-        display: inline-flex;
-        width: 16px;
-        height: 16px;
-    }
-
+       :popover-open, so the pill needs no JS to animate. */
     .icon-swap :global(svg) {
         position: absolute;
         inset: 0;
@@ -96,14 +100,14 @@ const isActive = (href: string) =>
     }
 
     .menu-icon,
-    details[open] .close-icon {
+    nav:has(:popover-open) .close-icon {
         opacity: 1;
         scale: 1;
         filter: blur(0);
     }
 
     .close-icon,
-    details[open] .menu-icon {
+    nav:has(:popover-open) .menu-icon {
         opacity: 0;
         scale: 0.25;
         filter: blur(4px);
@@ -117,25 +121,3 @@ const isActive = (href: string) =>
         }
     }
 </style>
-
-<script>
-    function initMobileMenu() {
-        const menu = document.getElementById(
-            "mobile-menu",
-        ) as HTMLDetailsElement | null;
-        if (!menu || menu.dataset.initialized) return;
-        menu.dataset.initialized = "true";
-
-        // Close when clicking outside or pressing Escape
-        document.addEventListener("click", (e) => {
-            if (menu.open && !menu.contains(e.target as Node))
-                menu.open = false;
-        });
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") menu.open = false;
-        });
-    }
-
-    initMobileMenu();
-    document.addEventListener("astro:page-load", initMobileMenu);
-</script>

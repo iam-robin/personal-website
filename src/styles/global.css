@@ -3,6 +3,7 @@
 @import "./theme/typography.css";
 @import "./theme/colors.css";
 @import "./theme/transitions.css";
+@import "./theme/shadows.css";
 @import "./theme/layout.css";
 @import "./utilities/utilities.css";
 

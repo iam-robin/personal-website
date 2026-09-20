@@ -1,0 +1,28 @@
+---
+import { labSections, type LabSection } from "../../data/lab";
+interface Props { current: LabSection; }
+const { current } = Astro.props;
+---
+
+<nav class="lab-sections" aria-label="Lab sections">
+    {labSections.map((section) => (
+        <a href={section.href} aria-current={current === section.id ? "page" : undefined}>
+            <span>{section.name}</span><small>{section.purpose}</small>
+        </a>
+    ))}
+</nav>
+
+<style>
+    .lab-sections { display: grid; gap: .375rem; }
+    a { display: flex; flex-direction: column; justify-content: center; gap: .25rem; min-block-size: 2.75rem; padding: .75rem 1rem; border-radius: .375rem; font: .875rem/1.5 var(--font-mono); }
+    small { font-size: .75rem; color: var(--color-ink-muted); }
+    a[aria-current="page"] { background: var(--color-inset); }
+    a[aria-current="page"] > span { font-weight: 700; text-decoration: underline; text-underline-offset: .25rem; }
+    @media (hover: hover) { a:hover > span { text-decoration: underline; text-underline-offset: .25rem; } }
+    @media (max-width: 60rem) {
+        .lab-sections { grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); gap: .25rem; }
+        a { padding: .625rem .5rem; align-items: center; white-space: nowrap; font-size: .8125rem; }
+        small { display: none; }
+    }
+    @media (max-width: 34rem) { .lab-sections { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>

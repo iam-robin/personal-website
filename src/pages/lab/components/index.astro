@@ -1,0 +1,90 @@
+---
+import LabLayout from "../../../layouts/LabLayout.astro";
+import { componentCatalog, componentGroups } from "../../../utils/componentCatalog";
+const previewCount = componentCatalog.filter((entry) => entry.preview).length;
+---
+
+<LabLayout current="components" title="Components" description="The pieces behind my website, grouped by where they belong. Open a row to try a component, find its source or see how I use it." meta={`${componentCatalog.length} components · ${previewCount} live previews · Read from src/components`} sections={componentGroups.map((group) => ({ id: `area-${group.id}`, label: group.name, count: group.entries.length }))}>
+    <div id="components" data-component-catalog>
+        <form class="catalog-controls" data-catalog-controls hidden role="search" aria-label="Find components">
+            <div class="search-field"><label for="component-search">Find a component</label><input id="component-search" type="search" placeholder="Name, purpose or source path" autocomplete="off" /></div>
+            <div><label for="component-group">Area</label><select id="component-group"><option value="all">All areas</option>{componentGroups.map((group) => <option value={group.id}>{group.name}</option>)}</select></div>
+            <button type="reset">Clear filters</button>
+        </form>
+        <p class="result-count" role="status" data-catalog-status></p>
+        <p class="empty" data-catalog-empty hidden>No matching components. Try a shorter name or clear the filters.</p>
+        {componentGroups.map((group) => (
+            <section id={`area-${group.id}`} class="component-group" data-catalog-group={group.id} aria-labelledby={`heading-${group.id}`}>
+                <div class="group-heading"><h2 id={`heading-${group.id}`}>{group.name}</h2><span>{group.entries.length} {group.entries.length === 1 ? "component" : "components"}</span></div>
+                <div class="component-list">
+                    {group.entries.map((entry) => (
+                        <details id={entry.id} class="component" open={entry.name === "Button"} data-component data-search={`${entry.name} ${entry.description} ${entry.source} ${entry.kind}`.toLowerCase()}>
+                            <summary><span class="component-name">{entry.name}</span><span class="component-description">{entry.description}</span><span class="component-kind">{entry.kind}</span></summary>
+                            <div class="component-body">
+                                <div class="source-row"><code>{entry.source}</code><a href={`#${entry.id}`} aria-label={`Link to ${entry.name}`}>Link to this component</a></div>
+                                {entry.note && <p class="context-note">{entry.note}</p>}
+                                {entry.preview && <>
+                                    <div class="preview-heading"><span>Actual component · isolated viewport</span><a href={`/lab/components/preview/${entry.id}`} target="_blank" rel="noopener noreferrer">Open {entry.name} preview ↗</a></div>
+                                    <iframe src={`/lab/components/preview/${entry.id}`} title={`${entry.name} component preview`} loading="lazy" width={entry.preview.width ?? "100%"} height={entry.preview.height} style={entry.preview.width ? `max-width:${entry.preview.width}px` : undefined}></iframe>
+                                </>}
+                                {entry.href && <a class="context-link" href={entry.href}>View {entry.name} in context →</a>}
+                                <details class="references"><summary>Direct imports outside the lab · {entry.references.length}</summary>
+                                    {entry.references.length ? <ul>{entry.references.map((reference) => <li><code>{reference}</code></li>)}</ul> : <p>No direct imports found outside the lab. Dynamic usage isn't counted.</p>}
+                                </details>
+                            </div>
+                        </details>
+                    ))}
+                </div>
+            </section>
+        ))}
+        <p class="catalog-note">The inventory follows <code>src/components</code>. Page layouts, scripts and inline page sections aren't counted. Helpers stay listed even when they have nothing to show on their own; page-dependent components link to their real context.</p>
+    </div>
+</LabLayout>
+
+<style>
+    [hidden] { display: none !important; }
+    .group-heading > span, .result-count, .preview-heading, .source-row, .references, .catalog-note { font: .8125rem/1.6 var(--font-mono); }
+    .group-heading > span, .result-count, .context-note, .component-description, .component-kind, .preview-heading, .catalog-note { color: var(--color-ink-muted); }
+    code { overflow-wrap: anywhere; }
+    .catalog-controls { display: flex; align-items: end; flex-wrap: wrap; gap: 1rem; }
+    .catalog-controls > div { display: grid; gap: .5rem; }
+    .search-field { flex: 1 1 18rem; }
+    label, button, .component-kind { font: .8125rem/1.5 var(--font-mono); }
+    input, select { min-block-size: 2.75rem; min-inline-size: 0; inline-size: 100%; padding: .5rem .75rem; border: 1px solid var(--color-ink-muted); border-radius: .375rem; background: var(--color-paper); color: var(--color-ink); font: 1rem/1.5 var(--font-mono); }
+    .catalog-controls button { min-block-size: 2.75rem; padding: .5rem .875rem; background: var(--color-inset); border-radius: .375rem; cursor: pointer; }
+    .result-count { margin-block: .75rem; min-block-size: 1.5em; }
+    .component-group { margin-block-start: 2.5rem; scroll-margin-block-start: var(--lab-anchor-offset); }
+    .group-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: .5rem; margin-block-end: 1rem; }
+    h2 { font-size: 1.5rem; font-weight: 700; }
+    .component { border-block-start: 1px solid var(--color-inset); scroll-margin-block-start: var(--lab-anchor-offset); }
+    .component:last-child { border-block-end: 1px solid var(--color-inset); }
+    .component > summary { display: grid; grid-template-columns: 1rem minmax(12rem, .85fr) minmax(0, 1.6fr) 7.5rem; align-items: baseline; gap: .75rem; padding-block: 1.125rem; cursor: pointer; list-style: none; }
+    .component > summary::-webkit-details-marker { display: none; }
+    .component > summary::before { content: "+"; font-family: var(--font-mono); }
+    .component[open] > summary::before { content: "−"; }
+    .component-name { font-family: var(--font-mono); font-size: .875rem; overflow-wrap: anywhere; }
+    .component-description { font-size: .9375rem; line-height: 1.5; }
+    .component-kind { text-align: end; }
+    .component[open] > summary .component-name { font-weight: 700; }
+    .component-body { padding: 0 0 1.5rem 1.75rem; min-inline-size: 0; }
+    .source-row, .preview-heading { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem 1rem; }
+    .source-row a, .preview-heading a, .context-link { min-block-size: 2.75rem; display: inline-flex; align-items: center; text-decoration: underline; text-underline-offset: .25rem; }
+    .context-note { max-inline-size: 65ch; margin-block: .5rem 1rem; font-size: .9375rem; line-height: 1.6; }
+    .preview-heading { margin-block-start: .5rem; }
+    iframe { display: block; inline-size: 100%; border: 1px solid var(--color-inset); background: var(--color-paper); }
+    .context-link { margin-block-start: .75rem; font: .8125rem/1.5 var(--font-mono); }
+    .references { margin-block-start: .75rem; }
+    .references summary { padding-block: .625rem; cursor: pointer; }
+    .references ul { display: grid; gap: .375rem; margin-block-start: .5rem; }
+    .catalog-note { margin-block-start: 3rem; max-inline-size: 75ch; }
+    .empty { padding-block: 2rem; }
+    @media (hover: hover) { a:hover { text-decoration: underline; text-underline-offset: .25rem; } .component > summary:hover .component-name { text-decoration: underline; text-underline-offset: .25rem; } }
+    @media (max-width: 75rem) { .component > summary { grid-template-columns: 1rem minmax(0, 1fr) 7.5rem; } .component-description { grid-column: 2 / -1; grid-row: 2; } .component-kind { grid-column: 3; grid-row: 1; } }
+    @media (max-width: 30rem) { .component > summary { grid-template-columns: 1rem minmax(0, 1fr); } .component-kind { grid-column: 2; grid-row: 3; text-align: start; } .component-body { padding-inline-start: 0; } }
+</style>
+
+<script>
+    import { initComponentCatalog } from "../../../scripts/componentCatalog";
+    initComponentCatalog();
+    document.addEventListener("astro:page-load", initComponentCatalog);
+</script>

@@ -1,5 +1,54 @@
 [
   {
+    "id": "810",
+    "title": "ui.camera — Product photography for software",
+    "url": "https://ui.camera/",
+    "added": "2026-09-18T12:59:55.700157Z",
+    "description": "Create beautiful product visuals from your UI. Studio-quality photos and videos of software, right in the browser.",
+    "tags": [
+      "design",
+      "tool",
+      "ui"
+    ],
+    "cover": "0f6a99a78aeded1f26fe0cf9bcd954e4.png"
+  },
+  {
+    "id": "809",
+    "title": "DesEngs: Resources for Design Engineers",
+    "url": "https://desengs.com/",
+    "added": "2026-09-18T11:59:05.728159Z",
+    "description": "Curated tools, articles, videos, communities, and inspiration for design engineers working across design and code.",
+    "tags": [
+      "design-engineer",
+      "inspiration",
+      "resources"
+    ],
+    "cover": "34f27963e972db17df5777e33076af4d.png"
+  },
+  {
+    "id": "806",
+    "title": "Little Websites Everywhere",
+    "url": "https://michellebarker.co.uk/writing/little-websites-everywhere/",
+    "added": "2026-09-17T16:12:43.255719Z",
+    "tags": [
+      "ai",
+      "internet"
+    ],
+    "cover": null
+  },
+  {
+    "id": "805",
+    "title": "Designing beyond beige",
+    "url": "https://buzzusborne.com/writing/designing-beyond-beige/",
+    "added": "2026-09-16T11:30:08.609793Z",
+    "description": "Buzz is a Principal Designer with over 21 years of experience building products and teams.",
+    "tags": [
+      "design",
+      "internet"
+    ],
+    "cover": "789ee5395a7c4f82b15160937969f040.png"
+  },
+  {
     "id": "797",
     "title": "95 reasons for having your own website in 2026 ~ Bell Kiosk",
     "url": "https://bellkiosk.website/blog/reasons-to-website.html",

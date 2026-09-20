@@ -40,7 +40,7 @@ const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
 <style>
     .feeder {
         position: relative;
-        /* The hop arc and the happy state's tail paint past the band. */
+        /* The hop arc and the love state's tail paint past the band. */
         overflow: visible;
     }
 
@@ -185,7 +185,7 @@ const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
     const HOP_LOOK = 0.15; // chance a landing is a heavier, slower one
     const PECK_MS = 200;
     const PECK_DEG = 22;
-    const YUM_MS = 380; // how long the happy state is held after a meal
+    const YUM_MS = 380; // how long the love state is held after a meal
     const FALL_MS = 420; // must match the crumb-fall duration above
     const MIN_DROP = 10; // a click on the floor still gets a small drop
 
@@ -431,7 +431,7 @@ const TILT = [-14, 7, 22, -5, 13, -21, 3, 17];
             // click state still showing from just before is dropped so it
             // can't sit under the love state.
             bird.classList.add("is-feeding");
-            bird.classList.remove("is-clicked", "is-angry");
+            bird.classList.remove("is-startled", "is-angry");
             try {
                 while (queue.length) {
                     // Nearest first, re-decided each time, so crumbs dropped

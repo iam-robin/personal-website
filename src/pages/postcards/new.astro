@@ -295,7 +295,7 @@ if (Astro.request.method === "POST") {
     }
 
     .stamp {
-        -webkit-filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.5));
+        -webkit-filter: drop-shadow(var(--shadow-hairline));
         background: radial-gradient(
             transparent 0px,
             transparent 4px,
@@ -355,7 +355,15 @@ if (Astro.request.method === "POST") {
         > = [];
         let currentPalette: string[] | undefined;
 
+        const paperStyles = getComputedStyle(document.body);
+        const paperPalette = [
+            paperStyles.getPropertyValue("--color-paper").trim(),
+            paperStyles.getPropertyValue("--color-surface").trim(),
+            paperStyles.getPropertyValue("--color-inset").trim(),
+        ];
+
         const colorPalettes: string[][] = [
+            paperPalette, // The same quiet tones used by the site's paper UI
             ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF"], // Bright & Playful
             ["#2C3E50", "#E74C3C", "#ECF0F1", "#3498DB", "#2ECC71"], // Modern Flat
             ["#A8DADC", "#457B9D", "#1D3557", "#F1FAEE", "#E63946"], // Oceanic

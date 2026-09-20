@@ -1,35 +1,14 @@
 ---
-import TeaserSection from '../TeaserSection.astro';
-import ProjectCard from './ProjectCard.astro';
-import { getFeaturedProjects } from '../../utils/projects';
+import TeaserSection from "../TeaserSection.astro";
+import FeaturedProjectCard from "./FeaturedProjectCard.astro";
+import { getFeaturedProjects } from "../../utils/projects";
 
 const projects = await getFeaturedProjects();
-
-const link = {
-  href: '/projects',
-  text: 'All Projects',
-};
+const link = { href: "/projects", text: "All Projects" };
 ---
 
 <TeaserSection title="Side Projects" link={link}>
-  <ul class="divide-y divide-dotted divide-ink/30 border-y border-dotted border-ink/30">
-    {
-      projects.map((project) => (
-        <li class:list={[project.data.draft ? 'cursor-not-allowed' : 'cursor-pointer']}>
-          <ProjectCard
-            slug={project.id}
-            title={project.data.title}
-            description={project.data.description}
-            year={project.data.year}
-            bgColor={project.data.bgColor}
-            bgColorDark={project.data.bgColorDark}
-            externalUrl={project.data.externalUrl}
-            tags={project.data.tags}
-            draft={project.data.draft}
-            mobileFanUntil="lg"
-          />
-        </li>
-      ))
-    }
-  </ul>
+    <div class="grid gap-4 md:grid-cols-3">
+        {projects.map((project) => <FeaturedProjectCard project={project} />)}
+    </div>
 </TeaserSection>

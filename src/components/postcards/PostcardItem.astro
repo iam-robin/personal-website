@@ -194,7 +194,7 @@ const wavyLinesStampContainerStyles = `
         >
             <div class="h-1/2 flex justify-end">
                 <div
-                    class="pc-stamp inline-block w-[4.125em] h-[4.125em] p-[0.1875em] bg-white relative drop-shadow-[0_0_1px_rgba(0,0,0,0.3)]"
+                    class="pc-stamp inline-block w-[4.125em] h-[4.125em] p-[0.1875em] bg-white relative"
                     style="background: radial-gradient(transparent 0px, transparent 0.125em, white 0.125em, white); background-size: 0.375em 0.375em; background-position: -0.5625em -0.5625em;"
                 >
                     <div class="h-full w-full p-[0.125em] bg-white">
@@ -378,6 +378,9 @@ const wavyLinesStampContainerStyles = `
         .pc-inner {
             font-size: min(3.13cqw, 1.31rem);
         }
+    }
+    .pc-stamp {
+        filter: drop-shadow(var(--shadow-hairline));
     }
     /* Generative stamp fills its (em-sized) frame regardless of its own
        intrinsic width/height attributes. */

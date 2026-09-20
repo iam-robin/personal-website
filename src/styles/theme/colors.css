@@ -11,13 +11,14 @@
 @theme static {
     --color-ink: #1a1919; /* terrain dark-500 — warm near-black */
     --color-paper: #eae8e3; /* terrain light-400 — warm off-white */
-    --color-surface: #d2d1ca; /* terrain light-200 — soft card greige */
+    --color-surface: #f4f3f0; /* lifted cards — lighter than paper */
+    --color-inset: #d2d1ca; /* recessed wells — ink mixed into paper */
     --color-ink-muted: #1a1919b3;
 }
 
 /*
-  Per-section paper. Layout.astro sets --paper and --surface inline on <body>
-  from utils/paper.ts; this maps them onto the two tokens everything else reads.
+  Per-section paper. Layout.astro sets --paper, --surface and --inset inline on
+  <body> from utils/paper.ts; this maps them onto the tokens everything else reads.
   The literals here are the answer for a <body> rendered without that layout,
   not placeholders.
 
@@ -38,6 +39,7 @@
 @layer base {
     body {
         --color-paper: var(--paper, #eae8e3);
-        --color-surface: var(--surface, #d2d1ca);
+        --color-surface: var(--surface, #f4f3f0);
+        --color-inset: var(--inset, #d2d1ca);
     }
 }

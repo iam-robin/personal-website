@@ -1,0 +1,165 @@
+---
+import { Image } from "astro:assets";
+import { getHomeFolders } from "../../utils/homeFolders";
+import { papers } from "../../utils/paper";
+
+const folders = await getHomeFolders();
+// Reuse the site's paper stocks without changing the destination pages' colors.
+const folderPapers = {
+    notes: papers.projects,
+    bookmarks: papers.shelf,
+    books: papers.work,
+    postcards: papers.blog,
+};
+---
+
+<section aria-labelledby="folder-shortcuts-heading">
+    <h2 id="folder-shortcuts-heading" class="text-sm font-bold">More to explore</h2>
+    <ul class="mt-4 grid list-none grid-cols-2 gap-4 p-0 @min-[36rem]:grid-cols-4" role="list">
+        {folders.map((folder) => (
+            <li>
+                <a
+                    href={folder.href}
+                    class="folder-link group flex h-full flex-col items-start gap-4 rounded-lg px-4 pt-13 pb-4 text-ink no-underline focus-visible:outline-2 focus-visible:outline-offset-4! focus-visible:outline-ink"
+                >
+                    <span
+                        class="folder"
+                        data-kind={folder.kind}
+                        aria-hidden="true"
+                        style={{
+                            "--folder-front": folderPapers[folder.kind].folderFront,
+                            "--folder-back": folderPapers[folder.kind].folderBack,
+                        }}
+                    >
+                        <span class="folder-back">
+                            {folder.items.map((item, index) => (
+                                <span
+                                    class="paper"
+                                    style={{
+                                        "--angle": `${(index - (folder.items.length - 1) / 2) * 16}deg`,
+                                        "--offset": `${(index - (folder.items.length - 1) / 2) * 24}%`,
+                                        "--note-paper": item.color,
+                                    }}
+                                >
+                                    {item.image && (
+                                        <Image src={item.image} alt="" width={160} widths={[80, 160]} sizes="64px" loading="lazy" class="block h-full w-full object-cover" />
+                                    )}
+                                    {folder.kind === "notes" ? (
+                                        <span class="flex min-h-full flex-col items-start gap-[0.3rem] border border-black/60 p-1 font-mono">
+                                            <span class="max-w-full overflow-hidden rounded-full border border-black/60 px-[0.2rem] py-[0.05rem] text-[0.3rem] leading-[1.4] whitespace-nowrap">{item.category}</span>
+                                            <span class="text-[0.45rem] leading-[1.4] font-bold [overflow-wrap:anywhere]">{item.title}</span>
+                                            {item.detail && <span class="border-t border-black/60 pt-[0.2rem] font-decorative text-[0.45rem] leading-[1.4]">{item.detail}</span>}
+                                        </span>
+                                    ) : !item.image && (
+                                        <span class="block p-[0.35rem]">
+                                            <span class="block text-[0.55rem] leading-[1.35] font-semibold [overflow-wrap:anywhere]">{item.title}</span>
+                                            {item.detail && <span class:list={["mt-1 block text-[0.45rem] leading-normal", { italic: folder.kind === "postcards" }]}>{item.detail}</span>}
+                                        </span>
+                                    )}
+                                </span>
+                            ))}
+                            <span class="folder-front"></span>
+                            <span class="folder-front right"></span>
+                        </span>
+                    </span>
+                    <span class="text-[0.875rem] underline-offset-[0.25em] group-hover:underline group-focus-visible:underline">{folder.label}</span>
+                </a>
+            </li>
+        ))}
+    </ul>
+</section>
+
+<style>
+    .folder-link { --folder-open: 0; }
+
+    .folder-link:focus-visible { --folder-open: 1; }
+
+    .folder {
+        /* One state drives hover, keyboard focus and always-open touch previews. */
+        --folder-lift: calc(-4px * var(--folder-open));
+        --front-skew: calc(15deg * var(--folder-open));
+        --front-scale: calc(1 - 0.4 * var(--folder-open));
+        --paper-shift: calc(10% - 45% * var(--folder-open));
+        --fan-spread: var(--folder-open);
+        display: block;
+        position: relative;
+        width: 6rem;
+        height: 4.8rem;
+        pointer-events: none;
+        transform: translateY(var(--folder-lift));
+    }
+
+    .folder-back {
+        position: absolute;
+        inset: 0;
+        background: var(--folder-back);
+        border-radius: 0 0.2rem 0.2rem 0.2rem;
+    }
+
+    .folder-back::before {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        width: 30%;
+        height: 10%;
+        background: inherit;
+        border-radius: 0.15rem 0.15rem 0 0;
+    }
+
+    .paper {
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+        width: 65%;
+        height: 85%;
+        overflow: hidden;
+        border-radius: 0.15rem;
+        background: var(--color-surface);
+        color: var(--color-ink);
+        outline: 1px solid rgb(0 0 0 / 0.1);
+        transform-origin: center bottom;
+        transform: translate(calc(-50% + var(--offset) * var(--fan-spread)), var(--paper-shift)) rotate(calc(var(--angle) * var(--fan-spread)));
+    }
+
+    [data-kind="notes"] .paper {
+        padding: 0.15rem;
+        border-radius: 0;
+        background: var(--note-paper);
+        color: #000;
+    }
+
+    [data-kind="postcards"] .paper { width: 80%; height: 65%; }
+
+    /* Two overlapping panels form the reference's outward-opening front.
+       Perspective rotation alone gives a different silhouette. */
+    .folder-front {
+        position: absolute;
+        inset: 0;
+        border-radius: 0.2rem;
+        background: var(--folder-front);
+        transform-origin: bottom;
+        transform: skewX(var(--front-skew)) scaleY(var(--front-scale));
+    }
+
+    .folder-front.right {
+        transform: skewX(calc(-1 * var(--front-skew))) scaleY(var(--front-scale));
+    }
+
+    @media (hover: hover) {
+        .folder-link:hover { --folder-open: 1; }
+
+    }
+
+    /* Keep previews visible on touch devices without requiring a first tap. */
+    @media (hover: none) {
+        .folder-link { --folder-open: 1; }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .folder, .folder-front, .paper {
+            transition: transform 200ms ease-in-out;
+        }
+    }
+
+</style>

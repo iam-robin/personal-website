@@ -1,5 +1,6 @@
 ---
 import Button from "./Button.astro";
+import PopoverPanel from "./PopoverPanel.astro";
 /**
  * RSS feed dropdown: an icon that opens a flyout listing the site's feeds,
  * each with copy-URL and open-feed actions. Ported from v3.
@@ -12,18 +13,19 @@ const rssFeeds = [
 ];
 ---
 
-<details id="rss-dropdown" class="relative">
-    <summary
-        class="cursor-pointer list-none p-2 text-ink-muted transition-colors hover:text-ink"
+<div class="relative">
+    <button
+        type="button"
+        popovertarget="rss-dropdown"
+        style="anchor-name: --rss-dropdown"
+        class="cursor-pointer p-2 text-ink-muted transition-colors hover:text-ink"
         aria-label="RSS Feeds"
         title="Subscribe to RSS"
     >
         <Icon name="ph:rss-simple-bold" size={18} />
-    </summary>
+    </button>
 
-    <div
-        class="absolute right-0 z-50 mt-2 w-64 rounded-xl border border-ink/15 bg-surface p-2 shadow-lg"
-    >
+    <PopoverPanel id="rss-dropdown" class="w-64">
         <div class="mb-1 border-b border-dotted border-ink/30 px-3 py-2">
             <h3 class="font-mono text-xs tracking-wide text-ink-muted uppercase">
                 RSS Feeds
@@ -48,7 +50,7 @@ const rssFeeds = [
                         title="Copy feed URL"
                         label={`Copy ${feed.label} RSS feed URL`}
                     >
-                        <span class="icon-swap">
+                        <span class="icon-swap relative inline-flex size-3.5">
                             <Icon
                                 name="ph:copy-bold"
                                 size={14}
@@ -76,15 +78,10 @@ const rssFeeds = [
                 </div>
             ))
         }
-    </div>
-</details>
+    </PopoverPanel>
+</div>
 
 <style>
-    summary::marker,
-    summary::-webkit-details-marker {
-        display: none;
-    }
-
     /*
       Copy -> check confirmation. This swap is the only signal the clipboard
       write landed, so it cross-fades rather than cutting: both icons stay in
@@ -96,13 +93,6 @@ const rssFeeds = [
       No green: the check inherits currentColor like every other icon here,
       and the palette in theme/colors.css is ink, paper and surface only.
     */
-    .icon-swap {
-        position: relative;
-        display: inline-flex;
-        width: 14px;
-        height: 14px;
-    }
-
     .icon-swap :global(svg) {
         position: absolute;
         inset: 0;
@@ -138,14 +128,9 @@ const rssFeeds = [
     function initRssDropdown() {
         const dropdown = document.getElementById(
             "rss-dropdown",
-        ) as HTMLDetailsElement | null;
+        );
         if (!dropdown || dropdown.dataset.initialized) return;
         dropdown.dataset.initialized = "true";
-
-        // Close when clicking outside
-        document.addEventListener("click", (e) => {
-            if (!dropdown.contains(e.target as Node)) dropdown.open = false;
-        });
 
         // Copy feed URL to clipboard
         dropdown.querySelectorAll(".rss-copy-btn").forEach((button) => {
