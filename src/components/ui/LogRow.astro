@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import Rating from "./Rating.astro";
 
 interface Props {
     title: string;
@@ -8,13 +9,25 @@ interface Props {
     /** The heart /books puts at the head of a spine. Decorative — whatever it
         stands for (a rating of 4+, a Letterboxd like) is in the meta or implied. */
     favourite?: boolean;
-    /** The right-hand line: "★ 4.5 · 23 Feb". */
+    /** A score rendered as five asterisk marks. */
+    rating?: number | null;
+    /** A fixed-width date at the right of the row. */
+    date?: string;
+    /** Other right-hand metadata, such as “Watching”. */
     meta?: string;
     /** Remote poster URL. Absent is fine — the row just has nothing to show. */
     cover?: string | null;
 }
 
-const { title, chip, favourite = false, meta = "", cover } = Astro.props;
+const {
+    title,
+    chip,
+    favourite = false,
+    rating,
+    date = "",
+    meta = "",
+    cover,
+} = Astro.props;
 ---
 
 <li
@@ -63,6 +76,17 @@ const { title, chip, favourite = false, meta = "", cover } = Astro.props;
 
         <div class="hidden h-px w-full grow bg-ink/10 md:block"></div>
 
-        {meta && <p class="shrink-0 font-mono text-xs text-ink-muted">{meta}</p>}
+        {
+            (rating || date || meta) && (
+                <p class="flex shrink-0 items-center gap-2 font-mono text-xs text-ink-muted">
+                    {rating && <Rating value={rating} />}
+                    {rating && (date || meta) && <span aria-hidden="true">·</span>}
+                    {date && (
+                        <span class="inline-block w-[6ch] whitespace-nowrap">{date}</span>
+                    )}
+                    {meta}
+                </p>
+            )
+        }
     </div>
 </li>

@@ -8,6 +8,7 @@
 import LogYear from "../ui/LogYear.astro";
 import LogRow from "../ui/LogRow.astro";
 import type { FilmYear } from "../../utils/movies";
+import { formatShortDate } from "../../utils/dates";
 
 interface Props {
     year: FilmYear;
@@ -15,12 +16,6 @@ interface Props {
 
 const { year } = Astro.props;
 
-// Day and month only — the year is the heading above the list.
-const shortDate = (iso: string) =>
-    new Date(iso).toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-    });
 ---
 
 <LogYear label={year.label} count={year.films.length} noun="film">
@@ -30,9 +25,8 @@ const shortDate = (iso: string) =>
                 title={film.title}
                 chip={film.year}
                 favourite={film.liked}
-                meta={[film.rating && `★ ${film.rating}`, shortDate(film.watched)]
-                    .filter(Boolean)
-                    .join(" · ")}
+                rating={film.rating}
+                date={formatShortDate(film.watched)}
                 cover={film.cover}
             />
         ))

@@ -7,7 +7,9 @@
  */
 import BookSpine from "./BookSpine.astro";
 import ReadingStack from "./ReadingStack.astro";
+import Rating from "../ui/Rating.astro";
 import type { ShelfYear } from "../../utils/books";
+import { formatShortDate } from "../../utils/dates";
 
 interface Props {
     year: ShelfYear;
@@ -18,13 +20,13 @@ const { year } = Astro.props;
 // Finished only — the stack at the end of the row isn't in these totals.
 const pages = year.books.reduce((sum, book) => sum + (book.pages ?? 0), 0);
 
-const shortDate = (iso: string) =>
-    iso
-        ? new Date(iso).toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "short",
-          })
-        : "";
+const detailsFor = (book: ShelfYear["books"][number]) =>
+    [
+        book.authors,
+        book.pages && `${book.pages} pages`,
+        book.rating,
+        formatShortDate(book.finished),
+    ].filter((detail): detail is string | number => Boolean(detail));
 
 /*
   How wide this row stands at rest, in the units the books are cut from: a
@@ -69,14 +71,16 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
                 <span>
                     {book.title}
                     <i>
-                        {[
-                            book.authors,
-                            book.pages && `${book.pages} pages`,
-                            book.rating && `★ ${book.rating}`,
-                            shortDate(book.finished),
-                        ]
-                            .filter(Boolean)
-                            .join(" · ")}
+                        {detailsFor(book).map((detail, index) => (
+                            <>
+                                {index > 0 && <span aria-hidden="true"> · </span>}
+                                {typeof detail === "number" ? (
+                                    <Rating value={detail} />
+                                ) : (
+                                    detail
+                                )}
+                            </>
+                        ))}
                     </i>
                 </span>
             ))

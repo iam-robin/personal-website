@@ -51,6 +51,7 @@ export const componentNotes: Record<string, { description: string; href?: string
     Nav: { description: "The six links in my desktop navigation.", href: "/", note: "Hidden below 768px by design. Open the standalone preview on a wider screen to see it." },
     Pagination: { description: "Page links with the current page and gaps." },
     Placeholder: { description: "The temporary block for unfinished page content.", note: "A placeholder component is not a finished feature." },
+    Rating: { description: "A five-asterisk rating that also shows half steps.", href: "/movies" },
     RssDropdown: { description: "Feed links and copy-URL actions.", href: "/blog" },
     PopoverPanel: { description: "A native dropdown panel, positioned beside its trigger.", href: "/", note: "Nav and RssDropdown supply the trigger and its CSS anchor." },
     SectionRail: { description: "Article contents as a disclosure or a side rail.", href: "/work" },

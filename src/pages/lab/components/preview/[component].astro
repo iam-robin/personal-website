@@ -65,7 +65,7 @@ if (name === "TeaserSection") Object.assign(props, { title: "On my website", lin
 
 const seasonYears = ["LogRow", "LogYear"].includes(name) ? await getSeasonYears() : [];
 const season = seasonYears[0]?.seasons[0];
-const row = season ? { title: season.title, chip: season.season ? `S${season.season}` : null, favourite: season.favourite, meta: season.watching ? "Watching" : season.rating ? `★ ${season.rating}` : "", cover: season.cover } : null;
+const row = season ? { title: season.title, chip: season.season ? `S${season.season}` : null, favourite: season.favourite, rating: season.watching ? null : season.rating, meta: season.watching ? "Watching" : "", cover: season.cover } : null;
 const sections = [{ id: "sample-design", text: "Design" }, { id: "sample-code", text: "Code" }, { id: "sample-product", text: "Product" }];
 const glyphs = ["post", "project", "365", "robins-photos", "matchprint", "geeenerated", "lumon", "email", "github", "mastodon", "bluesky"];
 ---

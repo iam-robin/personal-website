@@ -7,6 +7,7 @@
 import LogYear from "../ui/LogYear.astro";
 import LogRow from "../ui/LogRow.astro";
 import type { SeasonYear } from "../../utils/series";
+import { formatShortDate } from "../../utils/dates";
 
 interface Props {
     year: SeasonYear;
@@ -18,14 +19,6 @@ const { year } = Astro.props;
 // list but hasn't been watched yet.
 const count = year.seasons.filter((season) => !season.watching).length;
 
-// Day and month only — the year is the heading above the list.
-const shortDate = (iso: string) =>
-    iso
-        ? new Date(iso).toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "short",
-          })
-        : "";
 ---
 
 <LogYear label={year.label} count={count} noun="season">
@@ -35,16 +28,9 @@ const shortDate = (iso: string) =>
                 title={season.title}
                 chip={season.season && `S${season.season}`}
                 favourite={season.favourite}
-                meta={
-                    season.watching
-                        ? "Watching"
-                        : [
-                              season.rating && `★ ${season.rating}`,
-                              shortDate(season.finished),
-                          ]
-                              .filter(Boolean)
-                              .join(" · ")
-                }
+                rating={season.watching ? null : season.rating}
+                date={season.watching ? "" : formatShortDate(season.finished)}
+                meta={season.watching ? "Watching" : ""}
                 cover={season.cover}
             />
         ))
