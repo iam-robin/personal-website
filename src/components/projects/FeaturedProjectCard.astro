@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import InkMark from "../ui/InkMark.astro";
-import { getFanImages, getFirstBodyImage, isPhotoFan } from "../../utils/projectFans";
+import { getFanImages, getFirstBodyImage } from "../../utils/projectFans";
 
 interface Props {
     project: CollectionEntry<"projects">;
@@ -12,8 +12,10 @@ const { project } = Astro.props;
 const { title, description, year, tags = [], draft, externalUrl } = project.data;
 const fan = getFanImages(project.id)?.slice(0, 3) ?? [];
 const primary = fan[0] ?? getFirstBodyImage(project.body);
-const rounded = !isPhotoFan(project.id);
 const isExternal = !!externalUrl;
+const cardTitleLines = project.id === "one-canvas-many-hands"
+    ? ["one canvas,", "many hands"]
+    : null;
 // Drafts retain the same card layout, but are not links to unpublished pages.
 const Tag = draft ? "article" : "a";
 const linkAttributes = draft ? {} : {
@@ -39,10 +41,7 @@ const linkAttributes = draft ? {} : {
                     width={260}
                     widths={[260]}
                     sizes="6rem"
-                    class:list={[
-                        "fan-card-image relative h-22 w-auto flex-none origin-bottom border border-ink/15 shadow-[var(--shadow-raised)] transition-[transform,box-shadow] duration-180 ease-out",
-                        { rounded },
-                    ]}
+                    class="fan-card-image relative h-22 w-auto flex-none origin-bottom border border-ink/15 shadow-[var(--shadow-raised)] transition-[transform,box-shadow] duration-180 ease-out"
                 />
             )) : primary && (
                 <Image
@@ -51,14 +50,18 @@ const linkAttributes = draft ? {} : {
                     width={420}
                     widths={[420]}
                     sizes="8rem"
-                    class="h-auto max-h-23 w-auto max-w-34 rounded border border-ink/15"
+                    class="h-auto max-h-23 w-auto max-w-34 border-0 shadow-none"
                 />
             )}
         </span>
         <span class="grid grid-rows-[auto_1fr_auto] gap-3">
             <span class="grid min-h-17 content-start gap-1 pr-8">
                 <span class="font-mono text-xs leading-relaxed text-ink-muted">{year}</span>
-                <strong class="text-lg font-bold leading-tight tracking-[-0.02em]">{title}</strong>
+                <strong class="text-lg font-bold leading-tight tracking-[-0.02em]">
+                    {cardTitleLines ? (
+                        <>{cardTitleLines[0]}<br />{cardTitleLines[1]}</>
+                    ) : title}
+                </strong>
             </span>
             <span class="self-start text-[0.9375rem] leading-relaxed text-ink-muted">{description}</span>
             <span class="flex min-h-7 flex-wrap gap-1.5 self-end">

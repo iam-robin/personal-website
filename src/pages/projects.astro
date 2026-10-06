@@ -1,43 +1,209 @@
 ---
 import SubpageLayout from "../layouts/SubpageLayout.astro";
-import ProjectCard from "../components/projects/ProjectCard.astro";
+import InkMark from "../components/ui/InkMark.astro";
+import FeaturedProjectCard from "../components/projects/FeaturedProjectCard.astro";
 import { getAllProjects } from "../utils/projects";
 
-const projects = await getAllProjects();
+const projects = (await getAllProjects()).map((project) => ({
+    ...project,
+    href: project.data.externalUrl || `/projects/${project.id}`,
+    external: Boolean(project.data.externalUrl),
+}));
+
+// The landing page deliberately stops at three. This page opens with a wider,
+// curated shelf; drafts and the remaining projects stay in the compact index.
+const cardProjectIds = new Set([
+    "robins-photos",
+    "geeenerated",
+    "one-canvas-many-hands",
+    "matchprint",
+    "365",
+    "oh-my",
+]);
+const cardProjects = projects.filter((project) => cardProjectIds.has(project.id));
+const indexed = projects.filter((project) => !cardProjects.includes(project));
 ---
 
 <SubpageLayout
     title="Projects"
     description="Side projects where I try ideas in code, design, generative art and small tools. Some stay small. A few actually become real."
 >
-    <ul class="divide-y divide-dotted divide-ink/30 border-y border-dotted border-ink/30">
-        {
-            projects.map((project) => (
-                <li
-                    class:list={[
-                        "list-item-image-hover-effect group relative",
-                        project.data.draft
-                            ? "cursor-not-allowed"
-                            : "cursor-pointer",
-                    ]}
-                >
-                    <ProjectCard
-                        slug={project.id}
-                        title={project.data.title}
-                        description={project.data.description}
-                        year={project.data.year}
-                        bgColor={project.data.bgColor}
-                        bgColorDark={project.data.bgColorDark}
-                        externalUrl={project.data.externalUrl}
-                        tags={project.data.tags}
-                        draft={project.data.draft}
-                        showFanPreview
-                        mobileFanUntil="md"
-                    />
-                </li>
-            ))
-        }
-    </ul>
+    <div class="project-overview">
+        <section class="card-section" aria-label="Selected projects">
+            <div class="card-grid">
+                {
+                    cardProjects.map((project) => (
+                        <FeaturedProjectCard project={project} />
+                    ))
+                }
+            </div>
+        </section>
+
+        <section class="project-index" aria-label="More projects">
+            <ul>
+                {
+                    indexed.map((project) => (
+                        <li>
+                            {project.data.draft ? (
+                                <div class="project-row is-draft" aria-disabled="true">
+                                    <h2>{project.data.title}</h2>
+                                    <p>{project.data.tags?.slice(0, 2).join(" · ")}</p>
+                                    <span class="row-year">{project.data.year}</span>
+                                    <span class="status">Draft</span>
+                                </div>
+                            ) : (
+                                <a
+                                    href={project.href}
+                                    target={project.external ? "_blank" : undefined}
+                                    rel={project.external ? "noopener noreferrer" : undefined}
+                                    class="project-row"
+                                >
+                                    <h2>{project.data.title}</h2>
+                                    <p>{project.data.tags?.slice(0, 2).join(" · ")}</p>
+                                    <span class="row-year">{project.data.year}</span>
+                                    <InkMark
+                                        name={project.external ? "arrow-external" : "arrow-internal"}
+                                        class="arrow-mark"
+                                    />
+                                    <span class="sr-only">
+                                        {project.external
+                                            ? "Opens on an external site in a new tab"
+                                            : "Opens the project page on this site"}
+                                    </span>
+                                </a>
+                            )}
+                        </li>
+                    ))
+                }
+            </ul>
+        </section>
+    </div>
 </SubpageLayout>
 
-<script src="../scripts/listHoverPreview.ts"></script>
+<style is:global>
+    .project-overview {
+        display: grid;
+        gap: 7rem;
+        inline-size: 100%;
+        min-inline-size: 0;
+    }
+
+    .card-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .card-grid > .project-card-slot {
+        min-inline-size: 0;
+        block-size: 100%;
+    }
+
+    .project-index ul { border-block: 1px dotted var(--color-ink-muted); }
+    .project-index li + li { border-block-start: 1px dotted var(--color-ink-muted); }
+
+    .arrow-mark {
+        inline-size: 1rem;
+        block-size: 1rem;
+        flex: none;
+    }
+
+    .project-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: .375rem .75rem;
+        min-block-size: 4.75rem;
+        padding-block: 1rem;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .project-row.is-draft { color: var(--color-ink-muted); }
+
+    .project-row h2 {
+        min-inline-size: 0;
+        font-size: var(--text-base);
+        font-weight: 700;
+        line-height: var(--leading-tight);
+        overflow-wrap: anywhere;
+    }
+
+    .project-row p {
+        grid-column: 1 / -1;
+        justify-self: start;
+        font: var(--text-xs)/var(--leading-relaxed) var(--font-mono);
+        color: var(--color-ink-muted);
+        text-align: start;
+    }
+
+    .project-row .row-year {
+        grid-column: 2;
+        grid-row: 1;
+        font: var(--text-xs)/var(--leading-relaxed) var(--font-mono);
+    }
+
+    .project-row .arrow-mark,
+    .project-row .status {
+        grid-column: 1;
+        grid-row: 3;
+        margin-block-start: .25rem;
+    }
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        justify-self: start;
+        inline-size: fit-content;
+        min-block-size: 1.75rem;
+        padding-inline: .625rem;
+        border: 1px dotted var(--color-ink-muted);
+        border-radius: 999rem;
+        font: var(--text-xs)/var(--leading-relaxed) var(--font-mono);
+        white-space: nowrap;
+    }
+
+    a.project-row:active { opacity: .75; }
+
+    @media (min-width: 40rem) {
+        .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (min-width: 48rem) {
+        .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (min-width: 60rem) {
+        .project-row {
+            grid-template-columns: minmax(12rem, 1fr) minmax(12rem, 1fr) 6rem 7.5rem;
+            align-items: center;
+            min-block-size: 4.5rem;
+        }
+        .project-row p {
+            grid-column: 2;
+            grid-row: 1;
+            justify-self: start;
+            text-align: start;
+        }
+        .project-row .row-year {
+            grid-column: 3;
+            justify-self: end;
+        }
+        .project-row .arrow-mark,
+        .project-row .status {
+            grid-column: 4;
+            grid-row: 1;
+            justify-self: end;
+            margin-block-start: 0;
+        }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        a.project-row:hover h2 {
+            text-decoration: underline;
+            text-decoration-thickness: from-font;
+            text-underline-offset: .2em;
+        }
+    }
+</style>

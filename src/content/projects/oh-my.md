@@ -7,7 +7,7 @@ year: "2018"
 bgColor: "#F59E0B"
 ---
 
-![](../../assets/projects/oh-my/Bildschirmfoto_2024-07-04_um_13.21.17.png)
+![The oh my browser activity dashboard](../../assets/projects/oh-my/teaser.png)
 
 For my master's thesis, I built «oh my», a Vue.js browser extension that records browsing habits and shows them on the new tab page. It also lets people limit distracting sites after a set amount of time or number of visits.
 

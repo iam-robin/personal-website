@@ -8,6 +8,9 @@ import photo11 from "../assets/photos/11.jpg";
 import photo10 from "../assets/photos/10.jpg";
 import photo02 from "../assets/photos/02.jpg";
 import photo03 from "../assets/photos/03.jpg";
+import canvasFlowerField from "../assets/projects/one-canvas-many-hands/01-flower-field-framed.webp";
+import canvasBirchForest from "../assets/projects/one-canvas-many-hands/04-birch-forest-framed.webp";
+import canvasWaterLilies from "../assets/projects/one-canvas-many-hands/05-water-lilies-framed.webp";
 
 // Fan images shown for a project on hover — stacked in the homepage hero,
 // cursor-following on /projects. Poster filenames are number-prefixed to
@@ -42,6 +45,11 @@ const dailyPhotos = Object.keys(dailyModules)
     .map((key) => dailyModules[key].default);
 
 const fansByProject: Record<string, ImageMetadata[]> = {
+    "one-canvas-many-hands": [
+        canvasBirchForest,
+        canvasFlowerField,
+        canvasWaterLilies,
+    ],
     matchprint: matchprintPosters,
     "robins-photos": fanPhotos,
     geeenerated: handcodedArt,
