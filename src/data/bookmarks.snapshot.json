@@ -1,5 +1,40 @@
 [
   {
+    "id": "818",
+    "title": "FrankMoji",
+    "url": "https://frankmoji.com/",
+    "added": "2026-10-02T09:33:19.596022Z",
+    "description": "A bold emoji set. Pixel-perfect, even on low-resolution screens. Installable color font. Supports Unicode 18 emoji.",
+    "tags": [
+      "design",
+      "emoji"
+    ],
+    "cover": "29bfcd6af2f877e5728d9adebb57141a.png"
+  },
+  {
+    "id": "813",
+    "title": "Attention is all you have",
+    "url": "https://alicegg.tech/2026/09/21/attention",
+    "added": "2026-09-22T09:15:37.623216Z",
+    "description": "The Tetris effect is one of psychology’s most easy to reproduce experiments.Simply spend a bit of time playing the eponymous game every day for a few weeks.A...",
+    "tags": [
+      "internet",
+      "slow-web"
+    ],
+    "cover": null
+  },
+  {
+    "id": "811",
+    "title": "Don't use AI to write",
+    "url": "https://paulbakker.io/writing/no-ai-for-writing/",
+    "added": "2026-09-21T15:21:19.549781Z",
+    "description": "Writing requires thinking, don't let an AI do the thinking for you.",
+    "tags": [
+      "ai"
+    ],
+    "cover": "cf9bf9804f81bb7c79b8a7e2a2198a2b.jpg"
+  },
+  {
     "id": "810",
     "title": "ui.camera — Product photography for software",
     "url": "https://ui.camera/",
@@ -24,6 +59,17 @@
       "resources"
     ],
     "cover": "34f27963e972db17df5777e33076af4d.png"
+  },
+  {
+    "id": "807",
+    "title": "No such thing as normal?",
+    "url": "https://designlobster.substack.com/p/no-such-thing-as-normal",
+    "added": "2026-09-18T06:09:35.929184Z",
+    "description": "A more interesting way to think about your competitors",
+    "tags": [
+      "design"
+    ],
+    "cover": "9377b7bb1c0931cf26b1bad33d648856.jpg"
   },
   {
     "id": "806",
