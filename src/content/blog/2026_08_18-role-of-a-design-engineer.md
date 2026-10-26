@@ -179,7 +179,7 @@ worth being coherent about. Ask me again in two years and I’ll probably have r
     [Syntax #1027](https://syntax.fm/show/1027/the-rise-of-the-design-engineer/transcript).
 
 [^4]:
-    I keep a note in my [digital garden](/garden/design/taste) collecting things other people have
+    I keep a note in my [notes](/notes/design/taste) collecting things other people have
     written about taste. The line that stuck with me most: “the question is no longer ‘can it be
     made?’ but ‘is it worth making?’”
 

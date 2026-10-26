@@ -55,7 +55,7 @@ const editedDay = note.edited ? formatDate(note.edited) : null;
         data-rotation={randomRotation}
     >
         <a
-            href={`/garden/${categorySlug(note.thema)}/${note.slug}`}
+            href={`/notes/${categorySlug(note.thema)}/${note.slug}`}
             class="hover-lift relative block p-2 no-underline"
             style={backgroundColorStyle}
         >

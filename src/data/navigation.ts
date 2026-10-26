@@ -21,7 +21,7 @@ export const navItems: NavItem[] = [
     { label: "Work", href: "/work" },
     { label: "Projects", href: "/projects" },
     { label: "Blog", href: "/blog" },
-    { label: "Garden", href: "/garden" },
+    { label: "Notes", href: "/notes" },
     {
         label: "Shelf",
         children: [

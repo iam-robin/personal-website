@@ -161,7 +161,7 @@ function folderShades(hex: string): Pick<ResolvedPaper, "folderFront" | "folderB
 const stocks = {
     /**
      * The neutral stock. Colour means you've gone somewhere, so the homepage
-     * and /404 stay blank — and so do /garden and /postcards, whose content
+     * and /404 stay blank — and so do /notes and /postcards, whose content
      * already arrives full of colour of its own. /books and /series are in
      * that company: a wall of spines and covers is the loudest thing on the
      * site, and a tinted stock underneath it just competes.

@@ -110,7 +110,7 @@ function metaDescription(note: GardenNote["data"]): string {
     const withContext =
         base.length >= 50
             ? base
-            : `${base || note.title}. A garden note about ${note.thema.toLowerCase()} from Robin Spielmann's Obsidian vault.`;
+            : `${base || note.title}. A note about ${note.thema.toLowerCase()} from Robin Spielmann's Obsidian vault.`;
 
     if (withContext.length <= 155) return withContext;
 
@@ -119,11 +119,11 @@ function metaDescription(note: GardenNote["data"]): string {
 }
 
 const noteDescription = metaDescription(note);
-const gardenTitleSuffix = " — Garden note";
+const noteTitleSuffix = " — Note";
 const documentTitle =
-    note.title.length + gardenTitleSuffix.length > 65
+    note.title.length + noteTitleSuffix.length > 65
         ? note.title
-        : `${note.title}${gardenTitleSuffix}`;
+        : `${note.title}${noteTitleSuffix}`;
 ---
 
 <Layout title={documentTitle} description={noteDescription}>
@@ -139,7 +139,7 @@ const documentTitle =
     </svg>
 
     <Button
-        href="/garden"
+        href="/notes"
         label="Close"
         iconOnly
         size="lg"
@@ -152,10 +152,10 @@ const documentTitle =
     <article
         class="effect relative z-30 mx-auto w-full max-w-shell lg:my-12"
         data-prev-note={previousNote
-            ? `/garden/${categorySlug(note.thema)}/${previousNote.slug}`
+            ? `/notes/${categorySlug(note.thema)}/${previousNote.slug}`
             : undefined}
         data-next-note={nextNote
-            ? `/garden/${categorySlug(note.thema)}/${nextNote.slug}`
+            ? `/notes/${categorySlug(note.thema)}/${nextNote.slug}`
             : undefined}
     >
         <!-- Main card with category background color -->
@@ -247,7 +247,7 @@ const documentTitle =
                         <div class="flex border-t border-dotted border-black/60">
                             {previousNote && (
                                 <a
-                                    href={`/garden/${categorySlug(note.thema)}/${previousNote.slug}`}
+                                    href={`/notes/${categorySlug(note.thema)}/${previousNote.slug}`}
                                     class={`${nextNote ? "w-1/2 border-r border-black/60" : "w-full"} cursor-pointer px-3 py-9 text-center transition-colors hover:bg-black/5`}
                                 >
                                     ← Previous note
@@ -255,7 +255,7 @@ const documentTitle =
                             )}
                             {nextNote && (
                                 <a
-                                    href={`/garden/${categorySlug(note.thema)}/${nextNote.slug}`}
+                                    href={`/notes/${categorySlug(note.thema)}/${nextNote.slug}`}
                                     class={`${previousNote ? "w-1/2" : "w-full"} cursor-pointer px-3 py-9 text-center transition-colors hover:bg-black/5`}
                                 >
                                     Next note →

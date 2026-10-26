@@ -27,7 +27,7 @@ for (const [path, source] of Object.entries(consumers)) {
 
 const groupNames: Record<string, string> = {
     ui: "Shared UI", identity: "Bird & section shell", home: "Homepage",
-    projects: "Projects", blog: "Blog", garden: "Garden", books: "Books",
+    projects: "Projects", blog: "Blog", garden: "Notes", books: "Books",
     bookmarks: "Bookmarks", movies: "Movies", series: "Series", shelf: "Shelf",
     postcards: "Postcards", work: "Work", lab: "Lab helpers",
 };

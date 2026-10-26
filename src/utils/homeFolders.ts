@@ -38,13 +38,13 @@ export async function getHomeFolders(): Promise<HomeFolder[]> {
         getNewestPostcards(PREVIEW_LIMIT),
     ]);
 
-    // Compute before reordering, so tied category counts match the garden page.
+    // Compute before reordering, so tied category counts match the notes page.
     const categoryColors = getCategoryColorMap(notes);
 
     return [
         {
-            label: "Garden",
-            href: "/garden",
+            label: "Notes",
+            href: "/notes",
             kind: "notes",
             items: notes
                 .toSorted((a, b) =>

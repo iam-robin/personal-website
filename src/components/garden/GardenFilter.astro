@@ -18,13 +18,13 @@ const { categories, colorMap, total, active = null } = Astro.props;
 ---
 
 <FilterBar>
-    <FilterTag href="/garden" active={active === null} count={total}>
+    <FilterTag href="/notes" active={active === null} count={total}>
         All
     </FilterTag>
     {
         categories.map((category) => (
             <FilterTag
-                href={`/garden/${categorySlug(category.name)}`}
+                href={`/notes/${categorySlug(category.name)}`}
                 active={active === category.name}
                 count={category.count}
             >
