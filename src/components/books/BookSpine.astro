@@ -31,6 +31,7 @@ const described = [
     book.pages && `${book.pages} pages`,
     book.rating && `rated ${book.rating} out of 5`,
     finishedLong && `finished ${finishedLong}`,
+    book.note && "my note on it is linked below the shelf",
 ]
     .filter(Boolean)
     .join(" · ");
@@ -51,9 +52,14 @@ const described = [
                 <span class="face-spine">
                     <span class="spine-title">{book.spineTitle}</span>
                     {
-                        book.favourite && (
-                            <span class="spine-heart">
-                                <Icon name="ph:heart-fill" />
+                        (book.favourite || book.note) && (
+                            <span class="spine-marks">
+                                {book.favourite && (
+                                    <Icon name="ph:heart-fill" />
+                                )}
+                                {book.note && (
+                                    <Icon name="ph:pen-nib-fill" />
+                                )}
                             </span>
                         )
                     }
@@ -81,6 +87,17 @@ const described = [
                     }
                 </span>
             </span>
+            {
+                /* A title on the 3D-turned spine is never hit-tested, so a
+                   flat target sits over the pen instead. */
+                book.note && (
+                    <span
+                        class:list={["note-hit", book.favourite && "is-second"]}
+                        title="I wrote a note on this"
+                        aria-hidden="true"
+                    />
+                )
+            }
         </summary>
         {/* The disclosure payload — the same content ShelfRow shows under the
             row, in place, so "expanded" actually reveals something. */}
@@ -406,26 +423,57 @@ const described = [
         letter-spacing: 0.01em;
     }
 
-    /* Out of flow rather than a second flex child: in flow it would push the
-       title up off the foot on exactly the books that have one. */
-    .spine-heart {
+    .shelf-book {
+        --mark: clamp(10px, calc(var(--t) * 0.36), 14px);
+        --mark-gap: 0.4rem;
+    }
+
+    /* Out of flow, or they'd push the title up off the foot. */
+    .spine-marks {
         position: absolute;
         top: 1rem;
         inset-inline: 0;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--mark-gap);
         color: var(--text);
     }
 
-    .spine-heart :global(svg) {
+    .spine-marks :global(svg) {
         display: block;
-        width: clamp(7px, calc(var(--t) * 0.26), 11px);
-        height: auto;
+        width: var(--mark);
+        height: var(--mark);
     }
 
-    /* The heart is out of flow, so it can't hold a long title clear itself. */
-    .face-spine:has(.spine-heart) {
-        padding-top: 1.65rem;
+    /* Clearance for the out-of-flow marks above the title. */
+    .face-spine:has(.spine-marks) {
+        padding-top: calc(1rem + var(--mark) + 0.6rem);
+    }
+
+    .face-spine:has(.spine-marks > :nth-child(2)) {
+        padding-top: calc(1rem + var(--mark) * 2 + var(--mark-gap) + 0.6rem);
+    }
+
+    /* Closed, the spine renders 1:1 over the slot, so the marks' own
+       offsets place this. */
+    .note-hit {
+        --hit-pad: 0.25rem;
+        position: absolute;
+        top: calc(1rem - var(--hit-pad));
+        left: 50%;
+        width: calc(var(--mark) + var(--hit-pad) * 2);
+        height: calc(var(--mark) + var(--hit-pad) * 2);
+        translate: -50% 0;
+        z-index: 1;
+    }
+
+    .note-hit.is-second {
+        top: calc(1rem + var(--mark) + var(--mark-gap) - var(--hit-pad));
+    }
+
+    .shelf-book:has(details[open]) .note-hit {
+        display: none;
     }
 
     /* utils/books.ts only hands out the second line where the spine can take

@@ -63,14 +63,14 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
         </ul>
     </div>
 
-    {/* A positional restatement of what the open book already announces in
-        place, so it stays out of the accessibility tree. */}
-    <p class="shelf-detail" aria-hidden="true">
+    {/* The text restates what the open book announces in place, so it's
+        aria-hidden; the note link isn't. */}
+    <p class="shelf-detail">
         {
             year.books.map((book) => (
                 <span>
-                    {book.title}
-                    <i>
+                    <span aria-hidden="true">{book.title}</span>
+                    <i aria-hidden="true">
                         {detailsFor(book).map((detail, index) => (
                             <>
                                 {index > 0 && <span aria-hidden="true"> · </span>}
@@ -82,6 +82,13 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
                             </>
                         ))}
                     </i>
+                    {book.note && (
+                        <a class="shelf-note" href={book.note}>
+                            Read my note
+                            <span class="sr-only"> on {book.spineTitle}</span>{" "}
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    )}
                 </span>
             ))
         }
@@ -196,8 +203,8 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
     .shelf-detail {
         display: grid;
         min-height: 3.25rem;
-        /* 0.75rem minus the scroller's bottom padding above. */
-        margin-top: 0.25rem;
+        /* 1.25rem minus the scroller's bottom padding above. */
+        margin-top: 0.75rem;
         font-family: var(--font-mono);
         font-size: var(--text-xs);
         line-height: 1.5;
@@ -207,13 +214,26 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
         grid-area: 1 / 1;
     }
 
-    .shelf-detail i {
+    .shelf-detail i,
+    .shelf-note {
         display: block;
         font-style: normal;
         /* Authors, page count, rating, date — real content, so a colour at AA
            rather than an opacity. The wrapper is aria-hidden (the data is in
            the row above), but it is what a sighted reader actually reads. */
         color: var(--color-ink-muted);
+    }
+
+    .shelf-note {
+        width: fit-content;
+        margin-top: 0.75rem;
+        color: var(--color-ink);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .shelf-note:hover {
+        text-decoration: none;
     }
 
     /*

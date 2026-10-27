@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 type Book = CollectionEntry<"books">;
 import { hexToOklab, normaliseHex } from "./paper";
 import { createSeededRandom } from "./seededRandom";
+import { getMediaNoteLookup, type MediaNoteLookup } from "./garden";
 
 /**
  * Everything /books needs, resolved at build time.
@@ -57,6 +58,8 @@ export interface ShelfBook {
     favourite: boolean;
     /** 2 when the title overruns one line and the spine is thick enough. */
     titleLines: 1 | 2;
+    /** Garden note URL, if there is one. */
+    note: string | null;
 }
 
 export interface ShelfYear {
@@ -132,7 +135,7 @@ function toNumber(value: unknown): number | null {
     return Number.isFinite(n) && n > 0 ? n : null;
 }
 
-function resolve(book: Book): ShelfBook {
+function resolve(book: Book, noteFor: MediaNoteLookup): ShelfBook {
     const pages = toNumber(book.data.pages);
     const cover = getBookCover(book.data.cover);
 
@@ -191,6 +194,7 @@ function resolve(book: Book): ShelfBook {
             thickness >= TWO_LINE_THICKNESS
                 ? 2
                 : 1,
+        note: noteFor(book.data.title),
     };
 }
 
@@ -200,10 +204,12 @@ function resolve(book: Book): ShelfBook {
  * the end of the current year rather than shelved among the finished books.
  */
 export async function getShelfYears(): Promise<ShelfYear[]> {
-    const [finished, reading] = await Promise.all([
+    const [finished, reading, noteFor] = await Promise.all([
         getCollection("books", ({ data }) => data.group === "abgeschlossen"),
         getCollection("books", ({ data }) => data.group === "aktiv"),
+        getMediaNoteLookup("books"),
     ]);
+    const toShelf = (book: Book) => resolve(book, noteFor);
 
     const byYear = new Map<number, Book[]>();
     for (const book of finished) {
@@ -231,8 +237,8 @@ export async function getShelfYears(): Promise<ShelfYear[]> {
                         new Date(a.data.finished ?? 0).getTime() -
                         new Date(b.data.finished ?? 0).getTime(),
                 )
-                .map(resolve),
-            reading: year === currentYear ? reading.map(resolve) : [],
+                .map(toShelf),
+            reading: year === currentYear ? reading.map(toShelf) : [],
         }));
 }
 

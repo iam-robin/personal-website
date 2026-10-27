@@ -9,12 +9,15 @@ import LogYear from "../ui/LogYear.astro";
 import LogRow from "../ui/LogRow.astro";
 import type { FilmYear } from "../../utils/movies";
 import { formatShortDate } from "../../utils/dates";
+import { getMediaNoteLookup } from "../../utils/garden";
 
 interface Props {
     year: FilmYear;
 }
 
 const { year } = Astro.props;
+
+const noteFor = await getMediaNoteLookup("movies");
 
 ---
 
@@ -28,6 +31,7 @@ const { year } = Astro.props;
                 rating={film.rating}
                 date={formatShortDate(film.watched)}
                 cover={film.cover}
+                note={noteFor(film.title)}
             />
         ))
     }

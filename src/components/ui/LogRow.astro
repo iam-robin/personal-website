@@ -17,6 +17,8 @@ interface Props {
     meta?: string;
     /** Remote poster URL. Absent is fine — the row just has nothing to show. */
     cover?: string | null;
+    /** Garden note URL. Marks the row and makes it a link. */
+    note?: string | null;
 }
 
 const {
@@ -27,6 +29,7 @@ const {
     date = "",
     meta = "",
     cover,
+    note,
 } = Astro.props;
 ---
 
@@ -57,12 +60,42 @@ const {
             width there and the cap keeps the longest title off the meta. */
         }
         <div class="flex min-w-0 items-center gap-2 md:max-w-[75%] md:shrink-0">
-            <p class="truncate font-mono text-sm" title={title}>{title}</p>
+            <p class="truncate font-mono text-sm" title={title}>
+                {
+                    note ? (
+                        /* Stretched over the row, which is the positioned box. */
+                        <a
+                            href={note}
+                            class="underline-offset-4 group-hover:underline after:absolute after:inset-0 after:content-['']"
+                        >
+                            {title}
+                            <span class="sr-only"> — read my note</span>
+                        </a>
+                    ) : (
+                        title
+                    )
+                }
+            </p>
             {
                 chip && (
                     <span class="shrink-0 font-mono text-xs text-ink-muted">
                         {chip}
                     </span>
+                )
+            }
+            {
+                note && (
+                    /* Positioned above the title's stretched ::after, or it
+                       never gets the hover for its tooltip. */
+                    <a
+                        href={note}
+                        tabindex="-1"
+                        aria-hidden="true"
+                        title="I wrote a note on this"
+                        class="relative shrink-0 opacity-55"
+                    >
+                        <Icon name="ph:pen-nib-fill" width={12} />
+                    </a>
                 )
             }
             {
