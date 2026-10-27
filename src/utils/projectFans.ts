@@ -56,10 +56,6 @@ const fansByProject: Record<string, ImageMetadata[]> = {
     "365": dailyPhotos,
 };
 
-/** Photo fans print square; drawn and rendered work keeps a slight rounding. */
-export const isPhotoFan = (projectId: string): boolean =>
-    projectId === "robins-photos" || projectId === "365";
-
 export function getFanImages(projectId: string): ImageMetadata[] | null {
     // An empty array would still read as "has a fan" and render a bare box —
     // the glob-backed fans are empty until their folder is filled.
