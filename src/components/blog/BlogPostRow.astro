@@ -9,7 +9,7 @@
  */
 import type { CollectionEntry } from "astro:content";
 import { categoryLabel } from "../../utils/blog";
-import InkMark from "../ui/InkMark.astro";
+import { Icon } from "astro-icon/components";
 
 interface Props {
     post: CollectionEntry<"blog">;
@@ -31,7 +31,12 @@ const formatDate = (date: Date) =>
     href={`/blog/${post.id}`}
     class="ink-row flex items-start gap-3 py-4 font-mono sm:gap-4 sm:py-5"
 >
-    <InkMark name="post" class="ink-row-mark h-5 w-5 shrink-0 sm:mt-px" />
+    <Icon
+        name="ph:file-text-bold"
+        size={20}
+        aria-hidden="true"
+        class="ink-row-mark shrink-0 sm:mt-px"
+    />
     <span
         class="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-start sm:gap-4"
     >

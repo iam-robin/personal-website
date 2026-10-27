@@ -5,7 +5,7 @@ import ArticleLayout from "../layouts/ArticleLayout.astro";
 import Button from "../components/ui/Button.astro";
 import Link from "../components/ui/Link.astro";
 import RoleDiagram from "../components/work/RoleDiagram.astro";
-import InkMark from "../components/ui/InkMark.astro";
+import { Icon } from "astro-icon/components";
 import portrait from "../assets/robin-portrait.avif";
 import {
     graphSchema,
@@ -26,22 +26,22 @@ const metaDescription =
 
 const facets: { icon: string; title: string; body: string }[] = [
     {
-        icon: "build",
+        icon: "ph:code-bold",
         title: "Building it for real",
         body: "A design engineer is being able to implement the interfaces and work together with other developers on the codebase. Nothing gets lost between the design and what ships, and the person who drew it handles the part a design file can't hold: real-world cases, the states nobody sketched, accessibility, performance.",
     },
     {
-        icon: "feel",
+        icon: "ph:eye-bold",
         title: "Look and feel",
         body: "It's not just important how a product looks, but also how it feels while it's being used. Microinteractions, states, the small bits of feedback that confirm something happened. On most teams nobody owns that part. A design engineer is the person who does.",
     },
     {
-        icon: "longevity",
+        icon: "ph:heart-bold",
         title: "Longevity",
         body: "Shipping a product once isn't the job. A design engineer helps setting the guidelines and rules together with the design and development team, so the quality doesn't erode with every feature added after launch.",
     },
     {
-        icon: "both-languages",
+        icon: "ph:chat-circle-bold",
         title: "Speaking both languages",
         body: "Designers and developers judge the same work by different criteria. The design engineer speaks both, and keeps the two sides building one thing instead of talking past each other.",
     },
@@ -173,9 +173,11 @@ const structuredData = graphSchema([
                         facets.map((facet) => (
                             <div>
                                 <h3 class="flex items-center gap-2.5 text-prose font-bold">
-                                    <InkMark
+                                    <Icon
                                         name={facet.icon}
-                                        class="h-5 w-5 shrink-0 opacity-60"
+                                        size={20}
+                                        aria-hidden="true"
+                                        class="shrink-0 opacity-60"
                                     />
                                     {facet.title}
                                 </h3>

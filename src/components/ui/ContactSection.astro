@@ -1,10 +1,12 @@
 ---
 /** Email and postcards are the primary actions; social links form the address book. */
 import { contactChannels as channels, contactLinks } from "../../data/links";
-import InkMark from "./InkMark.astro";
+import { Icon } from "astro-icon/components";
 import PostcardStampPreview from "../postcards/PostcardStampPreview.astro";
 
-const socialChannels = channels.filter((channel) => channel.icon !== "email");
+const socialChannels = channels.filter(
+    (channel) => channel !== contactLinks.email,
+);
 const leavesSite = (href: string) =>
     href.startsWith("http") || href.startsWith("mailto:");
 const externalAttrs = (href: string, me?: boolean) =>
@@ -55,9 +57,11 @@ const detailClass = "font-mono text-[0.8125rem] leading-normal font-normal text-
                     {...externalAttrs(channel.href, channel.me)}
                     class="group grid grid-cols-[1.25rem_minmax(0,1fr)_auto] items-center gap-4 border-b border-dotted border-ink/30 py-3.5 font-mono text-[0.875rem] leading-normal min-[54rem]:flex-1 @max-[34rem]:grid-cols-[1.25rem_minmax(0,1fr)]"
                 >
-                    <InkMark
+                    <Icon
                         name={channel.icon}
-                        class="h-5 w-5 opacity-60 transition-opacity group-hover:opacity-100"
+                        size={20}
+                        aria-hidden="true"
+                        class="opacity-60 transition-opacity group-hover:opacity-100"
                     />
                     <span class="underline-offset-4 group-hover:underline">{channel.label}</span>
                     <small class="text-ink-muted @max-[34rem]:col-start-2">

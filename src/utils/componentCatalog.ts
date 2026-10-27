@@ -32,7 +32,7 @@ const groupNames: Record<string, string> = {
     postcards: "Postcards", work: "Work", lab: "Lab helpers",
 };
 const order = Object.keys(groupNames);
-const helpers = new Set(["BirdParts", "InkDefs", "WorldMapSvg"]);
+const helpers = new Set(["BirdParts", "WorldMapSvg"]);
 
 export const componentCatalog = Object.entries(components).map(([path]) => {
     const source = sourcePath(path);

@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
-import InkMark from "../ui/InkMark.astro";
+import { Icon } from "astro-icon/components";
 import { getFanImages, getFirstBodyImage } from "../../utils/projectFans";
 
 interface Props {
@@ -28,9 +28,11 @@ const linkAttributes = draft ? {} : {
 <Tag {...linkAttributes} class="project-card-slot relative block rounded-xl border border-dashed border-inset">
     <span class="project-card relative grid h-full origin-center grid-rows-[auto_1fr] gap-6 overflow-visible rounded-xl bg-surface p-5 pr-12 transition-[transform,background-color,box-shadow] duration-180 ease-out">
         {!draft && (
-            <InkMark
-                name={isExternal ? "arrow-external" : "arrow-internal"}
-                class="absolute right-4 top-4 h-5 w-5 transition-transform duration-180 ease-out"
+            <Icon
+                name={isExternal ? "ph:arrow-up-right-bold" : "ph:arrow-right-bold"}
+                size={20}
+                aria-hidden="true"
+                class="card-arrow absolute right-4 top-4 transition-transform duration-180 ease-out"
             />
         )}
         <span class="fan-card-preview flex min-h-23 items-end pt-1 pb-2 transition-transform duration-180 ease-out" aria-hidden="true">
@@ -109,7 +111,7 @@ const linkAttributes = draft ? {} : {
             box-shadow: var(--shadow-lifted);
         }
 
-        .project-card-slot:hover .project-card :global(.ink-mark) {
+        .project-card-slot:hover .project-card :global(.card-arrow) {
             transform: translate(0.125rem, -0.125rem) rotate(6deg);
         }
 

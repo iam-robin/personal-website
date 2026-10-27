@@ -4,7 +4,7 @@ import Button from "../../../../components/ui/Button.astro";
 import Link from "../../../../components/ui/Link.astro";
 import FilterBar from "../../../../components/ui/FilterBar.astro";
 import FilterTag from "../../../../components/ui/FilterTag.astro";
-import InkMark from "../../../../components/ui/InkMark.astro";
+import { Icon } from "astro-icon/components";
 import LogRow from "../../../../components/ui/LogRow.astro";
 import LogYear from "../../../../components/ui/LogYear.astro";
 import SectionRail from "../../../../components/ui/SectionRail.astro";
@@ -64,7 +64,6 @@ const seasonYears = ["LogRow", "LogYear"].includes(name) ? await getSeasonYears(
 const season = seasonYears[0]?.seasons[0];
 const row = season ? { title: season.title, chip: season.season ? `S${season.season}` : null, favourite: season.favourite, rating: season.watching ? null : season.rating, meta: season.watching ? "Watching" : "", cover: season.cover } : null;
 const sections = [{ id: "sample-design", text: "Design" }, { id: "sample-code", text: "Code" }, { id: "sample-product", text: "Product" }];
-const glyphs = ["post", "project", "365", "robins-photos", "matchprint", "geeenerated", "lumon", "email", "github", "mastodon", "bluesky"];
 ---
 
 <Layout title={`${name} · Component lab · Robin Spielmann`} description={`An isolated preview of ${entry.source}.`} noindex>
@@ -76,10 +75,9 @@ const glyphs = ["post", "project", "365", "robins-photos", "matchprint", "geeene
             <p class="sample-label">Variants · demo buttons, no saved actions</p>
             <div class="sample-row">{(["primary", "secondary", "outline", "ghost", "plain"] as const).map((variant) => <Button variant={variant}>{variant}</Button>)}</div>
             <p class="sample-label">Sizes</p><div class="sample-row">{(["sm", "md", "lg"] as const).map((size) => <Button size={size}>{size}</Button>)}</div>
-            <p class="sample-label">Shape & states</p><div class="sample-row"><Button shape="box">Box</Button><Button disabled>Disabled</Button><Button iconOnly label="Email example"><InkMark name="email" class="h-4 w-4" /></Button><Button href="/lab/components">Link button</Button></div>
+            <p class="sample-label">Shape & states</p><div class="sample-row"><Button shape="box">Box</Button><Button disabled>Disabled</Button><Button iconOnly label="Email example"><Icon name={contactLinks.email.icon} size={16} aria-hidden="true" /></Button><Button href="/lab/components">Link button</Button></div>
         </> : name === "Link" ? <div class="sample-row"><Link href="/">Home</Link><Link href="/projects" arrow>My projects</Link><Link href={contactLinks.github.href} external>{contactLinks.github.label}</Link></div>
         : name === "FilterBar" || name === "FilterTag" ? <FilterBar><FilterTag href="/lab/components" active count={componentCatalog.length}>All components</FilterTag><FilterTag href="/lab/components?area=ui" count={componentCatalog.filter((item) => item.group === "ui").length}>Shared UI</FilterTag><FilterTag href="/lab/components?area=home">Homepage</FilterTag></FilterBar>
-        : name === "InkMark" ? <div class="glyph-grid">{glyphs.map((name) => <div><InkMark name={name} class="h-8 w-8" /><span>{name}</span></div>)}</div>
         : name === "LogRow" || name === "LogYear" ? row ? name === "LogRow" ? <ul><LogRow {...row} /></ul> : <LogYear label={seasonYears[0].label} count={1} noun="season"><LogRow {...row} /></LogYear> : <p>No series entries are available for this preview.</p>
         : name === "SectionRail" ? <>
             <SectionRail sections={sections} variant="inline" label="Contents, inline" />
@@ -98,8 +96,6 @@ const glyphs = ["post", "project", "365", "robins-photos", "matchprint", "geeene
     .sample-label { font: .75rem/1.6 var(--font-mono); color: var(--color-ink-muted); margin-block: 0 .875rem; }
     .sample-label:not(:first-of-type) { margin-block-start: 2rem; }
     .sample-row { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
-    .glyph-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: 1.5rem; }
-    .glyph-grid > div { display: flex; flex-direction: column; align-items: start; gap: .75rem; font: .75rem/1.5 var(--font-mono); }
     .slot-sample { padding-block: 1.5rem; font-family: var(--font-mono); }
     .rail-sample { display: grid; grid-template-columns: minmax(6rem, 1fr) 2fr; gap: 2rem; margin-block-start: 2rem; }
     .sample-sections { display: grid; gap: 2rem; }

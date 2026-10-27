@@ -1,6 +1,5 @@
 ---
 import "../styles/global.css";
-import InkDefs from "../components/ui/InkDefs.astro";
 import { getPaperKey, papers } from "../utils/paper";
 
 interface Props {
@@ -178,7 +177,6 @@ const serializedStructuredData = structuredData
         data-paper={paperKey}
         style={`--paper: ${paper.hex}; --surface: ${paper.surface}; --inset: ${paper.inset}`}
     >
-        <InkDefs />
         <slot />
     </body>
 </html>

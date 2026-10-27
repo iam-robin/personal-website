@@ -16,7 +16,7 @@
  * utils/mastodon.ts. What arrives here is already safe to print.
  */
 import { getMastodonThread } from "../../utils/mastodon";
-import InkMark from "../ui/InkMark.astro";
+import { Icon } from "astro-icon/components";
 import Link from "../ui/Link.astro";
 import MastodonReply from "./MastodonReply.astro";
 
@@ -79,7 +79,7 @@ const shownCount = thread
                                 ›
                             </span>
                             <span aria-hidden="true" class="inline-flex">
-                                <InkMark name="mastodon" class="h-4 w-4" />
+                                <Icon name="ph:mastodon-logo-bold" size={16} />
                             </span>
                             <span id="mastodon-replies">
                                 Replies ({shownCount})
@@ -132,7 +132,7 @@ const shownCount = thread
                         class="flex items-center gap-2 font-mono text-xs font-bold tracking-wide"
                     >
                         <span aria-hidden="true" class="inline-flex">
-                            <InkMark name="mastodon" class="h-4 w-4" />
+                            <Icon name="ph:mastodon-logo-bold" size={16} />
                         </span>
                         Join in
                     </h2>
