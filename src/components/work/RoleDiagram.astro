@@ -1,10 +1,7 @@
 ---
 /**
- * "What is a design engineer" as a hand-drawn Venn: Design ∩ Code ∩ Product,
- * with the bird logo in the shared overlap. The circles run through the same
- * wobble filter as the logo; translucent fills darken the intersections on
- * their own, so no clip path is needed. Labels stay outside the filter to
- * remain legible.
+ * Translucent fills darken the overlaps on their own. Labels stay outside the
+ * wobble filter to remain legible.
  */
 import Bird from "../Bird.astro";
 
@@ -75,9 +72,8 @@ const { class: className } = Astro.props;
         width: 100%;
         height: auto;
     }
-    /* Seat the logo in the triple-overlap of the three circles, small enough
-       that it never crosses a circle outline. Centre (150, 130) in the
-       300×285 viewBox → 50% / 45.6%; 14% height ≈ 40 viewBox units. */
+    /* Centre (150, 130) in the 300x285 viewBox, small enough to stay inside every
+       circle. */
     .role-diagram__bird {
         position: absolute;
         top: 45.6%;

@@ -1,25 +1,17 @@
 ---
-// Robin bird logo — every state in one SVG, cross-faded on opacity so the
-// shared feTurbulence filter rasterizes once.
-//
-// The paths for the three moods the postcard stamp also draws live in
-// src/data/birdShape.ts. Angry stays inline: its brows need a <mask id>, which
-// the stamp generator can't emit.
+// Every state in one SVG, cross-faded on opacity so the shared filter
+// rasterizes once. Paths live in src/data/birdShape.ts; angry stays inline
+// (its <mask id> can't go into stamps).
 import BirdParts from "./BirdParts.astro";
 import { BIRD_MOODS } from "../data/birdShape";
 
 interface Props {
     class?: string;
-    /**
-     * Interactive birds are <button>s the script targets as `button.bird`.
-     * False renders a <span> the script never picks up — for decorative
-     * birds, e.g. inside a link.
-     */
+    /** False renders a <span> the script ignores, e.g. for a bird inside a link. */
     interactive?: boolean;
 }
 const { class: className, interactive = true } = Astro.props;
 
-// Unique filter id so multiple instances on a page don't collide.
 const uid = Math.random().toString(36).slice(2, 8);
 const filterId = `bird-turbulence-${uid}`;
 const angryMaskId = `bird-angry-mask-${uid}`;
@@ -57,14 +49,10 @@ const tagProps: Record<string, string> = interactive
         </filter>
 
         <g filter={`url(#${filterId})`}>
-            <!-- Default (resting) state -->
             <g class="bird-state bird-default">
                 <BirdParts parts={BIRD_MOODS.resting.parts} />
             </g>
 
-            <!-- Startled state. The transform carries a jump offset
-                 (+12 right, -20 up) on top of the alignment, so the bird looks
-                 like it hops up and to the right when surprised. -->
             <g
                 class="bird-state bird-startled"
                 transform={BIRD_MOODS.startled.logoTransform}
@@ -72,8 +60,6 @@ const tagProps: Record<string, string> = interactive
                 <BirdParts parts={BIRD_MOODS.startled.parts} />
             </g>
 
-            <!-- Love state (easter egg: the bird has just eaten a crumb —
-                 see BirdFeeder). Eyes shut, heart overhead. -->
             <g
                 class="bird-state bird-love"
                 transform={BIRD_MOODS.smitten.transform}
@@ -81,10 +67,7 @@ const tagProps: Record<string, string> = interactive
                 <BirdParts parts={BIRD_MOODS.smitten.parts} />
             </g>
 
-            <!-- Angry state (easter egg: three clicks in a row). Drawn ~4%
-                 smaller than the resting state; the transform matches the two
-                 body sizes and aligns on the body center so it stays in place
-                 and the same size as the other birds. -->
+            <!-- Easter egg: three clicks in a row. Scaled to match the resting bird. -->
             <g class="bird-state bird-angry" transform="translate(-1.78 -4.96) scale(1.0385)">
                 <path d="M37.753 82.7902L0 48.4693L12.0123 36.457L58.3455 72.494L37.753 82.7902Z" fill="currentColor"></path>
                 <path d="M70.3581 142.852C97.8427 142.852 120.123 120.571 120.123 93.0866C120.123 65.602 97.8427 43.3213 70.3581 43.3213C42.8734 43.3213 20.5928 65.602 20.5928 93.0866C20.5928 120.571 42.8734 142.852 70.3581 142.852Z" fill="currentColor"></path>
@@ -121,25 +104,17 @@ const tagProps: Record<string, string> = interactive
         line-height: 0;
         -webkit-tap-highlight-color: transparent;
     }
-    /* Busy eating — the click handler ignores it, so don't offer the pointer. */
     .bird.is-feeding {
         cursor: default;
     }
     .bird svg {
         height: 100%;
         width: auto;
-        /* The scaled-up startled state's tail tip reaches a few px past the
-           left edge; let it paint into the surrounding whitespace. */
+        /* The startled state's tail reaches past the left edge. */
         overflow: visible;
     }
-    /* Swap between states. Resting shows the default; hover / .is-startled
-       shows the startled state; .is-angry shows the angry state. Instant — no
-       transition. The angry rules come last so a click wins over hover.
-
-       .is-eating shows the love state; BirdFeeder sets it while the bird
-       swallows a crumb. It gets its own class because the click handler below
-       owns .is-angry and clears it on its own timer, which would cut a meal
-       short. */
+    /* Instant swaps; angry comes last so a click wins over hover. .is-eating is
+       separate because the click handler clears .is-angry on its own timer. */
     .bird-startled,
     .bird-love,
     .bird-angry {
@@ -175,10 +150,8 @@ const tagProps: Record<string, string> = interactive
     for (const btn of document.querySelectorAll<HTMLButtonElement>("button.bird")) {
         let visualTimer: ReturnType<typeof setTimeout>;
         btn.addEventListener("click", () => {
-            // While the feeder has the bird working a crumb it owns the
-            // expression (.is-eating). An angry state would paint on top of it,
-            // and the reset timer below would then clear it mid-meal — so
-            // clicks are inert until the bird is home.
+            // The feeder owns the expression while the bird eats; ignore clicks until
+            // it's home.
             if (btn.classList.contains("is-feeding")) return;
             clearTimeout(visualTimer);
             btn.classList.add("is-angry");

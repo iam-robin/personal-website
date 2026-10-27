@@ -1,10 +1,6 @@
 ---
 import Button from "./Button.astro";
 import PopoverPanel from "./PopoverPanel.astro";
-/**
- * RSS feed dropdown: an icon that opens a flyout listing the site's feeds,
- * each with copy-URL and open-feed actions. Ported from v3.
- */
 import { Icon } from "astro-icon/components";
 
 const rssFeeds = [
@@ -82,17 +78,8 @@ const rssFeeds = [
 </div>
 
 <style>
-    /*
-      Copy -> check confirmation. This swap is the only signal the clipboard
-      write landed, so it cross-fades rather than cutting: both icons stay in
-      the DOM, stacked, and trade opacity/scale/blur. `display` can't
-      transition, which is why the old .hidden toggle had no motion at either
-      end. The state class sits on this span rather than the <Button> so the
-      rule never depends on scoping reaching another component's root.
-
-      No green: the check inherits currentColor like every other icon here,
-      and the palette in theme/colors.css is ink, paper and surface only.
-    */
+    /* The only sign the copy worked, so it cross-fades. The state class sits on
+       this span so the rule never relies on scoping reaching <Button>'s root. */
     .icon-swap :global(svg) {
         position: absolute;
         inset: 0;
@@ -132,12 +119,9 @@ const rssFeeds = [
         if (!dropdown || dropdown.dataset.initialized) return;
         dropdown.dataset.initialized = "true";
 
-        // Copy feed URL to clipboard
         dropdown.querySelectorAll(".rss-copy-btn").forEach((button) => {
             const swap = button.querySelector(".icon-swap");
-            // Per button: a second click while the check is still showing has
-            // to restart the two seconds, not inherit the first click's
-            // deadline and reset early.
+            // Per button, so a second click restarts the two seconds.
             let resetTimer: ReturnType<typeof setTimeout>;
 
             button.addEventListener("click", async (e) => {

@@ -2,10 +2,6 @@
     @apply flex justify-center items-center;
 }
 
-/*
-  Analog text-marker highlight: a skewed, slightly rotated swatch with
-  hand-cut corners and uneven ink density, drawn behind the text.
-*/
 .marker {
     --marker-color: var(--color-inset);
     position: relative;
@@ -29,46 +25,29 @@
     transition: background-color 0.15s ease-out;
 }
 
-/* The italic tilt on hover used to apply to every link on the site. It now
-   belongs to this one highlighted link in the hero and nowhere else. */
 a.marker:hover {
     --marker-color: color-mix(in srgb, var(--color-ink) 10%, var(--color-inset));
     font-style: italic;
 }
 
-/*
-  The shared hover for every teaser row — projects, blog, contact. One
-  definition on purpose: the three lists each grew their own and drifted.
-
-  The row wakes up rather than lighting up: the mark comes forward, the title
-  underlines, the meta goes to full strength. Parts opt in with
-  .ink-row-{mark,title,meta}; anything unmarked stays put.
-*/
+/* Shared hover for teaser rows. Parts opt in with .ink-row-{mark,title,meta}. */
 .ink-row {
-    /* 0.55, not 0.4: the marks are icons, so the bar is 3:1 rather than 4.5:1,
-       and 0.55 ink measures 3.44:1 on the tightest stock. Still an opacity
-       because it dials a stroke's weight, not a text colour. */
+    /* Icons need 3:1, and 0.55 ink measures 3.44:1 on the tightest stock. */
     --ink-row-mark: 0.55;
 }
 
 .ink-row-mark {
-    /* A variable rather than a constant so a row whose mark carries more ink
-       than a 1.5px stroke can dial itself back to read at the same weight. */
     opacity: var(--ink-row-mark);
     transition: opacity 150ms ease-out;
 }
 
 .ink-row-meta {
     transition: color 150ms ease-out;
-    /* Colour, not opacity: this column carries real content — contact handles,
-       project years, "leave a note →" — so it has to clear 4.5:1, and opacity
-       would drag any border or icon inside it down too. */
+    /* Colour, not opacity: this is real content and needs 4.5:1. */
     color: var(--color-ink-muted);
 }
 
-/* Only where there's a pointer to hover with. On a touch device :hover
-   sticks after a tap, so the row a visitor last touched would stay woken
-   up — a highlight nobody asked for, on a page they've already left. */
+/* Hover only: on touch :hover sticks after a tap. */
 @media (hover: hover) {
     .ink-row:hover .ink-row-mark {
         opacity: 1;
@@ -84,9 +63,7 @@ a.marker:hover {
     }
 }
 
-/* Scale and filter, not `all`: those are the only two properties the hover
-   changes, and `all` would put this 600ms overshoot spring on every colour
-   and decoration change the card's anchor inherits too. */
+/* Not `all`: the spring would hit every inherited colour change too. */
 .hover-lift {
     @apply duration-600 ease-spring-playful;
     transition-property: scale, filter;
@@ -97,23 +74,14 @@ a.marker:hover {
     filter: drop-shadow(var(--shadow-raised));
 }
 
-/*
-  The cursor-following list preview (scripts/listHoverPreview.ts). Two rules
-  the script depends on, kept here because the rows that opt in are spread
-  across LogRow, BookmarkItem, /shelf and /projects.
-*/
+/* Rules scripts/listHoverPreview.ts depends on. */
 
-/* Hovering one row dims the other 56. Without a transition all of them snap
-   1 -> 0.2 and back on every entry and exit, which reads as a flicker rather
-   than a focus. Opacity composites, so 150ms is free. */
 .list-item-image-hover-effect {
     transition: opacity 150ms ease-out;
 }
 
-/* A lazily-loaded cover is only fetched once the hover reveals it, so the
-   first hover of a row would otherwise place an empty frame and hold it for
-   the length of the request. The script gates the fade on the load event and
-   only sets the attribute once it runs — without it, covers stay visible. */
+/* The script sets the attribute once covers have loaded. Without it, covers
+   stay visible. */
 .cover-image {
     transition: opacity 150ms ease-out;
 }
@@ -122,7 +90,6 @@ a.marker:hover {
     opacity: 0;
 }
 
-/* Postcard corner shadows (from v3) */
 .corner-shadow-effect {
     position: relative;
 }

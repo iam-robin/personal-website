@@ -1,9 +1,4 @@
 ---
-/**
- * One year of the series log. The markup is LogYear/LogRow, shared with
- * /movies; this only says which field of a season is the chip, the heart and
- * the meta.
- */
 import LogYear from "../ui/LogYear.astro";
 import LogRow from "../ui/LogRow.astro";
 import type { SeasonYear } from "../../utils/series";
@@ -16,8 +11,7 @@ interface Props {
 
 const { year } = Astro.props;
 
-// Finished only, as /books counts a shelf: the season in progress is in the
-// list but hasn't been watched yet.
+// Finished only: the season in progress hasn't been watched yet.
 const count = year.seasons.filter((season) => !season.watching).length;
 
 const noteFor = await getMediaNoteLookup("series");

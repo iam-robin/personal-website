@@ -1,8 +1,4 @@
 ---
-/**
- * Footer shared by the homepage and subpages: a large robin, columns of
- * links and a copyright line. Destinations live in data/links and data/navigation.
- */
 import Bird from "../Bird.astro";
 import { contactChannels, siteLinks, type SiteLink } from "../../data/links";
 import { navItems } from "../../data/navigation";
@@ -27,12 +23,10 @@ const year = new Date().getFullYear();
     <div
         class="flex flex-col gap-12 md:flex-row md:items-start md:justify-between md:gap-16"
     >
-        <!-- Logo: the robin, doubling as a link home -->
         <a href="/" aria-label="Back to homepage" class="shrink-0">
             <Bird interactive={false} class="h-24 w-auto text-ink" />
         </a>
 
-        <!-- Link columns -->
         <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 md:gap-16">
             {
                 columns.map((col) => (
@@ -60,9 +54,6 @@ const year = new Date().getFullYear();
         </div>
     </div>
 
-    {/* The rule is border-ink/30 like every other dotted rule on the site. It
-        used to render at ~ink/12 because the opacity-40 on this div leaked onto
-        its own border — an accident of dimming the text with opacity. */}
     <div
         class="mt-12 border-t border-dotted border-ink/30 pt-6 font-mono text-sm text-ink-muted"
     >

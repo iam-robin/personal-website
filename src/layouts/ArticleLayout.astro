@@ -1,33 +1,21 @@
 ---
 /**
- * The article construct: one reading column, optionally with a sticky rail to
- * its left. Used by blog posts and /work, which skip the shared subpage hero
- * and open with their own words.
- *
- * The two tracks add up to the shell's content width, so the rail starts under
- * the logo and the column ends under the RSS icon. --container-shell is
- * derived from those tracks in theme/layout.css, so it can't drift.
- *
- * Set `rail` and fill the `rail` slot for the sidebar; omit both for a plain
- * centred column.
+ * One reading column, optionally with a sticky rail. The tracks add up to
+ * --container-shell (see theme/layout.css).
  */
 import SubpageLayout from "./SubpageLayout.astro";
 
 interface Props {
     title: string;
     description?: string;
-    /** Override the <title> tag; defaults to "<title> — Robin Spielmann". */
     documentTitle?: string;
-    /** This page's own link preview card. See Layout.astro. */
     ogImage?: string;
     ogImageAlt?: string;
     ogType?: "website" | "article";
-    /** JSON-LD structured data for search engines. */
     structuredData?: unknown;
     /**
-     * Show the sticky sidebar. A prop and not `Astro.slots.has("rail")`: a
-     * conditionally-rendered slot still registers as present when the
-     * condition is false, leaving an empty 16rem gutter.
+     * A prop, not `Astro.slots.has("rail")`: a conditional slot still counts as
+     * present and leaves an empty gutter.
      */
     rail?: boolean;
 }
@@ -65,9 +53,7 @@ const {
         {
             rail && (
                 <aside class="hidden lg:block">
-                    {/* The aside stretches to the grid row's full height,
-                        which is what gives the inner element something to
-                        stick against. Don't add self-start. */}
+                    {/* Stretches to the row's height so the inner element can stick. No self-start. */}
                     <div class="sticky top-8 flex flex-col gap-8">
                         <slot name="rail" />
                     </div>
@@ -75,15 +61,9 @@ const {
             )
         }
 
-        {/* `@container` calibrates the fluid type scale to the reading column
-            rather than the whole shell, so headings stay in proportion to the
-            text. It belongs here and not on the wrapper above: the rail is
-            meant to keep resolving against the shell, the way the rest of the
-            page chrome does.
-
-            `min-w-0` stops a long code line or a wide table from prising the
-            42rem track open and pulling the column out of line with the
-            header. */}
+        {/* @container here, so the type scale follows the reading column while the rail
+            resolves against the shell. min-w-0 keeps wide code or tables from prising
+            the track open. */}
         <div class="@container min-w-0">
             <slot />
         </div>

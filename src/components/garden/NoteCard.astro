@@ -1,5 +1,4 @@
 ---
-/** Garden note card — ported to match v3 exactly. */
 import Divider from "./Divider.astro";
 import { gardenColors, categorySlug, type GardenNote } from "../../utils/garden";
 
@@ -111,7 +110,6 @@ const editedDay = note.edited ? formatDate(note.edited) : null;
 </div>
 
 <style>
-    /* Opt out of the site-wide italic-on-hover for the whole card */
     a:hover {
         font-style: normal;
     }

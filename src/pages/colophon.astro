@@ -8,8 +8,7 @@ import { papers } from "../utils/paper";
 
 const latest = changelog[0];
 
-// The swatches use colour utilities, so they render *this* page's stock. Labels
-// describe how derived values are made rather than quoting a stale hex.
+// Colour utilities, so the swatches show this page's stock.
 const colors = [
     {
         name: "--color-ink",
@@ -37,7 +36,6 @@ const colors = [
     },
 ];
 
-// Read from the same map the pages use, so the list can't drift.
 const stocks = Object.values(papers);
 
 const typefaces = [
@@ -79,13 +77,11 @@ const typeScale = [
     { cls: "text-xs", token: "text-xs" },
 ];
 
-// Every mood is its own specimen. One box can't show the logo at rest and
-// change under the cursor.
+// One specimen per mood: one box can't show rest and hover at once.
 const birds = [
     { label: "Resting", note: "The logo", cls: "" },
     { label: "Startled", note: "On hover", cls: "is-startled" },
     { label: "Angry", note: "On click", cls: "is-angry" },
-    // The note is the whole clue on purpose.
     { label: "Smitten", note: "Fed a crumb", cls: "is-eating" },
 ];
 ---
@@ -95,7 +91,6 @@ const birds = [
     description="The pieces this site is built from — colours, type, and the robin. A reference for how it's put together."
 >
     <div class="flex flex-col gap-24">
-        <!-- Colours -->
         <section>
             <h2
                 class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
@@ -153,7 +148,6 @@ const birds = [
             </div>
         </section>
 
-        <!-- Typefaces -->
         <section>
             <h2
                 class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
@@ -177,7 +171,6 @@ const birds = [
             </div>
         </section>
 
-        <!-- Type scale -->
         <section>
             <h2
                 class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
@@ -203,7 +196,6 @@ const birds = [
             </div>
         </section>
 
-        <!-- The bird -->
         <section>
             <h2
                 class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
@@ -214,13 +206,11 @@ const birds = [
                 One bird, a few moods. It's the logo and the favicon. Hover the
                 one in the corner to startle it. Click it to make it angry.
             </p>
-            <!-- Five cards: the four logo moods, plus the 404 bird. -->
             <div class="grid grid-cols-2 gap-8 sm:grid-cols-3">
                 {
                     birds.map((b) => (
                         <div class="flex flex-col items-center gap-4 rounded-md border border-ink/10 bg-inset/40 p-6 text-center">
-                            {/* Inert: each specimen is pinned to one mood,
-                                so the resting bird can't perk up on hover. */}
+                            {/* Inert: each specimen is pinned to one mood. */}
                             <Bird
                                 interactive={false}
                                 class:list={[
@@ -247,7 +237,6 @@ const birds = [
             </div>
         </section>
 
-        <!-- Signature details -->
         <section>
             <h2
                 class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"
@@ -279,7 +268,6 @@ const birds = [
             </div>
         </section>
 
-        <!-- Built with -->
         <section>
             <h2
                 class="mb-8 font-mono text-xs tracking-widest text-ink-muted uppercase"

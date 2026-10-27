@@ -20,7 +20,6 @@ export function getStaticPaths() {
 }
 const { entry } = Astro.props;
 const name = entry.name;
-// Lazy component imports: cataloguing an entry does not render it or fetch data.
 const modules = import.meta.glob<typeof import("../../../../components/Bird.astro")>("../../../../components/**/*.astro");
 const { default: Component } = await modules[`../../../../components/${entry.relative}`]();
 const props: Record<string, unknown> = {};
@@ -104,8 +103,7 @@ const sections = [{ id: "sample-design", text: "Design" }, { id: "sample-code", 
 </style>
 
 <script>
-    // Keep real destination links useful without nesting the whole site in an
-    // iframe. Local section anchors remain inside the specimen.
+    // Real destination links open outside the iframe.
     if (window.parent !== window) {
         document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((link) => {
             if (!link.getAttribute("href")?.startsWith("#") && !link.target) link.target = "_top";

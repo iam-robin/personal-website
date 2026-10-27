@@ -14,13 +14,12 @@ import {
     websiteSchema,
 } from "../utils/schema";
 
-// Used on the page and in the meta description below — declared once.
 const headline =
     "Design Engineer with 8+ years of experience in building digital products, web applications and design systems.";
 const focus =
     "Focus on scalable interfaces and a close collaboration between design and development.";
 
-// ArticleLayout passes hideHero, so this only reaches the meta tag.
+// With the hero hidden, this only reaches the meta tag.
 const metaDescription =
     "I'm a design engineer in Munich, working on frontend, design systems and web applications after 8+ years in product teams.";
 
@@ -47,7 +46,7 @@ const facets: { icon: string; title: string; body: string }[] = [
     },
 ];
 
-// Kept in sync with cv.iamrob.in — a shortlist, not the full proficiencies.
+// Keep in sync with cv.iamrob.in.
 const details: { label: string; value: string }[] = [
     {
         label: "Focus",
@@ -63,8 +62,8 @@ const details: { label: string; value: string }[] = [
     },
 ];
 
-// Raw SVG rather than <img> so the fills, rewritten to currentColor, inherit
-// the page's ink. A client with no file falls back to its name set in type.
+// Raw SVG so the fills, rewritten to currentColor, take the page's ink.
+// Clients without a file fall back to their name.
 const logoSvgs = import.meta.glob<string>("../assets/logos/*.svg", {
     query: "?raw",
     import: "default",
@@ -87,10 +86,7 @@ const structuredData = graphSchema([
 ]);
 ---
 
-{
-    /* No rail: too few sections for a contents list to be navigation rather
-    than furniture. */
-}
+{/* No rail: too few sections. */}
 <ArticleLayout
     title="Work"
     documentTitle="Frontend Design Engineer in Munich — Robin Spielmann"
@@ -98,11 +94,7 @@ const structuredData = graphSchema([
     structuredData={structuredData}
 >
     <div class="mt-4">
-        {
-            /* The statement sits on the lead measure, which is what makes the
-            pair fit: 30rem + 2rem gap + the 10rem portrait is the reading
-            column exactly. */
-        }
+        {/* 30rem + 2rem gap + the 10rem portrait fill the reading column. */}
         <header
             class="flex flex-col gap-10 md:grid md:grid-cols-[minmax(0,var(--container-lead))_auto] md:items-start md:gap-8"
         >
@@ -112,10 +104,8 @@ const structuredData = graphSchema([
                 </p>
                 <h1 class="mt-6 text-2xl font-bold text-balance">{headline}</h1>
             </div>
-            {
-                /* order-first below md, so the portrait doesn't split the
-                statement from the paragraph continuing it. */
-            }
+            {/* order-first below md, so the portrait doesn't split the statement from its
+                paragraph. */}
             <Image
                 src={portrait}
                 alt="Black-and-white portrait of Robin Spielmann in profile"

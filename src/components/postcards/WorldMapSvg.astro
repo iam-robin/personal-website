@@ -20,8 +20,7 @@ const escapeAttribute = (value: string) => value
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 
-// Only the checked-in SVG asset is parsed here, never user-supplied markup.
-// Keep its paths and license in the asset; decorate country paths at build time.
+// Only the checked-in SVG asset is parsed here, never user markup.
 const contents = mapSource.slice(mapSource.indexOf(">", mapSource.indexOf("<svg")) + 1, mapSource.lastIndexOf("</svg>"));
 const markup = contents.replace(/<path\b[^>]*>/g, (tag) => {
     const name = /\bname="([^"]*)"/.exec(tag)?.[1]

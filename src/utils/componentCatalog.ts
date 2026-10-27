@@ -1,8 +1,7 @@
 import { posix } from "node:path";
 import { componentNotes, componentPreviews } from "../data/componentLab";
 
-// Raw imports run at build time. Component code never goes into the browser's
-// catalogue script, and discovering a file does not execute its data fetching.
+// Raw imports: nothing here runs or ships to the browser.
 const components = import.meta.glob<string>("../components/**/*.astro", {
     query: "?raw", import: "default", eager: true,
 });
@@ -13,9 +12,8 @@ const sourcePath = (path: string) => posix.normalize(`src/utils/${path}`);
 const references = new Map<string, Set<string>>();
 for (const [path, source] of Object.entries(consumers)) {
     const importer = sourcePath(path);
-    // Direct relative imports only, not an assertion about runtime usage.
-    // Exclude lab examples so adding a specimen can't make an unused component
-    // look like a production dependency.
+    // Lab examples don't count, or a specimen would make an unused component
+    // look used.
     if (importer.includes("/lab/") || importer === "src/layouts/LabLayout.astro") continue;
     for (const match of source.matchAll(/\bimport\s+[\s\S]*?\sfrom\s*["']([^"']+\.astro)["']/g)) {
         if (!match[1].startsWith(".")) continue;

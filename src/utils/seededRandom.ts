@@ -1,9 +1,6 @@
 /**
- * A deterministic PRNG seeded from a string — FNV-1a seed, mulberry32 stream.
- *
- * Hand-placed values (a postcard's lean, its offsets) want to look random but
- * must survive a rebuild in the same spot, which `Math.random()` wouldn't.
- * Seed from the item's stable identity instead.
+ * Deterministic PRNG from a string (FNV-1a seed, mulberry32), so "random"
+ * layouts survive a rebuild.
  */
 export function createSeededRandom(seedSource: string): () => number {
     let seed = 2166136261;

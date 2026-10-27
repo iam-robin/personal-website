@@ -1,8 +1,7 @@
 import type { ImageMetadata } from "astro";
 
-// The fan prints, in fan order. Imported one by one on purpose: an eager glob
-// over the folder emits *every* photo into the build, including the seven no
-// page renders — ~74MB of untouched camera JPEGs in dist/.
+// Imported one by one: an eager glob would emit every photo in the folder
+// (~74MB) into the build.
 import photo12 from "../assets/photos/12.jpg";
 import photo11 from "../assets/photos/11.jpg";
 import photo10 from "../assets/photos/10.jpg";
@@ -12,9 +11,7 @@ import canvasFlowerField from "../assets/projects/one-canvas-many-hands/01-flowe
 import canvasBirchForest from "../assets/projects/one-canvas-many-hands/04-birch-forest-framed.webp";
 import canvasWaterLilies from "../assets/projects/one-canvas-many-hands/05-water-lilies-framed.webp";
 
-// Fan images shown for a project on hover — stacked in the homepage hero,
-// cursor-following on /projects. Poster filenames are number-prefixed to
-// control the fan order.
+// Poster filenames are number-prefixed to set the fan order.
 const posterModules = import.meta.glob<{ default: ImageMetadata }>(
     "../assets/projects/matchprint/*.png",
     { eager: true },
@@ -34,8 +31,7 @@ const handcodedArt = Object.keys(artModules)
     .sort()
     .map((key) => artModules[key].default);
 
-// The 365 folder holds nothing but its fan, so an eager glob is safe here —
-// unlike ../assets/photos, where most of the folder never renders.
+// This folder holds only the fan, so an eager glob is fine.
 const dailyModules = import.meta.glob<{ default: ImageMetadata }>(
     "../assets/projects/365/*.{jpg,jpeg,webp}",
     { eager: true },
@@ -57,15 +53,13 @@ const fansByProject: Record<string, ImageMetadata[]> = {
 };
 
 export function getFanImages(projectId: string): ImageMetadata[] | null {
-    // An empty array would still read as "has a fan" and render a bare box —
-    // the glob-backed fans are empty until their folder is filled.
+    // Empty globbed fans would still render a bare box.
     const fan = fansByProject[projectId];
     return fan?.length ? fan : null;
 }
 
-// Fallback for projects without a curated fan: the first image in the
-// project's markdown body. Gifs are excluded — the image pipeline would
-// strip their animation.
+// Fallback: the first image in the project's markdown. No gifs, the image
+// pipeline would strip their animation.
 const projectAssetModules = import.meta.glob<{ default: ImageMetadata }>(
     "../assets/projects/**/*.{png,jpg,jpeg,webp}",
     { eager: true },
@@ -75,8 +69,6 @@ export function getFirstBodyImage(
     body: string | undefined,
 ): ImageMetadata | null {
     if (!body) return null;
-    // Markdown paths are relative to src/content/projects/, glob keys to
-    // src/utils/ — both resolve to src/assets/….
     const matches = body.matchAll(/!\[[^\]]*\]\((\.\.\/\.\.\/assets\/[^)\s]+)\)/g);
     for (const match of matches) {
         const key = match[1].replace(/^\.\.\/\.\.\//, "../");

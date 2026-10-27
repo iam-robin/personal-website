@@ -1,35 +1,25 @@
-/*
-  Long-form article styling, applied via a `.blog-prose` wrapper around
-  rendered markdown. Prose is set in Apercu, not the site's mono: mono is the
-  voice of the chrome, and it flattens word shapes over a long read. It stays
-  for what's scanned rather than read — code and table data.
-*/
+/* Long-form styling via `.blog-prose`. Prose is set in Apercu; mono stays for
+   code and table data. */
 .blog-prose {
     font-family: var(--font-sans);
     font-size: var(--text-prose);
     line-height: var(--leading-relaxed);
     color: var(--color-ink);
-    /* Even rag, no single-word last lines */
     text-wrap: pretty;
-    /* Long URLs and identifiers break instead of escaping the column */
     overflow-wrap: break-word;
 }
 
-/* Vertical rhythm — space between all top-level blocks */
 .blog-prose > * + * {
     margin-top: 1.5em;
 }
 
-/* Headings — Apercu bold, with extra space above */
 .blog-prose h2,
 .blog-prose h3,
 .blog-prose h4 {
     font-family: var(--font-sans);
     font-weight: 700;
     line-height: var(--leading-tight);
-    /* Short lines — keep them from breaking one word onto line two */
     text-wrap: balance;
-    /* Breathing room when jumped to via a table-of-contents anchor */
     scroll-margin-top: 2rem;
 }
 .blog-prose h2 {
@@ -52,8 +42,7 @@
     font-style: italic;
 }
 
-/* The global `a:hover { font-style: italic }` is a nav gesture; in a
-   paragraph it shears body text, so prose links thicken their underline. */
+/* Prose links thicken their underline instead of the global italic hover. */
 .blog-prose a {
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -65,7 +54,6 @@
     text-decoration-thickness: 2px;
 }
 
-/* Lists */
 .blog-prose ul,
 .blog-prose ol {
     padding-left: 1.5em;
@@ -83,19 +71,15 @@
     color: color-mix(in srgb, var(--color-ink) 40%, transparent);
 }
 
-/* Inline code */
 .blog-prose :not(pre) > code {
     font-family: var(--font-mono);
     background-color: var(--color-inset);
     padding: 0.1em 0.35em;
     border-radius: 0.25rem;
     font-size: 0.9em;
-    /* Identifiers are unbreakable words — let them wrap rather than
-       push the column sideways */
     overflow-wrap: anywhere;
 }
 
-/* Code blocks (Shiki sets its own background + colors) */
 .blog-prose pre {
     font-family: var(--font-mono);
     padding: 1rem 1.25rem;
@@ -105,20 +89,12 @@
     line-height: var(--leading-normal);
 }
 
-/* Inline SVG figures. Drawn rather than exported so they inherit the ink and
-   sit on whatever paper the section has — a flat PNG would carry its own
-   background into a tinted stock. Labels are mono, matching the chrome. */
+/* Inline SVG figures inherit the ink and sit on any paper stock. */
 .blog-prose .figure-block {
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
 }
-/* A drawing that carries one idea rather than a set of examples doesn't need
-   the full measure. Flush left with the prose, so it hangs off the text column
-   rather than floating in the middle of it. */
 .blog-prose .figure-block--sm {
-    /* The svg is cropped to its own drawing, so this width is the drawing's
-       width — 26.79rem keeps the circles the size they were when the box still
-       carried padding. */
     max-width: 26.75rem;
 }
 .blog-prose svg.figure {
@@ -127,8 +103,7 @@
     height: auto;
     color: var(--color-ink);
 }
-/* Inside a figure the caption follows the svg directly, so it needs the gap
-   the image rule pulls back against rather than a negative margin. */
+/* No negative margin inside a figure: the caption follows the svg directly. */
 .blog-prose .figure-block figcaption {
     margin-top: 0.75rem;
 }
@@ -141,10 +116,7 @@
     fill: color-mix(in srgb, currentColor 55%, transparent);
 }
 
-/* Interactive demo — a 3x3 grid where tapping a tile opens it. The two grids
-   are independent (one radio group each) so you can work them separately and
-   compare. The only difference between them is the transition. No JS: radios
-   keep it keyboard-operable, labels make the tiles hit-able. */
+/* Two independent 3x3 radio grids; only the transition differs. No JS. */
 .blog-prose .demo {
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
@@ -154,7 +126,7 @@
     width: 0;
     height: 0;
 }
-/* Focusable, not display:none — that would drop them out of tab order. */
+/* Visually hidden, not display:none, so they stay in the tab order. */
 .blog-prose .demo-radio {
     position: absolute;
     width: 1px;
@@ -187,8 +159,7 @@
     outline-offset: 8px;
 }
 
-/* The box is drawn by ::before so the wobble filter never touches the number.
-   Same reason the Venn on /work keeps its labels outside the filter. */
+/* Drawn by ::before so the wobble filter never touches the number. */
 .blog-prose .demo-cell {
     --cell-bg: color-mix(in srgb, currentColor 8%, transparent);
     position: relative;
@@ -216,8 +187,7 @@
     position: relative;
 }
 
-/* Anything open dims the tiles it covers. :where() zeroes the id's specificity
-   so the "which tile is open" rules below still win. */
+/* :where() zeroes the id's specificity so the open-tile rules below still win. */
 .blog-prose
     .demo-radio-a:not(:where(#a-none)):checked
     ~ .demo-screens
@@ -248,7 +218,6 @@
 .blog-prose #b6:checked ~ .demo-screens .demo-grid--anim .cell-6,
 .blog-prose #b7:checked ~ .demo-screens .demo-grid--anim .cell-7,
 .blog-prose #b8:checked ~ .demo-screens .demo-grid--anim .cell-8 {
-    /* Solid, not a wash — it has to hide the dimmed tiles underneath it. */
     --cell-bg: var(--color-inset);
     opacity: 1;
     z-index: 2;
@@ -256,7 +225,6 @@
     transform: translate(calc(var(--c) * -64px), calc(var(--r) * -54px))
         scale(3.2857, 3.3478);
 }
-/* The only difference between the two grids. */
 .blog-prose .demo-grid--anim .demo-cell {
     transition:
         transform 340ms cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -268,16 +236,12 @@
     }
 }
 
-/* The shared figcaption rule pulls up by -1.25rem to sit against an image's
-   bottom margin. There's no image here, so it would ride over the grid. */
 .blog-prose .demo figcaption {
     margin-top: 0.9rem;
 }
 
-/* Clicking the open tile closes it. A radio can't be unchecked by clicking it
-   again, so this label for the "nothing open" radio covers the grid and only
-   takes pointer events while a tile is open. The open tile fills the grid, so
-   the overlay lands exactly on top of it. */
+/* A radio can't be unchecked by clicking it again, so this label for the
+   "nothing open" radio covers the grid while a tile is open. */
 .blog-prose .demo-close {
     position: absolute;
     inset: 0;
@@ -298,7 +262,6 @@
     pointer-events: auto;
 }
 
-/* Images */ /* Images */ /* Images */ /* Images */
 .blog-prose img {
     display: block;
     width: 100%;
@@ -308,21 +271,15 @@
     margin-bottom: 2rem;
 }
 
-/* Blockquotes — also used as the standfirst line under a section heading.
-   Quoted copy is body copy, so it keeps full ink and the dotted rule stays
-   quiet. What marks it out is the short measure: the block stops well before
-   the column does, so it reads as set apart rather than indented. */
+/* Also the standfirst under a section heading. Marked out by its short measure. */
 .blog-prose blockquote {
     border-left: 2px dotted
         color-mix(in srgb, var(--color-ink) 30%, transparent);
     padding-left: 1.25rem;
-    /* Body size, short measure: the narrower block is what marks it out, not
-       a size bump. (Sizing note: --text-md is not a step up from --text-prose
-       here — its clamp grows more slowly and crosses below at wide columns.) */
+    /* --text-md isn't a step up from --text-prose here: it grows more slowly. */
     max-width: 42ch;
 }
 
-/* Rules */
 .blog-prose hr {
     border: 0;
     border-top: 1px dotted color-mix(in srgb, var(--color-ink) 30%, transparent);
@@ -330,31 +287,21 @@
     margin-bottom: 2.5em;
 }
 
-/* Hairline rows, no boxes. Posts wrap wide tables in a .table-container so
-   they scroll instead of squeezing the reading column.
-
-   `table-layout: fixed` rather than auto: the article that has tables has six
-   of them stacked under one another, and auto sizes each from its own content,
-   so the columns stepped left and right down the page. Fixed makes every table
-   share one grid — and the widths below are that grid, tuned for the
-   name / description / place / flag shape those tables have. A table with a
-   different number of columns just splits the width evenly, which is fine. */
+/* `table-layout: fixed` so stacked tables share one column grid instead of
+   sizing each from its own content. */
 .blog-prose .table-container {
     overflow-x: auto;
-    /* Mono needs the room; below this the fixed columns start breaking words */
     --table-min-width: 34rem;
 }
 .blog-prose .table-container table {
     min-width: var(--table-min-width);
 }
 .blog-prose table {
-    /* Equal advance widths make columns line up down the page */
     font-family: var(--font-mono);
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    /* Fixed, not the fluid --text-sm: mono at 15px runs ~10 characters wider
-       per column than the reading column can give it, and every cell wrapped. */
+    /* Fixed, not fluid: mono at 15px made every cell wrap. */
     font-size: var(--text-xs);
     line-height: var(--leading-normal);
     text-align: left;
@@ -374,15 +321,11 @@
     vertical-align: top;
     border-bottom: 1px dotted
         color-mix(in srgb, var(--color-ink) 30%, transparent);
-    /* Fixed layout cannot widen for a long word, so let one break rather
-       than run under the next column. */
     overflow-wrap: break-word;
 }
 .blog-prose :is(th, td):last-child {
     padding-right: 0;
 }
-/* Column labels, not data: smaller, spaced out and set in caps so the eye
-   reads them as the header band and moves on. */
 .blog-prose th {
     font-weight: 400;
     font-size: var(--text-2xs);
@@ -390,35 +333,26 @@
     text-transform: uppercase;
     padding-bottom: 0.6em;
     color: var(--color-ink-muted);
-    /* Was 50% ink dimmed by the 0.5 opacity above — ~25% rendered. */
     border-bottom-color: color-mix(in srgb, var(--color-ink) 25%, transparent);
 }
 .blog-prose tbody tr:last-child :is(th, td) {
     border-bottom: 0;
 }
 
-/* Image captions */
 .blog-prose figcaption {
-    /* Pull up against the image's own bottom margin */
     margin-top: -1.25rem;
     font-size: var(--text-sm);
     color: var(--color-ink-muted);
 }
 
-/* Footnote markers. GFM wraps the reference in a <sup>; left alone it reads as
-   a stray digit stuck to the word. Mono and dimmed makes it a mark rather than
-   a character of the sentence — including inside a table cell, where several
-   of them sit next to a yes/no glyph. */
 .blog-prose sup:has(a[data-footnote-ref]) {
-    /* Not the UA's `smaller`, but not far under it either — inside a table
-       cell the marker is already sitting on 13px type. */
     font-size: 0.8em;
     line-height: 0;
 }
 .blog-prose a[data-footnote-ref] {
     font-family: var(--font-mono);
     text-decoration: none;
-    /* Vertical padding is hit area, not layout — the line box ignores it. */
+    /* Padding is hit area only; the line box ignores it. */
     padding: 0.4em 0.2em 0.4em 0.15em;
     color: var(--color-ink-muted);
 }
@@ -427,26 +361,20 @@
     text-decoration: underline;
 }
 
-/* Footnotes (GFM) — quieter, set off by a rule */
 .blog-prose .footnotes {
     margin-top: 3em;
     padding-top: 1.5em;
-    /* Was 30% ink dimmed by the 0.7 below — ~21% rendered. */
     border-top: 1px dotted color-mix(in srgb, var(--color-ink) 20%, transparent);
     font-size: var(--text-sm);
     color: var(--color-ink-muted);
 }
 .blog-prose .footnotes li {
-    /* Jumped to from the marker — don't land it against the viewport edge */
     scroll-margin-top: 2rem;
 }
 .blog-prose .footnotes li + li {
     margin-top: 0.75em;
 }
-/* The ↩ back to the sentence: an affordance, not part of the note. U+21A9 has
-   an emoji presentation, and the sans stack ends in the colour emoji fonts —
-   left alone it comes out as a blue glyph. Mono first, plus the explicit
-   text presentation for browsers that honour it. */
+/* U+21A9 has an emoji presentation and would render as a blue glyph. */
 .blog-prose a[data-footnote-backref] {
     font-family: var(--font-mono);
     font-variant-emoji: text;

@@ -23,8 +23,6 @@ const TOTAL_COUNTRIES = 195;
 </section>
 
 <script>
-    // Highlighting and country metadata are already in the HTML. Only following
-    // the pointer needs JavaScript; one delegated listener handles every path.
     function initWorldMaps() {
         document.querySelectorAll<HTMLElement>("[data-world-map]").forEach((root) => {
             if (root.dataset.initialized) return;

@@ -1,4 +1,4 @@
-/** Handwritten notes only. File names and import references come from the source tree. */
+/** Handwritten notes only. Names and imports come from the source tree. */
 export const componentNotes: Record<string, { description: string; href?: string; note?: string }> = {
     Bird: { description: "My robin logo, with click reactions and several moods.", href: "/" },
     Bird404: { description: "The dazed robin for wrong turns.", href: "/colophon" },

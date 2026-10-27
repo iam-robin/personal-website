@@ -1,13 +1,6 @@
 /**
- * A version history of this website, newest first. Each release is a small
- * milestone — a new section, a rebuild, a bit of polish. Major versions
- * (x.0.0) get a filled badge; everything else stays quiet.
- *
- * `body` is plain text; `bodyHtml` is used for the few entries that need an
- * inline link. Dates are ISO strings, rendered via `timeSince` at build time.
- *
- * Shared between the changelog page and the colophon's "last updated" line —
- * this is the single source of truth, so keep it newest-first.
+ * Newest first: the changelog and the colophon's "last updated" both read it.
+ * Major versions (x.0.0) get a filled badge. `bodyHtml` is for inline links.
  */
 export interface Entry {
     version: string;

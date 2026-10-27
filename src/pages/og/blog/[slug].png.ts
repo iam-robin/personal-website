@@ -1,11 +1,6 @@
 /**
- * One link preview card per blog post, built with the site rather than drawn
- * by hand. The route is prerendered, so these are plain PNGs in dist/ — no
- * image is rendered on request.
- *
- * The URL mirrors the post's own: /blog/<id> → /og/blog/<id>.png. A post that
- * wants a hand-made card instead sets `ogImage` in its frontmatter; the page,
- * not this route, decides which one goes in the meta tag.
+ * Prerendered preview card per post, at /og/blog/<id>.png. A post's own
+ * `ogImage` overrides it in the page, not here.
  */
 import type { APIRoute, GetStaticPaths } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
@@ -37,8 +32,7 @@ export const GET: APIRoute = async ({ props }) => {
         pathname: `/blog/${post.id}`,
     });
 
-    // No Cache-Control: the route is prerendered, so the static host sets
-    // the headers and this one would only ever apply in dev.
+    // No Cache-Control: prerendered, so the static host sets the headers.
     return new Response(new Uint8Array(png), {
         headers: { "Content-Type": "image/png" },
     });

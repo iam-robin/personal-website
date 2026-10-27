@@ -5,11 +5,7 @@ import Link from "../components/ui/Link.astro";
 import Placeholder from "../components/ui/Placeholder.astro";
 import { getFilmYears, FEED_LIMIT, PROFILE_URL } from "../utils/movies";
 
-/*
-  One sentence, two renderings: the hero paragraph links the word "Letterboxd"
-  to the profile the feed comes from, while the <meta> description needs the
-  same sentence flat. Cut in three so the two can't drift apart.
-*/
+/* One sentence, rendered linked in the hero and flat in the meta description. */
 const intro = {
     before: "Films go into ",
     linked: "Letterboxd",
@@ -19,9 +15,8 @@ const intro = {
 const years = await getFilmYears();
 const total = years.reduce((sum, year) => sum + year.films.length, 0);
 
-// The feed stops at FEED_LIMIT entries, so the last year on the page is only
-// as complete as the feed reaches — said out loud rather than left to look
-// like a year in which I watched eight films.
+// The feed stops at FEED_LIMIT, so the oldest year is incomplete. Said on the
+// page.
 const oldest = years.at(-1)?.label;
 ---
 
@@ -51,8 +46,7 @@ const oldest = years.at(-1)?.label;
                 </p>
             </>
         ) : (
-            /* Letterboxd was unreachable at build time (utils/movies.ts logs
-               the reason). The next rebuild picks the log back up. */
+            /* Letterboxd was unreachable at build time. */
             <Placeholder label="Couldn't reach Letterboxd — check back soon" />
         )
     }

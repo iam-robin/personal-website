@@ -1,26 +1,15 @@
 ---
-/**
- * One reply from a post's Mastodon thread: who wrote it, when, and what they
- * said. Used by MastodonComments for both a branch's opening reply and the
- * follow-ups indented beneath it.
- *
- * `reply.html` is already sanitized by utils/mastodon.ts — see the note there
- * on why `class` never survives that step.
- */
+/** `reply.html` is already sanitized by utils/mastodon.ts. */
 import type { MastodonReply } from "../../utils/mastodon";
 
 interface Props {
     reply: MastodonReply;
-    /**
-     * Show the full `@user@instance`. On a follow-up the handle is already
-     * established by the reply above it, and repeating it crowds the line.
-     */
+    /** Follow-ups drop the handle; the reply above already established it. */
     showAcct?: boolean;
 }
 
 const { reply, showAcct = false } = Astro.props;
 
-/** "Apr 11, 2025" — the site's locale, shortened to sit on a meta line. */
 const date = reply.date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -55,8 +44,6 @@ const date = reply.date.toLocaleDateString("en-US", {
 </p>
 
 {
-    /* A content warning keeps its role: the body stays folded away behind the
-       warning text, using <details> so it costs no JS. */
     reply.spoiler ? (
         <details class="mt-2">
             <summary class="cursor-pointer font-mono text-xs text-ink-muted">

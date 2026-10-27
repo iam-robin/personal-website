@@ -226,7 +226,6 @@ export function isValidCountry(countryName: string): boolean {
     return countryMap.has(normalizedName) || aliasMap.has(normalizedName);
 }
 
-/** The flag emoji for a country, or  if unknown. */
 export function getCountryFlag(countryName: string): string {
     if (!countryName || typeof countryName !== 'string') {
         return '';
@@ -237,7 +236,6 @@ export function getCountryFlag(countryName: string): string {
     return country?.flag || '';
 }
 
-/** Resolves an alias to the canonical name, or returns the input unchanged. */
 export function getStandardCountryName(countryName: string): string {
     if (!countryName || typeof countryName !== 'string') {
         return countryName;

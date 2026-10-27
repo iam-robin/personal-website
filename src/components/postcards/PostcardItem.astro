@@ -46,8 +46,7 @@ const {
     stampSvg = "",
     country = null,
     websiteUrl = null,
-    // A submitted postcard has its exact styling stored (see
-    // postcards/new.astro); missing values are seeded below instead.
+    // Submitted postcards store their styling; missing values are seeded below.
     marginBottom: marginBottomProp,
     marginRight: marginRightProp,
     rotation: rotationProp,
@@ -70,9 +69,8 @@ const {
     wavyStampRotation: wavyStampRotationProp,
 } = Astro.props;
 
-// Seeded from the postcard's stable identity, so a style-less card renders
-// identically on every rebuild. The ranges mirror those in new.astro, so
-// seeded and stored postcards are indistinguishable.
+// Seeded from stable identity, with the same ranges as new.astro, so seeded and
+// stored postcards look alike.
 const rand = createSeededRandom(`${author}|${date.getTime()}`);
 
 const marginBottom = marginBottomProp ?? Math.floor(rand() * 8);
@@ -101,9 +99,7 @@ const wavyStampRotation = wavyStampRotationProp ?? Math.floor(rand() * 21) - 10;
 
 const sanitizedStampSvg = DOMPurify.sanitize(stampSvg);
 
-// Everything inside the card is sized off a cqw-based font anchor (see
-// <style>), so lengths are in `em`. The values match the original pixel
-// design at the 672px reference width.
+// Inner lengths are in em off a cqw-based anchor, matching the 672px design.
 const em = (px: number) => `${(px / 16).toFixed(3)}em`;
 
 const fontSize = `${(fontSizeFactor * 1.2).toFixed(3)}em`; // 20% larger
@@ -134,8 +130,7 @@ const formattedDate = date.toLocaleDateString("en-US", {
     day: "numeric",
 });
 
-// Placement jitter stays in px: it nudges the card in the grid, not the
-// content, so it shouldn't scale with card width.
+// Placement jitter stays in px: it moves the card, not its content.
 const transformStyles = distorted
     ? `transform: translateY(${marginBottom}px) translateX(${marginRight}px) rotate(${rotation}deg);`
     : `transform: rotate(${rotation}deg);`;
@@ -362,12 +357,8 @@ const wavyLinesStampContainerStyles = `
 </div>
 
 <style>
-    /* The card is a query container; the content font-size is anchored to the
-       card's own width (cqw), so every inner `em` length scales with the card
-       instead of the viewport. 3.13cqw == ~21px at the 672px design width
-       (~30% larger than the original 16px); capped so it never grows past
-       that reference size. Mobile (< sm) keeps the stacked layout, scaled to
-       match. Bump both numbers together to resize the content further. */
+    /* Font-size anchored to the card's width (cqw), so inner `em`s scale with the
+       card. 3.13cqw is ~21px at the 672px design width, the cap. */
     .pc-card {
         container-type: inline-size;
     }
@@ -382,8 +373,6 @@ const wavyLinesStampContainerStyles = `
     .pc-stamp {
         filter: drop-shadow(var(--shadow-hairline));
     }
-    /* Generative stamp fills its (em-sized) frame regardless of its own
-       intrinsic width/height attributes. */
     .pc-stamp :global(svg) {
         width: 100%;
         height: 100%;

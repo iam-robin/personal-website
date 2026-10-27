@@ -1,11 +1,8 @@
 ---
 /**
- * One book on the shelf: a four-faced 3D box that rests spine-out and turns to
- * face the reader when opened. Geometry in the style block below.
- *
- * `<details name="shelf">` carries the state rather than a radio group: zero
- * JS either way, but the exclusive accordion gives one-open-at-a-time, a tab
- * stop per book, and an accessibility tree that says expanded/collapsed.
+ * A four-faced 3D box that rests spine-out and turns when opened.
+ * <details name="shelf"> gives one-open-at-a-time, a tab stop per book and
+ * expanded/collapsed state, without JS.
  */
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
@@ -17,8 +14,6 @@ interface Props {
 
 const { book } = Astro.props;
 
-// Spelled out for the screen-reader payload; ShelfRow's visible line keeps
-// the short form.
 const finishedLong = book.finished
     ? new Date(book.finished).toLocaleDateString("en-GB", {
           day: "numeric",
@@ -99,49 +94,30 @@ const described = [
                 )
             }
         </summary>
-        {/* The disclosure payload — the same content ShelfRow shows under the
-            row, in place, so "expanded" actually reveals something. */}
+        {/* The same content ShelfRow shows below the row, so "expanded" reveals something. */}
         <p class="sr-only">{described}</p>
     </details>
 </li>
 
 <style>
-    /*
-      ── Geometry ────────────────────────────────────────────────────────
-      `.book-inner` IS the front cover plane (width --cw, local z = 0), and the
-      other three faces hang off it — so the open state is a plain rotateY with
-      no z offset and the cover image rasterises 1:1.
-
-        .face-spine  right:100%, origin right, rotateY(-90deg)  → z ∈ [−T,0]
-        .face-fore   left:100%,  origin left,  rotateY(90deg)   → z ∈ [−T,0]
-        .face-back   translateZ(−T)
-
-      The spine's box sits *outside* the cover's left edge and pivots on its own
-      right edge, which is the only way to both extend backward and present its
-      front side; pivot from inside the plane and the title reads mirrored.
-    */
+    /* .book-inner IS the front cover plane; the other faces hang off it:
+         .face-spine  right:100%, origin right, rotateY(-90deg)
+         .face-fore   left:100%,  origin left,  rotateY(90deg)
+         .face-back   translateZ(-T)
+       Pivot the spine from inside the plane and its title reads mirrored. */
     .shelf-book {
-        /* Every dimension hangs off --shelf-h (set on the row). */
         --t: calc(var(--shelf-h) * var(--ts));
         --h: calc(var(--shelf-h) * var(--hs));
         --cw: calc(var(--h) * var(--cr));
 
-        /* The gap an open book gets from its neighbours. */
         --gap: calc(var(--shelf-h) * 0.06);
 
-        /* Short of flat, so the spine stays in view beside the cover. */
         --open-angle: 20deg;
 
-        /* One dial for the lighting below, which is written at full strength. */
         --shade: 0.65;
 
-        /*
-          What the book projects to when open — the slot has to be this wide,
-          not --cw, or the neighbours sit off. The last term is perspective:
-          the far edge is further from the eye and draws ~7% smaller. Truly it
-          varies with thickness (0.916–0.944 across the shelf), but one number
-          holds every slot to ~3px where ignoring it left an 18px hole.
-        */
+        /* The projected open width; the slot must match it. The last factor is
+           perspective (~7% smaller far edge). */
         --open-perspective: 0.931;
         --open-w: calc(
             (
@@ -151,35 +127,24 @@ const described = [
                 var(--open-perspective)
         );
 
-        /*
-          0 closed, 1 open. The width, the margin and the rotation are all
-          expressed in terms of it, so the cover can never lag the gap its
-          neighbours open for it. Registered below because an unregistered
-          custom property has no type and would jump between the endpoints
-          instead of interpolating.
-        */
+        /* 0 closed, 1 open. Width, margin and rotation all derive from it. Registered
+           below, or it would jump instead of interpolating. */
         --open: 0;
 
         position: relative;
         flex: 0 0 auto;
         height: var(--h);
 
-        /*
-          Explicit rather than derived from --open: z-index doesn't
-          interpolate, so a closing book would drop under its neighbours
-          halfway through the swing. The delayed swap below keeps it on top
-          for the whole movement in both directions.
-        */
+        /* z-index doesn't interpolate; the delayed swap below keeps a turning book on
+           top. */
         z-index: 1;
 
-        /* Plain margins are safe under a click. Under *hover* the leading
-           margin walks the book out from under the cursor and flickers. */
+        /* Margins are safe under a click; under hover they'd walk the book away. */
         width: calc(var(--t) + (var(--open-w) - var(--t)) * var(--open));
         margin-inline: calc(var(--gap) * var(--open));
     }
 
-    /* `inherits: true` matters: .book-inner reads --open for its transform,
-       and un-inherited it would sit at the initial value while the slot moved. */
+    /* `inherits: true`: .book-inner reads --open too. */
     @property --open {
         syntax: "<number>";
         inherits: true;
@@ -188,9 +153,7 @@ const described = [
 
     @media (prefers-reduced-motion: no-preference) {
         .shelf-book {
-            /* One property carries the whole turn. --ease-spring overshoots to
-               1.042, which peaks near 17deg — still short of flat, so the
-               spine never disappears and the back face never shows. */
+            /* --ease-spring overshoots to ~17deg, still short of flat. */
             transition:
                 --open 600ms var(--ease-spring),
                 z-index 0s linear 600ms;
@@ -203,8 +166,6 @@ const described = [
         }
     }
 
-    /* The first book's left edge is what the row lines up with under the
-       year label. */
     .shelf-book:first-child {
         margin-inline-start: 0;
     }
@@ -223,12 +184,7 @@ const described = [
         display: block;
         list-style: none;
         cursor: pointer;
-        /*
-          Belongs here, not on the <li>: perspective only applies to direct
-          children, and <details>/<summary> sit between the two flattening it.
-          Default origin, so each book is viewed head-on rather than the shelf
-          fanning out towards its edges.
-        */
+        /* Here, not on the <li>: perspective only applies to direct children. */
         perspective: 900px;
     }
 
@@ -241,29 +197,20 @@ const described = [
         outline-offset: 3px;
     }
 
-    /*
-      --cw wide even when closed, so it overflows the --t-wide slot by design —
-      at rest it is edge-on and nothing shows. Nothing on the book may ever set
-      overflow: hidden.
-    */
+    /* Wider than its slot by design. Nothing on the book may set overflow: hidden. */
     .book-inner {
         position: absolute;
         inset-block: 0;
         inset-inline-start: 0;
         width: var(--cw);
         transform-style: preserve-3d;
-        /*
-          The hinge is the back-left vertical corner, so the book swings away
-          from the shelf rather than through its neighbour. The translateZ term
-          pairs with the z-origin: without it the closed state sits at z = −T,
-          rendering every spine ~5% shrunk with soft text.
-        */
+        /* Hinged at the back-left corner. The translateZ keeps the closed state at
+           z = 0, or every spine renders ~5% small and soft. */
         transform-origin: left center calc(var(--t) * -1);
         transform: translateZ(calc(var(--t) * (1 - var(--open))))
             rotateY(calc(90deg - (90deg - var(--open-angle)) * var(--open)));
     }
 
-    /* The one rule the whole open state hangs off. */
     .shelf-book:has(details[open]) {
         --open: 1;
         z-index: 3;
@@ -275,12 +222,7 @@ const described = [
         inset: 0;
     }
 
-    /*
-      ── Light, on the turned-out book only ──────────────────────────────
-      Every layer is scaled by --open, so it arrives with the turn and is
-      exactly nothing at rest — no second rule to keep in sync with the open
-      state. Positioned, so they paint over the cover image without a z-index.
-    */
+    /* Light, scaled by --open, so it is nothing at rest. */
     .face-cover::before,
     .face-cover::after {
         content: "";
@@ -289,11 +231,7 @@ const described = [
         opacity: calc(var(--open) * var(--shade));
     }
 
-    /*
-      The joint: lit corner, a strip of board, the groove the cover hinges on,
-      then the face. Hard stops in fixed pixels — a soft percentage ramp reads
-      as the cover curving away, which is a paperback, not boards.
-    */
+    /* Hard stops in fixed pixels: a soft ramp reads as a paperback. */
     .face-cover::before {
         inset-block: 0;
         inset-inline-start: 0;
@@ -307,7 +245,6 @@ const described = [
         );
     }
 
-    /* A weak off-axis sheen: the board catches the light, it doesn't shine. */
     .face-cover::after {
         inset: 0;
         background: linear-gradient(
@@ -319,8 +256,7 @@ const described = [
         );
     }
 
-    /* The spine has turned away from the light. `to right` runs outer edge to
-       hinge: the face is laid out left of the cover and swung back. */
+    /* `to right` runs outer edge to hinge. */
     .face-spine::after {
         content: "";
         position: absolute;
@@ -350,12 +286,8 @@ const described = [
         background: var(--spine);
         color: var(--text);
         display: flex;
-        /* Every title at the foot, every heart at the head — seeding this per
-           book for variety made a shelf of eighty read as noise. */
         align-items: flex-end;
         justify-content: center;
-        /* On the face rather than the title, so the flex alignment has
-           something to sit inside. */
         padding-block: 0.75rem;
         overflow: hidden;
     }
@@ -368,7 +300,6 @@ const described = [
         height: 100%;
         transform-origin: left center;
         transform: rotateY(90deg);
-        /* The page block. */
         background: #f2f0eb;
     }
 
@@ -401,19 +332,14 @@ const described = [
         opacity: 0.7;
     }
 
-    /*
-      Sized off --t, not a container query: in vertical-rl the inline size is
-      the element's height, so cqi would scale the type with the spine's length
-      instead of its width.
-    */
+    /* Sized off --t, not cqi: in vertical-rl the inline size is the height. */
     .spine-title {
         writing-mode: vertical-rl;
-        /* `sideways-lr` says this directly but still isn't safe in Safari. */
+        /* `sideways-lr` isn't safe in Safari yet. */
         transform: rotate(180deg);
         overflow: hidden;
         max-height: 100%;
-        /* In vertical-rl the lines stack across the width, so capping the
-           width is what caps the line count. */
+        /* In vertical-rl, capping the width caps the line count. */
         max-width: calc(1.35em * var(--title-lines, 1));
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -476,17 +402,11 @@ const described = [
         display: none;
     }
 
-    /* utils/books.ts only hands out the second line where the spine can take
-       it, so nothing is left half-clipped. */
     .shelf-book[data-title-lines="2"] .spine-title {
         white-space: normal;
         text-overflow: clip;
     }
 
-    /*
-      The `ease-spring` class on the <li> is load-bearing, not decoration:
-      transitions.css declares --ease-spring under a plain `@theme`, so Tailwind
-      drops it from :root unless the scanner sees a use — and a scoped <style>
-      like this one is invisible to it.
-    */
+    /* The `ease-spring` class on the <li> keeps --ease-spring in :root: Tailwind
+       can't see uses in scoped styles. */
 </style>

@@ -1,8 +1,4 @@
-/**
- * A human "x time ago" string for a past date. Computed at build time, so it
- * reflects the moment the site was last built (fine for a changelog).
- * Ported from v3.
- */
+/** "x time ago", computed at build time. */
 export function timeSince(date: Date): string {
     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
     let interval = seconds / 31536000;
@@ -44,7 +40,6 @@ export function timeSince(date: Date): string {
     return ago(seconds, "second");
 }
 
-/** "3 days ago" / "1 day ago" — pluralise the unit for a whole count. */
 function ago(count: number, unit: string): string {
     const n = Math.floor(count);
     return `${n} ${unit}${n === 1 ? "" : "s"} ago`;

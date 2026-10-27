@@ -12,11 +12,7 @@ export interface DesignToken {
     source: string;
 }
 
-/** Build-time catalogue of our flat @theme blocks, not a second token set.
- * Only @theme declarations belong here: body overrides and @font-face have
- * different jobs. Wildcard resets such as --text-*: initial are not tokens.
- * This deliberately reads our known CSS format, not arbitrary CSS syntax.
- */
+/** Parses our own @theme blocks, not arbitrary CSS. Overrides aren't tokens. */
 function readTheme(css: string, source: string): DesignToken[] {
     const clean = css.replace(/\/\*[\s\S]*?\*\//g, "");
     const tokens = new Map<string, DesignToken>();
@@ -66,9 +62,9 @@ export const containerTokens = designTokens.filter((t) => t.name.startsWith("--c
 export const shadowTokens = designTokens.filter((t) => t.name.startsWith("--shadow-"));
 export const easingTokens = designTokens.filter((t) => t.name.startsWith("--ease-"));
 
-/** Scoped to the specimens so Tailwind cannot prune a token that is only
- * referenced by dynamic markup. The values still come straight from source.
- * Colour defaults are excluded: Layout's per-page paper overrides stay live.
+/**
+ * Scoped to the specimens so Tailwind can't prune tokens used only by dynamic
+ * markup. Colours are excluded: Layout overrides them per page.
  */
 export const specimenTokens = designTokens
     .filter((t) => !t.name.startsWith("--color-"))
@@ -76,7 +72,6 @@ export const specimenTokens = designTokens
     .join(";");
 
 export function easingPath(value: string): string {
-    // Our three spring curves use explicit value/percentage stops.
     return [...value.matchAll(/(-?\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)%/g)]
         .map(([, progress, percentage], index) => {
             const x = 12 + Number(percentage) * 2.96;

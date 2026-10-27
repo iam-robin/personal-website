@@ -1,11 +1,7 @@
 ---
 /**
- * Shared filter-tag pill, used by every subpage filter so they look identical.
- * Filtering stays server-side — this is only presentation.
- *
- * The active tag flips to solid ink: two fills of the same ink differ by too
- * little to read across a wrapping row. Inactive tags mute the *text*, not the
- * element, so slotted decoration (a colour dot, a flag) keeps full colour.
+ * Active tags are solid ink: two tints of ink are too close to read. Inactive
+ * tags mute the text, not the element, so slotted dots and flags keep colour.
  */
 interface Props {
     href: string;
@@ -17,8 +13,8 @@ const { href, active = false, count } = Astro.props;
 
 const base =
     "inline-flex items-center gap-1.5 rounded-full py-1 font-mono text-sm transition-colors";
-// The knockout slot brings its own side padding, so the active chip pulls its
-// right padding in to keep the pill balanced.
+// The knockout slot has its own padding, so the active chip pulls its right
+// padding in.
 const state = active
     ? `bg-ink text-paper active:bg-ink/85 ${count !== undefined ? "pr-1.5 pl-3" : "px-3"}`
     : "bg-ink/5 px-3 text-ink-muted hover:bg-ink/10 hover:text-ink focus-visible:text-ink active:bg-ink/20";

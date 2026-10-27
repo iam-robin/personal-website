@@ -2,7 +2,6 @@ import { getCollection, type CollectionEntry } from "astro:content";
 
 export type GardenNote = CollectionEntry<"garden">;
 
-/** Category background colors, in the order v3 assigns them. */
 export const gardenColors = [
     "#9EAAFA",
     "#FAE680",
@@ -16,7 +15,6 @@ export const gardenColors = [
     "#F4DAA0",
 ];
 
-/** All garden notes, newest first. */
 export async function getGardenNotes(): Promise<GardenNote[]> {
     return (await getCollection("garden")).sort(
         (a, b) =>
@@ -97,7 +95,7 @@ async function buildLookup(kind: MediaKind): Promise<MediaNoteLookup> {
     };
 }
 
-/** Categories with note counts, most notes first (drives color order). */
+/** Most notes first. This order drives the category colors. */
 export function getCategories(
     notes: GardenNote[],
 ): { name: string; count: number }[] {
@@ -110,10 +108,6 @@ export function getCategories(
         .sort((a, b) => b.count - a.count);
 }
 
-/**
- * Map each category to a stable color index — sorted by count, exactly
- * like v3, so a category always gets the same color.
- */
 export function getCategoryColorMap(
     notes: GardenNote[],
 ): Record<string, number> {

@@ -1,9 +1,6 @@
 ---
 /**
- * Mobile navigation: a fixed "Menu" pill at the bottom of the viewport
- * that expands into a panel of links — the concept from v3, restyled for
- * v4. Shown below md, where the inline <Nav> is hidden. Also renders a
- * spacer in the page flow so the floating pill never covers the last
+ * Shown below md. Also renders a spacer so the pill never covers the last
  * content on the page.
  */
 import { Icon } from "astro-icon/components";
@@ -87,10 +84,8 @@ const isActive = (href: string) =>
 </nav>
 
 <style>
-    /* List -> x. Both icons stay in the DOM, stacked, and trade
-       opacity/scale/blur — `display` can't transition, so the old toggle cut
-       between them with no motion at either end. Driven straight off
-       :popover-open, so the pill needs no JS to animate. */
+    /* Both icons stay stacked and cross-fade (display can't transition), driven by
+       :popover-open, no JS. */
     .icon-swap :global(svg) {
         position: absolute;
         inset: 0;

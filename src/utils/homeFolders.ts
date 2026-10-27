@@ -27,7 +27,6 @@ function timestamp(value?: string | null): number {
     return Number.isFinite(time) ? time : 0;
 }
 
-/** Build-time previews, using the same content sources as the destination pages. */
 export async function getHomeFolders(): Promise<HomeFolder[]> {
     const [notes, bookmarks, books, postcards] = await Promise.all([
         getGardenNotes(),
@@ -38,7 +37,7 @@ export async function getHomeFolders(): Promise<HomeFolder[]> {
         getNewestPostcards(PREVIEW_LIMIT),
     ]);
 
-    // Compute before reordering, so tied category counts match the notes page.
+    // Before reordering, so tied counts get the same colours as on /notes.
     const categoryColors = getCategoryColorMap(notes);
 
     return [
@@ -72,7 +71,6 @@ export async function getHomeFolders(): Promise<HomeFolder[]> {
             label: "Books",
             href: "/books",
             kind: "books",
-            // Currently reading first, then most recently finished.
             items: books
                 .toSorted((a, b) =>
                     Number(b.data.group === "aktiv") - Number(a.data.group === "aktiv") ||

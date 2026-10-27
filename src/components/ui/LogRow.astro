@@ -4,18 +4,12 @@ import Rating from "./Rating.astro";
 
 interface Props {
     title: string;
-    /** Dim qualifier after the title: "S2" on /series, the film's year on /movies. */
     chip?: string | number | null;
-    /** The heart /books puts at the head of a spine. Decorative — whatever it
-        stands for (a rating of 4+, a Letterboxd like) is in the meta or implied. */
+    /** Decorative: what it stands for is in the meta or implied. */
     favourite?: boolean;
-    /** A score rendered as five asterisk marks. */
     rating?: number | null;
-    /** A fixed-width date at the right of the row. */
     date?: string;
-    /** Other right-hand metadata, such as “Watching”. */
     meta?: string;
-    /** Remote poster URL. Absent is fine — the row just has nothing to show. */
     cover?: string | null;
     /** Garden note URL. Marks the row and makes it a link. */
     note?: string | null;
@@ -53,12 +47,8 @@ const {
             )
         }
 
-        {
-            /* Two different squeezes. Below md there's no hairline, so the title
-            shrinks against the meta and truncates. From md the hairline's
-            `grow` would eat it down to an ellipsis instead, so it holds its
-            width there and the cap keeps the longest title off the meta. */
-        }
+        {/* Below md the title truncates against the meta. From md the hairline's
+            `grow` would eat it, so it holds its width and the cap keeps it off the meta. */}
         <div class="flex min-w-0 items-center gap-2 md:max-w-[75%] md:shrink-0">
             <p class="truncate font-mono text-sm" title={title}>
                 {

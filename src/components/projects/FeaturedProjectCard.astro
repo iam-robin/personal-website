@@ -16,7 +16,6 @@ const isExternal = !!externalUrl;
 const cardTitleLines = project.id === "one-canvas-many-hands"
     ? ["one canvas,", "many hands"]
     : null;
-// Drafts retain the same card layout, but are not links to unpublished pages.
 const Tag = draft ? "article" : "a";
 const linkAttributes = draft ? {} : {
     href: externalUrl || `/projects/${project.id}`,
@@ -82,7 +81,6 @@ const linkAttributes = draft ? {} : {
 </Tag>
 
 <style>
-    /* Keep the coordinated card and fan transforms together. */
     .fan-card-image:nth-child(1) {
         z-index: 3;
         transform: rotate(-5deg);

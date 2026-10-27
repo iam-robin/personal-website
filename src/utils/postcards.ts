@@ -1,6 +1,5 @@
 import { db, Postcard, desc, eq } from "astro:db";
 
-/** The newest published postcards, newest first. */
 export async function getNewestPostcards(limit = 3) {
     return db
         .select()
@@ -10,7 +9,6 @@ export async function getNewestPostcards(limit = 3) {
         .limit(limit);
 }
 
-/** Every published postcard, newest first. */
 export async function getPublishedPostcards() {
     return db
         .select()
@@ -19,14 +17,11 @@ export async function getPublishedPostcards() {
         .orderBy(desc(Postcard.date));
 }
 
-/** Shared by every postcard route so they all paginate over the same slices. */
 export const POSTCARDS_PAGE_SIZE = 24;
 
 /**
- * URL for a country/page combination. Page 1 lives at the base path; deeper
- * pages append the number.
- *
- *   /postcards      /postcards/2      /postcards/country/Japan
+ * Page 1 lives at the base path: /postcards, /postcards/2,
+ * /postcards/country/Japan
  */
 export function postcardsHref({
     country,
@@ -39,7 +34,7 @@ export function postcardsHref({
     return page && page > 1 ? `${base}/${page}` : base;
 }
 
-/** Map a DB row to PostcardItem props (drizzle nulls → undefined). */
+/** Drizzle nulls to undefined. */
 export const toPostcardProps = (postcard: typeof Postcard.$inferSelect) => ({
     author: postcard.author,
     body: postcard.body,

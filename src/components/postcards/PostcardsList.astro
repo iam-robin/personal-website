@@ -1,15 +1,8 @@
 ---
 /**
- * The postcards, arranged to suit the screen — one set of markup, switched by
- * media query alone (emitting both layouts would double the HTML).
- *
- * From `lg`: a full-bleed gallery, since two landscape cards side by side are
- * wider than the reading column. Below it: the deck, where each card sticks
- * near the top of the viewport and the next slides over it. Plain
- * `position: sticky`, no JS — every card sticks inside one tall container.
- *
- * Offsets are scattered rather than evenly stepped, drawn from a PRNG seeded
- * on the card's identity so they're stable across rebuilds and pages.
+ * One set of markup, switched by media query. From `lg` a gallery; below it a
+ * sticky deck where each card slides over the last, no JS. Offsets are seeded
+ * so they're stable across rebuilds.
  */
 import type { Postcard } from "astro:db";
 import PostcardItem from "./PostcardItem.astro";
@@ -22,11 +15,9 @@ interface Props {
 
 const { postcards } = Astro.props;
 
-// Plain numbers, not lengths: the CSS multiplies them by --pc-lift /
-// --pc-spread, which shrink on narrow screens and are unused by the gallery.
+// Plain numbers: the CSS multiplies them by --pc-lift / --pc-spread.
 const scattered = postcards.map((postcard) => {
-    // Prefixed so this is independent of the values PostcardItem seeds from
-    // the same identity.
+    // Prefixed so it's independent of what PostcardItem seeds from the same id.
     const rand = createSeededRandom(
         `stack|${postcard.author}|${postcard.date.getTime()}`,
     );
@@ -57,43 +48,28 @@ const scattered = postcards.map((postcard) => {
 </div>
 
 <style>
-    /* ---------- the deck (below lg) ---------- */
-
     .pc-cards {
-        /* Where the deck rests, measured from the top of the viewport. */
         --pc-rest: 2.5rem;
-        /* The band a card may land in, either side of that line. Kept small:
-           it's the edges of the cards underneath that read as a pile, and a
-           card that lands too far off hides the one in front of it. */
+        /* Kept small: a card that lands too far off hides the one in front of it. */
         --pc-lift: 34px;
         --pc-spread: 8px;
-        /* The page gutter, read from the same token the shell pads with.
-           Pulled out by margin and put back as padding, so the cards keep the
-           column's width while the clip boundary sits out in the gutter. */
+        /* Pulled out by margin and put back as padding, so the clip sits in the gutter. */
         --pc-bleed: var(--spacing-gutter);
-        /* How long a card stands unobstructed before the next slides over it.
-           Keep it short — the overlap is the effect; a long pause reads as a
-           slideshow of single cards. */
+        /* Short: the overlap is the effect. */
         --pc-gap: 10vh;
-        /* Travel room for the last card (see ::after). Exactly one gap, so it
-           gets the same beat as every other card and no more. */
         --pc-tail: var(--pc-gap);
 
         list-style: none;
         margin: 0 calc(-1 * var(--pc-bleed));
         padding: 0 var(--pc-bleed);
-        /* Franking marks sit off the card's right edge and would give the page
-           a horizontal scrollbar. Clipped out in the gutter, so a leaning card
-           keeps the corner it leans past. `clip` not `hidden` — hidden would
-           make this a scroll container and break the sticky. */
+        /* Franking marks would add a horizontal scrollbar. `clip`, not `hidden`: hidden
+           makes a scroll container and breaks sticky. */
         overflow-x: clip;
-        /* Keep the per-card z-indexes (0…n) out of the page's stacking. */
         isolation: isolate;
     }
 
-    /* A sticky box can't be pushed past the bottom of its containing block,
-       which is the list's content box — padding wouldn't count. Without this
-       spacer the last card scrolls past mid-slide. */
+    /* Sticky can't pass its containing block's content box; this spacer gives the
+       last card room to slide. */
     .pc-cards::after {
         content: "";
         display: block;
@@ -103,14 +79,11 @@ const scattered = postcards.map((postcard) => {
     .pc-slot {
         position: sticky;
         top: calc(var(--pc-rest) + var(--pc-y) * var(--pc-lift));
-        /* The gap lives on the slot, not between slots: a sticky box is
-           pinned by its top edge, so trailing padding buys scroll distance
-           without moving the card. */
+        /* On the slot: sticky pins by the top edge, so trailing padding adds scroll
+           distance without moving the card. */
         padding-bottom: var(--pc-gap);
     }
 
-    /* …except the last, whose padding would survive as real whitespace
-       wedged between the deck and whatever follows the list. */
     .pc-slot:last-child {
         padding-bottom: 0;
     }
@@ -122,8 +95,6 @@ const scattered = postcards.map((postcard) => {
         transform: translateX(calc(var(--pc-x) * var(--pc-spread)));
     }
 
-    /* Phones: the card switches to its taller stacked layout and leans further
-       past its own edges, so the sideways scatter gives up its share. */
     @media (max-width: 640px) {
         .pc-cards {
             --pc-rest: 2rem;
@@ -133,9 +104,8 @@ const scattered = postcards.map((postcard) => {
         }
     }
 
-    /* Short viewports fall back to a plain list: a pinned card taller than the
-       screen can never be scrolled to the end of, putting the sender and date
-       out of reach. The tallest cards run ~590px. */
+    /* Short viewports get a plain list: a pinned card taller than the screen can't
+       be read to the end. */
     @media (max-height: 670px) {
         .pc-slot {
             position: static;
@@ -145,9 +115,6 @@ const scattered = postcards.map((postcard) => {
         }
     }
 
-    /* ---------- the gallery (lg and up) ---------- */
-
-    /* Tailwind's `lg` — the width at which a second card fits per row. */
     @media (width >= 64rem) {
         .pc-bleed {
             position: relative;
@@ -167,7 +134,6 @@ const scattered = postcards.map((postcard) => {
             padding: 0 var(--spacing-gutter);
         }
 
-        /* The deck's travel room would otherwise become a stray flex item. */
         .pc-cards::after {
             display: none;
         }
@@ -183,8 +149,6 @@ const scattered = postcards.map((postcard) => {
             transform: none;
         }
 
-        /* Only share rows once there's a second card, so a lone postcard
-           stays full width rather than stranded at half. */
         .pc-cards:has(> :nth-child(2)) .pc-slot {
             width: calc(50% - 1.25rem);
         }

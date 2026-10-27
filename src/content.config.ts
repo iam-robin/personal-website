@@ -4,15 +4,8 @@ import { z } from "astro/zod";
 import { linkdingLoader } from "./loaders/linkding";
 
 /**
- * Personal data (books, garden notes, series, timeline) comes from the
- * Obsidian export repo, mounted as git submodule at `data/`. The loaders
- * below read the exported JSON directly — no sync scripts, no GitHub
- * fetching. Bookmarks are the exception: they live in my self-hosted
- * linkding and come in over its API — see loaders/linkding.ts.
- *
- * Date fields are kept as strings on purpose: the exports mix ISO dates,
- * plain years, empty strings and even negative years (timeline). Parse
- * at the point of use.
+ * Exported dates mix ISO dates, plain years, empty strings and negative years,
+ * so they stay strings. Parse at the point of use.
  */
 
 const slugify = (value: string) =>
@@ -23,7 +16,6 @@ const slugify = (value: string) =>
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
 
-/** Generate unique ids, appending a counter on collision. */
 const uniqueIdFactory = () => {
     const seen = new Map<string, number>();
     return (value: string) => {
@@ -37,10 +29,7 @@ const uniqueIdFactory = () => {
 type Group = "aktiv" | "merkliste" | "pausiert" | "abgeschlossen";
 const GROUPS: Group[] = ["aktiv", "merkliste", "pausiert"];
 
-/**
- * books.json / series.json share the same shape:
- * flat arrays for aktiv/merkliste/pausiert, plus abgeschlossen keyed by year.
- */
+/** books.json / series.json: flat arrays per group, `abgeschlossen` keyed by year. */
 const parseGroupedMedia = (text: string) => {
     const data = JSON.parse(text);
     const uniqueId = uniqueIdFactory();
@@ -66,11 +55,7 @@ const parseGroupedMedia = (text: string) => {
 
 const groupSchema = z.enum(["aktiv", "merkliste", "pausiert", "abgeschlossen"]);
 
-/**
- * The exports are loose around arrays: null for missing arrays, a bare
- * string for single values (e.g. series director), and even null entries
- * inside arrays — normalize everything to a clean string[].
- */
+/** The exports send null, bare strings and null entries for arrays. */
 const nullableArray = z
     .union([z.array(z.string().nullable()), z.string()])
     .nullish()
@@ -125,10 +110,7 @@ const series = defineCollection({
     }),
 });
 
-/**
- * `cover` is a bare filename in src/generated/bookmark-covers, put there by
- * the loader; utils/bookmarks.ts resolves it to an optimisable image.
- */
+/** Bare filename in src/generated/bookmark-covers, resolved in utils/bookmarks.ts. */
 const bookmarks = defineCollection({
     loader: linkdingLoader(),
     schema: z.object({
@@ -191,8 +173,6 @@ const timeline = defineCollection({
     }),
 });
 
-// Local content (not from the data submodule)
-
 const projects = defineCollection({
     loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
     schema: z.object({
@@ -221,20 +201,9 @@ const blog = defineCollection({
             description: z.string().optional(),
             date: z.date(),
             category: z.string().optional(),
-            /**
-             * The toot announcing this post. Its replies are mirrored under
-             * the post by MastodonComments. Either the status id or the whole
-             * toot URL works — normalizeStatusId in utils/mastodon.ts takes
-             * both, so this can be pasted straight from the address bar.
-             * Left unset, the post simply carries no replies section.
-             */
+            /** Status id or toot URL. Its replies are mirrored under the post. */
             mastodonId: z.string().optional(),
-            /**
-             * Escape hatch for a hand-made link preview card, as a path under
-             * public/ (e.g. "/og/my-post.png"). Left unset — which is the
-             * normal case — the card is generated from the post's own title
-             * by src/pages/og/blog/[slug].png.ts.
-             */
+            /** Path under public/. Unset, the card is generated from the title. */
             ogImage: z.string().optional(),
             /** Opt-in authorship note for posts written with AI assistance. */
             aiDisclosure: z.boolean().optional(),

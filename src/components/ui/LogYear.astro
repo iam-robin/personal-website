@@ -1,14 +1,7 @@
 ---
-/**
- * One year of a media log: the year label, a count, and the rows below it.
- * The header is the same row /books gives each shelf, so every log reads as
- * one habit recorded several ways. Rows go in the slot as <LogRow>s.
- */
 interface Props {
-    /** The heading — a year, or "Undated" for entries logged without one. */
     label: string;
     count: number;
-    /** Singular; pluralised with an "s" for the count line. */
     noun: string;
 }
 

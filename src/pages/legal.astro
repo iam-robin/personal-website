@@ -1,14 +1,7 @@
 ---
 import SubpageLayout from "../layouts/SubpageLayout.astro";
 
-/**
- * Legal notice (Impressum) — the bits German law requires, plus a plain-English
- * note on what the postcard feature stores. Ported from v3; the postcard
- * section is updated to match the v4 Astro DB setup.
- *
- * The formal liability/copyright/privacy wording is intentionally left in its
- * standard legal phrasing rather than rewritten in the site's usual voice.
- */
+/** The formal wording stays in standard legal phrasing on purpose. */
 const sections: { title: string; body: string }[] = [
     {
         title: "Liability for content",
@@ -34,7 +27,6 @@ const sections: { title: string; body: string }[] = [
     description="The bits the law requires — who runs this site, and a plain note on the little the postcard feature stores."
 >
     <div class="flex flex-col gap-16">
-        <!-- Editor · Contact -->
         <section class="grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2">
             <div>
                 <h2
@@ -62,7 +54,6 @@ const sections: { title: string; body: string }[] = [
             </div>
         </section>
 
-        <!-- Formal sections -->
         <div class="flex flex-col divide-y divide-dotted divide-ink/30">
             {
                 sections.map((s) => (
@@ -77,7 +68,6 @@ const sections: { title: string; body: string }[] = [
                 ))
             }
 
-            <!-- Postcard data collection -->
             <section class="py-10 last:pb-0">
                 <h2
                     class="mb-4 font-mono text-xs tracking-widest text-ink-muted uppercase"

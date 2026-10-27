@@ -18,7 +18,6 @@
     font-display: swap;
 }
 
-/* fira-mono-regular - latin */
 @font-face {
     font-display: swap;
     font-family: "Fira Mono";
@@ -27,7 +26,6 @@
     src: url("/fonts/fira-mono-v14-latin-regular.woff2") format("woff2");
 }
 
-/* fira-mono-700 - latin */
 @font-face {
     font-display: swap;
     font-family: "Fira Mono";
@@ -45,7 +43,6 @@
 }
 
 @theme {
-    /* Font Family */
     --font-*: initial;
     --font-sans:
         "apercu", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
@@ -57,7 +54,6 @@
         "LiebeHeide", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
         "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-    /* Line Height */
     --leading-none: 1;
     --leading-tight: 1.25;
     --leading-snug: 1.375;
@@ -65,18 +61,11 @@
     --leading-relaxed: 1.625;
     --leading-loose: 2;
 
-    /*
-    Fluid type scale, calibrated to CONTAINER width (400px → 880px) rather
-    than the viewport, since the hero and content live in half-width columns.
-    Each size is declared twice: a `vi` fallback first, then the `cqi`
-    version, which modern browsers use. The fallback runs half the slope,
-    since a column is ~50vw.
-  */
+    /* Calibrated to container width (400px to 880px). Each size is declared twice:
+       a `vi` fallback at half the slope, then the `cqi` version. */
 
-    /* Font Size */
     --text-*: initial;
-    /* The floor. Below this text stops being readable rather than just small,
-       so nothing on the site goes under it. */
+    /* The floor. Nothing on the site goes below it. */
     --text-2xs: 0.75rem;
     --text-xs: 0.8125rem;
 
@@ -86,15 +75,8 @@
     --text-base: clamp(1rem, 0.21vi + 0.9rem, 1.125rem);
     --text-base: clamp(1rem, 0.42cqi + 0.9rem, 1.125rem);
 
-    /* Long-form body copy, between base and md: Apercu at 17–21px reads at
-       the size mono needs 16–17px to match.
-
-       The top of the ramp is set by the measure, not by taste. The reading
-       column is a fixed 42rem, so the only lever on characters-per-line is
-       the type size: at 18.5px it ran to ~82 characters, well past the 60–75
-       a line can be tracked comfortably. 20.8px at the full column lands at
-       ~73. The ramp is calibrated to hit exactly that at 672px, which is
-       where the column stops growing. */
+    /* Sized for the measure: hits ~73 characters per line at the full 42rem
+       column (672px). */
     --text-prose: clamp(1.0625rem, 0.55vi + 0.86rem, 1.3rem);
     --text-prose: clamp(1.0625rem, 1.1cqi + 0.8375rem, 1.3rem);
 
@@ -116,7 +98,6 @@
     --text-4xl: clamp(2.6rem, 3vi + 1.1rem, 5.5rem);
     --text-4xl: clamp(2.6rem, 6cqi + 1.1rem, 5.5rem);
 
-    /* Line Height per size */
     --text-2xs--line-height: var(--leading-normal);
     --text-xs--line-height: var(--leading-relaxed);
     --text-sm--line-height: var(--leading-relaxed);
@@ -125,14 +106,11 @@
     --text-lg--line-height: var(--leading-tight);
     --text-xl--line-height: var(--leading-tight);
     --text-2xl--line-height: var(--leading-tight);
-    /* Not `--leading-none`: these sizes wrap — the homepage statement runs to
-       four lines — and at 1.0 a descender lands on the cap-line below it. */
+    /* Not 1.0: these sizes wrap, and descenders would hit the next cap line. */
     --text-3xl--line-height: 1.08;
     --text-4xl--line-height: 1.05;
 
-    /* Letter Spacing. Only the display end: Apercu's default fit is drawn for
-       text sizes and reads loose once it's set at 45px and up. Body sizes
-       stay at their designed fit. */
+    /* Only the display end: Apercu reads loose at 45px and up. */
     --text-3xl--letter-spacing: -0.02em;
     --text-4xl--letter-spacing: -0.025em;
 }

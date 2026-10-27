@@ -3,31 +3,16 @@ import SubpageLayout from "../layouts/SubpageLayout.astro";
 import ShelfRow from "../components/books/ShelfRow.astro";
 import { getShelfYears } from "../utils/books";
 
-/*
-  "On the pile" — the paused and want-to-read books — is held back for now.
-  `getPile()` in utils/books.ts is still there; bring back the import, an
-  `<Eyebrow>` and a list to restore it.
-*/
+/* "On the pile" is held back for now. getPile() in utils/books.ts still
+   works; add an <Eyebrow> and a list to restore it. */
 const years = await getShelfYears();
 
 const total = years.reduce((sum, year) => sum + year.books.length, 0);
 
-/*
-  Connecting an open book to its own line in the detail strip under the row.
-
-  This can't be an Astro scoped style: `.shelf-row` and `.shelf-detail` are
-  ShelfRow's, `details[open]` is BookSpine's, and a scoped selector gets its
-  own component's hash stamped on it — so the cross-component compound would
-  never match. Generated + `is:inline` is the house pattern for computed CSS
-  (see index.astro's hero panels).
-
-  Books and detail lines are emitted in the same order, so one rule per index
-  covers every row. Derived from the data so a bumper year can't outgrow it.
-
-  The line fades in behind the book — text arriving with the turn competes
-  with it — but hides immediately. `visibility` carries the delay because
-  opacity alone would leave the outgoing line catching the pointer.
-*/
+/* Links an open book to its line under the row. Not a scoped style: the
+   selector crosses ShelfRow and BookSpine, and scoping would stamp one hash on
+   both. One rule per index, derived from the data. `visibility` carries the
+   delay, or the outgoing line would still catch the pointer. */
 const maxBooks = Math.max(...years.map((year) => year.books.length));
 
 const detailCss = `

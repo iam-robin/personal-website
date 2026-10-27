@@ -1,94 +1,63 @@
 import DOMPurify from "isomorphic-dompurify";
 
 /**
- * Replies to a blog post's Mastodon toot, fetched at build time.
- *
- * The conversation lives on Mastodon; this only mirrors it. That means no
- * comment database, no moderation queue, and no client-side JS — at the cost
- * of the page being up to a day stale, which the daily rebuild bounds.
- *
- * Everything that makes a reply safe to put on the page happens in here. The
- * component receives strings that are already sanitized, and never sees a raw
- * status.
+ * Replies to a post's Mastodon toot, mirrored at build time. Everything that
+ * makes a reply safe happens here; components only get sanitized strings.
  */
 
 const INSTANCE = "https://mastodon.social";
 const HANDLE = "iamrobin";
 const TIMEOUT_MS = 8_000;
 
-/** Whole branches are added until this many replies are on the page. */
 const MAX_REPLIES = 12;
 
 /**
- * Longer than this (plain-text characters) and a reply is left on Mastodon.
- * Truncating sanitized HTML mid-string means re-balancing tags, so an
- * over-long reply is dropped and counted instead. mastodon.social caps toots
- * at 500 characters, but a federated reply from another instance has no such
- * limit and one essay would out-length the post it sits under.
+ * Longer replies (plain-text chars) are dropped and counted, not truncated:
+ * cutting sanitized HTML would mean re-balancing tags.
  */
 const MAX_REPLY_CHARS = 700;
 
 /**
- * Accounts filtered out of every thread, by `acct` ("kwalm", or
- * "someone@another.instance"), lowercased.
- *
- * mastodon.social's own moderation already applies — suspended accounts and
- * defederated instances never reach us. What an unauthenticated fetch cannot
- * see is Robin's *personal* blocks and mutes, so this list is the stand-in for
- * them, and the only lever over what appears on his own site.
- *
- * To take a reply down: add the acct here, push, and run the "Daily rebuild"
- * workflow manually (it has a workflow_dispatch trigger).
+ * Lowercased `acct`s hidden from every thread: my personal blocks, which an
+ * unauthenticated fetch can't see. To take a reply down, add it here, push and
+ * run the "Daily rebuild" workflow.
  */
 const DENIED_ACCTS = new Set<string>([]);
 
-/** Anything else is somebody's followers-only post. See KEEP_VISIBILITY below. */
 const KEEP_VISIBILITY = new Set(["public", "unlisted"]);
 
-/** One reply, ready to render. `html` is sanitized. */
 export interface MastodonReply {
     id: string;
     url: string;
     date: Date;
-    /** Sanitized. Safe for set:html. */
     html: string;
     authorName: string;
     authorAcct: string;
     authorUrl: string;
-    /** Robin answering in his own thread. */
     isAuthor: boolean;
-    /**
-     * BCP-47, and only when it differs from the page's own language — see
-     * replyLanguage. null means "don't assert one".
-     */
+    /** Only when it differs from the page's language. See replyLanguage. */
     language: string | null;
-    /** Content warning. Non-null means the body belongs behind a <details>. */
+    /** Content warning. Non-null puts the body behind a <details>. */
     spoiler: string | null;
-    /** Follow-ups, flattened to one level. See buildBranches. */
     children: MastodonReply[];
 }
 
 export interface MastodonThread {
-    /** Usable even when `ok` is false — built from the id, no API involved. */
+    /** Built from the id, so usable even when `ok` is false. */
     url: string;
-    /** false when the API was unreachable, slow, or answered badly. */
     ok: boolean;
-    /** Top-level branches, oldest first, already capped. */
     branches: MastodonReply[];
-    /** Renderable replies that didn't make the page. 0 when none. */
     hiddenCount: number;
     favourites: number | null;
     reblogs: number | null;
 }
 
-/** Only the fields actually read. */
 interface MastodonAccount {
     id: string;
     acct: string;
     display_name: string;
     url: string;
     bot: boolean;
-    /** Silenced by the instance's moderators. */
     limited?: boolean;
 }
 
@@ -108,15 +77,9 @@ interface MastodonStatus {
     account: MastodonAccount;
 }
 
-/**
- * Accepts a bare status id, an id with junk stuck to it ("…702#"), or the whole
- * toot URL copied out of the address bar — the last one is what makes the
- * publishing step a paste rather than a digit hunt. Anything unusable is null,
- * which the component treats the same as no id at all.
- */
+/** Accepts a bare id, an id with junk on it, or the whole toot URL. */
 export function normalizeStatusId(raw?: string): string | null {
-    // Last id-shaped segment, not simply the last segment: a copied URL can
-    // carry a "#comment" fragment after the id.
+    // Last id-shaped segment: a copied URL can end in a #fragment.
     const segments = (raw ?? "").trim().split(/[/#?]/).filter(Boolean);
     for (const segment of segments.reverse()) {
         const digits = segment.replace(/\D/g, "");
@@ -125,10 +88,7 @@ export function normalizeStatusId(raw?: string): string | null {
     return null;
 }
 
-/**
- * The permalink, from the id alone. No network call — which is why the
- * "reply on Mastodon" link still works on a build where the API was down.
- */
+/** From the id alone, so the link works even when the API is down. */
 export function threadUrl(id: string): string {
     return `${INSTANCE}/@${HANDLE}/${id}`;
 }
@@ -148,7 +108,6 @@ const ALLOWED_TAGS = [
     "li",
 ];
 
-/** Tags out, entities in, whitespace collapsed — for length and empty tests. */
 function plainText(html: string): string {
     return html
         .replace(/<[^>]+>/g, " ")
@@ -159,37 +118,26 @@ function plainText(html: string): string {
 }
 
 /**
- * Mastodon's HTML, made safe for this page in three passes.
- *
- * `class` is stripped outright rather than allowlisted. Mastodon carries
- * meaning in it (.invisible hides a URL's scheme, .h-card wraps a mention),
- * but this site ships Tailwind: .invisible here is `visibility:hidden`, which
- * would *reserve* the hidden prefix's width and leave a gap mid-URL — and
- * .fixed/.inset-0/.z-50 are all in the same stylesheet, so a class-carrying
- * reply could lay a full-viewport overlay over the post. Allowlisting by value
- * would need a DOMPurify hook, and hooks attach to the shared singleton that
- * the RSS feed and the postcard SVGs also sanitize through.
+ * Made safe in three passes. `class` is stripped, not allowlisted: the site's
+ * Tailwind utilities would apply to reply markup, and an allowlist hook would
+ * attach to the DOMPurify singleton the RSS feed and stamps share.
  */
 export function sanitizeReplyHtml(content: string): string {
-    // 1. Unwrap the two classes that carry meaning, while they still exist.
-    //    Regex on untrusted HTML is fine *here* precisely because the result
-    //    goes straight into DOMPurify below: the worst a crafted string can do
-    //    is delete some of its own text or award itself an ellipsis.
+    // 1. Unwrap the meaningful classes first. Regex is fine here: DOMPurify
+    //    sanitizes the result next.
     const unwrapped = content
         .replace(/<span class="invisible">.*?<\/span>/gs, "")
         .replace(/<span class="ellipsis">(.*?)<\/span>/gs, "$1…");
 
-    // 2. `span` is deliberately not allowed. DOMPurify keeps the *text* of a
-    //    disallowed element, so the h-card wrapper around a mention collapses
-    //    to a plain <a href>@handle</a> — which is a shape step 3 can match.
+    // 2. No `span`: DOMPurify keeps its text, so a mention collapses to a bare
+    //    <a>, which step 3 matches.
     const clean = DOMPurify.sanitize(unwrapped, {
         ALLOWED_TAGS,
         ALLOWED_ATTR: ["href"],
         ALLOWED_URI_REGEXP: /^(?:https?:|mailto:)/i,
     });
 
-    // 3. The markup is now DOMPurify's own output, so `<a ` can only be a real
-    //    anchor — anything in a text node has had its `<` escaped.
+    // 3. DOMPurify's output, so `<a ` can only be a real anchor.
     return (
         clean
             // Every reply opens with the handles of everyone in the thread. A
@@ -209,19 +157,13 @@ export function sanitizeReplyHtml(content: string): string {
 }
 
 /**
- * Control and bidi characters. A U+202E in a display name reverses the rest of
- * the line — including text the commenter doesn't own — and escaping doesn't
- * stop it, because the characters are legitimate content to an escaper.
+ * Bidi and zero-width characters: a U+202E reverses text the commenter
+ * doesn't own, and escaping doesn't stop it.
  */
 const BIDI_AND_ZERO_WIDTH =
     /[\u0000-\u001F\u007F\u200B-\u200F\u202A-\u202E\u2066-\u2069]/g;
 
-/**
- * Rendered as text, so Astro handles the escaping. Custom emoji are stripped
- * rather than resolved: `account.emojis` would mean an <img> per emoji from an
- * arbitrary instance, which is the same third-party-request cost as avatars,
- * for decoration.
- */
+/** Custom emoji are stripped: resolving them means third-party image requests. */
 function displayName(account: MastodonAccount): string {
     const name = account.display_name
         .replace(/:[a-zA-Z0-9_]+:/g, "")
@@ -232,20 +174,11 @@ function displayName(account: MastodonAccount): string {
     return name || `@${account.acct}`;
 }
 
-/** The language of the surrounding page. */
 const PAGE_LANGUAGE = "en";
 
 /**
- * Mastodon reports the language the *poster's client* was set to, not the
- * language actually written. The real threads prove the difference: every
- * reply on the what-I-use post comes back "en", including the several written
- * entirely in German.
- *
- * So the field is a declaration, not a detection, and stamping lang="en" onto
- * a German paragraph would tell a screen reader to read it with English
- * phonemes — a confident lie where saying nothing merely inherits the page.
- * Emit it only when it disagrees with the page, where it is at least
- * deliberate on the poster's part.
+ * Mastodon reports the poster's client language, not what they wrote (German
+ * replies come back "en"). Only emit it when it differs from the page.
  */
 function replyLanguage(language: string | null): string | null {
     if (!language) return null;
@@ -258,8 +191,7 @@ async function getJson<T>(path: string): Promise<T> {
     const response = await fetch(`${INSTANCE}/api/v1${path}`, {
         headers: {
             accept: "application/json",
-            // Some instances reject Node's default UA outright, and a UA with
-            // a contact URL is what gets you unblocked rather than throttled.
+            // Some instances block Node's default UA; a contact URL avoids that.
             "user-agent": "iamrob.in build (+https://iamrob.in)",
         },
         signal: AbortSignal.timeout(TIMEOUT_MS),
@@ -270,25 +202,14 @@ async function getJson<T>(path: string): Promise<T> {
     return (await response.json()) as T;
 }
 
-/**
- * One fetch per toot per build. Astro renders every blog page in the same
- * process, so this also covers a second consumer without a second round trip —
- * the same reason getFilms() caches in utils/movies.ts.
- */
+/** One fetch per toot per build. */
 const inflight = new Map<string, Promise<MastodonThread>>();
 
-/**
- * After this many failures in a row the instance is treated as down for the
- * rest of the build. Without it, a cold build against an unreachable
- * mastodon.social costs the full timeout once per annotated post.
- */
+/** Consecutive failures before the instance counts as down for the build. */
 const CIRCUIT_LIMIT = 3;
 let consecutiveFailures = 0;
 
-/**
- * `null` means "this post has no toot" — the component then renders nothing at
- * all, rather than an empty comment section.
- */
+/** `null` means the post has no toot; the component renders nothing. */
 export function getMastodonThread(
     raw?: string,
 ): Promise<MastodonThread> | null {
@@ -321,18 +242,11 @@ function emptyThread(id: string): MastodonThread {
     };
 }
 
-/**
- * Never throws. A Mastodon outage degrades the section to its invitation
- * state; it does not fail the deploy. (v3's helper re-threw, which left every
- * caller wrapping it in a try/catch of its own.)
- */
+/** Never throws: an outage degrades to the invitation state. */
 async function fetchThread(id: string): Promise<MastodonThread> {
     if (consecutiveFailures >= CIRCUIT_LIMIT) return emptyThread(id);
 
-    // Two requests: /context carries the replies but not the toot itself, and
-    // the root is what gives us Robin's account id (so `isAuthor` isn't a
-    // hardcoded number) along with the counts. allSettled so either can fail
-    // on its own.
+    // The root gives the author's account id; /context only has replies.
     const [contextResult, rootResult] = await Promise.allSettled([
         getJson<{ ancestors: MastodonStatus[]; descendants: MastodonStatus[] }>(
             `/statuses/${id}/context`,
@@ -343,8 +257,7 @@ async function fetchThread(id: string): Promise<MastodonThread> {
     if (contextResult.status === "rejected") {
         consecutiveFailures += 1;
         const reason = String(contextResult.reason);
-        // A 404 is a wrong or deleted id in frontmatter — a content bug Robin
-        // can fix — rather than a bad day for the instance. Say so.
+        // A 404 is a wrong id in frontmatter, not an outage.
         if (reason.includes("404")) {
             console.error(
                 `[mastodon] status ${id} not found — check the mastodonId in the post's frontmatter`,
@@ -363,12 +276,9 @@ async function fetchThread(id: string): Promise<MastodonThread> {
 
     const descendants = contextResult.value.descendants ?? [];
 
-    // `ancestors` is deliberately ignored. It's empty for an announcement toot,
-    // and if Robin ever links a post from mid-thread they'd be his own
-    // preamble, not replies to it.
+    // `ancestors` is ignored: only my own preamble could be in there.
 
-    // Falls back to the account any direct reply is replying *to*, which is
-    // Robin by definition — so a failed root fetch still marks his replies.
+    // Fallback: whoever direct replies answer is me, even if the root fetch failed.
     const authorId =
         root?.account.id ??
         descendants.find((s) => s.in_reply_to_id === id)
@@ -394,21 +304,15 @@ async function fetchThread(id: string): Promise<MastodonThread> {
 }
 
 function keep(status: MastodonStatus, authorId: string | null): boolean {
-    // The privacy guard. An unauthenticated /context cannot return
-    // followers-only or direct replies today, so this is belt and braces — but
-    // it is also what would stop a future access token from quietly publishing
-    // someone's private reply to the open web. It stays a hard filter no
-    // matter how the data was fetched.
+    // Privacy guard. Redundant for unauthenticated fetches today, but it keeps a
+    // future token from publishing private replies.
     if (!KEEP_VISIBILITY.has(status.visibility)) return false;
 
     if (status.account.bot) return false;
-    // Silenced by mastodon.social's own moderators. Free signal; take it.
     if (status.account.limited) return false;
     if (DENIED_ACCTS.has(status.account.acct.toLowerCase())) return false;
 
-    // A self-reply whose parent is *also* Robin is the announcement carrying
-    // on, and would repeat the post it sits under. A self-reply to someone
-    // else is his half of a conversation, and stays.
+    // A self-reply to my own reply just continues the announcement; drop it.
     if (
         authorId &&
         status.account.id === authorId &&
@@ -419,7 +323,6 @@ function keep(status: MastodonStatus, authorId: string | null): boolean {
 
     const text = plainText(sanitizeReplyHtml(status.content));
 
-    // Nothing to quote — a reply that was only an image, or only "@iamrobin".
     if (!text) return false;
     if (text.length > MAX_REPLY_CHARS) return false;
 
@@ -443,21 +346,8 @@ function toReply(status: MastodonStatus, authorId: string | null): MastodonReply
 }
 
 /**
- * Grouped, not nested. Each direct reply to the toot opens a branch, and every
- * follow-up beneath it — at any depth — is flattened into that branch in time
- * order.
- *
- * Flat chronological was the first instinct and the real threads killed it:
- * with nine branches interleaved by timestamp, two unrelated sub-conversations
- * shuffle into each other. A faithful tree is no better — the reading column is
- * 42rem and the threads run four deep, so the deepest replies would have
- * nothing left to sit in. One level of indent keeps each conversation together
- * and still fits; inside a branch the authors alternate, so the back-and-forth
- * reads without further nesting.
- *
- * Branches are ordered by their opening reply and chronologically within, then
- * added whole until MAX_REPLIES — never split, because half a conversation is
- * worse than none of it.
+ * Grouped, not nested: each direct reply opens a branch and everything below
+ * it is flattened in time order. Branches are added whole until MAX_REPLIES.
  */
 function buildBranches(
     statuses: MastodonStatus[],
@@ -466,8 +356,10 @@ function buildBranches(
 ): MastodonReply[] {
     const survivors = new Map(statuses.map((s) => [s.id, s]));
 
-    /** The nearest ancestor still on the page, so a branch survives having a
-     *  middle reply filtered out. */
+    /**
+     * The nearest ancestor still on the page, so a branch survives a filtered
+     * middle reply.
+     */
     const branchRoot = (status: MastodonStatus): string => {
         let current = status;
         // Bounded by the chain length; survivors is finite and acyclic.

@@ -6,24 +6,16 @@ interface Props {
     title: string;
     description?: string;
     /**
-     * Site-root-relative path to this page's link preview card, e.g.
-     * "/og/blog/my-post.png". Omit it and the shared hand-drawn card is used.
+     * Site-root-relative path, e.g. "/og/blog/my-post.png". Defaults to the
+     * shared card.
      */
     ogImage?: string;
-    /** Alt text for that card. Only worth setting alongside `ogImage`. */
     ogImageAlt?: string;
-    /** "article" for a single post, "website" for everything else. */
     ogType?: "website" | "article";
-    /** Keep the page out of search results. Used by the placeholder media logs. */
     noindex?: boolean;
-    /** JSON-LD structured data for search engines. */
     structuredData?: unknown;
 }
 
-/*
-  The fallback for pages that don't set their own. Every page should really
-  pass one — this exists so none ever ships bare.
-*/
 const DEFAULT_DESCRIPTION =
     "Robin Spielmann — a design engineer at the intersection of code, design and art. My own little space on the internet.";
 
@@ -37,32 +29,16 @@ const {
     structuredData,
 } = Astro.props;
 
-/*
-  Absolute URLs, built against `site` from astro.config.mjs rather than
-  Astro.url.origin: on the Node adapter the origin is whatever host the request
-  arrived on, and a preview or health-check hostname would leak into the
-  canonical and the og:image.
-*/
+/* Built against `site`, not the request origin: on the Node adapter a preview
+   or health-check host would leak into the canonical and og:image. */
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
-/*
-  The shared card, drawn by hand and dropped into public/, is the fallback for
-  every page that doesn't bring its own. Blog posts do: they point at the
-  generated card from /og/blog/. Either way it is 1200×630 — if one is ever
-  re-cut at a different size, the width/height below have to move with it,
-  since several scrapers trust those over the file.
-*/
+/* Every card is 1200x630. Several scrapers trust the width/height below over
+   the file, so change them together. */
 const ogImage = new URL(ogImagePath ?? "/opengraph.png", Astro.site).href;
 
-/*
-  The section's paper stock, resolved from the URL rather than threaded through
-  four layout entry points as a prop — the route already spells out which
-  section a page belongs to.
-
-  See utils/paper.ts for the stocks and theme/colors.css for what derives from
-  them. `data-paper` is only a DevTools hook; the inline custom properties are
-  the mechanism.
-*/
+/* Resolved from the URL. The inline custom properties are the mechanism;
+   `data-paper` is only a DevTools hook. */
 const paperKey = getPaperKey(Astro.url.pathname);
 const paper = papers[paperKey];
 
@@ -75,8 +51,7 @@ const serializedStructuredData = structuredData
     <head>
         <meta charset="utf-8" />
 
-        <!-- SVG first: browsers that take it get the robin that inverts with the
-         colour scheme. The rest fall back down the list. -->
+        <!-- SVG first: the robin that inverts with the colour scheme. -->
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link
             rel="icon"
@@ -147,19 +122,13 @@ const serializedStructuredData = structuredData
             )
         }
 
-        <!-- Self-hosted Umami, same instance and site id as v3 so the numbers
-         carry over instead of restarting at zero. `data-domains` keeps dev
-         and preview builds out of the stats — the script no-ops anywhere
-         that isn't the live host. The match is exact string equality against
-         location.hostname, so www has to be listed separately: the server
-         answers on both and doesn't redirect. -->
+        <!-- Self-hosted Umami, same site id as v3. data-domains matches the hostname
+             exactly, so www is listed separately. -->
         <script
             defer
             src="https://umami.iamrob.in/script.js"
             data-website-id="9e274244-e311-4ebe-8ff0-c691ce080455"></script>
 
-        <!-- The feeds also live in the RSS dropdown; these are what a reader
-         pointed at the bare domain discovers. -->
         <link
             rel="alternate"
             type="application/rss+xml"

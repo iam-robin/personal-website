@@ -14,23 +14,18 @@ import FilterTag from "../ui/FilterTag.astro";
 import Pagination from "../ui/Pagination.astro";
 
 interface Props {
-    /** The current page of postcards to render (already sliced/filtered). */
     page: Page<typeof Postcard.$inferSelect>;
-    /** When set, only postcards from this (standardised) country are shown. */
     selectedCountry?: string;
 }
 const { page, selectedCountry } = Astro.props;
 
-// The list renders just this page's slice…
 const displayed = page.data;
 
-// Page 1 lives at the base path; deeper pages append the number.
 const baseHref = postcardsHref({ country: selectedCountry });
 
-// …but the filter chips and world map reflect the full published set.
+// The filter chips and world map use the full published set.
 const allPostcards = await getPublishedPostcards();
 
-// Country chips (from every postcard, not just the filtered set).
 const counts: Record<string, number> = {};
 for (const p of allPostcards) {
     if (p.country && isValidCountry(p.country)) {
@@ -45,7 +40,6 @@ const countryChips = Object.entries(counts)
 const visitedCountries = countryChips.map((c) => c.name);
 ---
 
-{/* SVG distortion filter used by PostcardItem's handwriting */}
 <svg class="hidden" aria-hidden="true">
     <defs>
         <filter id="distort-xl">
@@ -57,7 +51,6 @@ const visitedCountries = countryChips.map((c) => c.name);
 </svg>
 
 <div class="flex flex-col gap-16">
-    <!-- Country filter -->
     {
         countryChips.length > 0 && (
             <FilterBar>
@@ -82,9 +75,6 @@ const visitedCountries = countryChips.map((c) => c.name);
         )
     }
 
-    <!-- The postcards. PostcardsList picks its own arrangement from the
-         viewport — a gallery grid where there's room for more than one card
-         per row, a scroll-driven deck where there isn't. -->
     {
         displayed.length === 0 ? (
             <p class="font-mono text-base text-ink-muted">
@@ -105,6 +95,5 @@ const visitedCountries = countryChips.map((c) => c.name);
         )
     }
 
-    <!-- World map -->
     <WorldMap visitedCountries={visitedCountries} />
 </div>

@@ -1,10 +1,4 @@
-/**
- * Generates the raster icon set from public/favicon.svg.
- *
- * The source SVG is transparent and inverts with the colour scheme; app icons
- * can't do either (a transparent PNG icon renders on black on iOS), so this
- * bakes the robin in ink onto the home paper stock at a fixed padding.
- */
+/** Bakes the robin onto the home paper: transparent PNG icons render on black on iOS. */
 import { writeFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -19,9 +13,7 @@ const { default: sharp } = await import(
 const PAPER = "#eae8e3"; // stocks.home in src/utils/paper.ts
 const INK = "#1a1919"; // --color-ink
 
-// The robin's own paths, lifted from public/favicon.svg. The outer viewBox is
-// its "-20 0 180 180" padded by 10 on each side, which lands the bird at ~15%
-// margin — enough for iOS's mask to crop without clipping a wing.
+// Bird paths from favicon.svg. The padded viewBox leaves ~15% margin for iOS's mask.
 const bird = readFileSync(join(PUBLIC, "favicon.svg"), "utf8")
     .replace(/^[\s\S]*?<svg[^>]*>/, "")
     .replace(/<style>[\s\S]*?<\/style>/, "")
@@ -58,10 +50,7 @@ for (const [name, size] of targets) {
     console.log(`${name} (${size}x${size})`);
 }
 
-/**
- * A PNG-in-ICO container: since Vista every browser reads a PNG payload out of
- * an .ico, so there's no need to emit a BMP. Two entries, 16 and 32.
- */
+/** PNG payloads in an ICO container, 16 and 32px. */
 const entries = await Promise.all([16, 32].map(async (s) => ({ s, png: await render(s) })));
 
 const HEADER = 6;

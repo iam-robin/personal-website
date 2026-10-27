@@ -9,10 +9,8 @@ const [years, watchlist] = await Promise.all([
     getWatchlist(),
 ]);
 
-// Finished only, so the total agrees with the year headers and with the count
-// /shelf shows. Seasons is the honest unit — the log records one per season —
-// but a list with Ozark on it four times needs the second number to be read
-// properly.
+// Finished only, to match the year headers. Shows are counted too, since
+// seasons repeat a show.
 const seasons = years
     .flatMap((year) => year.seasons)
     .filter((season) => !season.watching);
@@ -40,11 +38,6 @@ const shows = new Set(seasons.map((season) => season.title)).size;
                 <ul class="mt-4 flex flex-col gap-2">
                     {watchlist.map((item, i) => (
                         <li class="flex items-baseline gap-3 font-mono text-sm">
-                            {/* The label names the group, not the row — the
-                                same list /shelf uses for "Right now". */}
-                            {/* The label register — uppercase + tracking — carries the column,
-                                since the contrast floor leaves ink only two steps
-                                and the muted one is already spent on the author. */}
                             <span class="w-32 shrink-0 text-xs tracking-widest text-ink-muted uppercase">
                                 {watchlist[i - 1]?.label === item.label
                                     ? ""

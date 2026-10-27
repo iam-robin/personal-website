@@ -1,16 +1,7 @@
 /**
- * The per-page link preview card, drawn at build time.
- *
- * Same composition as the hand-drawn public/opengraph.png it sits next to —
- * bird top-left, a bottom-anchored block of type — only with the page's own
- * words in it. Satori lays the card out as flexbox and hands back SVG with the
- * glyphs already outlined (`embedFont`, its default), so sharp can rasterize
- * it without a single font installed on the build host.
- *
- * Only Apercu is loaded. The site card sets its second line in Fira Mono, but
- * the mono is shipped as woff2 only and satori reads ttf/otf/woff — rather
- * than carry a converted copy of a font that is already in the repo, the meta
- * line is set in Apercu and separated by weight and colour instead.
+ * The link preview card, drawn at build time with satori. Glyphs come back as
+ * paths, so sharp needs no installed fonts. Apercu only: satori can't read the
+ * woff2-only Fira Mono.
  */
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -18,31 +9,22 @@ import satori from "satori";
 import sharp from "sharp";
 import { getPaper } from "./paper";
 
-/** The size every scraper is told to expect in Layout.astro. */
+/** The size Layout.astro announces to scrapers. */
 const WIDTH = 1200;
 const HEIGHT = 630;
 
-/** Matches the optical margin of the hand-drawn card. */
 const PADDING = 72;
 
-/**
- * The title's measure, narrower than the 1056px the padding leaves — a title
- * set edge to edge reads as a banner rather than as a line of type, and the
- * card has height to spare for the extra line. Only the title is held to it;
- * the meta and subtitle lines are short enough to keep the full width.
- */
+/** Narrower than the padding allows, so a title reads as a line, not a banner. */
 const TITLE_WIDTH = 860;
 
 const INK = "#1a1919";
-/** --color-ink-muted, written out: satori takes rgba(), not an eight-digit hex. */
+/** --color-ink-muted, written out: satori takes rgba(), not 8-digit hex. */
 const INK_MUTED = "rgba(26, 25, 25, 0.7)";
 
 const FONT_DIR = path.join(process.cwd(), "public", "fonts");
 
-/*
-  Loaded once per build rather than once per card — every blog post renders in
-  the same process, and the two files are ~50 KB each.
-*/
+/* Loaded once per build, not per card. */
 let fonts: Promise<Awaited<ReturnType<typeof loadFonts>>> | null = null;
 
 async function loadFonts() {
@@ -56,12 +38,7 @@ async function loadFonts() {
     ];
 }
 
-/**
- * The robin, as an <img>: satori renders SVG data URIs but not inline <svg>
- * children. Paths are the favicon's; the eye is knocked out in the paper
- * colour instead of the favicon's fixed off-white so it disappears into the
- * stock the card is printed on.
- */
+/** An <img>: satori renders SVG data URIs, not inline <svg>. */
 function birdDataUri(paper: string): string {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 0 145 167" fill="none">
 <path fill="${INK}" d="M32.0769 105.96L0 138.037L16.0384 148.73L53.4615 120.217L32.0769 105.96Z"/>
@@ -77,17 +54,13 @@ function birdDataUri(paper: string): string {
     return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
 }
 
-/** Satori takes a React element shape; this is the whole of it we need. */
 const h = (
     type: string,
     style: Record<string, unknown>,
     children?: unknown,
 ) => ({ type, props: { style, children } });
 
-/**
- * Cut long text rather than clamping lines in CSS: satori's line clamp needs
- * the text measured twice, and a card only has room for so many words anyway.
- */
+/** Cut, not line-clamped: satori's clamp measures text twice. */
 function clamp(text: string, max: number): string {
     if (text.length <= max) return text;
     return `${text.slice(0, max - 1).replace(/[\s,;:–—-]+$/, "")}…`;
@@ -95,11 +68,9 @@ function clamp(text: string, max: number): string {
 
 export interface OgCard {
     title: string;
-    /** The line under the title. Usually the post's subtitle. */
     subtitle?: string;
-    /** The small line above it — section, date, category. */
     meta?: string;
-    /** The page the card stands for; decides which paper stock it prints on. */
+    /** Decides the paper stock. */
     pathname: string;
 }
 
@@ -112,11 +83,7 @@ export async function renderOgCard({
     const paper = getPaper(pathname);
     const clampedTitle = clamp(title, 90);
 
-    /*
-      Three steps rather than a formula: the card holds three comfortable lines
-      at 68px, and dropping a step is what keeps a long title from touching the
-      bird above it.
-    */
+    /* Three steps keep a long title clear of the bird. */
     const titleSize =
         clampedTitle.length <= 34 ? 76 : clampedTitle.length <= 64 ? 68 : 56;
 

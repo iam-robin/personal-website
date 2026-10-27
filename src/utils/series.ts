@@ -2,46 +2,27 @@ import { getCollection, type CollectionEntry } from "astro:content";
 
 type Series = CollectionEntry<"series">;
 
-/**
- * Everything /series needs, resolved at build time.
- *
- * One entry is one *season*, not one show — that's how the Obsidian export
- * logs it, and folding the seasons back into shows would throw away the year
- * each one was actually watched in. Every count on the page says "seasons"
- * for that reason.
- */
+/** One entry is one season, not one show: that's how the export logs it. */
 
 export interface Season {
     id: string;
     title: string;
-    /** As logged, 1–6. Null where the export carries no number. */
     season: number | null;
-    /**
-     * A remote URL — TMDB for most, a few one-off hosts for the rest. Unlike
-     * book and bookmark covers these never made it into the export as files,
-     * so there is nothing local for `astro:assets` to optimise (see the note
-     * in SeriesRow).
-     */
+    /** Remote URL, so astro:assets can't optimise it. */
     cover: string | null;
-    /** ISO, or "" for the seasons logged without a date. */
+    /** ISO, or "" when undated. */
     finished: string;
-    /** Robin's own, out of 5. Only logged from 2023 on. */
     rating: number | null;
-    /** Rated 4 or better, or flagged in the vault — earns a heart, as on /books. */
     favourite: boolean;
-    /** The season currently being watched: in the list, but not finished. */
     watching: boolean;
 }
 
 export interface SeasonYear {
-    /** The heading: a year, or "Undated" for the ones logged without one. */
     label: string;
-    /** Sort key only. UNDATED sinks the undated group below every real year. */
     year: number;
     seasons: Season[];
 }
 
-/** Below any year in the log, so `sort` puts that group last on its own. */
 const UNDATED = -1;
 
 function toNumber(value: unknown): number | null {
@@ -59,20 +40,15 @@ function resolve(entry: Series, watching = false): Season {
         cover: entry.data.cover ?? null,
         finished: entry.data.finished ?? "",
         rating,
-        // Both, because the two disagree: the vault's star is only filled in
-        // from 2023 on, and the `favorite` flag is set on a handful that
-        // predate it.
+        // The vault's star only exists from 2023 on; `favorite` covers older ones.
         favourite: entry.data.favorite === true || (rating ?? 0) >= 4,
         watching,
     };
 }
 
 /**
- * Newest first the whole way down: the years descend, and inside a year
- * December sits above January. Two groups sit outside that: whatever is
- * running right now heads the current year, being the most recent thing of
- * all, and the seasons logged without a date make a group of their own at
- * the bottom.
+ * Newest first. Seasons in progress head the current year, undated ones sink
+ * to the bottom.
  */
 export async function getSeasonYears(): Promise<SeasonYear[]> {
     const [finished, watching] = await Promise.all([
@@ -88,8 +64,6 @@ export async function getSeasonYears(): Promise<SeasonYear[]> {
         byYear.get(key)!.push(entry);
     }
 
-    // Build time, so a deploy in January opens a new year holding nothing but
-    // the season in progress.
     const currentYear = new Date().getFullYear();
     if (watching.length > 0 && !byYear.has(currentYear)) {
         byYear.set(currentYear, []);
@@ -100,9 +74,6 @@ export async function getSeasonYears(): Promise<SeasonYear[]> {
         .map((year) => {
             const entries = byYear.get(year)!;
 
-            // Undated by show, then by season, so the two Mr. Robots and the
-            // two Better Call Sauls at least stand in order; everything else
-            // newest first, by the day it was finished.
             entries.sort((a, b) =>
                 year === UNDATED
                     ? a.data.title.localeCompare(b.data.title) ||
@@ -131,10 +102,7 @@ const LIST_LABELS: Record<string, string> = {
 };
 const LIST_ORDER = ["pausiert", "merkliste"];
 
-/**
- * The seasons that aren't in the log yet. `aktiv` is absent on purpose: it's
- * already in the list, marked as in progress.
- */
+/** Seasons not in the log yet. `aktiv` is already listed as in progress. */
 export async function getWatchlist(): Promise<
     { id: string; label: string; title: string; season: number | null }[]
 > {

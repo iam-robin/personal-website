@@ -1,4 +1,3 @@
-/** Link destinations shared by contact rows, the footer and structured data. */
 export interface SiteLink {
     label: string;
     href: string;
@@ -40,7 +39,6 @@ export const contactLinks: Record<"email" | "github" | "mastodon" | "bluesky", C
     },
 };
 
-/** Display order for contact rows and the footer's Elsewhere column. */
 export const contactChannels: readonly ContactLink[] = Object.values(contactLinks);
 
 export const siteLinks: readonly SiteLink[] = [

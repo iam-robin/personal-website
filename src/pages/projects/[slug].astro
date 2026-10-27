@@ -11,8 +11,7 @@ import {
 } from "../../utils/schema";
 import "../../styles/markdown.css";
 
-// Only for projects the cards link to internally — the rest open their own
-// site (externalUrl) or are unlinked (draft).
+// Only internal projects: the rest link out or are drafts.
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
     return projects
@@ -66,11 +65,8 @@ const structuredData = graphSchema([
         <Icon name="ph:x-bold" size={24} />
     </Button>
 
-    {/* A focused reading view. The measure is `prose` (65ch) rather than the
-      `reading` token, since this page aligns to nothing.
-
-      Deliberately no `@container`: without one the fluid type scale falls
-      back to its viewport line, and the oversized title is the page. */}
+    {/* No @container on purpose: the type scale falls back to its viewport line,
+        and the oversized title is the page. */}
     <article class="mx-auto w-full max-w-prose px-gutter py-16 md:py-24">
         <header>
             <h1 class="text-3xl font-bold md:text-4xl">{title}</h1>

@@ -1,19 +1,11 @@
 ---
 /**
- * Links to the sections of the current page, with an indicator for the one
- * being read. Passed to ArticleLayout's `rail` slot.
- *
- * - `rail` — the wide-screen sidebar, in its own column, always open.
- * - `inline` — narrow-screen fallback in the reading column, collapsed into
- *   a <details> so it needs no client-side JS.
- *
- * Unresolvable ids are silently ignored.
+ * `rail`: the wide-screen sidebar. `inline`: the narrow fallback, a <details>.
+ * Unresolvable ids are ignored.
  */
 export interface RailSection {
-    /** id of the heading this links to */
     id: string;
     text: string;
-    /** Indent one level (a sub-section) */
     nested?: boolean;
 }
 
@@ -31,7 +23,6 @@ const {
     class: className = "",
 } = Astro.props;
 
-// One entry is a list of one — nothing to navigate between.
 const show = sections.length >= 2;
 ---
 
@@ -88,7 +79,6 @@ const show = sections.length >= 2;
 }
 
 <style>
-    /* Drop the native disclosure triangle in favour of the caret span */
     .rail-details > summary {
         list-style: none;
     }
@@ -103,16 +93,12 @@ const show = sections.length >= 2;
         transform: rotate(90deg);
     }
 
-    /* Before the first heading the whole list reads at full strength — dimming
-       every entry there would make it look disabled rather than waiting. */
+    /* Full strength before the first heading, or it would look disabled. */
     .rail-link {
         position: relative;
         color: var(--color-ink);
-        /* Apercu has no variable axis: font-weight:700 swaps to a wider file
-           and re-wraps the entry inside the fixed rail. A stroke thickens the
-           same glyphs, so advance widths — and the line count — stay put. It
-           sits on every link at a constant width, transparent until active, so
-           only the colour ever changes. */
+        /* Apercu bold is a wider file and would re-wrap the entry. A stroke keeps the
+           advance widths; it sits on every link, transparent until active. */
         -webkit-text-stroke-width: 0.4px;
         -webkit-text-stroke-color: transparent;
         paint-order: stroke fill;
@@ -121,10 +107,7 @@ const show = sections.length >= 2;
             -webkit-text-stroke-color 200ms var(--ease-out, ease-out);
     }
 
-    /* Once a section is under way the others step back. A short dash marks the
-       current one, so the rail carries no permanent chrome. */
-    /* Colour rather than opacity: these are links, so the stepped-back state
-       still has to clear 4.5:1. */
+    /* Colour, not opacity: links need 4.5:1. */
     [data-rail-reading] .rail-link {
         color: var(--color-ink-muted);
     }
@@ -133,11 +116,8 @@ const show = sections.length >= 2;
         color: var(--color-ink);
     }
 
-    /* Weight, not just colour: with the contrast floor the stepped-back entries
-       can only go down to ink/70, which is too small a gap to read as "you are
-       here" on its own. The dash alone doesn't help either — it marks the row
-       without changing how the text scans. Faked with a stroke rather than the
-       bold face — see .rail-link — so activating an entry never moves its wrap. */
+    /* Weight, not just colour: ink/70 vs ink is too small a gap to say "you are
+       here". */
     .rail-link[aria-current] {
         -webkit-text-stroke-color: currentColor;
     }
@@ -160,17 +140,14 @@ const show = sections.length >= 2;
 </style>
 
 <script>
-    // Marks the entry for the section being read — the one thing here CSS
-    // can't express. One passive listener, coalesced into a rAF per frame,
-    // writing only `aria-current`.
+    // Marks the section being read: one passive listener, one rAF per frame.
     const links = Array.from(
         document.querySelectorAll<HTMLAnchorElement>("[data-rail-link]"),
     );
     const roots = Array.from(document.querySelectorAll("[data-rail-root]"));
 
     if (links.length > 0) {
-        // Both variants render at once (one is display:none), so several
-        // links can point at the same heading.
+        // Both variants render, so several links can point at one heading.
         const pairs = links
             .map((link) => ({
                 link,
@@ -183,11 +160,9 @@ const show = sections.length >= 2;
                     p.heading !== null,
             );
 
-        // Insertion order is list order, which is document order.
         const headings = [...new Set(pairs.map((p) => p.heading))];
 
-        // A heading counts as reached once it passes this line — roughly
-        // where the eye sits, not the top of the viewport.
+        // Reached once a heading passes roughly where the eye sits.
         const OFFSET = 120;
 
         let current: HTMLElement | null = null;
@@ -213,8 +188,7 @@ const show = sections.length >= 2;
                 }
             }
 
-            // Above the first heading nothing is marked — the intro isn't a
-            // section. The list drops out of its reading state instead.
+            // Above the first heading nothing is marked: the intro isn't a section.
             for (const root of roots) {
                 if (active) {
                     root.setAttribute("data-rail-reading", "");

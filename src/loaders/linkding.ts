@@ -11,56 +11,24 @@ import path from "node:path";
 import type { Loader } from "astro/loaders";
 
 /**
- * Bookmarks come from my self-hosted linkding (Coolify, Hetzner) rather than
- * from the Obsidian export the rest of the shelf uses — saving a link is a
- * browser-extension click, and routing that through the vault only to export
- * it again bought nothing.
- *
- * What's published is what linkding calls *shared*: the share checkbox on a
- * bookmark is the gate, the way `favorite: true` was in the vault. Archived
- * bookmarks never reach the API endpoint we ask, so they can't leak.
- *
- * When linkding can't be reached, the build falls back to a snapshot of the
- * last good response — committed, at src/data/bookmarks.snapshot.json. It
- * lives in git on purpose: the Dockerfile nixpacks generates runs the build
- * as a bare `RUN npm run build` with no cache mount, so anything written
- * under node_modules/.cache is gone by the next deploy. The fallback was
- * therefore empty every single time it was needed, and a transient DNS
- * failure on the build host took two deploys down with it (2026-08-29/30).
- * Any local dev run or build refreshes the file; commit it like any other
- * change.
- *
- * Covers stay out of git — 6.5 MB of binaries that would churn on every
- * deploy for a hover preview. They're cached under
- * node_modules/.cache/linkding/covers, which means a fallback build ships
- * bookmarks without preview images. A soft dependency, deliberately.
- *
- * Covers are then mirrored into src/generated/bookmark-covers, because
- * `import.meta.glob` in utils/bookmarks.ts has to see them inside src/ for
- * astro:assets to optimise them. The cache is the source of truth; the mirror
- * is derived and gitignored.
+ * Only `shared` bookmarks are published (see AGENTS.md, Bookmarks).
+ * The snapshot is tracked in git because nixpacks' build has no cache mount.
+ * Covers are cached under node_modules/.cache and mirrored into src/generated,
+ * where the glob in utils/bookmarks.ts can see them.
  */
 
 const PAGE_SIZE = 100;
-/** A stop for the pagination loop — 10k bookmarks is far past anything real. */
 const MAX_PAGES = 100;
 const TIMEOUT_MS = 15_000;
-/**
- * One blip shouldn't cost a deploy. Containers on the build host resolve
- * through an external nameserver, and a lookup that goes unanswered costs
- * glibc 10s (timeout:5 × attempts:2) before it gives up.
- */
+/** Unanswered DNS lookups on the build host cost glibc 10s, so retry. */
 const ATTEMPTS = 3;
 const RETRY_BACKOFF_MS = 1_000;
 
 const CACHE_DIR = path.join("node_modules", ".cache", "linkding");
-/** Tracked in git — see the note above on why the cache can't be trusted. */
 const SNAPSHOT_FILE = path.join("src", "data", "bookmarks.snapshot.json");
 const COVER_CACHE_DIR = path.join(CACHE_DIR, "covers");
-/** Mirrored here so the glob in utils/bookmarks.ts can reach them. */
 const COVER_OUT_DIR = path.join("src", "generated", "bookmark-covers");
 
-/** What astro:assets can optimise, and what the cover glob matches. */
 const COVER_EXTENSIONS = new Set([
     ".jpg",
     ".jpeg",
@@ -70,7 +38,6 @@ const COVER_EXTENSIONS = new Set([
     ".gif",
 ]);
 
-/** The fields we read off `GET /api/bookmarks/`; linkding sends more. */
 interface LinkdingBookmark {
     id: number;
     url: string;
@@ -88,9 +55,8 @@ interface LinkdingBookmark {
 }
 
 /**
- * The shape the site consumes — matches the `bookmarks` collection schema.
- * A type alias, not an interface: `parseData` wants a `Record<string,
- * unknown>`, and only an alias picks up the implicit index signature.
+ * A type alias, not an interface: only an alias gets the implicit index
+ * signature `parseData` needs.
  */
 export type BookmarkEntry = {
     id: string;
@@ -99,7 +65,6 @@ export type BookmarkEntry = {
     added: string;
     description?: string;
     tags: string[];
-    /** Filename inside src/generated/bookmark-covers, or null. */
     cover: string | null;
 };
 
@@ -117,7 +82,6 @@ async function exists(file: string): Promise<boolean> {
     }
 }
 
-/** Fall back through linkding's title fields, then the bare hostname. */
 function titleOf(item: LinkdingBookmark): string {
     const candidates = [item.title, item.website_title];
     for (const candidate of candidates) {
@@ -138,10 +102,6 @@ function descriptionOf(item: LinkdingBookmark): string | undefined {
     return undefined;
 }
 
-/**
- * Preview images live at /static/<file> on the instance. Newer linkding sends
- * the whole URL, older versions only the filename — take either.
- */
 function previewUrl(base: string, item: LinkdingBookmark): string | null {
     if (item.preview_image_url?.trim()) {
         return new URL(item.preview_image_url, base).href;
@@ -153,9 +113,8 @@ function previewUrl(base: string, item: LinkdingBookmark): string | null {
 }
 
 /**
- * linkding's own preview filenames are already unique and stable per bookmark,
- * so they double as the cache key. Sanitised anyway — it's a filename coming
- * off the network.
+ * linkding's filenames are unique per bookmark, so they double as the cache
+ * key. Sanitised anyway: it's a filename off the network.
  */
 function coverFilename(url: string): string | null {
     const name = path.basename(new URL(url).pathname);
@@ -167,7 +126,7 @@ function coverFilename(url: string): string | null {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/** A 4xx means the token or the endpoint is wrong; retrying only burns time. */
+/** A 4xx means the token or endpoint is wrong; retrying won't help. */
 class NonRetryableError extends Error {}
 
 async function fetchJson(
@@ -207,7 +166,6 @@ async function fetchJson(
     throw last;
 }
 
-/** Every page of the (unarchived) bookmarks endpoint. */
 async function fetchAll(
     base: string,
     token: string,
@@ -222,8 +180,7 @@ async function fetchAll(
     for (let page = 0; next && page < MAX_PAGES; page++) {
         const data = await fetchJson(next, token, logger);
         items.push(...(data.results ?? []));
-        // linkding returns an absolute `next`; resolve against the base anyway
-        // so an instance behind a proxy that rewrites the host still walks.
+        // Resolve against the base, in case a proxy rewrites the host.
         next = data.next ? new URL(data.next, base).href : null;
     }
 
@@ -231,12 +188,9 @@ async function fetchAll(
 }
 
 /**
- * Download what isn't cached yet, mirror the cache into src/, and drop files
- * neither dir needs any more — stale covers would otherwise be picked up by
- * the eager glob and re-encoded on every build.
- *
- * A null url means "cache only": the snapshot knows the filename but we have
- * no instance to ask, so a cover is used if it survived and skipped if not.
+ * Download what's missing, mirror the cache into src/, and drop stale files,
+ * which the eager glob would otherwise re-encode every build. A null url means
+ * cache only.
  */
 async function syncCovers(
     wanted: Map<string, string | null>,
@@ -253,8 +207,6 @@ async function syncCovers(
 
         if (!(await exists(cached))) {
             if (!url) {
-                // Cache-only mode. A mirror left from an earlier build is as
-                // good as the cache here — the glob only ever looks there.
                 if (await exists(path.join(COVER_OUT_DIR, file))) {
                     available.add(file);
                 }
@@ -275,7 +227,6 @@ async function syncCovers(
                     Buffer.from(await response.arrayBuffer()),
                 );
             } catch (error) {
-                // A missing cover costs a hover preview, not the page.
                 logger.warn(
                     `Cover ${file} failed: ${(error as Error).message}`,
                 );
@@ -325,8 +276,7 @@ export function linkdingLoader(): Loader {
                         (item) => item.shared === true && !item.is_archived,
                     );
 
-                    // Cover URLs first, so a bookmark whose download fails is
-                    // still published — just without its preview image.
+                    // A failed cover download still publishes the bookmark, without a preview.
                     const wanted = new Map<string, string | null>();
                     const coverByBookmark = new Map<number, string>();
                     for (const item of shared) {
@@ -372,8 +322,7 @@ export function linkdingLoader(): Loader {
             if (!entries) {
                 entries = await readSnapshot();
                 if (!entries) {
-                    // No API and no cache: an empty bookmarks page would ship
-                    // silently, so stop here instead.
+                    // No API and no snapshot: fail rather than ship an empty page.
                     throw new Error(
                         `Could not reach linkding and ${SNAPSHOT_FILE} is missing. Set LINKDING_URL and LINKDING_TOKEN, or restore the snapshot.`,
                     );
@@ -381,8 +330,7 @@ export function linkdingLoader(): Loader {
                 logger.info(
                     `Using ${entries.length} bookmarks from ${SNAPSHOT_FILE}`,
                 );
-                // The mirror is gitignored, so a fresh checkout has no covers
-                // even when the cache does — refill it from the cache.
+                // The mirror is gitignored, so refill it from the cache.
                 const covers = await syncCovers(
                     new Map(
                         entries
@@ -392,9 +340,7 @@ export function linkdingLoader(): Loader {
                     token ?? "",
                     logger,
                 );
-                // On the build host that cache is always cold, so most covers
-                // won't be there. Drop the ones nothing can resolve instead of
-                // pointing the page at files the glob will never find.
+                // Drop covers nothing can resolve, so the page never points at missing files.
                 entries = entries.map((entry) =>
                     entry.cover && !covers.has(entry.cover)
                         ? { ...entry, cover: null }

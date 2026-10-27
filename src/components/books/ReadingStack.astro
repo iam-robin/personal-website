@@ -1,9 +1,5 @@
 ---
-/**
- * The book (or books) I'm in the middle of, lying flat at the end of the
- * current year's shelf rather than standing in it. Display only: flat, the
- * spine reads left to right, so there's nothing to click through to.
- */
+/** The books in progress, lying flat at the end of the current year's shelf. */
 import type { ShelfBook } from "../../utils/books";
 
 interface Props {
@@ -30,16 +26,12 @@ const { books } = Astro.props;
 </li>
 
 <style>
-    /* A flex item of the shelf like any book, so `align-items: flex-end` sets
-       it on the line the standing books stand on. */
     .reading-stack {
         position: relative;
         flex: 0 0 auto;
-        /* Clear of the finished books — it hasn't joined them. */
         margin-inline-start: calc(var(--shelf-h) * 0.15);
     }
 
-    /* Above the stack, in the headroom the scroller reserves (see ShelfRow). */
     .reading-label {
         position: absolute;
         bottom: 100%;
@@ -52,15 +44,12 @@ const { books } = Astro.props;
         color: var(--color-ink-muted);
     }
 
-    /* column-reverse so the first book sits at the bottom of the pile. */
     .reading-books {
         display: flex;
         flex-direction: column-reverse;
         gap: 2px;
     }
 
-    /* Lying flat: as wide as the book is tall, as tall as it is thick — the
-       standing spine's two numbers, swapped. */
     .reading-book {
         --t: calc(var(--shelf-h) * var(--ts));
         --h: calc(var(--shelf-h) * var(--hs));

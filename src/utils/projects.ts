@@ -1,7 +1,6 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 
-// Extract the last year from a year string (e.g., "2015-2017" → 2017).
-// Ongoing projects sort first — they are the most current.
+// Last year of a range; ongoing projects sort first.
 export const getLastYear = (year: string | undefined): number => {
     if (!year) return 0;
     if (year.toLowerCase().includes("ongoing")) return Infinity;
@@ -9,7 +8,6 @@ export const getLastYear = (year: string | undefined): number => {
     return parseInt(parts[parts.length - 1], 10) || 0;
 };
 
-/** Every project, newest first (ongoing → most recent → oldest). */
 export async function getAllProjects(): Promise<
     CollectionEntry<"projects">[]
 > {
@@ -20,10 +18,7 @@ export async function getAllProjects(): Promise<
     );
 }
 
-/**
- * The projects featured on the homepage. A curated `featured: true` set wins
- * if any project opts in; otherwise the newest `limit` projects.
- */
+/** `featured: true` wins if any project opts in; otherwise the newest. */
 export async function getFeaturedProjects(
     limit = 3,
 ): Promise<CollectionEntry<"projects">[]> {

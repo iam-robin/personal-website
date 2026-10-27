@@ -1,9 +1,7 @@
 ---
 /**
- * One year of the shelf: the year label, the row of books, and the detail line
- * that names whichever book is open. The rules connecting the two are
- * generated per index in books.astro — the selector has to cross this
- * component's boundary into BookSpine's `[open]`.
+ * The rules linking an open book to its detail line are generated in
+ * books.astro: the selector crosses into BookSpine's `[open]`.
  */
 import BookSpine from "./BookSpine.astro";
 import ReadingStack from "./ReadingStack.astro";
@@ -17,7 +15,6 @@ interface Props {
 
 const { year } = Astro.props;
 
-// Finished only — the stack at the end of the row isn't in these totals.
 const pages = year.books.reduce((sum, book) => sum + (book.pages ?? 0), 0);
 
 const detailsFor = (book: ShelfYear["books"][number]) =>
@@ -28,11 +25,7 @@ const detailsFor = (book: ShelfYear["books"][number]) =>
         formatShortDate(book.finished),
     ].filter((detail): detail is string | number => Boolean(detail));
 
-/*
-  How wide this row stands at rest, in the units the books are cut from: a
-  multiple of `--shelf-h` plus the flex gaps in px. It's what lets the trailing
-  space in `.shelf::after` be conditional on the row actually overflowing.
-*/
+/* Resting row width, so `.shelf::after` only adds space when the row overflows. */
 const SHELF_GAP = 2;
 const stackUnits = year.reading.length
     ? 0.15 + Math.max(...year.reading.map((book) => book.heightRatio))
@@ -46,7 +39,6 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
 ---
 
 <section class="shelf-row" style={`--row-w: ${rowWidth}`}>
-    {/* Same header row the homepage teasers use (see TeaserSection). */}
     <div
         class="flex items-baseline justify-between gap-4 border-b border-dotted border-ink/30 pb-4"
     >
@@ -97,25 +89,12 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
 
 <style>
     .shelf-row {
-        /* The one dimension the shelf is built from — every book's thickness,
-           height and cover width is a fraction of it (see utils/books.ts).
-           One size everywhere: a book is the same object on every device. */
+        /* Every book's dimensions are fractions of this (see utils/books.ts). */
         --shelf-h: 22rem;
 
-        /*
-          Distance from the viewport edge to the content column — how far the
-          shelf reaches on each side to run the full width of the screen.
-
-          No percentages on purpose: `calc(50% - 50vw)` is briefer but a
-          percentage resolves against the containing block in `margin` and the
-          scrollport in `scroll-padding`, where it would compute to zero. The
-          max() floor is the narrow case, below the shell width.
-
-          --shelf-edge is load-bearing, not styling: `vw` counts a classic
-          scrollbar that the page's own width doesn't, so a bleed measured to
-          the full 100vw leaves the page scrollable sideways by ~8px. Nothing
-          can clip that — on the root element it *is* the viewport's scrolling.
-        */
+        /* No percentages: in margin and scroll-padding they resolve against different
+           boxes. --shelf-edge matters: 100vw includes a classic scrollbar, which would
+           leave the page scrollable sideways. */
         --shelf-edge: 0.75rem;
         --shelf-bleed: max(
             var(--spacing-gutter),
@@ -128,38 +107,22 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
 
     .shelf-scroller {
         overflow-x: auto;
-        /* Room for the focus ring: `overflow-x: auto` computes overflow-y to
-           `auto` too, so it can't bleed out of the box. */
+        /* Room for the focus ring: overflow-x: auto clips overflow-y too. */
         padding-top: 0.5rem;
-        /* The books stand on the bottom edge, which is where the scrollbar is
-           drawn. Padding is the only gap it can't eat — .shelf-detail's margin
-           is reduced by the same amount to keep the spacing below unchanged. */
+        /* Keeps the scrollbar off the books. .shelf-detail's margin subtracts it. */
         padding-bottom: 0.5rem;
         margin-top: 0.5rem;
-        /*
-          The scroll area spans the whole screen while the books inside start at
-          the text column, so a row sits in the page grid at rest and scrolls
-          out through the gutter rather than being cut off at the column.
-        */
         margin-inline: calc(var(--shelf-bleed) * -1);
-        /*
-          Leading padding only. The matching space at the far end is a flex item
-          (.shelf::after), because a scroll container's end padding isn't
-          counted in its scrollable overflow — set it and scrollWidth doesn't
-          move, so the last book still runs into the screen edge.
-        */
+        /* Start padding only: end padding doesn't count towards scrollable overflow,
+           so the far end is .shelf::after. */
         padding-inline-start: var(--shelf-bleed);
         padding-inline-end: 0;
         overscroll-behavior-x: contain;
-        /* `proximity`, not `mandatory` — a row only just too wide shouldn't
-           fight you over the last few pixels. */
         scroll-snap-type: x proximity;
-        /* Matches the leading padding, so a snapped book lands on the text
-           column and scrollLeft 0 is itself a snap point. */
+        /* Makes scrollLeft 0 a snap point. */
         scroll-padding-inline-start: var(--shelf-bleed);
     }
 
-    /* :global because the books are BookSpine's, not this component's. */
     .shelf :global(.shelf-book) {
         scroll-snap-align: start;
     }
@@ -172,34 +135,21 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
         min-height: var(--shelf-h);
     }
 
-    /*
-      The mirror of the leading padding, so a row that scrolls ends on the text
-      column — as a flex item, since end padding wouldn't count towards the
-      scrollable overflow.
-
-      The width is gated on the row overflowing, because a flat --shelf-bleed
-      grows with the viewport and would force a scrollbar onto rows with room
-      to spare. `100%` here is the flex container's content box — precisely the
-      width --row-w has to beat to need scrolling. The difference is negative
-      for a row that fits, so the clamp floors it at zero; the ×100 makes the
-      switch binary rather than dribbling the gap in as the window narrows.
-    */
+    /* Only as wide as the row overflows: --row-w minus the content box, floored at
+       0 and switched on by the x100. */
     .shelf::after {
         content: "";
         flex: 0 0 auto;
-        /* The 2px flex gap sits before it, so take that back. */
         width: clamp(
             0px,
             (var(--row-w) - 100%) * 100,
             calc(var(--shelf-bleed) - 2px)
         );
-        /* Load-bearing: a zero-height flex item contributes nothing to the
-           scrollable width, so the spacer would be laid out and then ignored. */
+        /* A zero-height flex item adds nothing to the scrollable width. */
         align-self: stretch;
     }
 
-    /* One grid cell with every line stacked in it, so the row reserves its
-       space once and opening a book never shifts the page below. */
+    /* All lines share one grid cell, so opening a book never shifts the page. */
     .shelf-detail {
         display: grid;
         min-height: 3.25rem;
@@ -218,9 +168,6 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
     .shelf-note {
         display: block;
         font-style: normal;
-        /* Authors, page count, rating, date — real content, so a colour at AA
-           rather than an opacity. The wrapper is aria-hidden (the data is in
-           the row above), but it is what a sighted reader actually reads. */
         color: var(--color-ink-muted);
     }
 
@@ -235,10 +182,4 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
     .shelf-note:hover {
         text-decoration: none;
     }
-
-    /*
-      No breakpoint, and no wrapping onto several lines on narrow screens:
-      opening a book widens it from spine to cover, which reflows the wrap and
-      throws books between lines. Scrolling with snap is the better jolt.
-    */
 </style>

@@ -10,8 +10,7 @@ const projects = (await getAllProjects()).map((project) => ({
     external: Boolean(project.data.externalUrl),
 }));
 
-// The landing page deliberately stops at three. This page opens with a wider,
-// curated shelf; drafts and the remaining projects stay in the compact index.
+// The homepage stops at three; this page opens with a wider curated set.
 const cardProjectIds = new Set([
     "robins-photos",
     "geeenerated",

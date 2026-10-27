@@ -24,7 +24,6 @@ export const getStaticPaths = (async ({ paginate }) => {
         ),
     ];
 
-    // One paginated set of routes per country.
     return countries.flatMap((country) => {
         const cards = postcards.filter(
             (p) => p.country && getStandardCountryName(p.country) === country,

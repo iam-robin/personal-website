@@ -1,24 +1,19 @@
 const USERNAME = "iamrobin";
-/** The profile the feed belongs to — linked from the page's opening line. */
 export const PROFILE_URL = `https://letterboxd.com/${USERNAME}/`;
 const FEED_URL = `${PROFILE_URL}rss/`;
 const TIMEOUT_MS = 10_000;
 
-/** What the feed gives out in one go. Quoted on the page, so it lives here. */
+/** Entries per feed. Quoted on /movies. */
 export const FEED_LIMIT = 50;
 
 export interface Film {
     id: string;
     title: string;
-    /** The film's own year — the dim chip after the title, as "S2" is on /series. */
     year: number | null;
-    /** a.ltrbxd.com, out of the description's CDATA. Remote, like the series covers. */
     cover: string | null;
-    /** Mine, out of 5. Letterboxd writes one on every diary entry it rates. */
     rating: number | null;
-    /** Letterboxd's own like — the heart, straight from the source. */
     liked: boolean;
-    /** ISO yyyy-mm-dd, the day I watched it. */
+    /** ISO yyyy-mm-dd. */
     watched: string;
 }
 
@@ -35,7 +30,6 @@ function tagContent(item: string, name: string): string | null {
     return match ? match[1].trim() : null;
 }
 
-/** The five XML entities. Titles like "Sun & Fire" arrive escaped. */
 function decodeEntities(value: string): string {
     return value
         .replace(/&lt;/g, "<")
@@ -54,14 +48,12 @@ function toNumber(value: string | null): number | null {
 function parseFeed(xml: string): Film[] {
     const films: Film[] = [];
 
-    // Splitting on <item> rather than matching them: the description holds a
-    // CDATA block with markup of its own, which a greedy item regex trips on.
+    // Split, not matched: the description's CDATA trips a greedy item regex.
     for (const item of xml.split("<item>").slice(1)) {
         const title = tagContent(item, "letterboxd:filmTitle");
         const watched = tagContent(item, "letterboxd:watchedDate");
 
-        // The feed carries more than diary entries — a new list, a review
-        // without a date. Only a watch has both, and only a watch belongs here.
+        // Only diary entries have both.
         if (!title || !watched) continue;
 
         const cover = item.match(
@@ -69,7 +61,7 @@ function parseFeed(xml: string): Film[] {
         )?.[1];
 
         films.push({
-            // Dated, so a rewatch is its own row rather than a duplicate key.
+            // Dated, so a rewatch gets its own id.
             id: `${watched}-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
             title: decodeEntities(title),
             year: toNumber(tagContent(item, "letterboxd:filmYear")),
@@ -83,10 +75,7 @@ function parseFeed(xml: string): Film[] {
     return films;
 }
 
-/**
- * One fetch per build, not per page: /shelf asks for the count and /movies for
- * the films, and Astro renders them in the same process.
- */
+/** Cached: several pages ask during one build. */
 let cached: Promise<Film[]> | null = null;
 
 export function getFilms(): Promise<Film[]> {
@@ -104,16 +93,11 @@ async function fetchFilms(): Promise<Film[]> {
         }
         return parseFeed(await response.text());
     } catch (error) {
-        // Loud in the build log, harmless to the build itself.
         console.error(`[movies] Letterboxd feed unavailable: ${error}`);
         return [];
     }
 }
 
-/**
- * Newest first the whole way down, the same as /series: the years descend, and
- * inside a year December sits above January.
- */
 export async function getFilmYears(): Promise<FilmYear[]> {
     const films = await getFilms();
 

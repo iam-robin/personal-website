@@ -37,8 +37,7 @@ if (Astro.request.method === "POST") {
         const isPublished = false;
         const stampSvg = formData?.get("stamp-svg");
 
-        // Every postcard is drawn once, at submission, and the values are
-        // stored — so a card looks the same on every later render.
+        // Drawn once at submission and stored, so a card never changes.
         const randomMarginBottom = Math.floor(Math.random() * 8);
         const randomMarginRight = Math.floor(Math.random() * 8);
         const randomRotation = Math.floor(Math.random() * 4 - 2);
@@ -76,7 +75,7 @@ if (Astro.request.method === "POST") {
         const wavyStampRotation = Math.floor(Math.random() * 21) - 10; // -10 to +10 degrees
 
         if (typeof author === "string" && typeof body === "string") {
-            // Swallow a double submit rather than storing the card twice.
+            // Swallow a double submit.
             const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
             const existing = await db
                 .select({ id: Postcard.id })
@@ -278,17 +277,13 @@ if (Astro.request.method === "POST") {
 <script is:inline>
     document.querySelector("form").addEventListener("submit", function () {
         const btn = document.querySelector(".submit-btn");
-        // The native `disabled` attribute is the whole mechanism: it blocks the
-        // second click, and `disabled:` styling carries the look. Setting
-        // opacity and pointer-events inline did the same job in a way no
-        // stylesheet could see or override.
+        // `disabled` blocks the second click; `disabled:` styles carry the look.
         btn.disabled = true;
         btn.textContent = "Sending…";
     });
 </script>
 
 <style>
-    /* The picked variant flips to solid ink, same as an active FilterTag. */
     .variant-pill[aria-pressed="true"] {
         background-color: var(--color-ink);
         color: var(--color-paper);
@@ -320,9 +315,8 @@ if (Astro.request.method === "POST") {
         );
     }
 
-    // Two generators, one hidden input. Each keeps its own last result so
-    // switching back and forth restores exactly what's still on screen —
-    // neither preview is redrawn when it's only being revealed again.
+    // Each generator keeps its last result, so switching variants restores what
+    // was on screen.
     type StampVariant = "shapes" | "bird";
     let activeVariant: StampVariant = "shapes";
     let shapesSvg = "";
@@ -345,7 +339,7 @@ if (Astro.request.method === "POST") {
         const MIN_CELLS = 1;
         const MAX_CELLS = 3;
 
-        const CANVAS_COLOR = "#fff"; // Overall canvas background
+        const CANVAS_COLOR = "#fff";
 
         let p5canvas: any;
         let numCells: number;
@@ -384,7 +378,6 @@ if (Astro.request.method === "POST") {
             if (currentPalette && currentPalette.length > 0) {
                 return p.random(currentPalette);
             }
-            // Should not happen — a palette is picked before any draw.
             return (
                 "#" +
                 Math.floor(Math.random() * 16777215)
@@ -516,7 +509,6 @@ if (Astro.request.method === "POST") {
                     p.quadraticVertex(x + size, y + size, x + size, y);
                     p.endShape(p.CLOSE);
                 },
-                // Four triangles meeting at the centre, one colour each.
                 (x: number, y: number, size: number) => {
                     const centerX = x + size / 2;
                     const centerY = y + size / 2;
@@ -551,7 +543,7 @@ if (Astro.request.method === "POST") {
                     const centerX = x + size / 2;
                     const centerY = y + size / 2;
                     const outerDiameter = size;
-                    const innerDiameter = size * 0.6; // Inner circle is 60% of the outer
+                    const innerDiameter = size * 0.6;
 
                     p.fill(getRandomColorFromPalette());
                     p.ellipse(centerX, centerY, outerDiameter, outerDiameter);
@@ -579,8 +571,7 @@ if (Astro.request.method === "POST") {
                 shapesSvg = "";
             }
 
-            // p5 draws on setup regardless of which variant is showing; only
-            // the active one owns the input.
+            // p5 draws on setup either way; only the active variant owns the input.
             if (activeVariant === "shapes") setStampSvgInput(shapesSvg);
         };
 
@@ -605,7 +596,7 @@ if (Astro.request.method === "POST") {
             p.noLoop();
 
             initializeShapeFunctions();
-            selectNewPalette(); // Select initial palette
+            selectNewPalette();
             generateGridParameters();
         };
 
@@ -635,7 +626,7 @@ if (Astro.request.method === "POST") {
         };
 
         (p as any).regenerate = () => {
-            selectNewPalette(); // Select a new palette on regenerate
+            selectNewPalette();
             generateGridParameters();
             p.redraw();
         };
@@ -675,8 +666,7 @@ if (Astro.request.method === "POST") {
         shapesPreview?.toggleAttribute("hidden", variant !== "shapes");
         birdPreview?.toggleAttribute("hidden", variant !== "bird");
 
-        // The revealed preview is still showing its last result, so hand the
-        // input that same string rather than drawing a new one.
+        // Hand the input the result already on screen instead of drawing anew.
         if (variant === "bird" && !birdSvg) regenerateBird();
         else setStampSvgInput(variant === "bird" ? birdSvg : shapesSvg);
     };

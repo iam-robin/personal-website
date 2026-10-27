@@ -15,9 +15,7 @@ function initTokenLab() {
     const lengths = [...root.querySelectorAll<HTMLOutputElement>("[data-length-value]")];
     const number = (value: number) => String(Math.round(value * 100) / 100);
 
-    // Resolves rem/calc lengths with the browser's own CSS engine. It has no
-    // layout footprint and stays inside the specimen scope, where tokens that
-    // Tailwind would otherwise prune are mirrored from the source files.
+    // Resolves rem/calc lengths with the browser's own CSS engine.
     const probe = document.createElement("span");
     probe.setAttribute("aria-hidden", "true");
     probe.style.cssText = "position:fixed;left:0;top:0;height:0;visibility:hidden;pointer-events:none;";
@@ -85,7 +83,6 @@ function initTokenLab() {
         if (reduced.matches || !supported) return;
         cancelMotion();
         for (const dot of dots) {
-            // Leave space past the resting point for the playful overshoot.
             const distance = (dot.parentElement!.clientWidth - dot.offsetWidth) * 0.75;
             const easing = getComputedStyle(dot).getPropertyValue(dot.dataset.easing!).trim();
             animations.set(dot, dot.animate([

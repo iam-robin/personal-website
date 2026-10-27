@@ -1,17 +1,10 @@
-// Cursor-following preview (a bookmark cover image, a project fan, …)
-// shown while hovering a list row, dimming the other rows. The row
-// needs the .list-item-image-hover-effect class (plus group/relative);
-// the floating element inside it the .cover-image class. Rows without
-// a .cover-image still take part in the dimming. Ported from v3.
+// Cursor-following preview for list rows (.list-item-image-hover-effect, with
+// a .cover-image inside), dimming the other rows.
 const coverDistance = 32;
 const initialized = new WeakSet<Element>();
 
-// The whole effect — floating cover *and* the dimming that frames it — only
-// exists where the cover does: a pointer that can hover, on a viewport wide
-// enough for `md:group-hover:block` to fire. Without both, dimming nine rows
-// buys nothing and, on touch, latches (tap fires mouseover, never mouseout).
-// Checked per event rather than once at init so resizing a window across the
-// breakpoint takes effect immediately.
+// Hover-capable pointer on a viewport wide enough for md:group-hover. On touch
+// the dimming would latch. Checked per event so resizing takes effect.
 const canPreview = () =>
     window.matchMedia("(hover: hover) and (min-width: 48rem)").matches;
 
@@ -31,28 +24,15 @@ function initHoverEffect() {
         initialized.add(item);
 
         const cover = item.querySelector<HTMLElement>(".cover-image");
-        // A cover counts unless it's a broken one: display:none from its own
-        // onerror handler, or finished loading with nothing in it. An image
-        // still in flight is fine to place — /series loads its posters lazily,
-        // so the first hover is always the one that fetches, and skipping it
-        // would leave that poster sitting at its static position.
+        // Broken covers don't count; covers still loading do (they load lazily).
         const isCoverValid = () =>
             !!cover &&
             cover.style.display !== "none" &&
             (!(cover instanceof HTMLImageElement) ||
                 !(cover.complete && cover.naturalWidth === 0));
 
-        // Placing an in-flight image is right (see above), but showing it is
-        // not: every preview here is lazy and sits behind `display: none`, so
-        // nothing is fetched until the hover reveals it and the first hover of
-        // a row would put an empty frame under the cursor until it lands.
-        // Gate the fade on load instead — position from the first mousemove,
-        // paint once there are pixels.
-        //
-        // The cover is either the <img> itself (a poster on /series) or a
-        // wrapper around the fan's <Image>s (/projects), and the wrapper is
-        // only ready once all of them are: the fan draws a bordered card per
-        // image, so a partial fan is a row of empty frames.
+        // Position right away, but fade in only once every image has loaded, or the
+        // first hover shows empty frames.
         if (cover) {
             const images =
                 cover instanceof HTMLImageElement
@@ -64,8 +44,7 @@ function initHoverEffect() {
             let remaining = pending.length;
             cover.dataset.previewReady = String(remaining === 0);
 
-            // `error` settles too, or one broken image in a fan of five would
-            // hold the whole preview at opacity 0 forever.
+            // `error` settles too, or one broken image holds the preview at opacity 0.
             pending.forEach((img) => {
                 let settled = false;
                 const settle = () => {

@@ -4,7 +4,6 @@ import { getHomeFolders } from "../../utils/homeFolders";
 import { papers } from "../../utils/paper";
 
 const folders = await getHomeFolders();
-// Reuse the site's paper stocks without changing the destination pages' colors.
 const folderPapers = {
     notes: papers.projects,
     bookmarks: papers.shelf,
@@ -131,8 +130,7 @@ const folderPapers = {
 
     [data-kind="postcards"] .paper { width: 80%; height: 65%; }
 
-    /* Two overlapping panels form the reference's outward-opening front.
-       Perspective rotation alone gives a different silhouette. */
+    /* Two overlapping panels: perspective alone gives the wrong silhouette. */
     .folder-front {
         position: absolute;
         inset: 0;
@@ -151,7 +149,6 @@ const folderPapers = {
 
     }
 
-    /* Keep previews visible on touch devices without requiring a first tap. */
     @media (hover: none) {
         .folder-link { --folder-open: 1; }
     }

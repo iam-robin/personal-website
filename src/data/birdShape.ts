@@ -1,41 +1,29 @@
 /**
- * The robin, as data — so the logo (Bird.astro) and the postcard stamp
- * (utils/stamps/birdStamp.ts) draw the same bird from one source.
- *
- * The angry mood is deliberately absent: its brows are cut with a <mask id>,
- * and the stamp generator must emit id-free markup because a postcards page
- * renders dozens of stamps at once. It stays inline in Bird.astro.
+ * The robin as data, shared by Bird.astro and the postcard stamps. The angry
+ * mood stays inline in Bird.astro: its <mask id> can't repeat dozens of times
+ * on the postcards page.
  */
 
 export const BIRD_VIEWBOX = { w: 139, h: 162 } as const;
 
 export interface BirdPart {
     d: string;
-    /**
-     * The eye white is the one part painted in the background colour rather
-     * than the bird's — which is what makes the eye read as a ring in every
-     * mood and every colourway.
-     */
+    /** Painted in the background colour, so the eye reads as a ring. */
     role: "ink" | "void";
     /** Stroked instead of filled (legs, the shut eye, the jump marks). */
     strokeWidth?: number;
-    /** Hooks Bird.astro's hover animation. Stamps drop it. */
     class?: string;
 }
 
 export interface BirdMood {
     parts: readonly BirdPart[];
-    /** Aligned on the resting bird's body centre — the framing stamps use. */
+    /** Aligned on the resting bird's body centre. */
     transform?: string;
-    /** What Bird.astro emits. Same as `transform`, except the startled bird hops. */
+    /** Same as `transform`, except the startled bird hops. */
     logoTransform?: string;
     /** Extent of the drawn bird after `transform`, for the portrait framing. */
     bbox: { x: number; y: number; w: number; h: number };
-    /**
-     * The close-up framing. Each is wider than it needs to be on the right so
-     * the beak — which ends at x≈139 — is never clipped, and `smitten` reaches
-     * above y=0 so the heart survives.
-     */
+    /** Wider on the right so the beak (ends at x 139) is never clipped. */
     closeup: { x: number; y: number; w: number; h: number };
 }
 
@@ -89,12 +77,7 @@ export const BIRD_MOODS: Record<BirdMoodKey, BirdMood> = {
         ],
     },
 
-    /**
-     * The export is drawn ~5% smaller than the resting state; the scale matches
-     * the two body sizes. `transform` aligns on the body centre; the logo adds
-     * a jump offset (+12 right, −20 up) on top, so the bird looks like it hops
-     * up and to the right when startled. A stamp wants it standing still.
-     */
+    /** Drawn ~5% smaller than resting. The logo adds a hop (+12, -20) on top. */
     startled: {
         transform: "translate(-10.01 2.6) scale(1.0539)",
         logoTransform: "translate(1.99 -17.4) scale(1.0539)",
@@ -160,10 +143,8 @@ export const BIRD_MOODS: Record<BirdMoodKey, BirdMood> = {
     },
 
     /**
-     * Easter egg: the bird has just eaten a crumb (see BirdFeeder). Eyes shut,
-     * heart overhead. Drawn larger than the resting state; the scale matches
-     * the two body radii and the translate aligns on the body centre, which
-     * also lands the feet on the same baseline.
+     * Easter egg after eating a crumb (see BirdFeeder). Scaled to match the body
+     * and land the feet on the same baseline.
      */
     smitten: {
         transform: "translate(-1.78 0.88) scale(0.69611)",

@@ -69,7 +69,6 @@ export function initComponentCatalog() {
     });
     document.querySelectorAll<HTMLAnchorElement>('[data-lab-page-nav] a[href^="#"], [data-component-catalog] a[href^="#"]').forEach((link) => {
         link.addEventListener("click", () => {
-            // A category jump is also an exit from a narrowed search.
             if (link.hash.startsWith("#area-")) {
                 search.value = "";
                 area.value = "all";
