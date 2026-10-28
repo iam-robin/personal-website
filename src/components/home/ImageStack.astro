@@ -22,19 +22,28 @@ const { label, images } = Astro.props;
 ---
 
 <div class="image-stack">
-    <ul class="strip" blossom-carousel data-image-stack role="list" aria-label={label} tabindex="0">
-        {images.map((image, index) => (
-            <li class="slide" style={{ "--z": images.length - index }}>
-                <Image
-                    src={image.src}
-                    alt={image.alt}
-                    widths={[320, 480, 720]}
-                    sizes="(min-width: 48rem) 15rem, 11rem"
-                    loading="lazy"
-                    class="slide-image"
-                />
-            </li>
-        ))}
+    <ul
+        class="strip"
+        blossom-carousel
+        data-image-stack
+        role="list"
+        aria-label={label}
+        tabindex="0"
+    >
+        {
+            images.map((image, index) => (
+                <li class="slide" style={{ "--z": images.length - index }}>
+                    <Image
+                        src={image.src}
+                        alt={image.alt}
+                        widths={[320, 480, 720]}
+                        sizes="(min-width: 48rem) 15rem, 11rem"
+                        loading="lazy"
+                        class="slide-image"
+                    />
+                </li>
+            ))
+        }
     </ul>
 </div>
 
@@ -42,7 +51,10 @@ const { label, images } = Astro.props;
     /* Starts on the content edge, ends on the column's right edge, but
        bleeds out to the viewport on the left. */
     .image-stack {
-        --edge: max(var(--spacing-gutter), (100vw - var(--container-shell)) / 2 + var(--spacing-gutter));
+        --edge: max(
+            var(--spacing-gutter),
+            (100vw - var(--container-shell)) / 2 + var(--spacing-gutter)
+        );
         margin-inline-start: calc(50% - 50vw);
     }
 
@@ -50,13 +62,15 @@ const { label, images } = Astro.props;
        browser kept snapping back to the start. */
     .strip {
         display: flex;
-        gap: .5rem;
+        gap: 0.5rem;
         padding-inline: var(--edge) 0;
         scroll-snap-type: none;
         --snap-type: none;
     }
 
-    .strip:focus-visible { outline-offset: -2px; }
+    .strip:focus-visible {
+        outline-offset: -2px;
+    }
 
     /* The script sets --stack-end so each slide's left edge lands on the
        stack slot; whatever sticks out past the column is clipped. Without
@@ -81,7 +95,9 @@ const { label, images } = Astro.props;
     // already scroll natively, so phones never download it.
     if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
         import("@blossom-carousel/core").then(({ Blossom }) => {
-            for (const element of document.querySelectorAll<HTMLElement>("[data-image-stack]")) {
+            for (const element of document.querySelectorAll<HTMLElement>(
+                "[data-image-stack]",
+            )) {
                 Blossom(element, {}).init();
             }
         });
@@ -90,21 +106,38 @@ const { label, images } = Astro.props;
     // The stack slot is where the first image that doesn't fully fit would
     // start. Every slide gets inset-inline-end = scrollport width - slot -
     // own width, so it pins its left edge there. Negative values are fine.
-    for (const strip of document.querySelectorAll<HTMLElement>("[data-image-stack]")) {
+    for (const strip of document.querySelectorAll<HTMLElement>(
+        "[data-image-stack]",
+    )) {
         const slides = [...strip.querySelectorAll<HTMLElement>(".slide")];
         const place = () => {
             for (const slide of slides) slide.style.position = "static";
             const width = strip.clientWidth;
-            const origin = strip.getBoundingClientRect().left - strip.scrollLeft;
-            const lefts = slides.map((slide) => slide.getBoundingClientRect().left - origin);
-            const first = slides.findIndex((slide, i) => lefts[i] + slide.offsetWidth > width);
+            const origin =
+                strip.getBoundingClientRect().left - strip.scrollLeft;
+            const lefts = slides.map(
+                (slide) => slide.getBoundingClientRect().left - origin,
+            );
+            const first = slides.findIndex(
+                (slide, i) => lefts[i] + slide.offsetWidth > width,
+            );
             const slot = first === -1 ? width : lefts[first];
             for (const slide of slides) {
-                slide.style.setProperty("--stack-end", `${width - slot - slide.offsetWidth}px`);
+                slide.style.setProperty(
+                    "--stack-end",
+                    `${width - slot - slide.offsetWidth}px`,
+                );
                 slide.style.position = "";
             }
         };
-        place();
-        new ResizeObserver(place).observe(strip);
+        // Watch the slides too: lazy images can still be 0 wide on the first
+        // pass (WebKit), and the strip's own width doesn't change when they load.
+        let frame = 0;
+        const observer = new ResizeObserver(() => {
+            cancelAnimationFrame(frame);
+            frame = requestAnimationFrame(place);
+        });
+        observer.observe(strip);
+        for (const slide of slides) observer.observe(slide);
     }
 </script>

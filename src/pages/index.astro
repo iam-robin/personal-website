@@ -14,7 +14,7 @@ import MobileMenu from "../components/ui/MobileMenu.astro";
 import Wordmark from "../components/ui/Wordmark.astro";
 import { graphSchema, personSchema, websiteSchema } from "../utils/schema";
 import { getAllProjects } from "../utils/projects";
-import { photos, art } from "../data/homeCarousels";
+import { photos } from "../data/homeCarousels";
 
 const structuredData = graphSchema([personSchema, websiteSchema]);
 
@@ -47,13 +47,30 @@ const projects = (await getAllProjects())
             <HomeHero />
 
             <div class="mt-32 flex w-full flex-col gap-24">
-                <TeaserSection title="Photos" link={{ href: "https://robins.photos", text: "robins.photos", external: true }}>
-                    <ImageStack label="A selection of my photos" images={photos} />
+                <TeaserSection
+                    title="Photos"
+                    link={{
+                        href: "https://robins.photos",
+                        text: "robins.photos",
+                        external: true,
+                    }}
+                >
+                    <ImageStack
+                        label="A selection of my photos"
+                        images={photos}
+                    />
                 </TeaserSection>
+                {
+                    /* Hidden for now.
                 <TeaserSection title="handcoded.art" link={{ href: "https://www.instagram.com/handcoded.art/", text: "More", external: true }}>
                     <ImageStack label="A selection of my generative art" images={art} />
                 </TeaserSection>
-                <TeaserSection title="Side Projects" link={{ href: "/projects", text: "All Projects" }}>
+                */
+                }
+                <TeaserSection
+                    title="Side Projects"
+                    link={{ href: "/projects", text: "All Projects" }}
+                >
                     <ProjectList projects={projects} />
                 </TeaserSection>
                 <BlogTeaser />
