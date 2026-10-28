@@ -14,7 +14,7 @@ for (const [path, source] of Object.entries(consumers)) {
     const importer = sourcePath(path);
     // Lab examples don't count, or a specimen would make an unused component
     // look used.
-    if (importer.includes("/lab/") || importer === "src/layouts/LabLayout.astro") continue;
+    if (importer.includes("/lab/") || importer.includes("/_lab/") || importer === "src/layouts/LabLayout.astro") continue;
     for (const match of source.matchAll(/\bimport\s+[\s\S]*?\sfrom\s*["']([^"']+\.astro)["']/g)) {
         if (!match[1].startsWith(".")) continue;
         const target = posix.normalize(posix.join(posix.dirname(importer), match[1]));

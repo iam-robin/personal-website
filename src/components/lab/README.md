@@ -33,8 +33,8 @@ time through `src/utils/componentCatalog.ts`. New component files appear
 automatically, even before someone writes a catalogue note for them.
 
 - `src/data/componentLab.ts`: descriptions, context links and preview dimensions.
-- `src/pages/lab/components/index.astro`: grouped inventory and native disclosures.
-- `src/pages/lab/components/preview/[component].astro`: actual components with
+- `src/pages/_lab/components/index.astro`: grouped inventory and native disclosures.
+- `src/pages/_lab/components/preview/[component].astro`: actual components with
   slot examples or published collection data. Register a preview in
   `componentPreviews`, then add its required props or slot recipe here.
 - `src/scripts/componentCatalog.ts`: optional search, area filtering and deep links.
@@ -64,7 +64,7 @@ also use these definitions. The footer's Explore column reuses `navItems` from
 
 ## Publication
 
-The lab deploys with the website. `/lab` and its previews have `noindex` and are
-excluded from the sitemap and main navigation. They are **not private**:
-anyone who knows the URL can open them. Do not put secrets or unpublished client
-work here.
+The lab is local only. Its pages live in `src/pages/_lab`, which Astro doesn't
+route on its own; the `dev-only-lab` integration in `astro.config.mjs` injects
+the `/lab` routes during `astro dev` and nowhere else. Production builds have no
+`/lab` at all. Adding a lab page means adding it to `LAB_ROUTES` there too.

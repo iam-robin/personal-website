@@ -16,6 +16,29 @@ const NOT_INDEXED = [
     "/music",
 ];
 
+/* The lab lives in src/pages/_lab, which Astro doesn't route by itself.
+   Its routes are injected for `astro dev` only, so production builds never
+   contain them. */
+const LAB_ROUTES = [
+    ["/lab", "index.astro"],
+    ["/lab/tokens", "tokens.astro"],
+    ["/lab/components", "components/index.astro"],
+    ["/lab/components/preview/[component]", "components/preview/[component].astro"],
+];
+
+/** @returns {import("astro").AstroIntegration} */
+const devOnlyLab = () => ({
+    name: "dev-only-lab",
+    hooks: {
+        "astro:config:setup": ({ command, injectRoute }) => {
+            if (command !== "dev") return;
+            for (const [pattern, file] of LAB_ROUTES) {
+                injectRoute({ pattern, entrypoint: `./src/pages/_lab/${file}` });
+            }
+        },
+    },
+});
+
 export default defineConfig({
     site: "https://iamrob.in",
     /* Nixpacks caches node_modules/.cache between deploys, so optimized images survive. */
@@ -23,6 +46,7 @@ export default defineConfig({
     integrations: [
         db(),
         icon(),
+        devOnlyLab(),
         sitemap({
             filter: (page) => {
                 // Compare paths without the trailing slash Astro appends.
@@ -31,8 +55,7 @@ export default defineConfig({
                     /^\/postcards\/\d+$/.test(path) ||
                     /^\/postcards\/country\//.test(path);
 
-                const isLab = path === "/lab" || path.startsWith("/lab/");
-                return !NOT_INDEXED.includes(path) && !isPostcardArchive && !isLab;
+                return !NOT_INDEXED.includes(path) && !isPostcardArchive;
             },
         }),
     ],
