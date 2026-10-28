@@ -1,10 +1,8 @@
 ---
 title: "media.camp"
 description: "A student barcamp I helped run."
-thumbnail: "/projects/mediacamp.svg"
 tags: ["Barcamp", "Branding"]
 year: "2015-2017"
-bgColor: "#C026D3"
 ---
 
 ![Mockups of the media.camp website](../../assets/projects/media-camp/header.png)

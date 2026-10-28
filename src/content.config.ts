@@ -180,13 +180,8 @@ const projects = defineCollection({
         description: z.string(),
         year: z.string(),
         order: z.number().optional().default(0),
-        thumbnail: z.string().optional(),
-        thumbnailWidth: z.string().optional(),
         tags: z.array(z.string()).optional(),
-        bgColor: z.string().optional(),
-        bgColorDark: z.string().optional(),
         externalUrl: z.string().optional(),
-        featured: z.boolean().optional().default(false),
         draft: z.boolean().optional().default(false),
     }),
 });

@@ -17,12 +17,3 @@ export async function getAllProjects(): Promise<
             b.data.order - a.data.order,
     );
 }
-
-/** `featured: true` wins if any project opts in; otherwise the newest. */
-export async function getFeaturedProjects(
-    limit = 3,
-): Promise<CollectionEntry<"projects">[]> {
-    const all = await getAllProjects();
-    const curated = all.filter((p) => p.data.featured);
-    return (curated.length > 0 ? curated : all).slice(0, limit);
-}

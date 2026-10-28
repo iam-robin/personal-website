@@ -1,11 +1,8 @@
 ---
 title: "meaningful animations"
 description: "My bachelor thesis on motion in small interactions."
-thumbnail: "/projects/meaningful-animation.svg"
-thumbnailWidth: "112px"
 tags: ["Bachelor Thesis", "Motion Design"]
 year: "2017"
-bgColor: "#4F46E5"
 ---
 
 ![](../../assets/projects/meaningful-animations/Bildschirmfoto_2024-07-04_um_13.35.17.png)

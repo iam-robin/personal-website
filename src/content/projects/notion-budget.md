@@ -1,10 +1,8 @@
 ---
 title: "notion budget"
 description: "Charts for my Notion budget."
-thumbnail: "/projects/notionbudget.png"
 tags: ["Data viz", "React", "Express"]
 year: "2021"
-bgColor: "#18181B"
 ---
 
 ![](../../assets/projects/notion-budget/002.png)

@@ -1,10 +1,8 @@
 ---
 title: "oh my"
 description: "A browser extension that shows where my time goes."
-thumbnail: "/projects/ohmy.svg"
 tags: ["Master Thesis", "Data viz"]
 year: "2018"
-bgColor: "#F59E0B"
 ---
 
 ![The oh my browser activity dashboard](../../assets/projects/oh-my/teaser.png)

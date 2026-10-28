@@ -1,11 +1,8 @@
 ---
 title: "Lumon"
 description: "Severance's office desktop, rebuilt for the web."
-thumbnail: "/projects/lumon.png"
-thumbnailWidth: "128px"
 tags: ["Website", "UI Imitation"]
 year: "2022"
-bgColor: "#1E3A8A"
 ---
 
 ![](../../assets/projects/lumon/1.png)
