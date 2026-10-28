@@ -17,6 +17,7 @@
         "@astrojs/node": "^11.0.2",
         "@astrojs/rss": "^4.0.19",
         "@astrojs/sitemap": "^3.7.3",
+        "@blossom-carousel/core": "^1.1.9",
         "@iconify-json/ph": "^1.2.2",
         "@tailwindcss/vite": "^4.3.2",
         "astro": "^7.0.5",

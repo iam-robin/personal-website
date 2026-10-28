@@ -1,0 +1,52 @@
+---
+/* Hallmark · component: project list · genre: editorial
+ * states: default · hover · focus · active · draft
+ * Built like my blog teaser rows, so the text lists read as one family:
+ * year, title, one line, and an arrow for internal or external.
+ * Drafts have no page yet: they stay in the list, quieter, without a link.
+ */
+import type { CollectionEntry } from "astro:content";
+
+interface Props { projects: CollectionEntry<"projects">[]; }
+const { projects } = Astro.props;
+
+const linkAttributes = (project: CollectionEntry<"projects">): Record<string, string | undefined> => {
+    if (project.data.draft) return { "aria-disabled": "true" };
+    const external = Boolean(project.data.externalUrl);
+    return {
+        href: project.data.externalUrl || `/projects/${project.id}`,
+        target: external ? "_blank" : undefined,
+        rel: external ? "noopener noreferrer" : undefined,
+    };
+};
+---
+
+<ul class="divide-y divide-dotted divide-ink/30 border-y border-dotted border-ink/30">
+    {projects.map((project) => {
+        const { draft } = project.data;
+        const external = Boolean(project.data.externalUrl);
+        const Row = draft ? "div" : "a";
+        return (
+            <li>
+                <Row
+                    {...linkAttributes(project)}
+                    class:list={["flex items-start gap-3 py-4 font-mono sm:gap-4 sm:py-5", draft ? "text-ink-muted" : "ink-row"]}
+                >
+                    <span class="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-start sm:gap-4">
+                        <span class="shrink-0 whitespace-nowrap text-xs text-ink-muted sm:w-24 sm:text-sm">{project.data.year}</span>
+                        <span class="flex min-w-0 flex-1 flex-col gap-1 @min-[48rem]:flex-row @min-[48rem]:gap-4">
+                            <span class="ink-row-title text-base leading-snug @min-[48rem]:w-64 @min-[48rem]:shrink-0">{project.data.title}</span>
+                            <span class="text-sm leading-snug text-ink-muted @min-[48rem]:pt-px">{project.data.description}</span>
+                        </span>
+                    </span>
+                    {draft ? (
+                        <span class="shrink-0 whitespace-nowrap rounded-full border border-dotted border-ink-muted px-2 text-xs leading-relaxed">Soon</span>
+                    ) : (
+                        <span class="ink-row-meta shrink-0 -translate-y-px text-base leading-snug" aria-hidden="true">{external ? "↗" : "→"}</span>
+                    )}
+                    {external && !draft && <span class="sr-only">Opens on an external site in a new tab</span>}
+                </Row>
+            </li>
+        );
+    })}
+</ul>

@@ -2,7 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import HomeHero from "../components/home/HomeHero.astro";
 import FolderShortcuts from "../components/home/FolderShortcuts.astro";
-import ProjectsTeaser from "../components/projects/ProjectsTeaser.astro";
+import TeaserSection from "../components/TeaserSection.astro";
+import ImageStack from "../components/home/ImageStack.astro";
+import ProjectList from "../components/projects/ProjectList.astro";
 import BlogTeaser from "../components/blog/BlogTeaser.astro";
 import Nav from "../components/ui/Nav.astro";
 import ContactSection from "../components/ui/ContactSection.astro";
@@ -11,8 +13,16 @@ import RssDropdown from "../components/ui/RssDropdown.astro";
 import MobileMenu from "../components/ui/MobileMenu.astro";
 import Wordmark from "../components/ui/Wordmark.astro";
 import { graphSchema, personSchema, websiteSchema } from "../utils/schema";
+import { getAllProjects } from "../utils/projects";
+import { photos, art } from "../data/homeCarousels";
 
 const structuredData = graphSchema([personSchema, websiteSchema]);
+
+// Photos and handcoded.art have their own image strips, so they skip the list.
+const stripProjects = new Set(["robins-photos", "geeenerated"]);
+const projects = (await getAllProjects())
+    .filter((project) => !project.data.draft && !stripProjects.has(project.id))
+    .slice(0, 3);
 ---
 
 <Layout
@@ -37,7 +47,15 @@ const structuredData = graphSchema([personSchema, websiteSchema]);
             <HomeHero />
 
             <div class="mt-32 flex w-full flex-col gap-24">
-                <ProjectsTeaser />
+                <TeaserSection title="Photos" link={{ href: "https://robins.photos", text: "robins.photos", external: true }}>
+                    <ImageStack label="A selection of my photos" images={photos} />
+                </TeaserSection>
+                <TeaserSection title="handcoded.art" link={{ href: "https://www.instagram.com/handcoded.art/", text: "More", external: true }}>
+                    <ImageStack label="A selection of my generative art" images={art} />
+                </TeaserSection>
+                <TeaserSection title="Side Projects" link={{ href: "/projects", text: "All Projects" }}>
+                    <ProjectList projects={projects} />
+                </TeaserSection>
                 <BlogTeaser />
                 <FolderShortcuts />
                 <ContactSection />

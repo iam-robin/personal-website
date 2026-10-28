@@ -1,0 +1,110 @@
+---
+/* Hallmark · component: image carousel (stack) · genre: editorial
+ * states: default · hover · focus · active (drag)
+ *
+ * A horizontal strip of images. On the left it runs out to the viewport;
+ * on the right the images still to come lie exactly on top of each other,
+ * one gap after the last image that fits, and peel off as you scroll.
+ *
+ * Native horizontal scroll first. Blossom only adds mouse dragging and
+ * momentum on fine pointers; touch and trackpads scroll natively.
+ * Every image keeps its own aspect ratio: one height, width follows.
+ */
+import { Image } from "astro:assets";
+import "@blossom-carousel/core/style.css";
+import type { Slide } from "../../data/homeCarousels";
+
+interface Props {
+    label: string;
+    images: Slide[];
+}
+const { label, images } = Astro.props;
+---
+
+<div class="image-stack">
+    <ul class="strip" blossom-carousel data-image-stack role="list" aria-label={label} tabindex="0">
+        {images.map((image, index) => (
+            <li class="slide" style={{ "--z": images.length - index }}>
+                <Image
+                    src={image.src}
+                    alt={image.alt}
+                    widths={[320, 480, 720]}
+                    sizes="(min-width: 48rem) 15rem, 11rem"
+                    loading="lazy"
+                    class="slide-image"
+                />
+            </li>
+        ))}
+    </ul>
+</div>
+
+<style>
+    /* Starts on the content edge, ends on the column's right edge, but
+       bleeds out to the viewport on the left. */
+    .image-stack {
+        --edge: max(var(--spacing-gutter), (100vw - var(--container-shell)) / 2 + var(--spacing-gutter));
+        margin-inline-start: calc(50% - 50vw);
+    }
+
+    /* No scroll snapping: snap areas follow the sticky positions, and the
+       browser kept snapping back to the start. */
+    .strip {
+        display: flex;
+        gap: .5rem;
+        padding-inline: var(--edge) 0;
+        scroll-snap-type: none;
+        --snap-type: none;
+    }
+
+    .strip:focus-visible { outline-offset: -2px; }
+
+    /* The script sets --stack-end so each slide's left edge lands on the
+       stack slot; whatever sticks out past the column is clipped. Without
+       JavaScript they stack flush against the column edge instead. */
+    .slide {
+        flex: none;
+        position: sticky;
+        inset-inline-end: var(--stack-end, 0px);
+        z-index: var(--z);
+    }
+
+    .slide-image {
+        display: block;
+        block-size: clamp(15rem, 34vw, 22.5rem);
+        inline-size: auto;
+        max-inline-size: none;
+    }
+</style>
+
+<script>
+    // Blossom's engine only matters for mouse dragging. Touch and trackpads
+    // already scroll natively, so phones never download it.
+    if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        import("@blossom-carousel/core").then(({ Blossom }) => {
+            for (const element of document.querySelectorAll<HTMLElement>("[data-image-stack]")) {
+                Blossom(element, {}).init();
+            }
+        });
+    }
+
+    // The stack slot is where the first image that doesn't fully fit would
+    // start. Every slide gets inset-inline-end = scrollport width - slot -
+    // own width, so it pins its left edge there. Negative values are fine.
+    for (const strip of document.querySelectorAll<HTMLElement>("[data-image-stack]")) {
+        const slides = [...strip.querySelectorAll<HTMLElement>(".slide")];
+        const place = () => {
+            for (const slide of slides) slide.style.position = "static";
+            const width = strip.clientWidth;
+            const origin = strip.getBoundingClientRect().left - strip.scrollLeft;
+            const lefts = slides.map((slide) => slide.getBoundingClientRect().left - origin);
+            const first = slides.findIndex((slide, i) => lefts[i] + slide.offsetWidth > width);
+            const slot = first === -1 ? width : lefts[first];
+            for (const slide of slides) {
+                slide.style.setProperty("--stack-end", `${width - slot - slide.offsetWidth}px`);
+                slide.style.position = "";
+            }
+        };
+        place();
+        new ResizeObserver(place).observe(strip);
+    }
+</script>
