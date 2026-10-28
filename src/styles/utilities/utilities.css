@@ -1,7 +1,3 @@
-.flex-center {
-    @apply flex justify-center items-center;
-}
-
 .marker {
     --marker-color: var(--color-inset);
     position: relative;

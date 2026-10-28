@@ -4,8 +4,6 @@
  * on the postcards page.
  */
 
-export const BIRD_VIEWBOX = { w: 139, h: 162 } as const;
-
 export interface BirdPart {
     d: string;
     /** Painted in the background colour, so the eye reads as a ring. */

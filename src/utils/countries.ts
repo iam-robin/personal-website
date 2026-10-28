@@ -245,25 +245,3 @@ export function getStandardCountryName(countryName: string): string {
     const country = countryMap.get(normalizedName) || aliasMap.get(normalizedName);
     return country?.name || countryName;
 }
-
-export function getCountryData(countryName: string): { name: string; flag: string } | null {
-    if (!countryName || typeof countryName !== 'string') {
-        return null;
-    }
-
-    const normalizedName = countryName.trim().toLowerCase();
-    const country = countryMap.get(normalizedName) || aliasMap.get(normalizedName);
-
-    if (country) {
-        return {
-            name: country.name,
-            flag: country.flag
-        };
-    }
-
-    return null;
-}
-
-export function filterValidCountries(countries: string[]): string[] {
-    return countries.filter((country) => isValidCountry(country));
-}
