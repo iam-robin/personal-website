@@ -8,7 +8,7 @@ import ProjectList from "../components/projects/ProjectList.astro";
 import BlogTeaser from "../components/blog/BlogTeaser.astro";
 import Nav from "../components/ui/Nav.astro";
 import ContactSection from "../components/ui/ContactSection.astro";
-import FooterColumns from "../components/ui/FooterColumns.astro";
+import Footer from "../components/ui/Footer.astro";
 import RssDropdown from "../components/ui/RssDropdown.astro";
 import MobileMenu from "../components/ui/MobileMenu.astro";
 import Wordmark from "../components/ui/Wordmark.astro";
@@ -62,7 +62,7 @@ const projects = (await getAllProjects())
             </div>
         </main>
 
-        <FooterColumns class="mt-48" />
+        <Footer class="mt-48" />
         <MobileMenu />
     </div>
 </Layout>

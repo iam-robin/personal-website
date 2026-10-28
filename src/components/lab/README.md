@@ -57,10 +57,10 @@ context links show the destination page's paper and surrounding layout.
 ## Shared link data
 
 `src/data/links.ts` owns contact labels, handles, destinations and Phosphor icon names,
-plus the footer's site links. `ContactSection` and `FooterColumns` read the same
+plus the footer's site links. `ContactSection` and `Footer` read the same
 contact list. The work-page email button, lab link example and Person schema
-also use these definitions. The footer's Explore column reuses `navItems` from
-`src/data/navigation.ts`.
+also use these definitions. The footer's carbon badge reads `src/data/carbon.ts`,
+the Website Carbon result, which is copied in by hand.
 
 ## Publication
 

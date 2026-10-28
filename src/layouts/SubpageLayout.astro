@@ -5,7 +5,7 @@
  */
 import Layout from "./Layout.astro";
 import Nav from "../components/ui/Nav.astro";
-import FooterColumns from "../components/ui/FooterColumns.astro";
+import Footer from "../components/ui/Footer.astro";
 import RssDropdown from "../components/ui/RssDropdown.astro";
 import MobileMenu from "../components/ui/MobileMenu.astro";
 import Bird from "../components/Bird.astro";
@@ -83,7 +83,7 @@ const {
             <slot />
         </main>
         {/* Twice the pages' `gap-24` rhythm, or the footer reads as another section. */}
-        <FooterColumns class="mt-48" />
+        <Footer class="mt-48" />
         <MobileMenu />
     </div>
 </Layout>
