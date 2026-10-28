@@ -1,6 +1,6 @@
 ---
 title: "robins.photos"
-description: "A separate home for my photography from years of walking around with a camera."
+description: "Where my photos live now."
 thumbnail: "/projects/robinsphotos.svg"
 thumbnailWidth: "50px"
 tags: ["Photography"]

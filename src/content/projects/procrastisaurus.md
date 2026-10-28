@@ -1,6 +1,6 @@
 ---
 title: "Procrastisaurus"
-description: "A browser extension to fight procrastination."
+description: "A browser extension against procrastination."
 thumbnail: "/projects/procrastisaurus.png"
 thumbnailWidth: "112px"
 tags: ["Browser Extension", "Screen time"]

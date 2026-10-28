@@ -1,6 +1,6 @@
 ---
 title: "Matchprint"
-description: "All 104 matches of the 2026 World Cup, each turned into a generative poster drawn from the game itself."
+description: "A poster for every World Cup 2026 match."
 thumbnail: "/projects/matchprint.svg"
 thumbnailWidth: "150px"
 tags: ["Data Visualization", "Poster", "Website"]

@@ -1,6 +1,6 @@
 ---
 title: "meaningful animations"
-description: "My bachelor thesis on motion in mobile microinteractions, with Framer.js prototypes and a user test."
+description: "My bachelor thesis on motion in small interactions."
 thumbnail: "/projects/meaningful-animation.svg"
 thumbnailWidth: "112px"
 tags: ["Bachelor Thesis", "Motion Design"]

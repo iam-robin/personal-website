@@ -1,6 +1,6 @@
 ---
 title: "media.camp"
-description: "A student-run barcamp at Furtwangen University, with branding, communication and event work from 2015 to 2017."
+description: "A student barcamp I helped run."
 thumbnail: "/projects/mediacamp.svg"
 tags: ["Barcamp", "Branding"]
 year: "2015-2017"

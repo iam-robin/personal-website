@@ -1,6 +1,6 @@
 ---
 title: "handcoded.art"
-description: "My generative art sketchbook on Instagram. p5.js experiments, patterns and poster ideas under the name handcoded.art."
+description: "Generative art I write in p5.js."
 thumbnail: "/projects/geeenerated.svg"
 thumbnailWidth: "48px"
 tags: ["Generative art", "p5.js"]

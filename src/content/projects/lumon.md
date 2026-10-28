@@ -1,6 +1,6 @@
 ---
 title: "Lumon"
-description: "A web recreation of the strange desktop interface from Apple TV+'s Severance."
+description: "Severance's office desktop, rebuilt for the web."
 thumbnail: "/projects/lumon.png"
 thumbnailWidth: "128px"
 tags: ["Website", "UI Imitation"]

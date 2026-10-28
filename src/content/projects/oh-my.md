@@ -1,6 +1,6 @@
 ---
 title: "oh my"
-description: "A Vue.js browser extension from my master's thesis that shows browsing habits and can block distracting sites."
+description: "A browser extension that shows where my time goes."
 thumbnail: "/projects/ohmy.svg"
 tags: ["Master Thesis", "Data viz"]
 year: "2018"

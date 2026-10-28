@@ -1,6 +1,6 @@
 ---
 title: "TimeGarden"
-description: "Interactive web-based historical timeline based on obsidian notes"
+description: "A timeline built from my Obsidian notes."
 thumbnail: "/projects/timegarden.svg"
 thumbnailWidth: "80px"
 tags: ["Data visualization", "Obsidian"]

@@ -1,6 +1,6 @@
 ---
 title: "notion budget"
-description: "A React and Express app that reads a Notion budget database and turns personal finance data into charts."
+description: "Charts for my Notion budget."
 thumbnail: "/projects/notionbudget.png"
 tags: ["Data viz", "React", "Express"]
 year: "2021"
