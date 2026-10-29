@@ -13,11 +13,6 @@ const intro = {
 };
 
 const years = await getFilmYears();
-const total = years.reduce((sum, year) => sum + year.films.length, 0);
-
-// The feed stops at FEED_LIMIT, so the oldest year is incomplete. Said on the
-// page.
-const oldest = years.at(-1)?.label;
 ---
 
 <SubpageLayout
@@ -40,9 +35,9 @@ const oldest = years.at(-1)?.label;
                 </div>
 
                 <p class="mt-16 max-w-xl font-mono text-xs text-ink-muted">
-                    {total} films. Letterboxd only hands out the last{" "}
-                    {FEED_LIMIT} entries, so {oldest} stops where the feed does
-                    — everything before it is over there, not here.
+                    Only my last {FEED_LIMIT} films show up here. The older
+                    ones are on{" "}
+                    <Link href={PROFILE_URL} external>my Letterboxd profile</Link>.
                 </p>
             </>
         ) : (
