@@ -4,6 +4,7 @@ Open `/lab` for an overview of the site's references.
 
 - `/lab/tokens`: design-token reference.
 - `/lab/components`: component inventory and previews.
+- `/lab/analog`: experiment with ink and paper effects on real components.
 
 All lab pages use `src/layouts/LabLayout.astro` for their header, sticky
 navigation, page title, content margins and footer. Destinations and their
@@ -53,6 +54,23 @@ Page-dependent compositions and invisible SVG helpers remain listed without
 fake standalone examples. The lab doesn't add postcard database requests or
 Mastodon thread requests. Isolated components use the lab's default paper;
 context links show the destination page's paper and surrounding layout.
+
+## Analog ink
+
+`/lab/analog` shows every ink and paper effect on the site, one section each,
+on the real component (`NoteCard`, hero marker, `LogRow`, `FolderShortcuts`).
+Each has its own on/off radio group; `:has()` switches it, so there's no
+JavaScript. "On" is what's live, so the page adds nothing for it; "off"
+undoes it.
+
+The system is one rule (only things made by hand get ink) and two files:
+
+- `src/styles/utilities/utilities.css`: the classes components use.
+  `.analog` frays print, `.marker` gets a felt-tip edge, `.analog-ink`
+  stamps, `.analog-grain` adds paper grain. One `prefers-contrast: more`
+  block switches them all off.
+- `src/components/ui/AnalogFilter.astro`: the SVG filters behind them,
+  rendered once by `Layout`.
 
 ## Shared link data
 

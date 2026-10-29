@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { getPaperKey, papers } from "../utils/paper";
+import AnalogFilter from "../components/ui/AnalogFilter.astro";
 
 interface Props {
     title: string;
@@ -146,6 +147,7 @@ const serializedStructuredData = structuredData
         data-paper={paperKey}
         style={`--paper: ${paper.hex}; --surface: ${paper.surface}; --inset: ${paper.inset}`}
     >
+        <AnalogFilter />
         <slot />
     </body>
 </html>

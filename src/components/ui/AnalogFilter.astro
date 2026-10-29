@@ -1,0 +1,47 @@
+---
+/**
+ * The analog ink filters, defined once per page by Layout. Components never
+ * reference them directly: they use the utility classes in
+ * styles/utilities/utilities.css (.analog, .marker, .analog-ink; the paper
+ * grain, .analog-grain, is a background tile and needs no filter here).
+ * Compare each one on and off in /lab/analog.
+ * Not display:none: some engines drop filters defined inside a hidden SVG.
+ */
+---
+
+<svg class="analog-defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <!-- .analog: per-pixel jitter of up to 0.6px, so edges fray like ink on
+         absorbent paper without the shape changing. -->
+    <filter id="analog">
+        <feTurbulence baseFrequency="1 1" numOctaves="1"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" scale="0.6"></feDisplacementMap>
+    </filter>
+
+    <!-- .marker::before: a slow wobble along the edge, then fine fibres. -->
+    <filter id="analog-marker" x="-5%" y="-30%" width="110%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.03 0.2" numOctaves="2" seed="5" result="edge"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="edge" scale="5" result="wobbly"></feDisplacementMap>
+        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" seed="2" result="fibre"></feTurbulence>
+        <feDisplacementMap in="wobbly" in2="fibre" scale="2"></feDisplacementMap>
+    </filter>
+
+    <!-- .analog-ink: ink bleed. Fray, blur outwards, snap the alpha back to a
+         hard edge; the colour comes from the unblurred layer so it stays
+         crisp. -->
+    <filter id="analog-ink" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="grain"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="grain" scale="1" result="frayed"></feDisplacementMap>
+        <feGaussianBlur in="frayed" stdDeviation="0.25" result="bled"></feGaussianBlur>
+        <feColorMatrix in="bled" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 10 -3" result="silhouette"></feColorMatrix>
+        <feMorphology in="frayed" operator="dilate" radius="0.4" result="spread"></feMorphology>
+        <feComposite in="spread" in2="silhouette" operator="in"></feComposite>
+    </filter>
+</svg>
+
+<style>
+    .analog-defs {
+        position: absolute;
+        overflow: hidden;
+        pointer-events: none;
+    }
+</style>

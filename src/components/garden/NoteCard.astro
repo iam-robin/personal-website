@@ -55,12 +55,11 @@ const editedDay = note.edited ? formatDate(note.edited) : null;
     >
         <a
             href={`/notes/${categorySlug(note.thema)}/${note.slug}`}
-            class="hover-lift relative block p-2 no-underline"
+            class="analog-grain hover-lift relative block p-2 no-underline"
             style={backgroundColorStyle}
         >
-            <div class="texture"></div>
             <div
-                class="flex h-full flex-col justify-between border border-black/60 p-3 font-mono text-black"
+                class="analog flex h-full flex-col justify-between border border-black/60 p-3 font-mono text-black"
             >
                 <div>
                     <ul class="flex gap-2">
@@ -76,7 +75,7 @@ const editedDay = note.edited ? formatDate(note.edited) : null;
                     note.description && (
                         <>
                             <Divider isBlack />
-                            <div style="filter: url(#distort);">
+                            <div>
                                 <p
                                     class="line-clamp-3 py-1 font-decorative text-md leading-[1.4]"
                                     style={`transform: translateY(${randomTypeMarginBottom}px) translateX(${randomTypeMarginRight}px) rotate(${randomTypeRotation}deg); opacity: 0.9;`}
@@ -112,16 +111,5 @@ const editedDay = note.edited ? formatDate(note.edited) : null;
 <style>
     a:hover {
         font-style: normal;
-    }
-
-    .texture {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        opacity: 0.5;
-        mix-blend-mode: soft-light;
-        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 369 369' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 </style>

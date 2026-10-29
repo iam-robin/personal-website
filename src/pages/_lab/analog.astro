@@ -1,0 +1,146 @@
+---
+/**
+ * Analog ink: every ink and paper effect on the site, one section each, on
+ * the real component. Each has its own on/off radio group, switched with
+ * :has(), so there's no JavaScript. "On" is what's live, so it adds nothing
+ * here: it's the utility classes from styles/utilities/utilities.css and the
+ * filters from components/ui/AnalogFilter.astro. "Off" undoes them.
+ */
+import LabLayout from "../../layouts/LabLayout.astro";
+import NoteCard from "../../components/garden/NoteCard.astro";
+import LogRow from "../../components/ui/LogRow.astro";
+import FolderShortcuts from "../../components/home/FolderShortcuts.astro";
+import { getGardenNotes, getCategoryColorMap } from "../../utils/garden";
+
+const states = ["off", "on"] as const;
+const effects = [
+    {
+        id: "print",
+        label: "Frayed print",
+        hook: ".analog",
+        note: "Per-pixel jitter, so edges fray like ink on absorbent paper while the shapes stay put. On whole note cards, the handwriting and postmarks on postcards, and the dates on a note.",
+    },
+    {
+        id: "marker",
+        label: "Frayed marker",
+        hook: ".marker",
+        note: "A felt-tip edge on the highlighter behind “Design Engineer”, and anywhere else I use the marker. Only its ::before gets the filter, so the text on top stays sharp.",
+    },
+    {
+        id: "ink",
+        label: "Ink-bleed ratings",
+        hook: ".analog-ink",
+        note: "Ink bleed on the ✱ ratings in my book, film and series logs and on my iamrobin wordmark, like a rubber stamp. Not on the postcard stamp: that one is printed, not stamped. Small text closes up under ink bleed, so this stays off copy.",
+    },
+    {
+        id: "grain",
+        label: "Paper grain",
+        hook: ".analog-grain",
+        note: "A grain tile on the folder stock in “More to explore” and on my note cards. It’s a background image, not a live filter, so it costs next to nothing.",
+    },
+];
+
+const notes = await getGardenNotes();
+const colorMap = getCategoryColorMap(notes);
+const sampleNote = notes.find((note) => note.data.description) ?? notes[0];
+
+/* Sample rows: the lab doesn't need the Letterboxd feed for this. */
+const films = [
+    { title: "Perfect Days", rating: 5, date: "12 Mar" },
+    { title: "Past Lives", rating: 4.5, date: "02 Mar" },
+    { title: "The Holdovers", rating: 3.5, date: "21 Feb" },
+];
+
+---
+
+<LabLayout
+    current="analog"
+    title="Analog ink"
+    description="A few things on my site should look drawn, stamped or printed rather than rendered. These are all of them, each on the real component, exactly as they're live. Switch one off to see what it adds."
+    meta="Rule: only things made by hand get ink. Never body copy, never anything printed."
+    sections={effects}
+>
+
+    {effects.map((effect, index) => (
+        <section
+            id={effect.id}
+            class="candidate"
+            data-candidate={effect.id}
+            aria-labelledby={`${effect.id}-title`}
+        >
+            <header class="candidate-header">
+                <p class="candidate-number">{String(index + 1).padStart(2, "0")}</p>
+                <h2 id={`${effect.id}-title`}>{effect.label} <code class="candidate-hook">{effect.hook}</code></h2>
+                <p class="candidate-note">{effect.note}</p>
+            </header>
+
+            <fieldset class="toggle">
+                <legend>{effect.label}</legend>
+                {states.map((state) => (
+                    <label>
+                        <input
+                            type="radio"
+                            name={`${effect.id}-state`}
+                            value={state}
+                            checked={state === "on"}
+                        />
+                        <span>{state}</span>
+                    </label>
+                ))}
+            </fieldset>
+
+            <div class="specimen">
+                {effect.id === "print" && (
+                    <div class="note-specimen">
+                        <NoteCard note={sampleNote.data} categoryIndex={colorMap[sampleNote.data.thema]} />
+                    </div>
+                )}
+                {effect.id === "marker" && (
+                    <p class="hero-specimen max-w-[24ch] text-3xl font-bold">
+                        Hey I am Robin&nbsp;Spielmann.<br />
+                        A <a href="/work" class="marker whitespace-nowrap">Design Engineer</a> who enjoys
+                        working at the intersection of code, design and&nbsp;art.
+                    </p>
+                )}
+                {effect.id === "ink" && (
+                    <ul class="ratings">
+                        {films.map((film) => <LogRow title={film.title} rating={film.rating} date={film.date} />)}
+                    </ul>
+                )}
+                {effect.id === "grain" && (
+                    <div class="@container">
+                        <FolderShortcuts />
+                    </div>
+                )}
+            </div>
+        </section>
+    ))}
+</LabLayout>
+
+<style>
+    .candidate { padding-block: 2.5rem; border-block-start: 1px solid var(--color-inset); scroll-margin-block-start: var(--lab-anchor-offset); }
+    .candidate-header { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1rem; max-inline-size: 48rem; }
+    .candidate-number { font: .8125rem/2 var(--font-mono); color: var(--color-ink-muted); }
+    h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.3; }
+    .candidate-note { grid-column: 2; margin-block-start: .5rem; max-inline-size: 65ch; font-size: .9375rem; line-height: 1.65; color: var(--color-ink-muted); text-wrap: pretty; }
+    code { font: .875em var(--font-mono); }
+
+    .toggle { display: inline-flex; gap: .25rem; margin-block: 1.5rem; padding: .25rem; border: 1px solid var(--color-inset); border-radius: .5rem; }
+    .toggle legend { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .toggle label { position: relative; display: inline-flex; align-items: center; min-block-size: 2.75rem; padding-inline: 1rem; border-radius: .375rem; cursor: pointer; font: .8125rem/1 var(--font-mono); }
+    .toggle input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+    .toggle label:has(input:checked) { background: var(--color-inset); font-weight: 700; }
+    .toggle label:has(input:focus-visible) { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+
+    /* isolate: the marker sits at z-index -1 and would fall behind the fill. */
+    .specimen { isolation: isolate; padding: clamp(1.5rem, 4vw, 3rem); border-radius: .75rem; background: var(--color-paper); outline: 1px solid var(--color-inset); }
+    .ratings { max-inline-size: 40rem; }
+    .note-specimen { display: grid; grid-template-columns: minmax(0, 17rem); }
+    .candidate-hook { margin-inline-start: .5rem; font-size: .8125rem; font-weight: 400; color: var(--color-ink-muted); }
+
+    /* Each effect is the live utility class; "off" overrides it. */
+    [data-candidate="print"]:has(input[value="off"]:checked) :global(.analog),
+    [data-candidate="ink"]:has(input[value="off"]:checked) :global(.analog-ink),
+    [data-candidate="marker"]:has(input[value="off"]:checked) :global(.marker)::before { filter: none; }
+    [data-candidate="grain"]:has(input[value="off"]:checked) :global(.analog-grain) { background-image: none; }
+</style>

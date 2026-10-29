@@ -26,6 +26,51 @@ a.marker:hover {
     font-style: italic;
 }
 
+/* Analog ink: four effects, one rule. Only things that are "by hand" get one
+   (handwriting, marker, stamped ratings, paper stock), never body copy or
+   anything printed. Compare them in /lab/analog; the filters live in
+   components/ui/AnalogFilter.astro. */
+
+/* Frayed print: per-pixel jitter. Postcards, note cards, note dates. */
+.analog {
+    filter: url(#analog);
+}
+
+/* Felt-tip edge on the highlight; the text on top stays sharp. */
+.marker::before {
+    filter: url(#analog-marker);
+}
+
+/* Stamped ink bleed: ratings, the iamrobin wordmark. Short, bold shapes
+   only: small text closes up.
+   Put it on the element that carries any opacity, not a parent, or the
+   alpha threshold erases faint shapes. */
+.analog-ink {
+    filter: url(#analog-ink);
+}
+
+/* Paper grain: home folders, note cards. A static grey noise tile,
+   soft-light blended so mid-grey is neutral. An image, not a filter, so it
+   costs next to nothing. Needs background-color, not the background
+   shorthand, on the same element. */
+.analog-grain {
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'160'%20height%3D'160'%3E%3Cfilter%20id%3D'g'%20color-interpolation-filters%3D'sRGB'%3E%3CfeTurbulence%20type%3D'fractalNoise'%20baseFrequency%3D'0.85'%20numOctaves%3D'3'%20stitchTiles%3D'stitch'%2F%3E%3CfeColorMatrix%20values%3D'.33%20.33%20.33%200%200%20%20.33%20.33%20.33%200%200%20%20.33%20.33%20.33%200%200%20%200%200%200%200%201'%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D'100%25'%20height%3D'100%25'%20filter%3D'url(%23g)'%20opacity%3D'0.45'%2F%3E%3C%2Fsvg%3E");
+    background-size: 160px;
+    background-blend-mode: soft-light;
+}
+
+@media (prefers-contrast: more) {
+    .analog,
+    .marker::before,
+    .analog-ink {
+        filter: none;
+    }
+
+    .analog-grain {
+        background-image: none;
+    }
+}
+
 /* Shared hover for teaser rows. Parts opt in with .ink-row-{mark,title,meta}. */
 .ink-row {
     /* Icons need 3:1, and 0.55 ink measures 3.44:1 on the tightest stock. */

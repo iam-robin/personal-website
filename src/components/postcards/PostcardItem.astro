@@ -137,9 +137,9 @@ const transformStyles = distorted
 
 const shadowClass = rotation >= 0 ? "hide-after" : "hide-before";
 
-const authorStyles = `transform: translateX(${em(authorLeftOffset)}) translateY(${em(authorTopOffset)}) rotate(${authorRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
-const dateStyles = `transform: translateX(${em(dateLeftOffset)}) translateY(${em(dateTopOffset)}) rotate(${dateRotation}deg); font-size: ${fontSize}; color: ${penColor}; filter: url(#distort-xl);`;
-const bodyStyles = `transform: translateX(${em(bodyLeftOffset)}) translateY(${em(bodyTopOffset)}) rotate(${bodyRotation}deg); font-size: ${bodyFontSize}; line-height: ${lineHeightValue}; color: ${penColor}; filter: url(#distort-xl); white-space: pre-wrap;`;
+const authorStyles = `transform: translateX(${em(authorLeftOffset)}) translateY(${em(authorTopOffset)}) rotate(${authorRotation}deg); font-size: ${fontSize}; color: ${penColor};`;
+const dateStyles = `transform: translateX(${em(dateLeftOffset)}) translateY(${em(dateTopOffset)}) rotate(${dateRotation}deg); font-size: ${fontSize}; color: ${penColor};`;
+const bodyStyles = `transform: translateX(${em(bodyLeftOffset)}) translateY(${em(bodyTopOffset)}) rotate(${bodyRotation}deg); font-size: ${bodyFontSize}; line-height: ${lineHeightValue}; color: ${penColor}; white-space: pre-wrap;`;
 
 const stampCountryText = (country ? country : "WORLD WIDE WEB").toUpperCase();
 const stampDateDay = date.toLocaleDateString("en-GB", { day: "2-digit" });
@@ -156,7 +156,6 @@ const postOfficeStampContainerStyles = `
     transform: rotate(${postOfficeStampRotation}deg);
     z-index: 10;
     opacity: 0.4;
-    filter: url(#distort-xl);
 `;
 
 const wavyLinesStampContainerStyles = `
@@ -166,7 +165,6 @@ const wavyLinesStampContainerStyles = `
     transform: rotate(${wavyStampRotation}deg);
     z-index: 9;
     opacity: 0.4;
-    filter: url(#distort-xl);
 `;
 ---
 
@@ -181,7 +179,7 @@ const wavyLinesStampContainerStyles = `
         <div
             class="relative w-full sm:w-1/2 max-h-[330px] sm:max-h-none p-[1.5em] px-[1em] sm:px-[2em] font-decorative overflow-hidden"
         >
-            <span class="block sm:absolute" style={bodyStyles}>{body}</span>
+            <span class="analog block sm:absolute" style={bodyStyles}>{body}</span>
         </div>
         <div class="hidden sm:block w-px h-3/4 self-center bg-black/20"></div>
         <div
@@ -207,7 +205,7 @@ const wavyLinesStampContainerStyles = `
                 </div>
             </div>
 
-            <div style={postOfficeStampContainerStyles}>
+            <div class="analog" style={postOfficeStampContainerStyles}>
                 <svg
                     style="width: 4.5em; height: 4.5em;"
                     viewBox="0 0 100 100"
@@ -287,7 +285,7 @@ const wavyLinesStampContainerStyles = `
                 </svg>
             </div>
 
-            <div style={wavyLinesStampContainerStyles}>
+            <div class="analog" style={wavyLinesStampContainerStyles}>
                 <svg
                     style="width: 5em; height: 2.5em;"
                     viewBox="0 0 50 40"
@@ -324,13 +322,13 @@ const wavyLinesStampContainerStyles = `
                                         href={websiteUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="absolute hover:underline"
+                                        class="analog absolute hover:underline"
                                         style={authorStyles}
                                     >
                                         {author} ↗
                                     </a>
                                 ) : (
-                                    <span class="absolute" style={authorStyles}>
+                                    <span class="analog absolute" style={authorStyles}>
                                         {author}
                                     </span>
                                 )
@@ -345,7 +343,7 @@ const wavyLinesStampContainerStyles = `
                         <div
                             class="font-decorative h-[2em] border-b border-dotted border-black/60"
                         >
-                            <span class="absolute" style={dateStyles}
+                            <span class="analog absolute" style={dateStyles}
                                 >{formattedDate}</span
                             >
                         </div>

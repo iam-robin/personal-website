@@ -22,6 +22,7 @@ const NOT_INDEXED = [
 const LAB_ROUTES = [
     ["/lab", "index.astro"],
     ["/lab/tokens", "tokens.astro"],
+    ["/lab/analog", "analog.astro"],
     ["/lab/components", "components/index.astro"],
     ["/lab/components/preview/[component]", "components/preview/[component].astro"],
 ];

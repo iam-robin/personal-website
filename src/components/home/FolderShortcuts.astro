@@ -30,7 +30,7 @@ const folderPapers = {
                             "--folder-back": folderPapers[folder.kind].folderBack,
                         }}
                     >
-                        <span class="folder-back">
+                        <span class="folder-back analog-grain">
                             {folder.items.map((item, index) => (
                                 <span
                                     class="paper"
@@ -57,8 +57,8 @@ const folderPapers = {
                                     )}
                                 </span>
                             ))}
-                            <span class="folder-front"></span>
-                            <span class="folder-front right"></span>
+                            <span class="folder-front analog-grain"></span>
+                            <span class="folder-front right analog-grain"></span>
                         </span>
                     </span>
                     <span class="text-[0.875rem] underline-offset-[0.25em] group-hover:underline group-focus-visible:underline">{folder.label}</span>
@@ -91,7 +91,7 @@ const folderPapers = {
     .folder-back {
         position: absolute;
         inset: 0;
-        background: var(--folder-back);
+        background-color: var(--folder-back);
         border-radius: 0 0.2rem 0.2rem 0.2rem;
     }
 
@@ -135,7 +135,7 @@ const folderPapers = {
         position: absolute;
         inset: 0;
         border-radius: 0.2rem;
-        background: var(--folder-front);
+        background-color: var(--folder-front);
         transform-origin: bottom;
         transform: skewX(var(--front-skew)) scaleY(var(--front-scale));
     }

@@ -125,16 +125,6 @@ const documentTitle =
 ---
 
 <Layout title={documentTitle} description={noteDescription}>
-    <svg class="hidden" aria-hidden="true">
-        <defs>
-            <filter id="distort-xl">
-                <feTurbulence baseFrequency="1 1" numOctaves="1"></feTurbulence>
-                <feDisplacementMap in="SourceGraphic" scale="1.3"
-                ></feDisplacementMap>
-            </filter>
-        </defs>
-    </svg>
-
     <Button
         href="/notes"
         label="Close"
@@ -186,8 +176,7 @@ const documentTitle =
                     >
                         <span>Created:</span>
                         <span
-                            class="font-decorative text-[20px] sm:text-[24px]"
-                            style="filter: url(#distort-xl);"
+                            class="analog font-decorative text-[20px] sm:text-[24px]"
                         >
                             {formatDate(note.created)}
                         </span>
@@ -197,8 +186,7 @@ const documentTitle =
                             <span class="flex w-1/3 flex-col items-center gap-2 border-r border-black/60 p-3 md:flex-row">
                                 <span>Edited:</span>
                                 <span
-                                    class="font-decorative text-[20px] sm:text-[24px]"
-                                    style="filter: url(#distort-xl);"
+                                    class="analog font-decorative text-[20px] sm:text-[24px]"
                                 >
                                     {formatDate(note.edited!)}
                                 </span>
@@ -213,8 +201,7 @@ const documentTitle =
                     >
                         <span>Topic:</span>
                         <span
-                            class="font-decorative text-[20px] sm:text-[24px]"
-                            style="filter: url(#distort-xl);"
+                            class="analog font-decorative text-[20px] sm:text-[24px]"
                         >
                             {note.thema}
                         </span>
