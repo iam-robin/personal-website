@@ -1,11 +1,13 @@
 ---
 import mapSource from "../../assets/world-map.svg?raw";
 import { COUNTRIES } from "../../utils/countries";
+import { postcardsHref } from "../../utils/postcards";
 
 interface Props {
     visitedCountries?: string[];
+    selectedCountry?: string;
 }
-const { visitedCountries = [] } = Astro.props;
+const { visitedCountries = [], selectedCountry } = Astro.props;
 const labels = new Map(COUNTRIES.flatMap((country) =>
     [country.name, ...(country.aliases ?? [])].map((name) => [
         name.toLowerCase(), { canonical: country.name, flag: country.flag },
@@ -22,12 +24,20 @@ const escapeAttribute = (value: string) => value
 
 // Only the checked-in SVG asset is parsed here, never user markup.
 const contents = mapSource.slice(mapSource.indexOf(">", mapSource.indexOf("<svg")) + 1, mapSource.lastIndexOf("</svg>"));
-const markup = contents.replace(/<path\b[^>]*>/g, (tag) => {
+const markup = contents.replace(/<path\b[^>]*>\s*<\/path>/g, (element) => {
+    const tag = element.slice(0, element.indexOf(">") + 1);
     const name = /\bname="([^"]*)"/.exec(tag)?.[1]
         ?? /\bclass="([^"]*)"/.exec(tag)?.[1] ?? "";
     const country = labels.get(name.toLowerCase());
-    const active = visited.has((country?.canonical ?? name).toLowerCase());
-    return tag.replace(/\sclass="[^"]*"/, "").replace(/>$/, ` class="${active ? "active" : ""}" data-country="${escapeAttribute(name)}" data-flag="${escapeAttribute(country?.flag ?? "")}">`);
+    const canonical = country?.canonical ?? name;
+    const active = visited.has(canonical.toLowerCase());
+    const classes = [active && "active", canonical === selectedCountry && "selected"].filter(Boolean).join(" ");
+    const path = tag.replace(/\sclass="[^"]*"/, "").replace(/>$/, ` class="${classes}" data-country="${escapeAttribute(name)}" data-flag="${escapeAttribute(country?.flag ?? "")}"></path>`);
+    if (!active) return path;
+    // A shortcut for pointers. Out of the tab order: the chips above already
+    // link every country, and a country drawn in 30 parts would be 30 stops.
+    const href = escapeAttribute(postcardsHref({ country: canonical }));
+    return `<a href="${href}" tabindex="-1">${path}</a>`;
 });
 const label = visitedCountries.length
     ? `Postcards received from ${visitedCountries.join(", ")}.`
@@ -62,5 +72,13 @@ const label = visitedCountries.length
     }
     .world-map :global(path:hover) {
         fill: color-mix(in srgb, var(--color-ink) 45%, var(--color-inset));
+    }
+    .world-map :global(a) { cursor: pointer; }
+    /* Filtered: the selected country stays ink, the other visited ones fade. */
+    .world-map:global(:has(path.selected) path.active:not(.selected)) {
+        fill: color-mix(in srgb, var(--color-ink) 30%, var(--color-inset));
+    }
+    .world-map:global(:has(path.selected) path.active:not(.selected):hover) {
+        fill: color-mix(in srgb, var(--color-ink) 60%, var(--color-inset));
     }
 </style>

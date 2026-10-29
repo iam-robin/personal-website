@@ -3,8 +3,9 @@ import WorldMapSvg from "./WorldMapSvg.astro";
 
 interface Props {
     visitedCountries?: string[];
+    selectedCountry?: string;
 }
-const { visitedCountries = [] } = Astro.props;
+const { visitedCountries = [], selectedCountry } = Astro.props;
 const TOTAL_COUNTRIES = 195;
 ---
 
@@ -13,7 +14,10 @@ const TOTAL_COUNTRIES = 195;
         Where postcards came from ({visitedCountries.length}/{TOTAL_COUNTRIES})
     </h2>
     <div class="relative">
-        <WorldMapSvg visitedCountries={visitedCountries} />
+        <WorldMapSvg
+            visitedCountries={visitedCountries}
+            selectedCountry={selectedCountry}
+        />
         <div
             data-map-tooltip
             aria-hidden="true"
