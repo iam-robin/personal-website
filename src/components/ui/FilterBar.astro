@@ -1,6 +1,56 @@
 ---
+/**
+ * A row of FilterTags. The first `limit` items show; the rest fold behind a
+ * "+ N more" toggle, without JS. An active item from the rest stays out front,
+ * so the current filter is always visible.
+ *
+ *   <FilterBar items={tags} isActive={(tag) => tag.name === active}>
+ *       <FilterTag slot="lead" href="/bookmarks" active={!active}>All</FilterTag>
+ *       {(tag) => <FilterTag href={…}>{tag.name}</FilterTag>}
+ *   </FilterBar>
+ */
+interface Props<T = any> {
+    items: T[];
+    isActive?: (item: T) => boolean;
+    limit?: number;
+}
+
+const { items, isActive = () => false, limit = 12 } = Astro.props;
+
+const shown = items.filter((item, i) => i < limit || isActive(item));
+const more = items.filter((item) => !shown.includes(item));
+
+const render = (list: unknown[]) =>
+    Promise.all(list.map((item) => Astro.slots.render("default", [item])));
+const [shownHtml, moreHtml] = await Promise.all([render(shown), render(more)]);
 ---
 
 <nav class="flex flex-wrap gap-2 font-mono text-sm">
-    <slot />
+    <slot name="lead" />
+    <Fragment set:html={shownHtml.join("")} />
+    {
+        more.length > 0 && (
+            <>
+                <details class="toggle group">
+                    <summary class="inline-flex cursor-pointer list-none items-center rounded-full px-3 py-1 text-ink-muted transition-colors hover:bg-ink/5 hover:text-ink focus-visible:text-ink [&::-webkit-details-marker]:hidden">
+                        <span class="group-open:hidden">+ {more.length} more</span>
+                        <span class="hidden group-open:inline">Show less</span>
+                    </summary>
+                </details>
+                <span class="more contents" set:html={moreHtml.join("")} />
+            </>
+        )
+    }
 </nav>
+
+<style>
+    /* The chips after the toggle are its content. Without :has they just stay
+       visible, which is fine. */
+    nav:has(.toggle:not([open])) .more {
+        display: none;
+    }
+    /* Open, the toggle moves behind the list it revealed. */
+    .toggle[open] {
+        order: 1;
+    }
+</style>

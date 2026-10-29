@@ -11,16 +11,16 @@ interface Props {
 const { categories, active = null } = Astro.props;
 ---
 
-<FilterBar>
-    <FilterTag href="/blog" active={active === null}>All</FilterTag>
+<FilterBar items={categories} isActive={(category) => category === active}>
+    <FilterTag slot="lead" href="/blog" active={active === null}>All</FilterTag>
     {
-        categories.map((category) => (
+        (category: string) => (
             <FilterTag
                 href={`/blog/category/${categorySlug(category)}`}
                 active={active === category}
             >
                 {categoryLabel(category)}
             </FilterTag>
-        ))
+        )
     }
 </FilterBar>

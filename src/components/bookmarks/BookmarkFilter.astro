@@ -12,12 +12,12 @@ interface Props {
 const { tags, total, active = null } = Astro.props;
 ---
 
-<FilterBar>
-    <FilterTag href="/bookmarks" active={active === null} count={total}>
+<FilterBar items={tags} isActive={(tag) => tag.name === active}>
+    <FilterTag slot="lead" href="/bookmarks" active={active === null} count={total}>
         All
     </FilterTag>
     {
-        tags.map((tag) => (
+        (tag: Props["tags"][number]) => (
             <FilterTag
                 href={`/bookmarks/tag/${tagSlug(tag.name)}`}
                 active={active === tag.name}
@@ -25,6 +25,6 @@ const { tags, total, active = null } = Astro.props;
             >
                 #{tag.name}
             </FilterTag>
-        ))
+        )
     }
 </FilterBar>

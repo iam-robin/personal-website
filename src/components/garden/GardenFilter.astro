@@ -13,12 +13,12 @@ interface Props {
 const { categories, colorMap, total, active = null } = Astro.props;
 ---
 
-<FilterBar>
-    <FilterTag href="/notes" active={active === null} count={total}>
+<FilterBar items={categories} isActive={(category) => category.name === active}>
+    <FilterTag slot="lead" href="/notes" active={active === null} count={total}>
         All
     </FilterTag>
     {
-        categories.map((category) => (
+        (category: Props["categories"][number]) => (
             <FilterTag
                 href={`/notes/${categorySlug(category.name)}`}
                 active={active === category.name}
@@ -30,6 +30,6 @@ const { categories, colorMap, total, active = null } = Astro.props;
                 />
                 {category.name}
             </FilterTag>
-        ))
+        )
     }
 </FilterBar>
