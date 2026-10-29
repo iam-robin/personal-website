@@ -35,7 +35,11 @@ function decodeEntities(value: string): string {
         .replace(/&lt;/g, "<")
         .replace(/&gt;/g, ">")
         .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
+        // Numeric, any padding: Letterboxd sends `&#039;`.
+        .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
+            String.fromCodePoint(parseInt(hex, 16)),
+        )
+        .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
         .replace(/&amp;/g, "&");
 }
 
