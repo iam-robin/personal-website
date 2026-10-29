@@ -1,13 +1,9 @@
 ---
 import SubpageLayout from "../layouts/SubpageLayout.astro";
-import Eyebrow from "../components/ui/Eyebrow.astro";
 import SeriesYear from "../components/series/SeriesYear.astro";
-import { getSeasonYears, getWatchlist } from "../utils/series";
+import { getSeasonYears } from "../utils/series";
 
-const [years, watchlist] = await Promise.all([
-    getSeasonYears(),
-    getWatchlist(),
-]);
+const years = await getSeasonYears();
 
 // Finished only, to match the year headers. Shows are counted too, since
 // seasons repeat a show.
@@ -28,36 +24,6 @@ const shows = new Set(seasons.map((season) => season.title)).size;
     <p class="mt-16 font-mono text-xs text-ink-muted">
         {seasons.length} seasons across {shows} shows.
     </p>
-
-    {
-        watchlist.length > 0 && (
-            <section class="mt-24">
-                <Eyebrow class="border-b border-dotted border-ink/30 pb-4">
-                    On the list
-                </Eyebrow>
-                <ul class="mt-4 flex flex-col gap-2">
-                    {watchlist.map((item, i) => (
-                        <li class="flex items-baseline gap-3 font-mono text-sm">
-                            <span class="w-32 shrink-0 text-xs tracking-widest text-ink-muted uppercase">
-                                {watchlist[i - 1]?.label === item.label
-                                    ? ""
-                                    : item.label}
-                            </span>
-                            <span>
-                                {item.title}
-                                {item.season && (
-                                    <span class="text-ink-muted">
-                                        {" "}
-                                        — Season {item.season}
-                                    </span>
-                                )}
-                            </span>
-                        </li>
-                    ))}
-                </ul>
-            </section>
-        )
-    }
 </SubpageLayout>
 
 <script src="../scripts/listHoverPreview.ts"></script>

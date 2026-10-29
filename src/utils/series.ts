@@ -96,32 +96,3 @@ export async function getSeasonYears(): Promise<SeasonYear[]> {
         });
 }
 
-const LIST_LABELS: Record<string, string> = {
-    pausiert: "Paused",
-    merkliste: "Want to watch",
-};
-const LIST_ORDER = ["pausiert", "merkliste"];
-
-/** Seasons not in the log yet. `aktiv` is already listed as in progress. */
-export async function getWatchlist(): Promise<
-    { id: string; label: string; title: string; season: number | null }[]
-> {
-    const entries = await getCollection("series", ({ data }) =>
-        LIST_ORDER.includes(data.group),
-    );
-
-    return entries
-        .sort(
-            (a, b) =>
-                LIST_ORDER.indexOf(a.data.group) -
-                    LIST_ORDER.indexOf(b.data.group) ||
-                a.data.title.localeCompare(b.data.title) ||
-                (toNumber(a.data.season) ?? 0) - (toNumber(b.data.season) ?? 0),
-        )
-        .map((entry) => ({
-            id: entry.id,
-            label: LIST_LABELS[entry.data.group] ?? "",
-            title: entry.data.title,
-            season: toNumber(entry.data.season),
-        }));
-}
