@@ -31,7 +31,7 @@ a.marker:hover {
    anything printed. Compare them in /lab/analog; the filters live in
    components/ui/AnalogFilter.astro. */
 
-/* Frayed print: per-pixel jitter. Postcards, note cards, note dates. */
+/* Frayed print: per-pixel jitter. Whole note cards and postcards, note dates. */
 .analog {
     filter: url(#analog);
 }
@@ -41,9 +41,8 @@ a.marker:hover {
     filter: url(#analog-marker);
 }
 
-/* Stamped ink bleed: ratings, the iamrobin wordmark. Short, bold shapes
-   only: small text closes up.
-   Put it on the element that carries any opacity, not a parent, or the
+/* Stamped ink bleed: ratings, book spines, the iamrobin wordmark. Short,
+   bold shapes only: small text closes up. Put it on the element that carries any opacity, not a parent, or the
    alpha threshold erases faint shapes. */
 .analog-ink {
     filter: url(#analog-ink);

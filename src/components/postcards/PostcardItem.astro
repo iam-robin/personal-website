@@ -176,14 +176,16 @@ const wavyLinesStampContainerStyles = `
         class="pc-inner flex flex-col sm:flex-row justify-between h-full w-full border border-black/10"
         style={`background-color: ${paperColor};`}
     >
+        {/* .analog on each half rather than .pc-inner, so the card's own edge
+            stays straight and only what's printed or written on it frays. */}
         <div
-            class="relative w-full sm:w-1/2 max-h-[330px] sm:max-h-none p-[1.5em] px-[1em] sm:px-[2em] font-decorative overflow-hidden"
+            class="analog relative w-full sm:w-1/2 max-h-[330px] sm:max-h-none p-[1.5em] px-[1em] sm:px-[2em] font-decorative overflow-hidden"
         >
-            <span class="analog block sm:absolute" style={bodyStyles}>{body}</span>
+            <span class="block sm:absolute" style={bodyStyles}>{body}</span>
         </div>
-        <div class="hidden sm:block w-px h-3/4 self-center bg-black/20"></div>
+        <div class="analog hidden sm:block w-px h-3/4 self-center bg-black/20"></div>
         <div
-            class="relative flex flex-col justify-between w-full sm:w-1/2 sm:overflow-hidden p-[1.5em] px-[2em]"
+            class="analog relative flex flex-col justify-between w-full sm:w-1/2 sm:overflow-hidden p-[1.5em] px-[2em]"
         >
             <div class="h-1/2 flex justify-end">
                 <div
@@ -205,7 +207,7 @@ const wavyLinesStampContainerStyles = `
                 </div>
             </div>
 
-            <div class="analog" style={postOfficeStampContainerStyles}>
+            <div style={postOfficeStampContainerStyles}>
                 <svg
                     style="width: 4.5em; height: 4.5em;"
                     viewBox="0 0 100 100"
@@ -285,7 +287,7 @@ const wavyLinesStampContainerStyles = `
                 </svg>
             </div>
 
-            <div class="analog" style={wavyLinesStampContainerStyles}>
+            <div style={wavyLinesStampContainerStyles}>
                 <svg
                     style="width: 5em; height: 2.5em;"
                     viewBox="0 0 50 40"
@@ -322,13 +324,13 @@ const wavyLinesStampContainerStyles = `
                                         href={websiteUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="analog absolute hover:underline"
+                                        class="absolute hover:underline"
                                         style={authorStyles}
                                     >
                                         {author} ↗
                                     </a>
                                 ) : (
-                                    <span class="analog absolute" style={authorStyles}>
+                                    <span class="absolute" style={authorStyles}>
                                         {author}
                                     </span>
                                 )
@@ -343,7 +345,7 @@ const wavyLinesStampContainerStyles = `
                         <div
                             class="font-decorative h-[2em] border-b border-dotted border-black/60"
                         >
-                            <span class="analog absolute" style={dateStyles}
+                            <span class="absolute" style={dateStyles}
                                 >{formattedDate}</span
                             >
                         </div>
