@@ -130,10 +130,9 @@ const formattedDate = date.toLocaleDateString("en-US", {
     day: "numeric",
 });
 
-// Placement jitter stays in px: it moves the card, not its content.
-const transformStyles = distorted
-    ? `transform: translateY(${marginBottom}px) translateX(${marginRight}px) rotate(${rotation}deg);`
-    : `transform: rotate(${rotation}deg);`;
+// Placement as variables, so a layout can rescale it (PostcardsList does).
+// The shift is a unitless 0–7, applied as px: it moves the card, not its content.
+const transformStyles = `--pc-rotate: ${rotation}deg; --pc-shift-x: ${distorted ? marginRight : 0}; --pc-shift-y: ${distorted ? marginBottom : 0};`;
 
 const shadowClass = rotation >= 0 ? "hide-after" : "hide-before";
 
@@ -361,6 +360,11 @@ const wavyLinesStampContainerStyles = `
        card. 3.13cqw is ~21px at the 672px design width, the cap. */
     .pc-card {
         container-type: inline-size;
+        transform: translate(
+                calc(var(--pc-shift-x) * 1px),
+                calc(var(--pc-shift-y) * 1px)
+            )
+            rotate(var(--pc-rotate));
     }
     .pc-inner {
         font-size: 1.31rem;

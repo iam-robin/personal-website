@@ -1,165 +1,75 @@
 ---
 /**
- * One set of markup, switched by media query. From `lg` a gallery; below it a
- * sticky deck where each card slides over the last, no JS. Offsets are seeded
- * so they're stable across rebuilds.
+ * Postcards as if laid out on a table by hand, within the page column. One
+ * column below `lg`; from `lg` two staggered columns, the right one starting
+ * half a card lower so the cards never line up into rows. Each card is placed
+ * by its own stored rotation and shift (PostcardItem's --pc-* variables).
  */
 import type { Postcard } from "astro:db";
 import PostcardItem from "./PostcardItem.astro";
 import { toPostcardProps } from "../../utils/postcards";
-import { createSeededRandom } from "../../utils/seededRandom";
 
 interface Props {
     postcards: (typeof Postcard.$inferSelect)[];
 }
 
 const { postcards } = Astro.props;
-
-// Plain numbers: the CSS multiplies them by --pc-lift / --pc-spread.
-const scattered = postcards.map((postcard) => {
-    // Prefixed so it's independent of what PostcardItem seeds from the same id.
-    const rand = createSeededRandom(
-        `stack|${postcard.author}|${postcard.date.getTime()}`,
-    );
-    return {
-        postcard,
-        // Centred on zero so the deck as a whole sits on --pc-rest.
-        y: (rand() - 0.5).toFixed(3), // -0.5 … 0.5  → above/below the rest line
-        x: (rand() * 2 - 1).toFixed(3), // -1 … 1  → left/right of centre
-    };
-});
 ---
 
-<div class="pc-bleed">
-    <ol class="pc-cards">
-        {
-            scattered.map(({ postcard, x, y }, index) => (
-                <li
-                    class="pc-slot"
-                    style={`--pc-x: ${x}; --pc-y: ${y}; z-index: ${index};`}
-                >
-                    <div class="pc-slot-card">
-                        <PostcardItem {...toPostcardProps(postcard)} />
-                    </div>
-                </li>
-            ))
-        }
-    </ol>
-</div>
+<ol class="pc-cards">
+    {
+        postcards.map((postcard, index) => (
+            <li class="pc-slot" style={`--pc-row: ${index + 1};`}>
+                <PostcardItem {...toPostcardProps(postcard)} />
+            </li>
+        ))
+    }
+</ol>
 
 <style>
     .pc-cards {
-        --pc-rest: 2.5rem;
-        /* Kept small: a card that lands too far off hides the one in front of it. */
-        --pc-lift: 34px;
-        --pc-spread: 8px;
-        /* Pulled out by margin and put back as padding, so the clip sits in the gutter. */
-        --pc-bleed: var(--spacing-gutter);
-        /* Short: the overlap is the effect. */
-        --pc-gap: 10vh;
-        --pc-tail: var(--pc-gap);
+        /* px per step of the stored 0–7 shift; see the transform below. */
+        --pc-spread: 2px;
 
+        display: grid;
+        grid-template-columns: minmax(0, var(--container-reading));
+        justify-content: center;
+        row-gap: 2.5rem;
         list-style: none;
-        margin: 0 calc(-1 * var(--pc-bleed));
-        padding: 0 var(--pc-bleed);
-        /* Franking marks would add a horizontal scrollbar. `clip`, not `hidden`: hidden
-           makes a scroll container and breaks sticky. */
-        overflow-x: clip;
-        isolation: isolate;
     }
 
-    /* Sticky can't pass its containing block's content box; this spacer gives the
-       last card room to slide. */
-    .pc-cards::after {
-        content: "";
-        display: block;
-        height: var(--pc-tail);
-    }
-
-    .pc-slot {
-        position: sticky;
-        top: calc(var(--pc-rest) + var(--pc-y) * var(--pc-lift));
-        /* On the slot: sticky pins by the top edge, so trailing padding adds scroll
-           distance without moving the card. */
-        padding-bottom: var(--pc-gap);
-    }
-
-    .pc-slot:last-child {
-        padding-bottom: 0;
-    }
-
-    .pc-slot-card {
-        margin-inline: auto;
-        width: 100%;
-        max-width: var(--container-reading);
-        transform: translateX(calc(var(--pc-x) * var(--pc-spread)));
-    }
-
-    @media (max-width: 640px) {
-        .pc-cards {
-            --pc-rest: 2rem;
-            --pc-lift: 20px;
-            --pc-spread: 0px;
-            --pc-gap: 6vh;
-        }
-    }
-
-    /* Short viewports get a plain list: a pinned card taller than the screen can't
-       be read to the end. */
-    @media (max-height: 670px) {
-        .pc-slot {
-            position: static;
-        }
-        .pc-cards {
-            --pc-tail: 0px;
-        }
+    /* The stored shift (0–7px, always down and right) is too faint to take the
+       cards off their lines, so it's centred on zero and scaled by
+       --pc-spread. The rotation (−2° to 1°) stays as stored. */
+    .pc-slot :global(.pc-card) {
+        transform: translate(
+                calc((var(--pc-shift-x) - 3.5) * var(--pc-spread)),
+                calc((var(--pc-shift-y) - 3.5) * var(--pc-spread))
+            )
+            rotate(var(--pc-rotate));
     }
 
     @media (width >= 64rem) {
-        .pc-bleed {
-            position: relative;
-            left: 50%;
-            width: 100vw;
-            transform: translateX(-50%);
-        }
-
         .pc-cards {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            --pc-spread: 4px; /* about ±14px */
             column-gap: 2.5rem;
-            row-gap: 3.5rem;
-            margin-inline: auto;
-            max-width: 80rem;
-            padding: 0 var(--spacing-gutter);
+            /* Within a column, the gap between two cards is one row gap. */
+            row-gap: 3rem;
         }
 
-        .pc-cards::after {
-            display: none;
+        /* Staggered: each card spans two row tracks and starts one track after
+           the card before it, so the right column runs half a card lower. */
+        .pc-cards:has(> :nth-child(2)) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-
-        .pc-slot {
-            position: static;
-            padding-bottom: 0;
-            width: 100%;
-            max-width: var(--container-reading);
-        }
-
-        .pc-slot-card {
-            transform: none;
-        }
-
         .pc-cards:has(> :nth-child(2)) .pc-slot {
-            width: calc(50% - 1.25rem);
+            grid-row: var(--pc-row) / span 2;
         }
-    }
-
-    @media (width >= 96rem) {
-        .pc-cards {
-            max-width: 120rem;
+        .pc-cards:has(> :nth-child(2)) .pc-slot:nth-child(odd) {
+            grid-column: 1;
         }
-        .pc-cards:has(> :nth-child(3)) .pc-slot {
-            width: calc(33.333% - 1.667rem);
+        .pc-cards:has(> :nth-child(2)) .pc-slot:nth-child(even) {
+            grid-column: 2;
         }
     }
 </style>

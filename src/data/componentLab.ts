@@ -25,7 +25,7 @@ export const componentNotes: Record<string, { description: string; href?: string
     LabSections: { description: "Shared navigation between the lab's overview, references and experiments.", href: "/lab", note: "Lab-only navigation, kept available while scrolling." },
     MovieYear: { description: "One year's films in the shared media-log layout.", href: "/movies", note: "Composes LogYear and LogRow using the film collection." },
     PostcardItem: { description: "A handwritten postcard with its stored or seeded styling.", href: "/postcards", note: "View published cards on the postcards page. This catalogue does not create example submissions." },
-    PostcardsList: { description: "A postcard gallery on desktop and a sticky deck on mobile.", href: "/postcards", note: "The layout depends on page scrolling, so it is best seen in context." },
+    PostcardsList: { description: "Hand-laid postcards: one column on mobile, two staggered columns on desktop.", href: "/postcards", note: "Needs published postcards from the database, so it is best seen in context." },
     PostcardsView: { description: "The postcard list, country filters, map and pagination.", href: "/postcards", note: "Needs paginated database results. Open the page to inspect the complete composition." },
     SendPostcardCta: { description: "The link to write me a postcard.", href: "/postcards" },
     WorldMap: { description: "Countries I've received postcards from, with hover labels.", href: "/postcards", note: "Uses the full published postcard set for highlighted countries." },
