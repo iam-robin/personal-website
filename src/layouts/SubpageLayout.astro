@@ -33,6 +33,7 @@ const {
     noindex = false,
     structuredData,
 } = Astro.props;
+const hasDescription = Boolean(description) || Astro.slots.has("description");
 ---
 
 <Layout
@@ -65,15 +66,19 @@ const {
 
         {
             !hideHero && (
-                <div class="mt-24 grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-5">
-                    <div class="flex flex-col items-start gap-10 md:col-span-2">
-                        <h1 class="text-3xl font-bold">{title}</h1>
-                        <slot name="cta" />
-                    </div>
-                    {(description || Astro.slots.has("description")) && (
-                        <p class="font-mono text-base md:col-span-3 md:pt-2">
-                            <slot name="description">{description}</slot>
-                        </p>
+                <div class="mt-24 grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-3">
+                    <h1 class="text-3xl font-bold">{title}</h1>
+                    {/* The CTA sits with the text, not under the title, so the
+                        weight isn't all on the left. Beside it from lg. */}
+                    {(hasDescription || Astro.slots.has("cta")) && (
+                        <div class="flex flex-col items-start gap-8 md:col-span-2 md:pt-2 lg:flex-row lg:gap-10">
+                            {hasDescription && (
+                                <p class="font-mono text-base">
+                                    <slot name="description">{description}</slot>
+                                </p>
+                            )}
+                            <slot name="cta" />
+                        </div>
                     )}
                 </div>
             )
