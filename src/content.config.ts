@@ -56,28 +56,13 @@ const parseGroupedMedia = (text: string) => {
 const groupSchema = z.enum(["aktiv", "merkliste", "pausiert", "abgeschlossen"]);
 
 /** The exports send null, bare strings and null entries for arrays. */
-const nullableArray = z
-    .union([z.array(z.string().nullable()), z.string()])
-    .nullish()
-    .transform((value) => {
-        if (value == null) return [];
-        const array = Array.isArray(value) ? value : [value];
-        return array.filter(
-            (entry): entry is string => typeof entry === "string",
-        );
-    });
-
 const books = defineCollection({
     loader: file("data/output/books.json", { parser: parseGroupedMedia }),
     schema: z.object({
         title: z.string(),
         author: z.array(z.string()).default([]),
         pages: z.union([z.number(), z.string()]).optional(),
-        published: z.union([z.number(), z.string()]).optional(),
         cover: z.string().nullable().optional(),
-        isbn: z.union([z.string(), z.number()]).nullable().optional(),
-        publisher: z.string().optional(),
-        genre: nullableArray,
         finished: z.string().nullable().optional(),
         rating: z.union([z.number(), z.string()]).nullable().optional(),
         added: z.string().optional(),
@@ -94,13 +79,8 @@ const series = defineCollection({
     schema: z.object({
         title: z.string(),
         season: z.union([z.number(), z.string()]).optional(),
-        genre: nullableArray,
-        director: nullableArray,
         rating: z.union([z.number(), z.string()]).nullable().optional(),
-        imdbScore: z.number().nullable().optional(),
-        cast: nullableArray,
         cover: z.string().nullable().optional(),
-        released: z.string().nullable().optional(),
         finished: z.string().nullable().optional(),
         added: z.string().nullable().optional(),
         favorite: z.boolean().optional(),
@@ -151,28 +131,6 @@ const garden = defineCollection({
     }),
 });
 
-const timeline = defineCollection({
-    loader: file("data/output/timeline.json", {
-        parser: (text) => {
-            const uniqueId = uniqueIdFactory();
-            return JSON.parse(text).entries.map((entry: { title: string }) => ({
-                ...entry,
-                id: uniqueId(entry.title),
-            }));
-        },
-    }),
-    schema: z.object({
-        title: z.string(),
-        type: z.string(),
-        start: z.string().nullable().optional(),
-        end: z.string().nullable().optional(),
-        domain: z.string().optional(),
-        tags: z.array(z.string()).default([]),
-        added: z.string().optional(),
-        content: z.string().optional(),
-    }),
-});
-
 const projects = defineCollection({
     loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
     schema: z.object({
@@ -210,7 +168,6 @@ export const collections = {
     series,
     bookmarks,
     garden,
-    timeline,
     projects,
     blog,
 };
