@@ -60,7 +60,7 @@ const shownCount = thread
 
                                 {reply.children.length > 0 && (
                                     /* One level only; the threads run four deep. */
-                                    <ul class="mt-6 flex flex-col gap-6 border-l border-dotted border-ink/30 pl-4">
+                                    <ul class="mt-6 flex flex-col gap-6 border-l border-dotted border-rule pl-4">
                                         {reply.children.map((child) => (
                                             <li>
                                                 <MastodonReply reply={child} />

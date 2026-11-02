@@ -7,6 +7,8 @@
     --color-surface: #f4f3f0;
     --color-inset: #d2d1ca;
     --color-ink-muted: #1a1919b3;
+    /* Lines and dividers. Translucent ink, so they take on each page's paper tint. */
+    --color-rule: #1a19194d;
 }
 
 /* Layout.astro sets --paper, --surface and --inset inline on <body>; the

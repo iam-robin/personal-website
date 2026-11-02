@@ -46,7 +46,7 @@ const detailClass = "font-mono text-[0.8125rem] leading-normal font-normal text-
     </div>
 
     <ul
-        class="grid border-t border-dotted border-ink/30 min-[54rem]:col-start-2 min-[54rem]:row-start-2 min-[54rem]:flex min-[54rem]:flex-col min-[54rem]:self-stretch"
+        class="grid border-t border-dotted border-rule min-[54rem]:col-start-2 min-[54rem]:row-start-2 min-[54rem]:flex min-[54rem]:flex-col min-[54rem]:self-stretch"
         aria-label="Elsewhere"
     >
         {socialChannels.map((channel) => (
@@ -54,7 +54,7 @@ const detailClass = "font-mono text-[0.8125rem] leading-normal font-normal text-
                 <a
                     href={channel.href}
                     {...externalAttrs(channel.href, channel.me)}
-                    class="group grid grid-cols-[1.25rem_minmax(0,1fr)_auto] items-center gap-4 border-b border-dotted border-ink/30 py-3.5 font-mono text-[0.875rem] leading-normal min-[54rem]:flex-1 @max-[34rem]:grid-cols-[1.25rem_minmax(0,1fr)]"
+                    class="group grid grid-cols-[1.25rem_minmax(0,1fr)_auto] items-center gap-4 border-b border-dotted border-rule py-3.5 font-mono text-[0.875rem] leading-normal min-[54rem]:flex-1 @max-[34rem]:grid-cols-[1.25rem_minmax(0,1fr)]"
                 >
                     <Icon
                         name={channel.icon}

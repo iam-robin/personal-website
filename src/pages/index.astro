@@ -71,7 +71,7 @@ const projects = (await getAllProjects())
                     title="Side Projects"
                     link={{ href: "/projects", text: "All Projects" }}
                 >
-                    <ProjectList projects={projects} />
+                    <ProjectList projects={projects} alignDescriptions={false} />
                 </TeaserSection>
                 <BlogTeaser />
                 <FolderShortcuts />

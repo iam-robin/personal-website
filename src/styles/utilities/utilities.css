@@ -77,7 +77,8 @@ a.marker:hover {
 }
 
 .ink-row-mark {
-    opacity: var(--ink-row-mark);
+    /* Fallback for rows without .ink-row, like project drafts. */
+    opacity: var(--ink-row-mark, 0.55);
     transition: opacity 150ms ease-out;
 }
 
