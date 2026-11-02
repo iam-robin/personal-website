@@ -66,10 +66,10 @@ const SECOND_BIRD_X = 172;
         <div class="row secondary">
             <a class="badge" href={carbon.reportUrl} target="_blank" rel="noopener noreferrer">
                 <span class="grade">{carbon.rating}</span>
-                <span>{carbon.gramsPerVisit} g CO₂ per visit ↗</span>
+                <span class="marker-hover">{carbon.gramsPerVisit} g CO₂ per visit ↗</span>
             </a>
             <nav class="small-print" aria-label="Small print">
-                {siteLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+                {siteLinks.map((link) => <a href={link.href}><span class="marker-hover">{link.label}</span></a>)}
             </nav>
         </div>
     </div>
@@ -95,7 +95,7 @@ const SECOND_BIRD_X = 172;
     .grade { padding: .125rem .5rem; border-radius: 999px; background: var(--color-ink); color: var(--color-paper); font-weight: 700; font-size: .75rem; }
     @media (hover: hover) {
         .icons a:hover { opacity: 1; }
-        .small-print a:hover, .badge:hover span:last-child { color: var(--color-ink); text-decoration: underline; text-underline-offset: .25rem; }
+        .small-print a:hover, .badge:hover span:last-child { color: var(--color-ink); }
     }
     @container (max-width: 30rem) {
         .love-birds { block-size: 4.25rem; margin-inline-end: 0; }

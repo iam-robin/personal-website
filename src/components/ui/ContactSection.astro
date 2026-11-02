@@ -16,7 +16,7 @@ const externalAttrs = (href: string, me?: boolean) =>
           }
         : {};
 
-const actionClass = "grid min-h-25 content-center gap-1.5 rounded-xl border border-inset bg-transparent p-4 font-bold underline-offset-4 hover:underline";
+const actionClass = "grid min-h-25 content-center gap-1.5 rounded-xl border border-inset bg-transparent p-4 font-bold";
 const detailClass = "font-mono text-[0.8125rem] leading-normal font-normal text-ink-muted";
 ---
 
@@ -31,13 +31,13 @@ const detailClass = "font-mono text-[0.8125rem] leading-normal font-normal text-
         aria-label="Primary contact actions"
     >
         <a href={contactLinks.email.href} class={actionClass}>
-            Email me
+            <span class="marker-hover w-fit">Email me</span>
             <span class={detailClass}>{contactLinks.email.handle} ↗</span>
         </a>
         <div class="postcard-action-wrap group relative min-w-0">
             <a href="/postcards/new" class:list={[actionClass, "h-full [@media(hover:hover)]:pe-22"]}>
                 <span class="grid gap-1.5">
-                    Send a postcard
+                    <span class="marker-hover w-fit">Send a postcard</span>
                     <span class={detailClass}>leave a note →</span>
                 </span>
             </a>
@@ -46,7 +46,7 @@ const detailClass = "font-mono text-[0.8125rem] leading-normal font-normal text-
     </div>
 
     <ul
-        class="grid border-t border-dotted border-rule min-[54rem]:col-start-2 min-[54rem]:row-start-2 min-[54rem]:flex min-[54rem]:flex-col min-[54rem]:self-stretch"
+        class="fade-list grid border-t border-dotted border-rule min-[54rem]:col-start-2 min-[54rem]:row-start-2 min-[54rem]:flex min-[54rem]:flex-col min-[54rem]:self-stretch"
         aria-label="Elsewhere"
     >
         {socialChannels.map((channel) => (
@@ -62,7 +62,7 @@ const detailClass = "font-mono text-[0.8125rem] leading-normal font-normal text-
                         aria-hidden="true"
                         class="opacity-60 transition-opacity group-hover:opacity-100"
                     />
-                    <span class="underline-offset-4 group-hover:underline">{channel.label}</span>
+                    <span>{channel.label}</span>
                     <small class="text-ink-muted @max-[34rem]:col-start-2">
                         {channel.handle}
                         {leavesSite(channel.href) && " ↗"}

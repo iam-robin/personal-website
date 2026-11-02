@@ -323,10 +323,10 @@ const wavyLinesStampContainerStyles = `
                                         href={websiteUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="absolute hover:underline"
+                                        class="absolute"
                                         style={authorStyles}
                                     >
-                                        {author} ↗
+                                        <span class="marker-hover">{author} ↗</span>
                                     </a>
                                 ) : (
                                     <span class="absolute" style={authorStyles}>

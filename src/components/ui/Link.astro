@@ -2,6 +2,8 @@
 /**
  * The site's one link style. `external` opens a new tab and adds an arrow;
  * `arrow` adds one for calls to action.
+ * The hover marker is the flow variant: Link often sits inside a sentence
+ * and can wrap, which the felt-tip ::before can't follow.
  */
 interface Props {
     href: string;
@@ -15,7 +17,7 @@ const { href, external = false, arrow = false, class: className = "text-xs" } = 
 
 <a
     href={href}
-    class={`font-mono underline underline-offset-4 hover:no-underline ${className}`}
+    class={`marker-hover-flow font-mono underline underline-offset-4 hover:no-underline focus-visible:no-underline ${className}`}
     {...external && { target: "_blank", rel: "noopener noreferrer" }}
 >
     <slot />{external && " ↗"}{arrow && " →"}

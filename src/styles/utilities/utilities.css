@@ -26,6 +26,124 @@ a.marker:hover {
     font-style: italic;
 }
 
+/* Link hover, one rule: a link on its own gets the marker; a row in a list
+   that looks like a list fades its neighbours instead (.fade-list).
+
+   .marker-hover: the hero's highlighter, wiped in from the left like a pen
+   stroke, faded out on the way back. Revealed with clip-path rather than
+   scaled, so the felt-tip edge never stretches. For short text on one line:
+   on an inline link, or on a span inside a link or button. The transition on
+   the hot state is the way in, the one on the resting state the way out.
+   isolate keeps the z-index -1 marker above any ancestor's background. */
+.marker-hover {
+    position: relative;
+    isolation: isolate;
+}
+
+.marker-hover::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0.08em -0.25em 0.02em -0.18em;
+    background: linear-gradient(
+        100deg,
+        color-mix(in srgb, var(--color-inset) 55%, transparent) 0%,
+        var(--color-inset) 6%,
+        var(--color-inset) 82%,
+        color-mix(in srgb, var(--color-inset) 75%, transparent) 96%,
+        color-mix(in srgb, var(--color-inset) 40%, transparent) 100%
+    );
+    border-radius: 0.08em 0.15em 0.1em 0.18em / 0.18em 0.1em 0.15em 0.08em;
+    transform: skew(-7deg) rotate(-0.7deg);
+    filter: url(#analog-marker);
+    opacity: 0;
+    clip-path: inset(-20% 100% -20% 0);
+    transition: opacity 180ms ease-out, clip-path 0s 180ms;
+}
+
+.marker-hover:focus-visible::before,
+:is(a, button):focus-visible .marker-hover::before {
+    opacity: 1;
+    clip-path: inset(-20% -10% -20% 0);
+    transition: opacity 0s, clip-path 260ms cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+/* .marker-hover-flow: the same wipe for text that wraps, like prose links
+   and the section rail. A ::before can't follow a line break, so this is a
+   background, and clone wipes each line on its own. It loses the felt-tip
+   edge, since a filter would fray the text too. Inline elements only.
+   The colour is a registered property so the way out can fade it. */
+@property --marker-flow {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: transparent;
+}
+
+.marker-hover-flow,
+:is(.blog-prose, .mastodon-reply) a:not([data-footnote-ref], [data-footnote-backref], :has(img)) {
+    /* Starts a hair inside the box: the fill paints over whatever comes
+       before it in the line, and an opening bracket's overhang reaches in. */
+    background: linear-gradient(var(--marker-flow), var(--marker-flow)) no-repeat 0.06em 60% / 0% 85%;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    transition: --marker-flow 180ms ease-out, background-size 0s 180ms, text-decoration-color 150ms ease-out;
+}
+
+:is(.marker-hover-flow, :is(.blog-prose, .mastodon-reply) a:not([data-footnote-ref], [data-footnote-backref], :has(img))):focus-visible,
+:is(a, button):focus-visible .marker-hover-flow {
+    --marker-flow: var(--color-inset);
+    background-size: calc(100% - 0.06em) 85%;
+    text-decoration-color: transparent;
+    transition: --marker-flow 0s, background-size 260ms cubic-bezier(0.45, 0, 0.2, 1), text-decoration-color 150ms ease-out;
+}
+
+/* .fade-list on a <ul> of link rows: pointing at one row steps the others
+   back. The row itself keeps its .ink-row hover. */
+.fade-list > li {
+    transition: opacity 150ms ease-out;
+}
+
+.fade-list:has(> li > a:focus-visible) > li:not(:has(> a:focus-visible)) {
+    opacity: 0.4;
+}
+
+/* Hover only: on touch :hover sticks after a tap. */
+@media (hover: hover) {
+    .marker-hover:hover::before,
+    :is(a, button):hover .marker-hover::before {
+        opacity: 1;
+        clip-path: inset(-20% -10% -20% 0);
+        transition: opacity 0s, clip-path 260ms cubic-bezier(0.45, 0, 0.2, 1);
+    }
+
+    :is(.marker-hover-flow, :is(.blog-prose, .mastodon-reply) a:not([data-footnote-ref], [data-footnote-backref], :has(img))):hover,
+    :is(a, button):hover .marker-hover-flow {
+        --marker-flow: var(--color-inset);
+        background-size: calc(100% - 0.06em) 85%;
+        text-decoration-color: transparent;
+        transition: --marker-flow 0s, background-size 260ms cubic-bezier(0.45, 0, 0.2, 1), text-decoration-color 150ms ease-out;
+    }
+
+    .fade-list:has(> li > a:hover) > li:not(:has(> a:hover)) {
+        opacity: 0.4;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marker-hover::before,
+    .marker-hover:is(:hover, :focus-visible)::before,
+    :is(a, button):is(:hover, :focus-visible) .marker-hover::before {
+        clip-path: none;
+        transition: opacity 150ms ease-out;
+    }
+
+    .marker-hover-flow,
+    :is(.blog-prose, .mastodon-reply) a {
+        background-size: calc(100% - 0.06em) 85%;
+        transition: --marker-flow 150ms ease-out, text-decoration-color 150ms ease-out !important;
+    }
+}
+
 /* Analog ink: four effects, one rule. Only things that are "by hand" get one
    (handwriting, marker, stamped ratings, paper stock), never body copy or
    anything printed. Compare them in /lab/analog; the filters live in
@@ -61,6 +179,7 @@ a.marker:hover {
 @media (prefers-contrast: more) {
     .analog,
     .marker::before,
+    .marker-hover::before,
     .analog-ink {
         filter: none;
     }
@@ -96,11 +215,6 @@ a.marker:hover {
 
     .ink-row:hover .ink-row-meta {
         color: var(--color-ink);
-    }
-
-    .ink-row:hover .ink-row-title {
-        text-decoration: underline;
-        text-underline-offset: 4px;
     }
 }
 

@@ -75,7 +75,7 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
                         ))}
                     </i>
                     {book.note && (
-                        <a class="shelf-note" href={book.note}>
+                        <a class="shelf-note marker-hover" href={book.note}>
                             Read my note
                             <span class="sr-only"> on {book.spineTitle}</span>{" "}
                             <span aria-hidden="true">→</span>
@@ -179,7 +179,7 @@ const rowWidth = `calc(var(--shelf-h) * ${rowUnits.toFixed(4)} + ${
         text-underline-offset: 4px;
     }
 
-    .shelf-note:hover {
+    .shelf-note:is(:hover, :focus-visible) {
         text-decoration: none;
     }
 </style>

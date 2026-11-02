@@ -22,7 +22,7 @@ const date = reply.date.toLocaleDateString("en-US", {
         href={reply.authorUrl}
         target="_blank"
         rel="nofollow ugc noopener noreferrer"
-        class="text-ink underline-offset-4 hover:underline"
+        class="marker-hover text-ink"
     >
         {reply.authorName}
     </a>
@@ -36,7 +36,7 @@ const date = reply.date.toLocaleDateString("en-US", {
         href={reply.url}
         target="_blank"
         rel="noopener noreferrer"
-        class="text-ink-muted underline-offset-4 hover:underline"
+        class="marker-hover text-ink-muted hover:text-ink"
     >
         <time datetime={reply.date.toISOString()}>{date}</time>
     </a>

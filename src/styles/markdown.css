@@ -42,16 +42,12 @@
     font-style: italic;
 }
 
-/* Prose links thicken their underline instead of the global italic hover. */
+/* Prose links rest underlined; on hover the marker wipes in over the line
+   (.marker-hover-flow in utilities.css). */
 .blog-prose a {
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
-    transition: text-decoration-thickness 120ms ease;
-}
-.blog-prose a:hover {
-    font-style: normal;
-    text-decoration-thickness: 2px;
 }
 
 .blog-prose ul,
@@ -358,7 +354,6 @@
 }
 .blog-prose a[data-footnote-ref]:hover {
     color: var(--color-ink);
-    text-decoration: underline;
 }
 
 .blog-prose .footnotes {

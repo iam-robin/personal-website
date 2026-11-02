@@ -39,9 +39,9 @@ const show = sections.length >= 2;
                             <a
                                 href={`#${section.id}`}
                                 data-rail-link
-                                class="rail-link block leading-snug underline-offset-4 hover:underline"
+                                class="rail-link block leading-snug"
                             >
-                                {section.text}
+                                <span class="marker-hover-flow">{section.text}</span>
                             </a>
                         </li>
                     ))}
@@ -67,9 +67,9 @@ const show = sections.length >= 2;
                             <a
                                 href={`#${section.id}`}
                                 data-rail-link
-                                class="rail-link underline-offset-4 hover:underline"
+                                class="rail-link"
                             >
-                                {section.text}
+                                <span class="marker-hover-flow">{section.text}</span>
                             </a>
                         </li>
                     ))}
