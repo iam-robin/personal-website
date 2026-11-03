@@ -3,6 +3,14 @@ import { db, Postcard, eq, and, gt } from "astro:db";
 import SubpageLayout from "../../layouts/SubpageLayout.astro";
 import Button from "../../components/ui/Button.astro";
 import { sendPostcardNotification } from "../../utils/email";
+import {
+    HONEYPOT_FIELD,
+    MAX_AUTHOR,
+    MAX_BODY,
+    MAX_COUNTRY,
+    createFormToken,
+    detectSpam,
+} from "../../utils/postcardSpam";
 
 export const prerender = false;
 
@@ -29,6 +37,14 @@ const paperColors = [
 if (Astro.request.method === "POST") {
     try {
         const formData = await Astro.request.formData();
+
+        // Spam gets the same success page as a real card, just never stored.
+        const spamReason = detectSpam(formData);
+        if (spamReason) {
+            console.info(`Postcard dropped as spam: ${spamReason}`);
+            return Astro.redirect("/postcards/success");
+        }
+
         const author = formData?.get("author");
         const body = formData?.get("body");
         const country = formData?.get("country");
@@ -161,12 +177,27 @@ if (Astro.request.method === "POST") {
     noindex
 >
     <form method="POST" class="mx-auto flex max-w-md flex-col gap-8">
+        <input type="hidden" name="form-token" value={createFormToken()} />
+
+        <!-- Honeypot: invisible to people, irresistible to bots. -->
+        <div class="honeypot" aria-hidden="true">
+            <label for={HONEYPOT_FIELD}>Leave this empty</label>
+            <input
+                id={HONEYPOT_FIELD}
+                name={HONEYPOT_FIELD}
+                type="text"
+                tabindex="-1"
+                autocomplete="off"
+            />
+        </div>
+
         <div class="flex flex-col">
             <label for="author" class="mb-1 font-mono text-sm">Your Name</label>
             <input
                 id="author"
                 name="author"
                 required
+                maxlength={MAX_AUTHOR}
                 class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink"
             />
         </div>
@@ -178,7 +209,7 @@ if (Astro.request.method === "POST") {
                 name="body"
                 rows="6"
                 required
-                maxlength="270"
+                maxlength={MAX_BODY}
                 class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink"
             ></textarea>
             <span class="mt-1 font-mono text-xs text-ink-muted"
@@ -193,7 +224,7 @@ if (Astro.request.method === "POST") {
             <input
                 id="country"
                 name="country"
-                maxlength="18"
+                maxlength={MAX_COUNTRY}
                 class="rounded-md border border-ink/20 bg-paper p-3 font-mono text-base focus:border-ink"
             />
             <span class="mt-1 font-mono text-xs text-ink-muted"
@@ -284,6 +315,14 @@ if (Astro.request.method === "POST") {
 </script>
 
 <style>
+    .honeypot {
+        position: absolute;
+        left: -10000px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+
     .variant-pill[aria-pressed="true"] {
         background-color: var(--color-ink);
         color: var(--color-paper);

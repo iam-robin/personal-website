@@ -8,6 +8,14 @@ interface PostcardData {
     date: Date;
 }
 
+const escapeHtml = (value: string) =>
+    value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
 export async function sendPostcardNotification(postcard: PostcardData): Promise<void> {
     try {
         if (!import.meta.env.RESEND_API_KEY) {
@@ -21,6 +29,13 @@ export async function sendPostcardNotification(postcard: PostcardData): Promise<
 
         const emailSubject = `New Postcard from ${author}`;
 
+        const html = {
+            author: escapeHtml(author),
+            body: escapeHtml(body),
+            country: country ? escapeHtml(country) : '',
+            websiteUrl: websiteUrl ? escapeHtml(websiteUrl) : '',
+        };
+
         const emailHtml = `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
                 <h2 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 10px;">
@@ -30,14 +45,14 @@ export async function sendPostcardNotification(postcard: PostcardData): Promise<
                 <div style="background: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #000;">
                     <h3 style="margin-top: 0; color: #333;">Message:</h3>
                     <p style="font-style: italic; line-height: 1.6; margin: 0;">
-                        "${body}"
+                        "${html.body}"
                     </p>
                 </div>
 
                 <div style="margin: 20px 0;">
-                    <p style="margin: 5px 0;"><strong>From:</strong> ${author}</p>
-                    ${country ? `<p style="margin: 5px 0;"><strong>Country:</strong> ${country}</p>` : ''}
-                    ${websiteUrl ? `<p style="margin: 5px 0;"><strong>Website:</strong> <a href="${websiteUrl}" target="_blank">${websiteUrl}</a></p>` : ''}
+                    <p style="margin: 5px 0;"><strong>From:</strong> ${html.author}</p>
+                    ${html.country ? `<p style="margin: 5px 0;"><strong>Country:</strong> ${html.country}</p>` : ''}
+                    ${html.websiteUrl ? `<p style="margin: 5px 0;"><strong>Website:</strong> <a href="${html.websiteUrl}" target="_blank">${html.websiteUrl}</a></p>` : ''}
                     <p style="margin: 5px 0;"><strong>Sent:</strong> ${date.toLocaleString()}</p>
                 </div>
             </div>
