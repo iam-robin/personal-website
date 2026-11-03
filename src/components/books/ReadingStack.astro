@@ -18,7 +18,7 @@ const { books } = Astro.props;
                     class="reading-book"
                     style={`--ts: ${book.thicknessRatio.toFixed(4)}; --hs: ${book.heightRatio.toFixed(4)}; --spine: ${book.spineColor}; --text: ${book.textColor}; --title-lines: ${book.titleLines}`}
                 >
-                    <span class="reading-title">{book.spineTitle}</span>
+                    <span class="reading-title analog-ink">{book.spineTitle}</span>
                 </li>
             ))
         }
