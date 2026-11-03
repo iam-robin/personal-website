@@ -180,7 +180,7 @@ const wavyLinesStampContainerStyles = `
 ---
 
 <div
-    class={`pc-card corner-shadow-effect w-full max-w-2xl sm:aspect-3/2 ${hoverEffect ? "hover-lift" : ""} ${shadowClass}`}
+    class={`pc-card corner-shadow-effect w-full max-w-2xl sm:aspect-3/2 ${hoverEffect ? "pc-hover" : ""} ${shadowClass}`}
     style={transformStyles}
 >
     <div
@@ -388,6 +388,53 @@ const wavyLinesStampContainerStyles = `
             font-size: min(3.13cqw, 1.31rem);
         }
     }
+    /* Hover: the corner that's already up (the one with the corner shadow)
+       rises a little further. The card pivots on the corner still on the
+       table and the shadow under the raised one deepens. A card turned
+       clockwise or not at all has its bottom left corner up (.hide-after),
+       one turned anticlockwise its bottom right (.hide-before). The turn is
+       on .pc-inner, so the card's own transform and origin stay as placed. */
+    .pc-card.hide-after {
+        --pc-lift-dir: 1;
+        --pc-lift-pivot: 100% 100%;
+    }
+    .pc-card.hide-before {
+        --pc-lift-dir: -1;
+        --pc-lift-pivot: 0 100%;
+    }
+    .pc-hover .pc-inner {
+        transform-origin: var(--pc-lift-pivot);
+        transition: rotate 450ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    .pc-hover::before,
+    .pc-hover::after {
+        transition:
+            box-shadow 450ms cubic-bezier(0.2, 0, 0, 1),
+            rotate 450ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    @media (hover: hover) {
+        .pc-hover:hover .pc-inner {
+            rotate: calc(var(--pc-lift-dir) * 1deg);
+        }
+        .pc-hover:hover::before,
+        .pc-hover:hover::after {
+            box-shadow: 0 1.6em 0.9em rgb(0 0 0 / 0.24);
+        }
+        .pc-hover:hover::before {
+            rotate: -2deg;
+        }
+        .pc-hover:hover::after {
+            rotate: 2deg;
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .pc-hover .pc-inner,
+        .pc-hover::before,
+        .pc-hover::after {
+            transition-duration: 0s;
+        }
+    }
+
     .pc-stamp {
         filter: drop-shadow(var(--shadow-hairline));
     }
