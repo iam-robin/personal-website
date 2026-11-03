@@ -1,0 +1,811 @@
+{
+  "lastUpdated": "2026-11-03T08:48:00.057Z",
+  "count": 65,
+  "aktiv": [],
+  "merkliste": [
+    {
+      "title": "The Last Kingdom",
+      "season": 1,
+      "rating": null,
+      "cover": "series-covers/the-last-kingdom-1.jpg",
+      "finished": null,
+      "added": "2026-01-18 00:00",
+      "favorite": false,
+      "status": [
+        "Merkliste"
+      ]
+    },
+    {
+      "title": "The Bear",
+      "season": 4,
+      "rating": null,
+      "cover": "series-covers/the-bear-4.jpg",
+      "finished": null,
+      "added": "2026-01-18 00:00",
+      "favorite": false,
+      "status": [
+        "Merkliste"
+      ]
+    },
+    {
+      "title": "The Bear",
+      "season": 3,
+      "rating": null,
+      "cover": "series-covers/the-bear-3.jpg",
+      "finished": null,
+      "added": "2026-01-10 00:00",
+      "favorite": false,
+      "status": [
+        "Merkliste"
+      ]
+    },
+    {
+      "title": "Shōgun",
+      "season": 1,
+      "rating": null,
+      "cover": "series-covers/shogun-1.jpg",
+      "finished": null,
+      "added": "2026-01-18 00:00",
+      "favorite": false,
+      "status": [
+        "Merkliste"
+      ]
+    },
+    {
+      "title": "Pluto",
+      "season": 1,
+      "rating": null,
+      "cover": "series-covers/pluto-1.jpg",
+      "finished": null,
+      "added": "2026-11-03 09:47",
+      "favorite": false,
+      "status": [
+        "Merkliste"
+      ]
+    },
+    {
+      "title": "Peaky Blinders",
+      "season": 1,
+      "rating": null,
+      "cover": "series-covers/peaky-blinders-1.jpg",
+      "finished": null,
+      "added": "2026-01-18 00:00",
+      "favorite": false,
+      "status": [
+        "Merkliste"
+      ]
+    },
+    {
+      "title": "Frieren - Nach dem Ende der Reise",
+      "season": 1,
+      "rating": null,
+      "cover": "series-covers/frieren-nach-dem-ende-der-reise-1.jpg",
+      "finished": null,
+      "added": "2026-11-03 09:47",
+      "favorite": false,
+      "status": [
+        "Merkliste"
+      ]
+    }
+  ],
+  "pausiert": [
+    {
+      "title": "Halt and catch fire",
+      "season": 1,
+      "rating": null,
+      "cover": "series-covers/halt-and-catch-fire-1.jpg",
+      "finished": null,
+      "added": "2026-01-10 00:00",
+      "favorite": false,
+      "status": [
+        "Pausiert"
+      ]
+    },
+    {
+      "title": "Blue Eye Samurai",
+      "season": 1,
+      "rating": null,
+      "cover": "series-covers/blue-eye-samurai-1.jpg",
+      "finished": null,
+      "added": "2026-02-03 00:00",
+      "favorite": false,
+      "status": [
+        "Pausiert"
+      ]
+    }
+  ],
+  "abgeschlossen": {
+    "2018": [
+      {
+        "title": "Better Call Saul",
+        "season": 4,
+        "rating": null,
+        "cover": "series-covers/better-call-saul-4.jpg",
+        "finished": "2018-10-10T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "4 Blocks",
+        "season": 2,
+        "rating": null,
+        "cover": "series-covers/4-blocks-2.jpg",
+        "finished": "2018-12-25T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Better Call Saul",
+        "season": 3,
+        "rating": null,
+        "cover": "series-covers/better-call-saul-3.jpg",
+        "finished": "2018-12-31T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "4 Blocks",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/4-blocks-1.jpg",
+        "finished": "2018-12-10T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2019": [
+      {
+        "title": "Fleabag",
+        "season": 2,
+        "rating": null,
+        "cover": "series-covers/fleabag-2.jpg",
+        "finished": "2019-07-16T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Mr. Robot",
+        "season": 4,
+        "rating": null,
+        "cover": "series-covers/mr-robot-4.jpg",
+        "finished": "2019-12-24T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The End of the F***ing World",
+        "season": 2,
+        "rating": null,
+        "cover": "series-covers/the-end-of-the-f-ing-world-2.jpg",
+        "finished": "2019-11-09T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Fleabag",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/fleabag-1.jpg",
+        "finished": "2019-07-13T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "When They See Us",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/when-they-see-us-1.jpg",
+        "finished": "2019-06-10T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2020": [
+      {
+        "title": "The Queen's Gambit",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/the-queen-s-gambit-1.jpg",
+        "finished": "2020-12-09T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Ozark",
+        "season": 2,
+        "rating": null,
+        "cover": "series-covers/ozark-2.jpg",
+        "finished": "2020-10-27T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "I Am Not Okay with This",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/i-am-not-okay-with-this-1.jpg",
+        "finished": "2020-02-13T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Bad Banks",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/bad-banks-1.jpg",
+        "finished": "2020-05-10T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Chernobyl",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/chernobyl-1.jpg",
+        "finished": "2020-05-03T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "4 Blocks",
+        "season": 3,
+        "rating": null,
+        "cover": "series-covers/4-blocks-3.jpg",
+        "finished": "2020-05-02T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Bad Banks",
+        "season": 2,
+        "rating": null,
+        "cover": "series-covers/bad-banks-2.jpg",
+        "finished": "2020-07-18T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Ozark",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/ozark-1.jpg",
+        "finished": "2020-09-07T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Leftovers",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/the-leftovers-1.jpg",
+        "finished": "2020-03-30T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2021": [
+      {
+        "title": "The Leftovers",
+        "season": 2,
+        "rating": null,
+        "cover": "series-covers/the-leftovers-2.jpg",
+        "finished": "2021-03-09T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Patrick Melrose",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/patrick-melrose-1.jpg",
+        "finished": "2021-09-19T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Ozark",
+        "season": 3,
+        "rating": null,
+        "cover": "series-covers/ozark-3.jpg",
+        "finished": "2021-01-03T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Die Neue Zeit",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/die-neue-zeit-1.jpg",
+        "finished": "2021-01-03T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Unorthodox",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/unorthodox-1.jpg",
+        "finished": "2021-08-16T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Euphoria",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/euphoria-1.jpg",
+        "finished": "2021-03-26T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Leftovers",
+        "season": 3,
+        "rating": null,
+        "cover": "series-covers/the-leftovers-3.jpg",
+        "finished": "2021-03-19T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2022": [
+      {
+        "title": "Ozark",
+        "season": 4,
+        "rating": null,
+        "cover": "series-covers/ozark-4.jpg",
+        "finished": "2022-02-15T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Severance",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/severance-1.jpg",
+        "finished": "2022-04-12T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Better Call Saul",
+        "season": 6,
+        "rating": null,
+        "cover": "series-covers/better-call-saul-6.jpg",
+        "finished": "2022-09-18T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Better Call Saul",
+        "season": 5,
+        "rating": null,
+        "cover": "series-covers/better-call-saul-5.jpg",
+        "finished": "2022-09-04T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2023": [
+      {
+        "title": "Euphoria",
+        "season": 2,
+        "rating": 4.5,
+        "cover": "series-covers/euphoria-2.jpg",
+        "finished": "2023-01-11T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": true,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Bear",
+        "season": 1,
+        "rating": 4,
+        "cover": "series-covers/the-bear-1.jpg",
+        "finished": "2023-01-17T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": true,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "One Piece",
+        "season": 1,
+        "rating": 3.5,
+        "cover": "series-covers/one-piece-1.jpg",
+        "finished": "2023-09-25T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Succession",
+        "season": 1,
+        "rating": 4,
+        "cover": "series-covers/succession-1.jpg",
+        "finished": "2023-07-17T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "BEEF",
+        "season": 1,
+        "rating": 3.5,
+        "cover": "series-covers/beef-1.jpg",
+        "finished": "2023-10-20T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Mindhunter",
+        "season": 1,
+        "rating": 3.5,
+        "cover": "series-covers/mindhunter-1.jpg",
+        "finished": "2023-01-27T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Mindhunter",
+        "season": 2,
+        "rating": 3,
+        "cover": "series-covers/mindhunter-2.jpg",
+        "finished": "2023-02-10T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2024": [
+      {
+        "title": "Dark",
+        "season": 1,
+        "rating": 4,
+        "cover": "series-covers/dark-1.jpg",
+        "finished": "2024-01-10T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Penguin",
+        "season": 1,
+        "rating": 4,
+        "cover": "series-covers/the-penguin-1.jpg",
+        "finished": "2024-12-04T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Slow Horses",
+        "season": 1,
+        "rating": 3.5,
+        "cover": "series-covers/slow-horses-1.jpg",
+        "finished": "2024-10-20T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Dark Matter",
+        "season": 1,
+        "rating": 2,
+        "cover": "series-covers/dark-matter-1.jpg",
+        "finished": "2024-07-21T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Slow Horses",
+        "season": 2,
+        "rating": 3.5,
+        "cover": "series-covers/slow-horses-2.jpg",
+        "finished": "2024-12-14T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2025": [
+      {
+        "title": "The White Lotus",
+        "season": 1,
+        "rating": 4,
+        "cover": "series-covers/the-white-lotus-1.jpg",
+        "finished": "2025-02-12T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Pluribus",
+        "season": 1,
+        "rating": 5,
+        "cover": "series-covers/pluribus-1.jpg",
+        "finished": "2025-12-24T00:00:00.000Z",
+        "added": "2025-11-12 21:44",
+        "favorite": true,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Succession",
+        "season": 2,
+        "rating": 4,
+        "cover": "series-covers/succession-2.jpg",
+        "finished": "2025-04-09T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The White Lotus",
+        "season": 3,
+        "rating": 3.5,
+        "cover": "series-covers/the-white-lotus-3.jpg",
+        "finished": "2025-06-03T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The White Lotus",
+        "season": 2,
+        "rating": 4.5,
+        "cover": "series-covers/the-white-lotus-2.jpg",
+        "finished": "2025-05-04T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Adolescence",
+        "season": 1,
+        "rating": 4,
+        "cover": "series-covers/adolescence-1.jpg",
+        "finished": "2025-03-30T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Last of Us",
+        "season": 1,
+        "rating": 3,
+        "cover": "series-covers/the-last-of-us-1.jpg",
+        "finished": "2025-07-21T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2026": [
+      {
+        "title": "Mr. Robot",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/mr-robot-1.jpg",
+        "finished": "2026-05-02T00:00:00.000Z",
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Bear",
+        "season": 2,
+        "rating": 4.5,
+        "cover": "series-covers/the-bear-2.jpg",
+        "finished": "2026-01-05T00:00:00.000Z",
+        "added": "2026-01-05 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "A Knight of the Seven Kingdoms",
+        "season": 1,
+        "rating": 4.5,
+        "cover": "series-covers/a-knight-of-the-seven-kingdoms-1.jpg",
+        "finished": "2026-02-23T00:00:00.000Z",
+        "added": "2026-01-19 00:00",
+        "favorite": true,
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "unknown": [
+      {
+        "title": "The End of the F***ing World",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/the-end-of-the-f-ing-world-1.jpg",
+        "finished": null,
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Mr. Robot",
+        "season": 3,
+        "rating": null,
+        "cover": "series-covers/mr-robot-3.jpg",
+        "finished": null,
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Mr. Robot",
+        "season": 2,
+        "rating": null,
+        "cover": "series-covers/mr-robot-2.jpg",
+        "finished": null,
+        "added": "2026-01-19 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Better Call Saul",
+        "season": 2,
+        "rating": null,
+        "cover": "series-covers/better-call-saul-2.jpg",
+        "finished": null,
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Better Call Saul",
+        "season": 1,
+        "rating": null,
+        "cover": "series-covers/better-call-saul-1.jpg",
+        "finished": null,
+        "added": "2026-01-18 00:00",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ]
+  }
+}

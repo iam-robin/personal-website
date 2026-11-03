@@ -6,7 +6,7 @@ import { createSeededRandom } from "./seededRandom";
 import { getMediaNoteLookup, type MediaNoteLookup } from "./garden";
 
 const coverModules = import.meta.glob<{ default: ImageMetadata }>(
-    "../../data/output/book-covers/*.{jpg,jpeg,png,webp}",
+    "../../data/book-covers/*.{jpg,jpeg,png,webp}",
     { eager: true },
 );
 const coversByFile: Record<string, ImageMetadata> = {};

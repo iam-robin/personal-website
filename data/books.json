@@ -1,0 +1,1664 @@
+{
+  "lastUpdated": "2026-11-03T07:50:10.219Z",
+  "count": 104,
+  "aktiv": [
+    {
+      "title": "On Photography",
+      "author": [
+        "Susan Sontag"
+      ],
+      "pages": 167,
+      "cover": "book-covers/on-photography-susan-sontag.jpg",
+      "finished": null,
+      "rating": null,
+      "status": [
+        "Aktiv"
+      ],
+      "spineColor": "#f8f8f8"
+    },
+    {
+      "title": "Moonbound",
+      "author": [
+        "Robin Sloan"
+      ],
+      "pages": 434,
+      "cover": "book-covers/moonbound-robin-sloan.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-09-22 00:00",
+      "status": [
+        "Aktiv"
+      ],
+      "spineColor": "#f8f8e8"
+    },
+    {
+      "title": "Der Name des Windes",
+      "author": [
+        "Patrick Rothfuss"
+      ],
+      "pages": 876,
+      "cover": "book-covers/der-name-des-windes-patrick-rothfuss.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-08-25 13:08",
+      "spineColor": "#E8DFC8",
+      "textColor": "#8B1A1A",
+      "status": [
+        "Aktiv"
+      ]
+    }
+  ],
+  "merkliste": [
+    {
+      "title": "Watchmen",
+      "author": [
+        "Alan             Moore",
+        "Dave Gibbons",
+        "John    Higgins"
+      ],
+      "pages": 416,
+      "cover": "book-covers/watchmen-alan-moore.jpg",
+      "finished": null,
+      "rating": null,
+      "added": "2025-11-11 00:00",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#f8f818"
+    },
+    {
+      "title": "Verlorene Schäfchen",
+      "author": [
+        "Madeline Cash"
+      ],
+      "pages": 320,
+      "cover": "book-covers/verlorene-sch-fchen-madeline-cash.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-09-14 11:15",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#f8e808"
+    },
+    {
+      "title": "Time to Burn",
+      "author": [
+        "Ellery Lloyd"
+      ],
+      "pages": 320,
+      "cover": "book-covers/time-to-burn-ellery-lloyd.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-08-23 10:40",
+      "spineColor": "#5A5F63",
+      "textColor": "#FF7A18",
+      "status": [
+        "Merkliste"
+      ]
+    },
+    {
+      "title": "The Will of the Many",
+      "author": [
+        "James Islington"
+      ],
+      "pages": 720,
+      "cover": "book-covers/the-will-of-the-many-james-islington.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-03-10 00:00",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#382828"
+    },
+    {
+      "title": "The Secret History",
+      "author": [
+        "Donna Tartt"
+      ],
+      "pages": 546,
+      "cover": "book-covers/the-secret-history-donna-tartt.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-04-20 16:53",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#080808"
+    },
+    {
+      "title": "The People in the Trees",
+      "author": [
+        "Hanya Yanagihara"
+      ],
+      "pages": 369,
+      "cover": "book-covers/the-people-in-the-trees-hanya-yanagihara.jpg",
+      "finished": null,
+      "rating": null,
+      "added": "2025-11-12 00:00",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#f8e8d8"
+    },
+    {
+      "title": "The Little Friend",
+      "author": [
+        "Donna Tartt"
+      ],
+      "pages": 1024,
+      "cover": "book-covers/the-little-friend-donna-tartt.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-04-20 16:53",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#180808"
+    },
+    {
+      "title": "The Goldfinch",
+      "author": [
+        "Donna Tartt"
+      ],
+      "pages": 935,
+      "cover": "book-covers/the-goldfinch-donna-tartt.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-04-20 16:53",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#c8b8b8"
+    },
+    {
+      "title": "Red Rising",
+      "author": [
+        "Pierce Brown"
+      ],
+      "pages": 382,
+      "cover": "book-covers/red-rising-pierce-brown.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-09-29 11:57",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#080808"
+    },
+    {
+      "title": "Piranesi",
+      "author": [
+        "Susanna Clarke"
+      ],
+      "pages": 245,
+      "cover": "book-covers/piranesi-susanna-clarke.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-09-29 11:57",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#080808"
+    },
+    {
+      "title": "On Love",
+      "author": [
+        "Alain de Botton"
+      ],
+      "pages": 240,
+      "cover": "book-covers/on-love-alain-de-botton.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-09-29 11:57",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#d81828"
+    },
+    {
+      "title": "Middlemarch",
+      "author": [
+        "George Eliot"
+      ],
+      "pages": 912,
+      "cover": "book-covers/middlemarch-george-eliot.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-09-29 11:57",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#f8f8f8"
+    },
+    {
+      "title": "Im Jahr Null",
+      "author": [
+        "Moritz Aisslinger"
+      ],
+      "pages": 400,
+      "cover": "book-covers/im-jahr-null-moritz-aisslinger.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-09-14 11:15",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#b88878"
+    },
+    {
+      "title": "Empire of AI: Dreams and Nightmares in Sam Altman's OpenAI",
+      "author": [
+        "Karen Hao"
+      ],
+      "pages": 496,
+      "cover": "book-covers/empire-of-ai-dreams-and-nightmares-in-sam-altman-s-openai-karen-hao.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-02-11 12:00",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#080808"
+    },
+    {
+      "title": "Die Säulen der Erde - Der Traum von einer Kathedrale",
+      "author": [
+        "Didier Alcante",
+        "Steven Dupré"
+      ],
+      "pages": 112,
+      "cover": "book-covers/die-s-ulen-der-erde-der-traum-von-einer-kathedrale-didier-alcante.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-02-26 12:00",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#d8d8d8"
+    },
+    {
+      "title": "Bullshit Jobs: A Theory",
+      "author": [
+        "David Graeber"
+      ],
+      "pages": 368,
+      "cover": "book-covers/bullshit-jobs-a-theory-david-graeber.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-02-24 12:00",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#2898d8"
+    }
+  ],
+  "pausiert": [
+    {
+      "title": "The Pillars of the Earth",
+      "author": [
+        "Ken Follett"
+      ],
+      "pages": "",
+      "cover": "book-covers/the-pillars-of-the-earth-ken-follett.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-02-02 15:30",
+      "status": [
+        "Pausiert"
+      ],
+      "spineColor": "#980818"
+    }
+  ],
+  "abgeschlossen": {
+    "2018": [
+      {
+        "title": "Speculative Everything: Design, Fiction, and Social Dreaming",
+        "author": [
+          "Anthony Dunne",
+          "Fiona Raby"
+        ],
+        "pages": 224,
+        "cover": "book-covers/speculative-everything-design-fiction-and-social-dreaming-anthony-dunne.jpg",
+        "finished": "2018-09-05T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#14B071",
+        "textColor": "#E1E8EA",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Handmaid's Tale",
+        "author": [
+          "Margaret Atwood"
+        ],
+        "pages": 320,
+        "cover": "book-covers/the-handmaid-s-tale-margaret-atwood.jpg",
+        "finished": "2018-09-08T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#953322",
+        "textColor": "#F7D1C5",
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2019": [
+      {
+        "title": "An Absolutely Remarkable Thing",
+        "author": [
+          "Hank Green"
+        ],
+        "pages": 343,
+        "cover": "book-covers/an-absolutely-remarkable-thing-hank-green.jpg",
+        "finished": "2019-12-18T00:00:00.000Z",
+        "rating": 3,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#554EFF",
+        "textColor": "#E7FB1B",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Monk of Mokha",
+        "author": [
+          "Dave Eggers"
+        ],
+        "pages": 352,
+        "cover": "book-covers/the-monk-of-mokha-dave-eggers.jpg",
+        "finished": "2019-03-05T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#F02D33",
+        "textColor": "#FFF8EB",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Monsieur Ibrahim And The Flowers",
+        "author": [
+          "Eric-Emmanuel Schmitt"
+        ],
+        "pages": 42,
+        "cover": "book-covers/monsieur-ibrahim-and-the-flowers-eric-emmanuel-schmitt.jpg",
+        "finished": "2019-05-09T00:00:00.000Z",
+        "rating": 3,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#0C513F",
+        "textColor": "#FDF697",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Tuesdays With Morrie: An old man, a young man, and life's greatest lesson",
+        "author": [
+          "Mitch Albom"
+        ],
+        "pages": 0,
+        "cover": "book-covers/tuesdays-with-morrie-an-old-man-a-young-man-and-life-s-greatest-lesson-mitch-albom.jpg",
+        "finished": "2019-02-28T00:00:00.000Z",
+        "rating": 3.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#BB232B",
+        "textColor": "#E7FBF8",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Terror",
+        "author": [
+          "Ferdinand von Schirach"
+        ],
+        "pages": 96,
+        "cover": "book-covers/terror-ferdinand-von-schirach.jpg",
+        "finished": "2019-04-11T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FFF",
+        "textColor": "#2B2B2B",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Das Parfum",
+        "author": [
+          "Patrick Süskind"
+        ],
+        "pages": 336,
+        "cover": "book-covers/das-parfum-patrick-s-skind.jpg",
+        "finished": "2019-08-04T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FFFFF3",
+        "textColor": "#181C0C",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Permanent Record",
+        "author": [
+          "Edward Snowden"
+        ],
+        "pages": 352,
+        "cover": "book-covers/permanent-record-edward-snowden.jpg",
+        "finished": "2019-11-16T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FFF",
+        "textColor": "#080808",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Der Goldene Handschuh",
+        "author": [
+          "Heinz Strunk"
+        ],
+        "pages": 256,
+        "cover": "book-covers/der-goldene-handschuh-heinz-strunk.jpg",
+        "finished": "2019-03-15T00:00:00.000Z",
+        "rating": 3.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#C13B33",
+        "textColor": "#EBDFD0",
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2020": [
+      {
+        "title": "HERKUNFT",
+        "author": [
+          "Sasa Stanisic"
+        ],
+        "pages": 320,
+        "cover": "book-covers/herkunft-sasa-stanisic.jpg",
+        "finished": "2020-09-24T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FBFAF7",
+        "textColor": "#1F1E1C",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Alte Sorten: Roman",
+        "author": [
+          "Ewald Arenz"
+        ],
+        "pages": 210,
+        "cover": "book-covers/alte-sorten-roman-ewald-arenz.jpg",
+        "finished": "2020-05-21T00:00:00.000Z",
+        "rating": 3.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#F0ECDC",
+        "textColor": "#2A4C1E",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Sapiens: A Brief History of Humankind",
+        "author": [
+          "Yuval Noah Harari"
+        ],
+        "pages": 512,
+        "cover": "book-covers/sapiens-a-brief-history-of-humankind-yuval-noah-harari.jpg",
+        "finished": "2020-07-30T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FDFCFB",
+        "textColor": "#E74312",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "A Winter's Promise: Book One of the Mirror Visitor Quartet",
+        "author": [
+          "Christelle Dabos"
+        ],
+        "pages": 492,
+        "cover": "book-covers/a-winter-s-promise-book-one-of-the-mirror-visitor-quartet-christelle-dabos.jpg",
+        "finished": "2020-07-02T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#6DAEE4",
+        "textColor": "#1D3A51",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Colorless Tsukuru Tazaki and His Years of Pilgrimage",
+        "author": [
+          "Haruki Murakami"
+        ],
+        "pages": 304,
+        "cover": "book-covers/colorless-tsukuru-tazaki-and-his-years-of-pilgrimage-haruki-murakami.jpg",
+        "finished": "2020-02-13T00:00:00.000Z",
+        "rating": 3.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FFF",
+        "textColor": "#0D0D0D",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Oryx and Crake",
+        "author": [
+          "Margaret Atwood"
+        ],
+        "pages": 0,
+        "cover": "book-covers/oryx-and-crake-margaret-atwood.jpg",
+        "finished": "2020-12-17T00:00:00.000Z",
+        "rating": 3.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#0A0A0A",
+        "textColor": "#A9D632",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Miroloi",
+        "author": [
+          "Karen Köhler"
+        ],
+        "pages": 464,
+        "cover": "book-covers/miroloi-karen-k-hler.jpg",
+        "finished": "2020-04-16T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#043F81",
+        "textColor": "#FEFDFD",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Schöner als überall: Roman",
+        "author": [
+          "Kristin Höller"
+        ],
+        "pages": 219,
+        "cover": "book-covers/sch-ner-als-berall-roman-kristin-h-ller.jpg",
+        "finished": "2020-01-18T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#CFD0D2",
+        "textColor": "#3061A2",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Factfulness",
+        "author": [
+          "Hans Rosling"
+        ],
+        "pages": 352,
+        "cover": "book-covers/factfulness-hans-rosling.jpg",
+        "finished": "2020-10-19T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#E75A0C",
+        "textColor": "#FEFEFE",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Nickel Boys",
+        "author": [
+          "Colson Whitehead"
+        ],
+        "pages": 240,
+        "cover": "book-covers/the-nickel-boys-colson-whitehead.jpg",
+        "finished": "2020-06-15T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#EEEEE7",
+        "textColor": "#EB252C",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Digital Minimalism: Choosing a Focused Life in a Noisy World",
+        "author": [
+          "Cal Newport"
+        ],
+        "pages": 304,
+        "cover": "book-covers/digital-minimalism-choosing-a-focused-life-in-a-noisy-world-cal-newport.jpg",
+        "finished": "2020-11-13T00:00:00.000Z",
+        "rating": 5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FCCC0F",
+        "textColor": "#083B5B",
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2021": [
+      {
+        "title": "Untenrum frei",
+        "author": [
+          "Margarete Stokowski"
+        ],
+        "pages": 256,
+        "cover": "book-covers/untenrum-frei-margarete-stokowski.jpg",
+        "finished": "2021-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#CCC",
+        "textColor": "#EC5F09",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Midnight Library",
+        "author": [
+          "Matt Haig"
+        ],
+        "pages": 304,
+        "cover": "book-covers/the-midnight-library-matt-haig.jpg",
+        "finished": "2021-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#1F2D5A",
+        "textColor": "#FEF262",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Sophie Passmann über Frank Ocean",
+        "author": [
+          "Sophie Passmann"
+        ],
+        "pages": 96,
+        "cover": "book-covers/sophie-passmann-ber-frank-ocean-sophie-passmann.jpg",
+        "finished": "2021-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#B7DECF",
+        "textColor": "#982086",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Sei kein Mann: Warum Männlichkeit ein Albtraum für Jungs ist",
+        "author": [
+          "JJ Bola"
+        ],
+        "pages": 0,
+        "cover": "book-covers/sei-kein-mann-warum-m-nnlichkeit-ein-albtraum-f-r-jungs-ist-jj-bola.jpg",
+        "finished": "2021-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#E4418F",
+        "textColor": "#FDFDFF",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Land in Sicht",
+        "author": [
+          "Ilona Hartmann"
+        ],
+        "pages": 160,
+        "cover": "book-covers/land-in-sicht-ilona-hartmann.jpg",
+        "finished": "2021-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#353373",
+        "textColor": "#E8DCCB",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Jacob träumt nicht mehr",
+        "author": [
+          "Clemens Bruno Gatzmaga"
+        ],
+        "pages": 0,
+        "cover": "book-covers/jacob-tr-umt-nicht-mehr-clemens-bruno-gatzmaga.jpg",
+        "finished": "2021-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#F1100B",
+        "textColor": "#090306",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Das Leben ist eins der Härtesten",
+        "author": [
+          "Giulia Becker"
+        ],
+        "pages": 224,
+        "cover": "book-covers/das-leben-ist-eins-der-h-rtesten-giulia-becker.jpg",
+        "finished": "2021-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#F7F7F6",
+        "textColor": "#EC3925",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Dark Matter",
+        "author": [
+          "Blake Crouch"
+        ],
+        "pages": 352,
+        "cover": "book-covers/dark-matter-blake-crouch.jpg",
+        "finished": "2021-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FF3B41",
+        "textColor": "#201C1D",
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2022": [
+      {
+        "title": "In: A Graphic Novel",
+        "author": [
+          "Will McPhail"
+        ],
+        "pages": 0,
+        "cover": "book-covers/in-a-graphic-novel-will-mcphail.jpg",
+        "finished": "2022-05-24T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#E3D9D2",
+        "textColor": "#426B3C",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Death Note  Vol. 1",
+        "author": [
+          "Yuki Kowalsky"
+        ],
+        "pages": 385,
+        "cover": "book-covers/death-note-vol-1-yuki-kowalsky.jpg",
+        "finished": "2022-04-28T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#010101",
+        "textColor": "#FEFEFE",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Memory Police",
+        "author": [
+          "YÅko Ogawa"
+        ],
+        "pages": 274,
+        "cover": "book-covers/the-memory-police-y-ko-ogawa.jpg",
+        "finished": "2022-10-08T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#121D24",
+        "textColor": "#DACFCA",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Wool",
+        "author": [
+          "Hugh Howey"
+        ],
+        "pages": 592,
+        "cover": "book-covers/wool-hugh-howey.jpg",
+        "finished": "2022-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#BD1D22",
+        "textColor": "#F9B23D",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Girl with the Dragon Tattoo",
+        "author": [
+          "Stieg Larsson"
+        ],
+        "pages": 480,
+        "cover": "book-covers/the-girl-with-the-dragon-tattoo-stieg-larsson.jpg",
+        "finished": "2022-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FFF45D",
+        "textColor": "#242421",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Comfort Book",
+        "author": [
+          "Matt Haig"
+        ],
+        "pages": 272,
+        "cover": "book-covers/the-comfort-book-matt-haig.jpg",
+        "finished": "2022-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#51B293",
+        "textColor": "#F2F8F5",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Show Your Work!: 10 Ways to Share Your Creativity and Get Discovered",
+        "author": [
+          "Austin Kleon"
+        ],
+        "pages": 224,
+        "cover": "book-covers/show-your-work-10-ways-to-share-your-creativity-and-get-discovered-austin-kleon.jpg",
+        "finished": "2022-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FED318",
+        "textColor": "#040505",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Refactoring UI",
+        "author": [
+          "Adam Wathan",
+          "Steve Schoger"
+        ],
+        "pages": 252,
+        "cover": "book-covers/refactoring-ui-adam-wathan.jpg",
+        "finished": "2022-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#12242F",
+        "textColor": "#F9F9FC",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Maybe You Should Talk to Someone: A Therapist, Her Therapist, and Our Lives Revealed",
+        "author": [
+          "Lori Gottlieb"
+        ],
+        "pages": 415,
+        "cover": "book-covers/maybe-you-should-talk-to-someone-a-therapist-her-therapist-and-our-lives-revealed-lori-gottlieb.jpg",
+        "finished": "2022-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#49C9F2",
+        "textColor": "#2E2A2C",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Ghostwritten",
+        "author": [
+          "David Mitchell"
+        ],
+        "pages": 300,
+        "cover": "book-covers/ghostwritten-david-mitchell.jpg",
+        "finished": "2022-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#AC2326",
+        "textColor": "#D7EEFE",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Dschinns: Roman",
+        "author": [
+          "Fatma Aydemir"
+        ],
+        "pages": 368,
+        "cover": "book-covers/dschinns-roman-fatma-aydemir.jpg",
+        "finished": "2022-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#474C97",
+        "textColor": "#E75452",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Convenience Store Woman",
+        "author": [
+          "Sayaka Murata"
+        ],
+        "pages": 176,
+        "cover": "book-covers/convenience-store-woman-sayaka-murata.jpg",
+        "finished": "2022-01-01T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#CC8CDB",
+        "textColor": "#FFF",
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2023": [
+      {
+        "title": "Kummer aller Art",
+        "author": [
+          "Mariana Leky"
+        ],
+        "pages": 128,
+        "cover": "book-covers/kummer-aller-art-mariana-leky.jpg",
+        "finished": "2023-11-15T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#F59E84",
+        "textColor": "#FFF8ED",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Sprache und Sein",
+        "author": [
+          "Kübra Gümüsay"
+        ],
+        "pages": 208,
+        "cover": "book-covers/sprache-und-sein-k-bra-g-m-say.jpg",
+        "finished": "2023-05-03T00:00:00.000Z",
+        "rating": 3.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#02428B",
+        "textColor": "#FFFFFE",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Recursion",
+        "author": [
+          "Blake Crouch"
+        ],
+        "pages": 352,
+        "cover": "book-covers/recursion-blake-crouch.jpg",
+        "finished": "2023-03-29T00:00:00.000Z",
+        "rating": 5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FFF227",
+        "textColor": "#171818",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Steal Like an Artist: 10 Things Nobody Told You About Being Creative",
+        "author": [
+          "Austin Kleon"
+        ],
+        "pages": 160,
+        "cover": "book-covers/steal-like-an-artist-10-things-nobody-told-you-about-being-creative-austin-kleon.jpg",
+        "finished": "2023-06-07T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#262223",
+        "textColor": "#FEFEFE",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Swimming Studies",
+        "author": [
+          "Leanne Shapton"
+        ],
+        "pages": 336,
+        "cover": "book-covers/swimming-studies-leanne-shapton.jpg",
+        "finished": "2023-10-03T00:00:00.000Z",
+        "rating": 3,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#A9E4DA",
+        "textColor": "#0535B6",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Vom Ende der Einsamkeit: Roman",
+        "author": [
+          "Benedict Wells"
+        ],
+        "pages": 354,
+        "cover": "book-covers/vom-ende-der-einsamkeit-roman-benedict-wells.jpg",
+        "finished": "2023-01-26T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FFFFF3",
+        "textColor": "#323125",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Horrorstör: Thriller",
+        "author": [
+          "Grady Hendrix"
+        ],
+        "pages": 276,
+        "cover": "book-covers/horrorst-r-thriller-grady-hendrix.jpg",
+        "finished": "2023-12-14T00:00:00.000Z",
+        "rating": 3,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#020202",
+        "textColor": "#F3D918",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Fellowship of the Ring: The Lord of the Rings, Part 1",
+        "author": [
+          "J.R.R. Tolkien"
+        ],
+        "pages": 560,
+        "cover": "book-covers/the-fellowship-of-the-ring-the-lord-of-the-rings-part-1-j-r-r-tolkien.jpg",
+        "finished": "2023-01-15T00:00:00.000Z",
+        "rating": 5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#060606",
+        "textColor": "#FFF",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Two Towers : Lord of the Rings Part 2",
+        "author": [
+          "J.R.R. Tolkien"
+        ],
+        "pages": 464,
+        "cover": "book-covers/the-two-towers-lord-of-the-rings-part-2-j-r-r-tolkien.jpg",
+        "finished": "2023-03-11T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#020202",
+        "textColor": "#FBFBFB",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Animal Farm",
+        "author": [
+          "George Orwell"
+        ],
+        "pages": 140,
+        "cover": "book-covers/animal-farm-george-orwell.jpg",
+        "finished": "2023-07-22T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#2C2A24",
+        "textColor": "#F4A6D6",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Attack on Titan, Vol. 1",
+        "author": [
+          "Hajime Isayama"
+        ],
+        "pages": 0,
+        "cover": "book-covers/attack-on-titan-vol-1-hajime-isayama.jpg",
+        "finished": "2023-01-14T00:00:00.000Z",
+        "rating": null,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#21283C",
+        "textColor": "#FEFEFE",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Little Fires Everywhere",
+        "author": [
+          "Celeste Ng"
+        ],
+        "pages": 338,
+        "cover": "book-covers/little-fires-everywhere-celeste-ng.jpg",
+        "finished": "2023-05-15T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#066954",
+        "textColor": "#F9FEFC",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "What I Talk About When I Talk About Running",
+        "author": [
+          "Haruki Murakami"
+        ],
+        "pages": 192,
+        "cover": "book-covers/what-i-talk-about-when-i-talk-about-running-haruki-murakami.jpg",
+        "finished": "2023-06-26T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#131215",
+        "textColor": "#FFFEFA",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "What They Forgot to Teach You at School",
+        "author": [
+          "The School of Life"
+        ],
+        "pages": 160,
+        "cover": "book-covers/what-they-forgot-to-teach-you-at-school-the-school-of-life.jpg",
+        "finished": "2023-08-28T00:00:00.000Z",
+        "rating": 3.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#C3716F",
+        "textColor": "#23134D",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Hard Land",
+        "author": [
+          "Benedict Wells"
+        ],
+        "pages": 352,
+        "cover": "book-covers/hard-land-benedict-wells.jpg",
+        "finished": "2023-10-20T00:00:00.000Z",
+        "rating": 5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#FFFFF3",
+        "textColor": "#312D1F",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "A Simpler Life: A guide to greater serenity, ease, and clarity",
+        "author": [
+          "The School of Life"
+        ],
+        "pages": 192,
+        "cover": "book-covers/a-simpler-life-a-guide-to-greater-serenity-ease-and-clarity-the-school-of-life.jpg",
+        "finished": "2023-06-02T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#272D1F",
+        "textColor": "#F6F5F5",
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2024": [
+      {
+        "title": "Harry Potter and the Sorcerer's Stone",
+        "author": [
+          "J. K. Rowling"
+        ],
+        "pages": 309,
+        "cover": "book-covers/harry-potter-and-the-sorcerer-s-stone-j-k-rowling.jpg",
+        "finished": "2024-11-20T00:00:00.000Z",
+        "rating": "",
+        "added": "2026-02-02 19:30",
+        "spineColor": "#2F5B90",
+        "textColor": "#F9DD34",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Anxiety",
+        "author": [
+          "The School of Life"
+        ],
+        "pages": 112,
+        "cover": "book-covers/anxiety-the-school-of-life.jpg",
+        "finished": "2024-05-01T00:00:00.000Z",
+        "rating": 3,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#272D2C",
+        "textColor": "#D8C87F",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Project Hail Mary",
+        "author": [
+          "Andy Weir"
+        ],
+        "pages": 0,
+        "cover": "book-covers/project-hail-mary-andy-weir.jpg",
+        "finished": "2024-02-28T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#030303",
+        "textColor": "#FEFEFE",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Seven Brief Lessons on Physics",
+        "author": [
+          "Carlo Rovelli"
+        ],
+        "pages": 86,
+        "cover": "book-covers/seven-brief-lessons-on-physics-carlo-rovelli.jpg",
+        "finished": "2024-01-25T00:00:00.000Z",
+        "rating": 3.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#242422",
+        "textColor": "#EFEEE7",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "How To Live: 27 conflicting answers and one weird conclusion",
+        "author": [
+          "Derek Sivers"
+        ],
+        "pages": 115,
+        "cover": "book-covers/how-to-live-27-conflicting-answers-and-one-weird-conclusion-derek-sivers.jpg",
+        "finished": "2024-01-11T00:00:00.000Z",
+        "rating": 3,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#157978",
+        "textColor": "#FEFEFE",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Glass Castle: A Memoir",
+        "author": [
+          "Jeannette Walls"
+        ],
+        "pages": 304,
+        "cover": "book-covers/the-glass-castle-a-memoir-jeannette-walls.jpg",
+        "finished": "2024-04-04T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#E5DFD3",
+        "textColor": "#242018",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Diary of a Murderer: And Other Stories",
+        "author": [
+          "Young-ha Kim"
+        ],
+        "pages": 208,
+        "cover": "book-covers/diary-of-a-murderer-and-other-stories-young-ha-kim.jpg",
+        "finished": "2024-10-27T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#E73526",
+        "textColor": "#F1EBDD",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Stay True: A Memoir",
+        "author": [
+          "Hua Hsu"
+        ],
+        "pages": 204,
+        "cover": "book-covers/stay-true-a-memoir-hua-hsu.jpg",
+        "finished": "2024-10-20T00:00:00.000Z",
+        "rating": 3.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#D87E4C",
+        "textColor": "#F8D41F",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "22 Bahnen",
+        "author": [
+          "Caroline Wahl"
+        ],
+        "pages": 187,
+        "cover": "book-covers/22-bahnen-caroline-wahl.jpg",
+        "finished": "2024-06-09T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#98B8CB",
+        "textColor": "#E42D13",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Circe",
+        "author": [
+          "Madeline Miller"
+        ],
+        "pages": 393,
+        "cover": "book-covers/circe-madeline-miller.jpg",
+        "finished": "2024-09-14T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#1D1C1A",
+        "textColor": "#E17C33",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The Walking Man",
+        "author": [
+          "Jiro Taniguchi"
+        ],
+        "pages": 160,
+        "cover": "book-covers/the-walking-man-jiro-taniguchi.jpg",
+        "finished": "2024-12-02T00:00:00.000Z",
+        "rating": 2.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#DCDEBD",
+        "textColor": "#1B3204",
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2025": [
+      {
+        "title": "Small Things Like These",
+        "author": [
+          "Claire Keegan"
+        ],
+        "pages": 112,
+        "cover": "book-covers/small-things-like-these-claire-keegan.jpg",
+        "finished": "2025-12-24T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-12-22 16:54",
+        "spineColor": "#F7F1E5",
+        "textColor": "#0C7B3E",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Tomorrow, and Tomorrow, and Tomorrow: A Novel",
+        "author": [
+          "Gabrielle Zevin"
+        ],
+        "pages": 401,
+        "cover": "book-covers/tomorrow-and-tomorrow-and-tomorrow-a-novel-gabrielle-zevin.jpg",
+        "finished": "2025-04-02T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#1C6B93",
+        "textColor": "#FBF4E4",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Fever in Urbicand",
+        "author": [
+          "François Schuiten",
+          "Benoît Peeters"
+        ],
+        "pages": 96,
+        "cover": "book-covers/fever-in-urbicand-fran-ois-schuiten.jpg",
+        "finished": "2025-11-11T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#B4BAAB",
+        "textColor": "#612448",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Hello World: Being Human in the Age of Algorithms",
+        "author": [
+          "Hannah Fry"
+        ],
+        "pages": 256,
+        "cover": "book-covers/hello-world-being-human-in-the-age-of-algorithms-hannah-fry.jpg",
+        "finished": "2025-02-09T00:00:00.000Z",
+        "rating": 3.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#11B1AF",
+        "textColor": "#E2E434",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Leviathan Wakes",
+        "author": [
+          "James S. A. Corey"
+        ],
+        "pages": 561,
+        "cover": "book-covers/leviathan-wakes-james-s-a-corey.jpg",
+        "finished": "2025-08-31T00:00:00.000Z",
+        "rating": 4,
+        "added": "2026-01-04 13:39",
+        "status": [
+          "Abgeschlossen"
+        ],
+        "spineColor": "#f8f8f8"
+      },
+      {
+        "title": "The Hobbit",
+        "author": [
+          "J.R.R. Tolkien"
+        ],
+        "pages": 0,
+        "cover": "book-covers/the-hobbit-j-r-r-tolkien.jpg",
+        "finished": "2025-05-03T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#040404",
+        "textColor": "#FFF",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The song of Achilles : Barnes & Noble Edition ",
+        "author": [
+          "Madeline Miller"
+        ],
+        "pages": 369,
+        "cover": "book-covers/the-song-of-achilles-barnes-noble-edition-madeline-miller.jpg",
+        "finished": "2025-02-08T00:00:00.000Z",
+        "rating": 3,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#0A2429",
+        "textColor": "#C79A2E",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Swimming in Darkness",
+        "author": [
+          "Lucas Harari"
+        ],
+        "pages": 152,
+        "cover": "book-covers/swimming-in-darkness-lucas-harari.jpg",
+        "finished": "2025-04-26T00:00:00.000Z",
+        "rating": 3,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#11273D",
+        "textColor": "#F36467",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "The List of Suspicious Things",
+        "author": [
+          "Jennie Godfrey"
+        ],
+        "pages": 464,
+        "cover": "book-covers/the-list-of-suspicious-things-jennie-godfrey.jpg",
+        "finished": "2025-12-15T00:00:00.000Z",
+        "rating": 4,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#F3E2CA",
+        "textColor": "#2164FE",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "My Year of Rest and Relaxation",
+        "author": [
+          "Ottessa Moshfegh"
+        ],
+        "pages": 304,
+        "cover": "book-covers/my-year-of-rest-and-relaxation-ottessa-moshfegh.jpg",
+        "finished": "2025-06-13T00:00:00.000Z",
+        "rating": 2.5,
+        "added": "2025-11-11 00:00",
+        "spineColor": "#F142AF",
+        "textColor": "#282226",
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ],
+    "2026": [
+      {
+        "title": "Hey guten Morgen, wie geht es dir?",
+        "author": [
+          "Martina Hefter"
+        ],
+        "pages": 178,
+        "cover": "book-covers/hey-guten-morgen-wie-geht-es-dir-martina-hefter.jpg",
+        "finished": "2026-02-01T00:00:00.000Z",
+        "rating": 3,
+        "added": "2026-01-10 19:45",
+        "spineColor": "#424236",
+        "textColor": "#FEEE0D",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Station Eleven",
+        "author": [
+          "Emily St. John Mandel"
+        ],
+        "pages": 333,
+        "cover": "book-covers/station-eleven-emily-st-john-mandel.jpg",
+        "finished": "2026-08-23T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2026-01-04 13:39",
+        "spineColor": "#1C1737",
+        "textColor": "#fff",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "ë",
+        "author": [
+          "Jehona Kicaj"
+        ],
+        "pages": 145,
+        "cover": "book-covers/jehona-kicaj.jpg",
+        "finished": "2026-01-10T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2026-01-03 23:34",
+        "spineColor": "#FFF",
+        "textColor": "#000",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Hexenkunst",
+        "author": [
+          "Sole Otero"
+        ],
+        "pages": 376,
+        "cover": "book-covers/hexenkunst-sole-otero.jpg",
+        "finished": "2026-08-24T00:00:00.000Z",
+        "rating": 4,
+        "added": "2026-08-23 10:33",
+        "spineColor": "#1B1F33",
+        "textColor": "#FEFEFE",
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
+        "title": "Junge Frau, am Fenster stehend, Abendlicht, blaues Kleid",
+        "author": [
+          "Alena Schröder"
+        ],
+        "pages": 366,
+        "cover": "book-covers/junge-frau-am-fenster-stehend-abendlicht-blaues-kleid-alena-schr-der.jpg",
+        "finished": "2026-10-16T00:00:00.000Z",
+        "rating": 4.5,
+        "added": "2026-09-07 08:23",
+        "spineColor": "#1C1F2B",
+        "textColor": "#F2E6C9",
+        "status": [
+          "Abgeschlossen"
+        ]
+      }
+    ]
+  }
+}

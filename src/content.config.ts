@@ -57,7 +57,7 @@ const groupSchema = z.enum(["aktiv", "merkliste", "pausiert", "abgeschlossen"]);
 
 /** The exports send null, bare strings and null entries for arrays. */
 const books = defineCollection({
-    loader: file("data/output/books.json", { parser: parseGroupedMedia }),
+    loader: file("data/books.json", { parser: parseGroupedMedia }),
     schema: z.object({
         title: z.string(),
         author: z.array(z.string()).default([]),
@@ -75,7 +75,7 @@ const books = defineCollection({
 });
 
 const series = defineCollection({
-    loader: file("data/output/series.json", { parser: parseGroupedMedia }),
+    loader: file("data/series.json", { parser: parseGroupedMedia }),
     schema: z.object({
         title: z.string(),
         season: z.union([z.number(), z.string()]).optional(),
@@ -104,7 +104,7 @@ const bookmarks = defineCollection({
 });
 
 const garden = defineCollection({
-    loader: file("data/output/digital-garden.json", {
+    loader: file("data/digital-garden.json", {
         parser: (text) => {
             const data = JSON.parse(text);
             const uniqueId = uniqueIdFactory();

@@ -3,7 +3,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 type Series = CollectionEntry<"series">;
 
 const coverModules = import.meta.glob<{ default: ImageMetadata }>(
-    "../../data/output/series-covers/*.{jpg,jpeg,png,webp}",
+    "../../data/series-covers/*.{jpg,jpeg,png,webp}",
     { eager: true },
 );
 const coversByFile: Record<string, string> = {};
