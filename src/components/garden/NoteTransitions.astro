@@ -21,6 +21,9 @@
     @keyframes vt-fade-in {
         from { opacity: 0; }
     }
+    @keyframes vt-fade-out {
+        to { opacity: 0; }
+    }
     @keyframes vt-slide-up {
         from { transform: translateY(100vh); }
     }
@@ -32,6 +35,12 @@
 
     [data-vt-note-detail] {
         view-transition-name: note;
+    }
+
+    /* Its own layer, or it's part of the page snapshot underneath the note,
+       which covers it on mobile where the note runs full width. */
+    [data-vt-note-close] {
+        view-transition-name: note-close;
     }
 
     /* The new page fades in over the old one in both directions; the old
@@ -59,13 +68,23 @@
         animation-delay: 150ms;
     }
 
+    /* The close button arrives once the note has mostly settled and leaves
+       right away. */
+    ::view-transition-new(note-close):only-child {
+        animation: vt-fade-in 200ms ease-out 400ms both;
+    }
+    ::view-transition-old(note-close):only-child {
+        animation: vt-fade-out 150ms ease-out both;
+    }
+
     /* Note → note (prev/next): a short crossfade, no travel. */
     ::view-transition-group(note) {
         animation-duration: 200ms;
     }
 
     @media (prefers-reduced-motion: reduce) {
-        [data-vt-note-detail] {
+        [data-vt-note-detail],
+        [data-vt-note-close] {
             view-transition-name: none;
         }
     }
