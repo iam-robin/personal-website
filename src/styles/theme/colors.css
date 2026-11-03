@@ -3,9 +3,9 @@
    fold the fallback for opacity modifiers. */
 @theme static {
     --color-ink: #1a1919;
-    --color-paper: #eae8e3;
-    --color-surface: #f4f3f0;
-    --color-inset: #d2d1ca;
+    --color-paper: #f2f0e7;
+    --color-surface: #f7f6f1;
+    --color-inset: #d9d8d0;
     --color-ink-muted: #1a1919b3;
     /* Lines and dividers. Translucent ink, so they take on each page's paper tint. */
     --color-rule: #1a19194d;
@@ -19,8 +19,8 @@
       color-mix at build time (invisible in dev). */
 @layer base {
     body {
-        --color-paper: var(--paper, #eae8e3);
-        --color-surface: var(--surface, #f4f3f0);
-        --color-inset: var(--inset, #d2d1ca);
+        --color-paper: var(--paper, #f2f0e7);
+        --color-surface: var(--surface, #f7f6f1);
+        --color-inset: var(--inset, #d9d8d0);
     }
 }

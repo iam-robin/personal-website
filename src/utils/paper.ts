@@ -129,7 +129,7 @@ function folderShades(hex: string): Pick<ResolvedPaper, "folderFront" | "folderB
 
 const stocks = {
     /** Neutral stock for home, 404, and pages whose content is colourful already. */
-    home: { hex: "#eae8e3", oklch: "oklch(93.12% 0.007 88.6)", name: "Blank" },
+    home: { hex: "#f2f0e7", oklch: "oklch(95.42% 0.012 96.4)", name: "Blank" },
     work: { hex: "#f2e0c8", oklch: "oklch(91.5% 0.038 75)", name: "Sand" },
     projects: { hex: "#fbdbd2", oklch: "oklch(91.5% 0.038 35)", name: "Clay" },
     blog: {
