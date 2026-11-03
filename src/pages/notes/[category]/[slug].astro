@@ -4,6 +4,7 @@ import { marked } from "marked";
 import { Icon } from "astro-icon/components";
 import Layout from "../../../layouts/Layout.astro";
 import Divider from "../../../components/garden/Divider.astro";
+import NoteTransitions from "../../../components/garden/NoteTransitions.astro";
 import {
     getGardenNotes,
     getCategories,
@@ -125,6 +126,7 @@ const documentTitle =
 ---
 
 <Layout title={documentTitle} description={noteDescription}>
+    <NoteTransitions />
     <Button
         href="/notes"
         label="Close"
@@ -138,6 +140,7 @@ const documentTitle =
 
     <article
         class="effect relative z-30 mx-auto w-full max-w-shell lg:my-12"
+        data-vt-note-detail
         data-prev-note={previousNote
             ? `/notes/${categorySlug(note.thema)}/${previousNote.slug}`
             : undefined}

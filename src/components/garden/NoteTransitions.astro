@@ -1,0 +1,72 @@
+---
+/**
+ * Page transition between the notes overview and a single note: the note
+ * slides up over the page and drops away again on close, like v3.
+ *
+ * Cross-document view transitions: no router, no JS for the animation.
+ * Browsers without support (Firefox) just change pages.
+ *
+ * All animation CSS is read from the *new* document, so the direction falls
+ * out of which page we land on: a note page (`:has([data-vt-note-detail])`)
+ * means "open", an overview means "close". `:only-child` on the pseudo tells
+ * open/close apart from note → note (prev/next), where both sides exist.
+ */
+---
+
+<style is:global>
+    @view-transition {
+        navigation: auto;
+    }
+
+    @keyframes vt-fade-in {
+        from { opacity: 0; }
+    }
+    @keyframes vt-slide-up {
+        from { transform: translateY(100vh); }
+    }
+    /* 100% (the note's own height) + 100vh clears the viewport from any
+       scroll position, without measuring in JS like v3 did. */
+    @keyframes vt-slide-down {
+        to { transform: translateY(calc(100% + 100vh)); }
+    }
+
+    [data-vt-note-detail] {
+        view-transition-name: note;
+    }
+
+    /* The new page fades in over the old one in both directions; the old
+       one holds still underneath. Normal blend instead of the default
+       crossfade's plus-lighter. */
+    ::view-transition-old(root) {
+        animation: none;
+        mix-blend-mode: normal;
+    }
+    ::view-transition-new(root) {
+        animation: vt-fade-in 400ms ease-out both;
+        mix-blend-mode: normal;
+    }
+
+    /* Open: no overshoot, it just settles. */
+    ::view-transition-new(note):only-child {
+        animation: vt-slide-up 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    /* Close: the note drops first, the overview fades in behind it. */
+    ::view-transition-old(note):only-child {
+        animation: vt-slide-down 550ms cubic-bezier(0.55, 0, 0.75, 0) both;
+    }
+    html:not(:has([data-vt-note-detail]))::view-transition-new(root) {
+        animation-delay: 150ms;
+    }
+
+    /* Note → note (prev/next): a short crossfade, no travel. */
+    ::view-transition-group(note) {
+        animation-duration: 200ms;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        [data-vt-note-detail] {
+            view-transition-name: none;
+        }
+    }
+</style>

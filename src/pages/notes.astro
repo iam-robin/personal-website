@@ -1,6 +1,7 @@
 ---
 import SubpageLayout from "../layouts/SubpageLayout.astro";
 import NoteCard from "../components/garden/NoteCard.astro";
+import NoteTransitions from "../components/garden/NoteTransitions.astro";
 import GardenFilter from "../components/garden/GardenFilter.astro";
 import {
     getGardenNotes,
@@ -17,6 +18,7 @@ const colorMap = getCategoryColorMap(notes);
     title="Notes"
     description="Living notes from my Obsidian vault. Small, unfinished thoughts about design, technology, art, books and life online."
 >
+    <NoteTransitions />
     <GardenFilter
         categories={categories}
         colorMap={colorMap}
