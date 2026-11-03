@@ -145,7 +145,14 @@ const projects = defineCollection({
 });
 
 const blog = defineCollection({
-    loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
+    /* Exported from the vault. Drafts (data/blog-drafts/, gitignored) are only
+       read by `astro dev`. The id is the file name, so a draft keeps its URL
+       once it's published. */
+    loader: glob({
+        pattern: import.meta.env.DEV ? ["blog/*.md", "blog-drafts/*.md"] : "blog/*.md",
+        base: "./data",
+        generateId: ({ entry }) => entry.split("/").pop()!.replace(/\.md$/, ""),
+    }),
     schema: ({ image }) =>
         z.object({
             title: z.string(),

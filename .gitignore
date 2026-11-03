@@ -4,6 +4,8 @@ dist/
 .astro/
 # bookmark covers, downloaded from linkding by src/loaders/linkding.ts
 src/generated/
+# blog drafts, exported from the vault for `astro dev` only
+data/blog-drafts/
 
 # dependencies
 node_modules/

@@ -1,4 +1,5 @@
 // @ts-check
+import { readdirSync, watch } from "node:fs";
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import db from "@astrojs/db";
@@ -40,6 +41,44 @@ const devOnlyLab = () => ({
     },
 });
 
+/* `astro dev` exports the blog from the vault on start and again whenever a
+   note in its blog/ folder changes, so drafts show up locally while writing.
+   Builds never touch the vault (the build server has none); they use the
+   committed data/blog/. */
+/** @returns {import("astro").AstroIntegration} */
+const devBlogFromVault = () => ({
+    name: "dev-blog-from-vault",
+    hooks: {
+        "astro:config:setup": async ({ command, logger }) => {
+            if (command !== "dev") return;
+            // Imported here so builds don't need the export's dev dependencies
+            const { VAULT_PATH } = await import("./scripts/export/lib/utils.mjs");
+            const { exportBlog } = await import("./scripts/export/export-blog.mjs");
+            const vaultBlog = `${VAULT_PATH}/blog`;
+            try {
+                // Also fails without permission, e.g. in a sandboxed shell
+                readdirSync(vaultBlog);
+            } catch (err) {
+                const code = /** @type {NodeJS.ErrnoException} */ (err).code;
+                logger.warn(`Can't read ${vaultBlog} (${code}), showing the committed blog posts only.`);
+                return;
+            }
+            const run = () => exportBlog().catch((err) => logger.error(err.message));
+            await run();
+
+            // A config change restarts the server and runs this again
+            const store = /** @type {{ vaultBlogWatcher?: import("node:fs").FSWatcher }} */ (globalThis);
+            store.vaultBlogWatcher?.close();
+            /** @type {NodeJS.Timeout | undefined} */
+            let timer;
+            store.vaultBlogWatcher = watch(vaultBlog, () => {
+                clearTimeout(timer);
+                timer = setTimeout(run, 300);
+            });
+        },
+    },
+});
+
 export default defineConfig({
     site: "https://iamrob.in",
     /* Nixpacks caches node_modules/.cache between deploys, so optimized images survive. */
@@ -48,6 +87,7 @@ export default defineConfig({
         db(),
         icon(),
         devOnlyLab(),
+        devBlogFromVault(),
         sitemap({
             filter: (page) => {
                 // Compare paths without the trailing slash Astro appends.
