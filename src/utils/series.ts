@@ -2,13 +2,30 @@ import { getCollection, type CollectionEntry } from "astro:content";
 
 type Series = CollectionEntry<"series">;
 
+const coverModules = import.meta.glob<{ default: ImageMetadata }>(
+    "../../data/output/series-covers/*.{jpg,jpeg,png,webp}",
+    { eager: true },
+);
+const coversByFile: Record<string, string> = {};
+for (const [path, mod] of Object.entries(coverModules)) {
+    const file = path.split("/").pop();
+    if (file) coversByFile[file] = mod.default.src;
+}
+
+/** Local covers resolve to the bundled file; remote URLs pass through. */
+function getSeasonCover(cover: string | null | undefined): string | null {
+    if (!cover) return null;
+    if (/^https?:\/\//.test(cover)) return cover;
+    return coversByFile[cover.split("/").pop() ?? ""] ?? null;
+}
+
 /** One entry is one season, not one show: that's how the export logs it. */
 
 export interface Season {
     id: string;
     title: string;
     season: number | null;
-    /** Remote URL, so astro:assets can't optimise it. */
+    /** Bundled local cover, or a remote URL while the export hasn't localised it. */
     cover: string | null;
     /** ISO, or "" when undated. */
     finished: string;
@@ -37,7 +54,7 @@ function resolve(entry: Series, watching = false): Season {
         id: entry.id,
         title: entry.data.title,
         season: toNumber(entry.data.season),
-        cover: entry.data.cover ?? null,
+        cover: getSeasonCover(entry.data.cover),
         finished: entry.data.finished ?? "",
         rating,
         // The vault's star only exists from 2023 on; `favorite` covers older ones.
