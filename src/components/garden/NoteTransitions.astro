@@ -10,8 +10,46 @@
  * out of which page we land on: a note page (`:has([data-vt-note-detail])`)
  * means "open", an overview means "close". `:only-child` on the pseudo tells
  * open/close apart from note → note (prev/next), where both sides exist.
+ *
+ * A note opens from anywhere (a book, a project…), and both documents have to
+ * opt in, so this sits in the Layout on every page. The script below then
+ * skips every transition that doesn't involve a note page, so the rest of
+ * the site keeps plain page loads. It has to be inline in <head>: `pagereveal`
+ * fires before the first frame, before any module script runs.
  */
 ---
+
+<script is:inline>
+    (() => {
+        const KEY = "vt-from";
+        const kind = (path) =>
+            /^\/notes\/[^/]+\/[^/]+\/?$/.test(path)
+                ? "note"
+                : /^\/notes(\/|$)/.test(path)
+                  ? "notes"
+                  : "other";
+
+        addEventListener("pageswap", () => {
+            try {
+                sessionStorage.setItem(KEY, kind(location.pathname));
+            } catch {}
+        });
+
+        addEventListener("pagereveal", (event) => {
+            if (!event.viewTransition) return;
+            let from = "other";
+            try {
+                from = sessionStorage.getItem(KEY) || "other";
+            } catch {}
+            const to = kind(location.pathname);
+            const keep =
+                from === "note" ||
+                to === "note" ||
+                (from === "notes" && to === "notes");
+            if (!keep) event.viewTransition.skipTransition();
+        });
+    })();
+</script>
 
 <style is:global>
     @view-transition {

@@ -1,10 +1,8 @@
 ---
-import Button from "../../../components/ui/Button.astro";
+import CloseButton from "../../../components/ui/CloseButton.astro";
 import { marked } from "marked";
-import { Icon } from "astro-icon/components";
 import Layout from "../../../layouts/Layout.astro";
 import Divider from "../../../components/garden/Divider.astro";
-import NoteTransitions from "../../../components/garden/NoteTransitions.astro";
 import {
     getGardenNotes,
     getCategories,
@@ -126,18 +124,7 @@ const documentTitle =
 ---
 
 <Layout title={documentTitle} description={noteDescription}>
-    <NoteTransitions />
-    <Button
-        href="/notes"
-        label="Close"
-        iconOnly
-        size="lg"
-        variant="ghost"
-        class="fixed top-4 right-4 z-50 no-underline"
-        data-vt-note-close
-    >
-        <Icon name="ph:x-bold" size={24} />
-    </Button>
+    <CloseButton href="/notes" data-vt-note-close />
 
     <article
         class="effect relative z-30 mx-auto w-full max-w-shell lg:my-12"
@@ -234,6 +221,7 @@ const documentTitle =
                             {previousNote && (
                                 <a
                                     href={`/notes/${categorySlug(note.thema)}/${previousNote.slug}`}
+                                    data-close-sibling
                                     class={`${nextNote ? "w-1/2 border-r border-black/60" : "w-full"} cursor-pointer px-3 py-9 text-center transition-colors hover:bg-black/5`}
                                 >
                                     ← Previous note
@@ -242,6 +230,7 @@ const documentTitle =
                             {nextNote && (
                                 <a
                                     href={`/notes/${categorySlug(note.thema)}/${nextNote.slug}`}
+                                    data-close-sibling
                                     class={`${previousNote ? "w-1/2" : "w-full"} cursor-pointer px-3 py-9 text-center transition-colors hover:bg-black/5`}
                                 >
                                     Next note →
@@ -417,6 +406,8 @@ const documentTitle =
 </style>
 
 <script>
+    import { replaceSibling } from "../../../scripts/closeReturn";
+
     document.addEventListener("keydown", (e) => {
         if (
             e.target instanceof HTMLInputElement ||
@@ -430,7 +421,7 @@ const documentTitle =
         if (!article) return;
         const prevUrl = article.getAttribute("data-prev-note");
         const nextUrl = article.getAttribute("data-next-note");
-        if (e.key === "ArrowLeft" && prevUrl) window.location.href = prevUrl;
-        if (e.key === "ArrowRight" && nextUrl) window.location.href = nextUrl;
+        if (e.key === "ArrowLeft" && prevUrl) replaceSibling(prevUrl);
+        if (e.key === "ArrowRight" && nextUrl) replaceSibling(nextUrl);
     });
 </script>

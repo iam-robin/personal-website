@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { getPaperKey, papers } from "../utils/paper";
 import AnalogFilter from "../components/ui/AnalogFilter.astro";
+import NoteTransitions from "../components/garden/NoteTransitions.astro";
 
 interface Props {
     title: string;
@@ -95,6 +96,7 @@ const serializedStructuredData = structuredData
             crossorigin
         />
         <meta name="viewport" content="width=device-width" />
+        <NoteTransitions />
         <meta name="theme-color" content={paper.hex} />
         <meta name="generator" content={Astro.generator} />
 

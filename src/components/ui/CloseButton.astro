@@ -1,0 +1,68 @@
+---
+/**
+ * The X on overlay-style detail pages (notes, projects). It returns to
+ * wherever the visitor came from — a book, the notes page halfway down —
+ * by stepping back in history, so the browser restores that page and its
+ * scroll position. `href` is only the fallback: a direct visit, a new tab or
+ * an arrival from another site has nothing on this site to go back to.
+ *
+ * Prev/next between detail pages (`data-close-sibling` links, or
+ * `replaceSibling()` from a script) replace the history entry instead of
+ * adding one, so the X is always exactly one step from the origin.
+ */
+import { Icon } from "astro-icon/components";
+import Button from "./Button.astro";
+
+type Props = { href: string; [key: string]: unknown };
+
+const { href, ...rest } = Astro.props;
+---
+
+<Button
+    href={href}
+    label="Close"
+    iconOnly
+    size="lg"
+    variant="ghost"
+    class="fixed top-4 right-4 z-50 no-underline"
+    data-close-return
+    {...rest}
+>
+    <Icon name="ph:x-bold" size={24} />
+</Button>
+
+<script>
+    import { initCloseReturn, replaceSibling } from "../../scripts/closeReturn";
+
+    initCloseReturn();
+
+    document.addEventListener("click", (e) => {
+        if (
+            e.defaultPrevented ||
+            e.button !== 0 ||
+            e.metaKey ||
+            e.ctrlKey ||
+            e.shiftKey ||
+            e.altKey
+        ) {
+            return;
+        }
+        const target = e.target instanceof Element ? e.target : null;
+
+        if (target?.closest("[data-close-return]")) {
+            if (history.state?.closeReturn) {
+                e.preventDefault();
+                history.back();
+            }
+            return;
+        }
+
+        const sibling = target?.closest<HTMLAnchorElement>(
+            "a[data-close-sibling]",
+        );
+        if (sibling) {
+            e.preventDefault();
+            replaceSibling(sibling.href);
+        }
+    });
+</script>
