@@ -26,9 +26,7 @@ const KEY_MAP = {
 async function exportBooks() {
     console.log("Exporting books...");
 
-    const files = (await findMarkdownFiles("books/*.md")).filter(
-        (f) => !f.endsWith("/README.md"),
-    );
+    const files = await findMarkdownFiles("books/*.md");
     const books = [];
 
     for (const filePath of files) {

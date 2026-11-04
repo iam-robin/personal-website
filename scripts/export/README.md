@@ -11,6 +11,8 @@ generated, but committed so the build server doesn't need the vault.
 npm run export
 ```
 
+Notes whose file name starts with `_` (the folder READMEs, `_README.md`) are skipped by every export.
+
 ## Output
 
 Written to `data/` in the repo root:

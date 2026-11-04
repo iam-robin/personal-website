@@ -201,7 +201,7 @@ async function writePosts(dir, posts, linkTargets, imageIndex) {
 async function exportBlog() {
     console.log("Exporting blog posts...");
 
-    const files = (await findMarkdownFiles("blog/*.md")).filter((f) => !f.endsWith("/README.md"));
+    const files = await findMarkdownFiles("blog/*.md");
 
     const published = [];
     const drafts = [];

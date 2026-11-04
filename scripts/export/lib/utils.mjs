@@ -70,10 +70,11 @@ export async function parseMarkdownFile(filePath) {
 }
 
 /**
- * Find all markdown files matching a glob pattern
+ * Find all markdown files matching a glob pattern. Notes starting with `_`
+ * (like the folder READMEs) are never exported.
  */
 export async function findMarkdownFiles(pattern) {
-    return glob(pattern, { cwd: VAULT_PATH, absolute: true });
+    return glob(pattern, { cwd: VAULT_PATH, absolute: true, ignore: "**/_*.md" });
 }
 
 /**
