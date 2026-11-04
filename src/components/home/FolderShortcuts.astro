@@ -130,6 +130,9 @@ const folderPapers = {
 
     [data-kind="postcards"] .paper { width: 80%; height: 65%; }
 
+    /* Covers are portrait: give them a book's proportions so object-cover doesn't crop them. */
+    [data-kind="books"] .paper { width: auto; aspect-ratio: 2 / 3; }
+
     /* Two overlapping panels: perspective alone gives the wrong silhouette. */
     .folder-front {
         position: absolute;
