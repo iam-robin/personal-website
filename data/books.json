@@ -1,7 +1,22 @@
 {
-  "lastUpdated": "2026-11-03T07:50:10.219Z",
-  "count": 104,
+  "lastUpdated": "2026-11-07T11:06:21.674Z",
+  "count": 107,
   "aktiv": [
+    {
+      "title": "Color of the End, Vol. 1",
+      "author": [
+        "Haruo Iwamune"
+      ],
+      "pages": 224,
+      "cover": "book-covers/color-of-the-end-vol-1-haruo-iwamune.jpg",
+      "finished": "2026-11-07T00:00:00.000Z",
+      "rating": 4,
+      "added": "2026-11-06 12:59",
+      "status": [
+        "Aktiv"
+      ],
+      "spineColor": "#080808"
+    },
     {
       "title": "On Photography",
       "author": [
@@ -277,6 +292,36 @@
         "Merkliste"
       ],
       "spineColor": "#d8d8d8"
+    },
+    {
+      "title": "Color of the End, Vol. 3",
+      "author": [
+        "Haruo Iwamune"
+      ],
+      "pages": 216,
+      "cover": "book-covers/color-of-the-end-vol-3-haruo-iwamune.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-11-06 12:59",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#281818"
+    },
+    {
+      "title": "Color of the End, Vol. 2",
+      "author": [
+        "Haruo Iwamune"
+      ],
+      "pages": 196,
+      "cover": "book-covers/color-of-the-end-vol-2-haruo-iwamune.jpg",
+      "finished": "",
+      "rating": "",
+      "added": "2026-11-06 12:59",
+      "status": [
+        "Merkliste"
+      ],
+      "spineColor": "#383838"
     },
     {
       "title": "Bullshit Jobs: A Theory",
