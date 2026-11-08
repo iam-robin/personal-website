@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-11-03T08:48:00.057Z",
-  "count": 65,
+  "lastUpdated": "2026-11-08T20:21:42.003Z",
+  "count": 66,
   "aktiv": [],
   "merkliste": [
     {
@@ -709,9 +709,21 @@
     ],
     "2026": [
       {
+        "title": "Attack on Titan",
+        "season": 1,
+        "rating": 3.5,
+        "cover": "series-covers/attack-on-titan-1.jpg",
+        "finished": "2026-11-08T00:00:00.000Z",
+        "added": "2026-11-08 21:12",
+        "favorite": false,
+        "status": [
+          "Abgeschlossen"
+        ]
+      },
+      {
         "title": "Mr. Robot",
         "season": 1,
-        "rating": null,
+        "rating": 4,
         "cover": "series-covers/mr-robot-1.jpg",
         "finished": "2026-05-02T00:00:00.000Z",
         "added": "2026-01-18 00:00",
