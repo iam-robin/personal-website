@@ -7,6 +7,7 @@ import {
     translateKeys,
     writeOutput,
     getLastUpdated,
+    cleanWikilinks,
 } from "./lib/utils.mjs";
 
 // Map vault frontmatter keys to the JSON keys the website consumes.
@@ -37,6 +38,74 @@ function getTitleFromPath(filePath) {
     return basename(filePath, ".md");
 }
 
+// Book and series notes become garden notes too: whatever is written under a
+// "## Garden" heading (to the end of the note) is published, everything above
+// it stays private.
+const GARDEN_HEADING = /^## Garden[ \t]*$/m;
+
+function gardenSection(body) {
+    const match = body.match(GARDEN_HEADING);
+    if (!match) return null;
+    return body.slice(match.index + match[0].length).trim() || null;
+}
+
+/**
+ * Dates as the Linter writes them ("YYYY-MM-DD HH:mm"). YAML turns bare
+ * dates like `finished: 2024-09-14` into Date objects.
+ */
+function formatDate(value) {
+    if (!value) return null;
+    if (value instanceof Date) return `${value.toISOString().slice(0, 10)} 00:00`;
+    return String(value);
+}
+
+/**
+ * "Title – Author" for books (subtitle after the colon dropped), "Show 2" for
+ * series. The website matches its book and series logs to notes by these.
+ */
+function mediaTitle(kind, data) {
+    if (kind === "books") {
+        const title = String(data.title || "").split(":")[0].trim();
+        const authors = [].concat(cleanWikilinks(data.author) || []).join(", ");
+        return authors ? `${title} – ${authors}` : title;
+    }
+    return [cleanWikilinks(data.title), data.season].filter(Boolean).join(" ");
+}
+
+const MEDIA_SOURCES = [
+    { kind: "books", pattern: "books/*.md", topic: "Books" },
+    { kind: "series", pattern: "series/*.md", topic: "Series" },
+];
+
+async function collectMediaNotes() {
+    const notes = [];
+    for (const { kind, pattern, topic } of MEDIA_SOURCES) {
+        for (const filePath of await findMarkdownFiles(pattern)) {
+            try {
+                const { data, body } = await parseMarkdownFile(filePath);
+                const content = gardenSection(body);
+                if (!content) continue;
+
+                const title = mediaTitle(kind, data);
+                const note = {
+                    thema: topic,
+                    title,
+                    slug: slugify(title),
+                    // Written once watched or read, so that's the note's date
+                    created: formatDate(data.finished) || formatDate(data.added) || "",
+                    edited: formatDate(data.updated),
+                    content,
+                };
+                if (data.description) note.description = data.description;
+                notes.push(note);
+            } catch (err) {
+                console.error(`  Error processing ${filePath}: ${err.message}`);
+            }
+        }
+    }
+    return notes;
+}
+
 async function exportDigitalGarden() {
     console.log("Exporting Digital Garden notes...");
 
@@ -63,6 +132,16 @@ async function exportDigitalGarden() {
         } catch (err) {
             console.error(`  Error processing ${filePath}: ${err.message}`);
         }
+    }
+
+    const slugs = new Set(notes.map((note) => note.slug));
+    for (const note of await collectMediaNotes()) {
+        if (slugs.has(note.slug)) {
+            console.warn(`  Warning: Skipping "${note.title}", a garden note has the same slug`);
+            continue;
+        }
+        slugs.add(note.slug);
+        notes.push(note);
     }
 
     // Group by thema

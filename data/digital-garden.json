@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-11-04T10:34:22.714Z",
-  "count": 36,
+  "lastUpdated": "2026-11-09T09:32:50.641Z",
+  "count": 37,
   "Art": [
     {
       "thema": "Art",
@@ -60,30 +60,38 @@
   "Books": [
     {
       "thema": "Books",
-      "description": "a Young Adult take on The Iliad",
-      "created": "2025-02-08 00:00",
-      "edited": "2025-02-08 00:00",
-      "title": "The song of Achilles – Madeline Miller",
-      "slug": "the-song-of-achilles-madeline-miller",
-      "content": "![The song of Achilles book cover](https://res.cloudinary.com/daxsvl9cg/image/upload/w_450/v1739018299/obsidian/xrpfbuahfiomr2gkaxgv.jpg)\n\nI really enjoyed reading «Circe» by Madeline Miller, so I decided to read her take on the Trojan War and explore more Greek mythology. Unfortunately, I didn’t enjoy this book as much. The relationship between the main character, Patroclus, and Achilles didn’t resonate with me; it felt too melodramatic and one-dimensional. Additionally, the writing style and the abrupt structure of the chapters didn’t draw me in. I still like the genre of historical fiction and the greek mythology, which made the book interesting enough for me to finish, but it didn’t capture my curiosity about this new world like «Circe» did."
+      "title": "Color of the End, Vol. 1 – Haruo Iwamune",
+      "slug": "color-of-the-end-vol-1-haruo-iwamune",
+      "created": "2026-11-07 00:00",
+      "edited": "2026-11-09 10:32",
+      "content": "I bought the first three volumes of this series on a whim because I liked the style and the theme. I read the first volume in one sitting, and the world, the art style, and the main character definitely left me wanting more. I think this is a good series to take the next step in my journey into the world of graphic novels and manga. Not too over the top. Just right."
     },
     {
       "thema": "Books",
-      "description": "memoir about running and life in general",
-      "created": "2024-09-21 00:00",
-      "edited": "2024-12-17 00:00",
       "title": "What I Talk About When I Talk About Running – Haruki Murakami",
       "slug": "what-i-talk-about-when-i-talk-about-running-haruki-murakami",
-      "content": "![What I Talk About When I Talk About Running book cover](https://res.cloudinary.com/daxsvl9cg/image/upload/w_450/v1734445129/obsidian/tqdslijx3ke9ogjrvrja.webp)\n\nHaruki Murakami and running? I’m all in!\n\nThis book is far more than just a memoir by Haruki Murakami about his routine of running. It is about the joy of doing something stoically day after day to influence life, creativity and the view of the world. It is about the themes of self-discovery, perseverance, and the human condition.\n\nMurakami reflects on his own struggles with identity, creativity, and purpose, and how these challenges have shaped him into the person he is today. It's always interesting to get a glimpse inside Murakami's head."
+      "created": "2023-06-26 00:00",
+      "edited": null,
+      "content": "![What I Talk About When I Talk About Running book cover](https://res.cloudinary.com/daxsvl9cg/image/upload/w_450/v1734445129/obsidian/tqdslijx3ke9ogjrvrja.webp)\n\nHaruki Murakami and running? I’m all in!\n\nThis book is far more than just a memoir by Haruki Murakami about his routine of running. It is about the joy of doing something stoically day after day to influence life, creativity and the view of the world. It is about the themes of self-discovery, perseverance, and the human condition.\n\nMurakami reflects on his own struggles with identity, creativity, and purpose, and how these challenges have shaped him into the person he is today. It's always interesting to get a glimpse inside Murakami's head.",
+      "description": "memoir about running and life in general"
     },
     {
       "thema": "Books",
-      "description": "adaptation of various Greek myths",
-      "created": "2024-09-14 00:00",
-      "edited": "2024-12-17 00:00",
+      "title": "The song of Achilles – Madeline Miller",
+      "slug": "the-song-of-achilles-madeline-miller",
+      "created": "2025-02-08 00:00",
+      "edited": null,
+      "content": "![The song of Achilles book cover](https://res.cloudinary.com/daxsvl9cg/image/upload/w_450/v1739018299/obsidian/xrpfbuahfiomr2gkaxgv.jpg)\n\nI really enjoyed reading «Circe» by Madeline Miller, so I decided to read her take on the Trojan War and explore more Greek mythology. Unfortunately, I didn’t enjoy this book as much. The relationship between the main character, Patroclus, and Achilles didn’t resonate with me; it felt too melodramatic and one-dimensional. Additionally, the writing style and the abrupt structure of the chapters didn’t draw me in. I still like the genre of historical fiction and the greek mythology, which made the book interesting enough for me to finish, but it didn’t capture my curiosity about this new world like «Circe» did.",
+      "description": "a Young Adult take on The Iliad"
+    },
+    {
+      "thema": "Books",
       "title": "Circe – Madeline Miller",
       "slug": "circe-madeline-miller",
-      "content": "![Circe book cover](https://res.cloudinary.com/daxsvl9cg/image/upload/w_450/v1734443002/obsidian/vjtng97awhrjfyjylxts.jpg)\n\nBefore reading this book, I knew very little about Greek mythology – maybe that Zeus, Poseidon and Hades were associated with Greece, but nothing more. However, Madeline Miller has made the topic engaging, accessible, and exciting for me. Her writing inspired me to explore more about the topic while I was reading and after finishing the book. I even subscribed to a podcast on the subject, can you imagine? There is something fascinating about the fact, how the ancient Greeks used gods, titans, and olympians and other concepts to explain the world, life, and the uncertainties that come with it and giving meaning to their experiences."
+      "created": "2024-09-14 00:00",
+      "edited": null,
+      "content": "![Circe book cover](https://res.cloudinary.com/daxsvl9cg/image/upload/w_450/v1734443002/obsidian/vjtng97awhrjfyjylxts.jpg)\n\nBefore reading this book, I knew very little about Greek mythology – maybe that Zeus, Poseidon and Hades were associated with Greece, but nothing more. However, Madeline Miller has made the topic engaging, accessible, and exciting for me. Her writing inspired me to explore more about the topic while I was reading and after finishing the book. I even subscribed to a podcast on the subject, can you imagine? There is something fascinating about the fact, how the ancient Greeks used gods, titans, and olympians and other concepts to explain the world, life, and the uncertainties that come with it and giving meaning to their experiences.",
+      "description": "adaptation of various Greek myths"
     }
   ],
   "Design": [
@@ -270,12 +278,12 @@
   "Series": [
     {
       "thema": "Series",
-      "description": "back to westeros, finally",
+      "title": "A Knight of the Seven Kingdoms 1",
+      "slug": "a-knight-of-the-seven-kingdoms-1",
       "created": "2026-02-23 00:00",
-      "edited": "2026-02-23 00:00",
-      "title": "A Knight of the Seven Kingdoms",
-      "slug": "a-knight-of-the-seven-kingdoms",
-      "content": "It has been a while since I watched anything Game of Thrones related. After the original series ended, I kind of moved on and didn't feel the urge to go back. But when «A Knight of the Seven Kingdoms» came out, something pulled me in again. And I'm really glad it did.\n\nThe show is set about a hundred years before the events of Game of Thrones and follows Ser Duncan the Tall and his young squire Egg on their journey through Westeros. What I loved most is the storytelling pace. It's not rushing through plot points to get to the next big twist — it takes its time with the characters, lets you sit with them, understand their motivations. The character development is exactly my taste. You genuinely start caring about Dunk and Egg, their dynamic, and the people they meet along the way. Plus, the story itself is really well written, which is no surprise considering it's based on George R.R. Martin's novellas.\n\nIf I have one critique, it's the look and feel. Some scenes felt a bit too polished, too computer generated. Westeros should feel rough and lived-in, and in certain moments that grittiness was missing. It's not a dealbreaker at all, but compared to the earlier seasons of Game of Thrones, where everything felt raw and real, it stood out to me.\n\nStill, this was one of my favourite watches in a while. It reminded me why I fell in love with this world in the first place. The layered storytelling, the morally complex characters, and that feeling of being dropped into a world that feels bigger than any single story.\n\nNow we have to wait for the second season."
+      "edited": null,
+      "content": "It has been a while since I watched anything Game of Thrones related. After the original series ended, I kind of moved on and didn't feel the urge to go back. But when «A Knight of the Seven Kingdoms» came out, something pulled me in again. And I'm really glad it did.\n\nThe show is set about a hundred years before the events of Game of Thrones and follows Ser Duncan the Tall and his young squire Egg on their journey through Westeros. What I loved most is the storytelling pace. It's not rushing through plot points to get to the next big twist — it takes its time with the characters, lets you sit with them, understand their motivations. The character development is exactly my taste. You genuinely start caring about Dunk and Egg, their dynamic, and the people they meet along the way. Plus, the story itself is really well written, which is no surprise considering it's based on George R.R. Martin's novellas.\n\nIf I have one critique, it's the look and feel. Some scenes felt a bit too polished, too computer generated. Westeros should feel rough and lived-in, and in certain moments that grittiness was missing. It's not a dealbreaker at all, but compared to the earlier seasons of Game of Thrones, where everything felt raw and real, it stood out to me.\n\nStill, this was one of my favourite watches in a while. It reminded me why I fell in love with this world in the first place. The layered storytelling, the morally complex characters, and that feeling of being dropped into a world that feels bigger than any single story.\n\nNow we have to wait for the second season.",
+      "description": "back to westeros, finally"
     }
   ],
   "Society": [

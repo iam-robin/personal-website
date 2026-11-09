@@ -19,7 +19,7 @@ Written to `data/` in the repo root:
 
 -   `books.json` - Books from the vault folder `books/`
 -   `series.json` - TV series from the vault folder `series/`
--   `digital-garden.json` - Garden notes from the vault folder `garden/`
+-   `digital-garden.json` - Garden notes from the vault folder `garden/`, plus the `## Garden` sections of book and series notes (see below)
 -   `book-covers/`, `series-covers/` - cover images
 -   `blog/` - Posts from the vault folder `blog/` as markdown, images in `blog/images/` (drafts in the gitignored `blog-drafts/`)
 
@@ -34,6 +34,10 @@ Covers live in the Obsidian vault under `attachments/book-cover/`; each book not
 To change a cover, either overwrite the image file in the vault (same name) or paste a new image URL into `cover`, then run the export.
 
 **Series** work the same way: poster URLs in `cover` are downloaded to `attachments/series-cover/`, the note is rewritten to the local path, and the file is published to `data/series-covers/` (`series.json` then holds `"cover": "series-covers/<file>.jpg"`). If a download fails, the remote URL stays in `series.json` until the next try. No spine colours for series.
+
+## Garden notes from books and series
+
+A book or series note with a `## Garden` heading also becomes a garden note: everything from that heading to the end of the note is the content, everything above it (TMDB synopses, private notes) is left out. Books get topic `Books` and the title `<title without subtitle> – <authors>`, series get `Series` and `<show> <season>`; `created` is `finished`, falling back to `added`, and `description` comes from the note's frontmatter. If a note in `garden/` already has the same slug, the book or series note is skipped with a warning. The book shelf and series log link to these notes by title (`getMediaNoteLookup` in `src/utils/garden.ts`; series per season, falling back to a note about the whole show).
 
 ## Blog
 

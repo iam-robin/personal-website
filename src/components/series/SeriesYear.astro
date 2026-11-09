@@ -15,6 +15,11 @@ const { year } = Astro.props;
 const count = year.seasons.filter((season) => !season.watching).length;
 
 const noteFor = await getMediaNoteLookup("series");
+
+// Notes from the vault's series notes are per season ("Dark 1"); a note about
+// the whole show still links every season.
+const seasonNote = (season: SeasonYear["seasons"][number]) =>
+    noteFor(`${season.title} ${season.season}`) ?? noteFor(season.title);
 ---
 
 <LogYear label={year.label} count={count} noun="season">
@@ -28,7 +33,7 @@ const noteFor = await getMediaNoteLookup("series");
                 date={season.watching ? "" : formatShortDate(season.finished)}
                 meta={season.watching ? "Watching" : ""}
                 cover={season.cover}
-                note={noteFor(season.title)}
+                note={seasonNote(season)}
             />
         ))
     }
