@@ -124,6 +124,62 @@ if (bodyCharCount > 180 && bodyLineBreaks > 2) {
 
 const bodyFontSize = `${(bodyFontSizeFactor * 1.2).toFixed(3)}em`; // 20% larger
 
+/* From sm the card is a fixed 3:2 and ~32em wide, so the message half has
+   about 13em × 18em to write in: 2em in from the left, 1em short of the
+   divider (set in %, since the text's own em grows with it). Short messages
+   would use a fifth of it, so they're written larger, the way you'd fill a
+   real card: the largest scale whose estimated wrap still fits the target
+   height. The wrap is a rough greedy estimate with LiebeHeide's average
+   glyph width (~0.34em, rounded up); CJK and emoji count as a full em. */
+const BODY_WIDTH = 13;
+const BODY_TARGET_HEIGHT = 18 * 0.7;
+const MAX_BODY_FIT = 1.45;
+
+const wideChar = /[\u2E80-\u9FFF\uAC00-\uD7AF\uF900-\uFAFF\uFF00-\uFFEF\p{Extended_Pictographic}]/u;
+const textWidth = (text: string) =>
+    [...text].reduce((sum, ch) => sum + (wideChar.test(ch) ? 1 : 0.37), 0);
+// Words, with CJK split per character since it wraps anywhere.
+const bodyWords = body
+    .split("\n")
+    .map((paragraph) =>
+        paragraph
+            .split(/\s+/)
+            .filter(Boolean)
+            .flatMap((word) => (wideChar.test(word) ? [...word] : [word]))
+            .map(textWidth),
+    );
+
+// Estimated height of the wrapped message in card em; Infinity if a word
+// alone is wider than the line.
+const bodyHeight = (sizeEm: number) => {
+    let lines = 0;
+    for (const words of bodyWords) {
+        let line = 0;
+        lines += 1;
+        for (const width of words) {
+            const w = width * sizeEm;
+            if (w > BODY_WIDTH) return Infinity; // words don't break
+            const next = line === 0 ? w : line + 0.2 * sizeEm + w;
+            if (next > BODY_WIDTH) {
+                lines += 1;
+                line = w;
+            } else {
+                line = next;
+            }
+        }
+    }
+    return lines * sizeEm * lineHeight;
+};
+
+let bodyFit = MAX_BODY_FIT;
+while (
+    bodyFit > 1 &&
+    bodyHeight(bodyFontSizeFactor * 1.2 * bodyFit) > BODY_TARGET_HEIGHT
+) {
+    bodyFit -= 0.05;
+}
+bodyFit = Math.max(1, bodyFit);
+
 const formattedDate = date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -138,7 +194,7 @@ const shadowClass = rotation >= 0 ? "hide-after" : "hide-before";
 
 const authorStyles = `transform: translateX(${em(authorLeftOffset)}) translateY(${em(authorTopOffset)}) rotate(${authorRotation}deg); font-size: ${fontSize}; color: ${penColor};`;
 const dateStyles = `transform: translateX(${em(dateLeftOffset)}) translateY(${em(dateTopOffset)}) rotate(${dateRotation}deg); font-size: ${fontSize}; color: ${penColor};`;
-const bodyStyles = `transform: translateX(${em(bodyLeftOffset)}) translateY(${em(bodyTopOffset)}) rotate(${bodyRotation}deg); font-size: ${bodyFontSize}; line-height: ${lineHeightValue}; color: ${penColor}; white-space: pre-wrap;`;
+const bodyStyles = `transform: translateX(${em(bodyLeftOffset)}) translateY(${em(bodyTopOffset)}) rotate(${bodyRotation}deg); --pc-body-size: ${bodyFontSize}; --pc-body-fit: ${bodyFit.toFixed(2)}; line-height: ${lineHeightValue}; color: ${penColor}; white-space: pre-wrap;`;
 
 const stampCountryText = (country ? country : "WORLD WIDE WEB").toUpperCase();
 const stampDateDay = date.toLocaleDateString("en-GB", { day: "2-digit" });
@@ -192,7 +248,7 @@ const wavyLinesStampContainerStyles = `
         <div
             class="analog-soft relative w-full sm:w-1/2 max-h-[330px] sm:max-h-none p-[1.5em] px-[1em] sm:px-[2em] font-decorative overflow-hidden"
         >
-            <span class="block sm:absolute" style={bodyStyles}>{body}</span>
+            <span class="pc-body block sm:absolute sm:left-[12.5%] sm:right-[6.25%]" style={bodyStyles}>{body}</span>
         </div>
         <div class="analog hidden sm:block w-px h-3/4 self-center bg-black/20"></div>
         <div
@@ -386,6 +442,16 @@ const wavyLinesStampContainerStyles = `
     @media (min-width: 640px) {
         .pc-inner {
             font-size: min(3.13cqw, 1.31rem);
+        }
+    }
+    /* The fit only applies to the fixed 3:2 card; on phones the card grows
+       with its text instead. */
+    .pc-body {
+        font-size: var(--pc-body-size);
+    }
+    @media (min-width: 640px) {
+        .pc-body {
+            font-size: calc(var(--pc-body-size) * var(--pc-body-fit));
         }
     }
     /* Hover: the corner that's already up (the one with the corner shadow)
