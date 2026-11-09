@@ -154,6 +154,12 @@ a.marker:hover {
     filter: url(#analog);
 }
 
+/* Half the fray, for longer handwriting that has to stay readable: the
+   message side of a postcard. */
+.analog-soft {
+    filter: url(#analog-soft);
+}
+
 /* Felt-tip edge on the highlight; the text on top stays sharp. */
 .marker::before {
     filter: url(#analog-marker);
@@ -178,6 +184,7 @@ a.marker:hover {
 
 @media (prefers-contrast: more) {
     .analog,
+    .analog-soft,
     .marker::before,
     .marker-hover::before,
     .analog-ink {

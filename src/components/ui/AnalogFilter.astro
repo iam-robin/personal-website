@@ -17,6 +17,13 @@
         <feDisplacementMap in="SourceGraphic" scale="0.6"></feDisplacementMap>
     </filter>
 
+    <!-- .analog-soft: the same fray at half strength, for handwriting that
+         has to stay legible at small sizes (postcard messages). -->
+    <filter id="analog-soft">
+        <feTurbulence baseFrequency="1 1" numOctaves="1"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" scale="0.3"></feDisplacementMap>
+    </filter>
+
     <!-- .marker::before: a slow wobble along the edge, then fine fibres. -->
     <filter id="analog-marker" x="-5%" y="-30%" width="110%" height="160%" color-interpolation-filters="sRGB">
         <feTurbulence type="fractalNoise" baseFrequency="0.03 0.2" numOctaves="2" seed="5" result="edge"></feTurbulence>
