@@ -132,6 +132,7 @@ const bodyFontSize = `${(bodyFontSizeFactor * 1.2).toFixed(3)}em`; // 20% larger
    height. The wrap is a rough greedy estimate with LiebeHeide's average
    glyph width (~0.34em, rounded up); CJK and emoji count as a full em. */
 const BODY_WIDTH = 13;
+const BODY_HEIGHT = 18;
 const BODY_TARGET_HEIGHT = 18 * 0.7;
 const MAX_BODY_FIT = 1.45;
 
@@ -180,6 +181,18 @@ while (
 }
 bodyFit = Math.max(1, bodyFit);
 
+/* Not everyone starts writing at the top edge. Where the message leaves room,
+   it starts lower by a seeded share of that room: squared, so most cards
+   still start near the top and only a few halfway down. The room keeps 15%
+   in reserve because the wrap is only estimated. Own seed, so the stored
+   styling above stays as it was. */
+const estimatedBodyHeight = bodyHeight(bodyFontSizeFactor * 1.2 * bodyFit);
+const bodyRoom = Math.max(0, BODY_HEIGHT * 0.85 - estimatedBodyHeight);
+const dropRand = createSeededRandom(`${author}|${date.getTime()}|drop`)();
+const bodyDrop = Math.min(bodyRoom * 0.6, 6) * dropRand ** 2;
+// As a share of the half's height (21.3em), since top % is set by it.
+const bodyDropPercent = ((bodyDrop / (BODY_HEIGHT + 3.33)) * 100).toFixed(2);
+
 const formattedDate = date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -194,7 +207,7 @@ const shadowClass = rotation >= 0 ? "hide-after" : "hide-before";
 
 const authorStyles = `transform: translateX(${em(authorLeftOffset)}) translateY(${em(authorTopOffset)}) rotate(${authorRotation}deg); font-size: ${fontSize}; color: ${penColor};`;
 const dateStyles = `transform: translateX(${em(dateLeftOffset)}) translateY(${em(dateTopOffset)}) rotate(${dateRotation}deg); font-size: ${fontSize}; color: ${penColor};`;
-const bodyStyles = `transform: translateX(${em(bodyLeftOffset)}) translateY(${em(bodyTopOffset)}) rotate(${bodyRotation}deg); --pc-body-size: ${bodyFontSize}; --pc-body-fit: ${bodyFit.toFixed(2)}; line-height: ${lineHeightValue}; color: ${penColor}; white-space: pre-wrap;`;
+const bodyStyles = `transform: translateX(${em(bodyLeftOffset)}) translateY(${em(bodyTopOffset)}) rotate(${bodyRotation}deg); --pc-body-size: ${bodyFontSize}; --pc-body-fit: ${bodyFit.toFixed(2)}; --pc-body-drop: ${bodyDropPercent}%; line-height: ${lineHeightValue}; color: ${penColor}; white-space: pre-wrap;`;
 
 const stampCountryText = (country ? country : "WORLD WIDE WEB").toUpperCase();
 const stampDateDay = date.toLocaleDateString("en-GB", { day: "2-digit" });
@@ -450,8 +463,11 @@ const wavyLinesStampContainerStyles = `
         font-size: var(--pc-body-size);
     }
     @media (min-width: 640px) {
+        /* top: the 1.5em padding (7.03% of the 21.3em-high half) plus the
+           drop. */
         .pc-body {
             font-size: calc(var(--pc-body-size) * var(--pc-body-fit));
+            top: calc(7.03% + var(--pc-body-drop));
         }
     }
     /* Hover: the corner that's already up (the one with the corner shadow)
